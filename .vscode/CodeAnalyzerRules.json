@@ -1,0 +1,36 @@
+{
+    "name": "Name",
+    "description": "Description",
+    "rules": [
+        {
+            "id": "AA0218",
+            "action": "None", 
+            "justification": "ToolTip must be filled"
+        },
+        {
+            "id": "AA0215",
+            "action": "None", 
+            "justification": "The file xyz.al has an incorrect name."
+        },
+        {
+            "id": "PTE0004",
+            "action": "None", 
+            "justification": "missing permission set"
+        },
+        {
+            "id": "AA0005",
+            "action": "None",
+            "justification": "Only use BEGIN..END to enclose compound statements."
+        },
+        {
+            "id": "AA0072",
+            "action": "None",
+            "justification": "Variables names"
+        },
+        {
+            "id": "AA0217",
+            "action": "None",
+            "justification": "Use a text constant or label for format string in StrSubstNo."
+        }
+    ]
+}

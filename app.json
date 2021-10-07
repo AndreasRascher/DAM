@@ -1,0 +1,27 @@
+{
+  "id": "492ba9be-193c-48f2-a405-ab6ba7a6da55",
+  "name": "DAM",
+  "publisher": "Default publisher",
+  "version": "1.0.0.1",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "17.0.0.0",
+  "idRanges": [
+    {
+      "from": 90000,
+      "to": 900050
+    }
+  ],
+  "contextSensitiveHelpUrl": "https://DAM.com/help/",
+  "showMyCode": true,
+  "runtime": "6.0",
+  "target":"OnPrem"
+}
