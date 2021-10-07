@@ -1,4 +1,4 @@
-table 91001 "DAMFields"
+table 91003 "DAMFields"
 {
     DataClassification = SystemMetadata;
 

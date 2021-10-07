@@ -6,7 +6,5 @@
     "al.enableCodeActions": true,
     "al.enableCodeAnalysis": true,
     "al.ruleSetPath": ".vscode\\CodeAnalyzerRules.json",
-    "CRS.FileNamePattern": "<ObjectNameShort>.al",
-    "CRS.FileNamePatternPageCustomizations": "<ObjectNameShort>.al",
-    "CRS.FileNamePatternExtensions": "<ObjectNameShort>.al"
+    "CRS.FileNamePattern": "<ObjectNameShort>.al"
  }

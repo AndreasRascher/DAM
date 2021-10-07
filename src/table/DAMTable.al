@@ -1,4 +1,4 @@
-table 91000 "DAMTable"
+table 91001 "DAMTable"
 {
     DataClassification = SystemMetadata;
 

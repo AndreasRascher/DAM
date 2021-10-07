@@ -2,3 +2,4 @@
 .vscode/.altemplates/*
 .alpackages/*.app
 *.app
+.vscode/rad.json
