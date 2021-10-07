@@ -3,7 +3,7 @@ OBJECT Dataport 50004 DAMExport
   OBJECT-PROPERTIES
   {
     Date=07.10.21;
-    Time=21:46:10;
+    Time=22:13:21;
     Modified=Yes;
     Version List=;
   }
@@ -24,7 +24,7 @@ OBJECT Dataport 50004 DAMExport
     PROPERTIES
     {
       Width=13200;
-      Height=3190;
+      Height=3410;
       SourceTable=Table2000000058;
       OnOpenForm=BEGIN
                    THIS_OnOpenForm
@@ -72,6 +72,15 @@ OBJECT Dataport 50004 DAMExport
                                                             THIS_ExportCtrl_OnPush
                                                           END;
                                                            }
+      { 1000000007;CommandButton;4400;2640;3300;550;
+                                                   Name=ExportCtrl;
+                                                   InPage=-1;
+                                                   CaptionML=[DEU=Schema exportieren (Felder);
+                                                              ENU=Export Schema (Fields)];
+                                                   OnPush=BEGIN
+                                                            THIS_ExportFieldsCtrl_OnPush
+                                                          END;
+                                                           }
     }
   }
   CODE
@@ -103,6 +112,28 @@ OBJECT Dataport 50004 DAMExport
     BEGIN
       AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
       AllObjWithCaption.SETFILTER("Object ID",ExportTableIDFilter);
+      IF NOT AllObjWithCaption.FINDSET THEN EXIT;
+      ReadyMsg:='DAM EXPORT:';
+      REPEAT
+        ExportToPath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.txt';
+        Progress.OPEN(STRSUBSTNO('Export %1',CONVERTSTR(ExportToPath,'\','/')));
+        EXPORT_ExportFullTable(ExportToPath,AllObjWithCaption."Object ID",FALSE,ExportDuration);
+        ReadyMsg += STRSUBSTNO('\%1: %2',AllObjWithCaption."Object Caption",ExportDuration);
+        Progress.CLOSE;
+      UNTIL AllObjWithCaption.NEXT = 0;
+      MESSAGE(ReadyMsg)
+    END;
+
+    PROCEDURE THIS_ExportFieldsCtrl_OnPush@1000000016();
+    VAR
+      AllObjWithCaption@1000000004 : Record 2000000058;
+      ExportToPath@1000000003 : Text[1024];
+      ExportDuration@1000000002 : Duration;
+      Progress@1000000001 : Dialog;
+      ReadyMsg@1000000000 : Text[1024];
+    BEGIN
+      AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
+      AllObjWithCaption.SETRANGE("Object ID",DATABASE::Field);
       IF NOT AllObjWithCaption.FINDSET THEN EXIT;
       ReadyMsg:='DAM EXPORT:';
       REPEAT
