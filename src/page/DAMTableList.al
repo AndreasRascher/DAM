@@ -13,21 +13,13 @@ page 91003 "DAMTableList"
         {
             repeater(DAMTableRepeater)
             {
-                field("From Table Caption"; Rec."From Table Caption")
-                {
-                    ToolTip = 'Specifies the value of the From Table Caption field.';
-                    ApplicationArea = All;
-                }
-                field("To Table Caption"; Rec."To Table Caption")
-                {
-                    ToolTip = 'Specifies the value of the To Table Caption field.';
-                    ApplicationArea = All;
-                }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID")
-                {
-                    ToolTip = 'Specifies the value of the Import XMLPort ID field.';
-                    ApplicationArea = All;
-                }
+                field("From Table ID"; Rec."From Table ID") { ApplicationArea = All; }
+                field("From Table Caption"; Rec."From Table Caption") { ApplicationArea = All; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
+                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; }
+                field("To Table Caption"; Rec."To Table Caption") { ApplicationArea = All; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; }
+                field(ExportFilePath; Rec.ExportFilePath) { ApplicationArea = All; }
             }
         }
     }
