@@ -327,7 +327,7 @@ codeunit 91005 XMLBackup
         _RecRef: RecordRef;
     begin
         _AllObj.SETRANGE("Object Type", _AllObj."Object Type"::Table);
-        _AllObj.SETRANGE("Object ID", 91000, 91002);
+        _AllObj.SETRANGE("Object ID", 91000, 91005);
         IF _AllObj.FINDSET(FALSE, FALSE) then
             REPEAT
                 _RecRef.OPEN(_AllObj."Object ID");
