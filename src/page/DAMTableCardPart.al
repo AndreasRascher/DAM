@@ -47,6 +47,7 @@ page 90002 "DAMTableCardPart"
                 field("From Field Type"; Rec."From Field Type")
                 {
                     HideValue = HideFromFieldInfo;
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Src.Field Type field';
                     ApplicationArea = All;
                 }

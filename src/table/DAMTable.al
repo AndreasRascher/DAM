@@ -4,25 +4,30 @@ table 91001 "DAMTable"
 
     fields
     {
-        field(1; "From Table ID"; Integer)
-        {
-            CaptionML = DEU = 'Von Tab.-ID', ENU = 'From Tab.-ID';
-            DataClassification = SystemMetadata;
-        }
-        field(2; "To Table ID"; Integer)
+        field(1; "To Table ID"; Integer)
         {
             CaptionML = DEU = 'Nach Tabellen ID', ENU = 'To Table ID';
             DataClassification = SystemMetadata;
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
+
+        }
+        field(2; "Old Version Table ID"; Integer)
+        {
+            CaptionML = DEU = 'Von Tab.-ID', ENU = 'From Tab.-ID';
+            DataClassification = SystemMetadata;
+
         }
         field(3; "From Table Caption"; Text[250])
         {
-            CaptionML = DEU = 'Von', ENU = 'From';
+            CaptionML = DEU = 'Von Tabelle', ENU = 'From Table';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit ObjMgt;
             begin
                 ObjectMgt.LookUpFromTable(Rec);
+                if "To Table ID" = 0 then begin
+                    Rec.Validate("To Table Caption", Format("Old Version Table ID"));
+                    ProposeObjectIDs();
+                end;
             end;
 
             trigger OnValidate()
@@ -30,11 +35,15 @@ table 91001 "DAMTable"
                 ObjectMgt: Codeunit ObjMgt;
             begin
                 ObjectMgt.ValidateFromTableCaption(Rec, xRec);
+                if ("To Table ID" = 0) and ("Old Version Table ID" <> 0) then begin
+                    Rec.Validate("To Table Caption", Format("Old Version Table ID"));
+                    ProposeObjectIDs();
+                end;
             end;
         }
         field(4; "To Table Caption"; Text[250])
         {
-            CaptionML = DEU = 'Nach', ENU = 'To';
+            CaptionML = DEU = 'In Tabelle', ENU = 'To Table';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit ObjMgt;
@@ -51,13 +60,13 @@ table 91001 "DAMTable"
         }
         field(21; "Qty.Lines In Src. Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Zeilen in Herkunftstabelle', ENU = 'Qty.Lines in source table';
+            CaptionML = DEU = 'Anz. Zeilen in Puffertabelle', ENU = 'Qty.Lines in buffer table';
             FieldClass = FlowField;
-            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("From Table ID")));
+            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Buffer Table ID")));
             Editable = false;
             trigger OnLookup()
             begin
-                ShowTableContent("From Table ID");
+                ShowTableContent("Buffer Table ID");
             end;
         }
         field(31; "Qty.Lines In Trgt. Table"; Integer)
@@ -68,10 +77,10 @@ table 91001 "DAMTable"
             Editable = false;
             trigger OnLookup()
             begin
-                ShowTableContent("From Table ID");
+                ShowTableContent("Old Version Table ID");
             end;
         }
-        field(50; ExportFilePath; Text[250])
+        field(50; DataFilePath; Text[250])
         {
             CaptionML = DEU = 'Dateipfad Exportdatei', ENU = 'Export File Path';
             trigger OnValidate()
@@ -79,10 +88,10 @@ table 91001 "DAMTable"
                 FileMgt: Codeunit "File Management";
                 FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', ENU = 'The path "%1" is not accessibly for the service tier';
             begin
-                if rec.ExportFilePath <> '' then begin
-                    rec.ExportFilePath := CopyStr(rec.ExportFilePath.TrimEnd('"').TrimStart('"'), 1, MaxStrLen(rec.ExportFilePath));
-                    if not FileMgt.ServerFileExists(rec.ExportFilePath) then
-                        Message(FileNotAccessibleFromServiceLabelMsg, ExportFilePath);
+                if rec.DataFilePath <> '' then begin
+                    rec.DataFilePath := CopyStr(rec.DataFilePath.TrimEnd('"').TrimStart('"'), 1, MaxStrLen(rec.DataFilePath));
+                    if not FileMgt.ServerFileExists(rec.DataFilePath) then
+                        Message(FileNotAccessibleFromServiceLabelMsg, DataFilePath);
                 end;
             end;
         }
@@ -90,10 +99,13 @@ table 91001 "DAMTable"
         {
             CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
+            MinValue = 50000;
+            MaxValue = 99999;
         }
         field(52; "Buffer Table ID"; Integer)
         {
             CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
+            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
             MinValue = 50000;
             MaxValue = 99999;
         }
@@ -106,7 +118,7 @@ table 91001 "DAMTable"
 
     keys
     {
-        key(PK; "From Table ID", "To Table ID")
+        key(PK; "To Table ID")
         {
             Clustered = true;
         }
@@ -126,8 +138,8 @@ table 91001 "DAMTable"
         InStr: InStream;
     begin
         rec.TestField("Import XMLPort ID");
-        rec.Testfield(ExportFilePath);
-        file.Open(ExportFilePath, TextEncoding::MSDos);
+        rec.Testfield(DataFilePath);
+        file.Open(DataFilePath, TextEncoding::MSDos);
         file.CreateInStream(InStr);
         Xmlport.Import(Rec."Import XMLPort ID", InStr);
     end;
@@ -136,6 +148,49 @@ table 91001 "DAMTable"
     begin
         if TableID = 0 then exit;
         Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
+    end;
+
+    local procedure ProposeObjectIDs()
+    var
+        DAMSetup: Record "DAM Object Setup";
+        DAMTable: Record DAMTable;
+        Numbers: Record Integer;
+        UsedBufferTableIDs: List of [Integer];
+        UsedXMLPortIDs: List of [Integer];
+    begin
+        if not DAMSetup.Get() then
+            DAMSetup.InsertWhenEmpty();
+        DAMSetup.Get();
+        // Collect used numbers
+        if DAMTable.FindSet() then
+            repeat
+                if DAMTable."Import XMLPort ID" <> 0 then
+                    UsedXMLPortIDs.Add(DAMTable."Import XMLPort ID");
+                if DAMTable."Buffer Table ID" <> 0 then
+                    UsedBufferTableIDs.Add(DAMTable."Buffer Table ID");
+            until DAMTable.Next() = 0;
+        // Buffer Table ID - Assign Next Number in Filter
+        if DAMSetup."Obj. ID Range Buffer Tables" <> '' then
+            if rec."Buffer Table ID" = 0 then begin
+                Numbers.SetFilter(Number, DAMSetup."Obj. ID Range Buffer Tables");
+                if Numbers.FindSet() then
+                    repeat
+                        if not UsedBufferTableIDs.Contains(Numbers.Number) then begin
+                            Rec."Buffer Table ID" := Numbers.Number;
+                        end;
+                    until (Numbers.Next() = 0) or (rec."Buffer Table ID" <> 0);
+            end;
+        // Import XMLPort ID - Assign Next Number in Filter
+        if DAMSetup."Obj. ID Range XMLPorts" <> '' then
+            if rec."Import XMLPort ID" = 0 then begin
+                Numbers.SetFilter(Number, DAMSetup."Obj. ID Range XMLPorts");
+                if Numbers.FindSet() then
+                    repeat
+                        if not UsedXMLPortIDs.Contains(Numbers.Number) then begin
+                            Rec."Import XMLPort ID" := Numbers.Number;
+                        end;
+                    until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
+            end;
     end;
 
 }

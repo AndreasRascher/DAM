@@ -77,8 +77,8 @@ codeunit 91000 "DAMImport"
     procedure SetObjectIDs(DAMTable_NEW: Record DAMTable)
     begin
         DAMTable.Copy(DAMTable_NEW);
-        DAMMgt.CheckBufferTableIsNotEmpty(DAMTable."From Table ID");
-        BufferTableID := DAMTable."From Table ID";
+        DAMMgt.CheckBufferTableIsNotEmpty(DAMTable."Buffer Table ID");
+        BufferTableID := DAMTable."Buffer Table ID";
     end;
 
     procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef)

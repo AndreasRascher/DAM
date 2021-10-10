@@ -21,7 +21,7 @@ codeunit 91004 ObjMgt
         AllObjectwithCaption.LookupMode(true);
         if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
             AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
-            DAMTable."From Table ID" := TempAllObjWithCaption."Object ID";
+            DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."From Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
@@ -61,7 +61,7 @@ codeunit 91004 ObjMgt
         if Delchr(rec."From Table Caption", '=', '0123456789') = '' then begin
             DAMFieldBuffer.SetFilter(TableNo, rec."From Table Caption");
             if DAMFieldBuffer.FindFirst() then begin
-                Rec."From Table ID" := DAMFieldBuffer.TableNo;
+                Rec."Old Version Table ID" := DAMFieldBuffer.TableNo;
                 Rec."From Table Caption" := DAMFieldBuffer."Table Caption";
             end;
         end;

@@ -4,13 +4,41 @@ table 91002 "DAMFields"
 
     fields
     {
-        field(20; "From Table ID"; Integer)
+        field(20; "To Table ID"; Integer)
+        {
+            CaptionML = DEU = 'Ziel Tabellen ID', ENU = 'Target Table ID';
+            DataClassification = SystemMetadata;
+            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+        }
+        field(21; "To Field No."; Integer)
+        {
+            CaptionML = DEU = 'Ziel Feldnr.', ENU = 'Target Field No.';
+            DataClassification = SystemMetadata;
+            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+        }
+        field(22; "To Field Caption"; Text[80])
+        {
+            CaptionML = DEU = 'Zielfeld Bezeichnung', ENU = 'Target Field Caption';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+        }
+        field(23; "To Field Type"; Text[30])
+        {
+            CaptionML = DEU = 'Zielfeld Typ', ENU = 'Target Field Type';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+        }
+        field(24; "From Table ID"; Integer)
         {
             CaptionML = DEU = 'Herkunft Tabellen ID', ENU = 'Source Table ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
-        field(21; "From Field No."; Integer)
+        field(31; "From Field No."; Integer)
         {
             CaptionML = DEU = 'Herkunft Feldnr.', ENU = 'Source Field No.';
             DataClassification = SystemMetadata;
@@ -20,7 +48,7 @@ table 91002 "DAMFields"
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
             end;
         }
-        field(22; "From Field Caption"; Text[80])
+        field(32; "From Field Caption"; Text[80])
         {
             CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
             FieldClass = FlowField;
@@ -28,7 +56,7 @@ table 91002 "DAMFields"
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
         }
-        field(23; "From Field Type"; Text[30])
+        field(33; "From Field Type"; Text[30])
         {
             CaptionML = DEU = 'Herkunftsfeld Typ', ENU = 'Source Field Type';
             FieldClass = FlowField;
@@ -36,34 +64,7 @@ table 91002 "DAMFields"
             CalcFormula = lookup(Field."Type Name" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
         }
-        field(30; "To Table ID"; Integer)
-        {
-            CaptionML = DEU = 'Ziel Tabellen ID', ENU = 'Target Table ID';
-            DataClassification = SystemMetadata;
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
-        }
-        field(31; "To Field No."; Integer)
-        {
-            CaptionML = DEU = 'Ziel Feldnr.', ENU = 'Target Field No.';
-            DataClassification = SystemMetadata;
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
-        }
-        field(32; "To Field Caption"; Text[80])
-        {
-            CaptionML = DEU = 'Zielfeld Bezeichnung', ENU = 'Target Field Caption';
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
-        }
-        field(33; "To Field Type"; Text[30])
-        {
-            CaptionML = DEU = 'Zielfeld Typ', ENU = 'Target Field Type';
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
-        }
+
         field(34; "Fixed Value"; Text[250])
         {
             CaptionML = DEU = 'Fester Wert', ENU = 'Fixed Value';
@@ -96,14 +97,13 @@ table 91002 "DAMFields"
 
     keys
     {
-        key(PK; "From Table ID", "To Table ID", "To Field No.")
+        key(PK; "To Table ID", "To Field No.")
         {
             Clustered = true;
         }
     }
     internal procedure FilterBy(DAMTable: Record DAMTable) NotIsEmpty: Boolean
     begin
-        Rec.SetRange("From Table ID", DAMTable."From Table ID");
         Rec.SetRange("To Table ID", DAMTable."To Table ID");
         NotIsEmpty := not Rec.IsEmpty;
     end;
@@ -124,7 +124,7 @@ table 91002 "DAMFields"
                     DAMFields.FilterBy(DAMTable);
                     DAMFields.setrange("To Field No.", TargetRecRef.FieldIndex(i).Number);
                     if DAMFields.IsEmpty then begin
-                        DAMFields_NEW."From Table ID" := DAMTable."From Table ID";
+                        DAMFields_NEW."From Table ID" := DAMTable."Buffer Table ID";
                         DAMFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
                         DAMFields_NEW."To Table ID" := DAMTable."To Table ID";
                         DAMFields_NEW.Insert(true);
@@ -147,7 +147,7 @@ table 91002 "DAMFields"
         if DAMFields.FindSet(false, false) then
             repeat
                 TargetField.Get(DAMFields."To Table ID", DAMFields."To Field No.");
-                SourceField.SetRange(TableNo, DAMTable."From Table ID");
+                SourceField.SetRange(TableNo, DAMTable."Buffer Table ID");
                 SourceField.SetRange(Enabled, true);
                 SourceField.SetRange(Class, SourceField.Class::Normal);
                 SourceField.SetRange(FieldName, TargetField.FieldName);

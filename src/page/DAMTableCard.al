@@ -29,12 +29,19 @@ page 90001 "DAMTableCard"
                 {
                     ToolTip = 'Specifies the value of the Import XMLPort ID field';
                     ApplicationArea = All;
+                    StyleExpr = ImportXMLPortIDStyle;
+                }
+                field("Buffer Table ID"; Rec."Buffer Table ID")
+                {
+                    ToolTip = 'Specifies the value of the Buffer Table ID field.';
+                    ApplicationArea = All;
+                    StyleExpr = BufferTableIDStyle;
                 }
             }
             group(Import)
             {
                 CaptionML = DEU = 'Import', ENU = 'Import';
-                field("Src.Table ID"; Rec."From Table ID")
+                field("Src.Table ID"; Rec."Old Version Table ID")
                 {
                     ToolTip = 'Specifies the value of the Src.Table ID field';
                     ApplicationArea = All;
@@ -45,19 +52,14 @@ page 90001 "DAMTableCard"
                     ToolTip = 'Specifies the value of the Qty.Lines In Src. Table field';
                     ApplicationArea = All;
                 }
-                field("Buffer Table ID"; Rec."Buffer Table ID")
-                {
-                    ToolTip = 'Specifies the value of the Buffer Table ID field.';
-                    ApplicationArea = All;
-                }
 
                 grid(dummy)
                 {
                     GridLayout = Rows;
                     group(dummy2)
                     {
-                        CaptionML = DEU = 'Exportdatei Path', ENU = 'Export File Path';
-                        field(ExportFilePath; Rec.ExportFilePath)
+                        CaptionML = DEU = 'Datendatei Pfad', ENU = 'Data File Path';
+                        field(ExportFilePath; Rec.DataFilePath)
                         {
                             ShowCaption = false;
                             ApplicationArea = All;
@@ -94,7 +96,7 @@ page 90001 "DAMTableCard"
             {
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
                 Editable = LinesEditable;
-                SubPageLink = "From Table ID" = field("From Table ID"), "To Table ID" = field("To Table ID");
+                SubPageLink = "From Table ID" = field("Old Version Table ID"), "To Table ID" = field("To Table ID");
             }
         }
     }
@@ -105,7 +107,7 @@ page 90001 "DAMTableCard"
         {
             action(ImportBufferDataFromFile)
             {
-                CaptionML = DEU = 'Daten aus Puffertabelle importieren';
+                CaptionML = DEU = 'Datendatei in Puffertabelle importieren';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -150,31 +152,7 @@ page 90001 "DAMTableCard"
                 var
                     DAMErrorLog: Record DAMErrorLog;
                 begin
-                    DAMErrorLog.OpenListWithFilter(rec."From Table ID");
-                end;
-            }
-            action(XMLExport)
-            {
-                ApplicationArea = All;
-                Image = CreateXMLFile;
-
-                trigger OnAction()
-                var
-                    XMLBackup: Codeunit XMLBackup;
-                begin
-                    XMLBackup.Export();
-                end;
-            }
-            action(XMLImport)
-            {
-                ApplicationArea = All;
-                Image = ImportCodes;
-
-                trigger OnAction()
-                var
-                    XMLBackup: Codeunit XMLBackup;
-                begin
-                    XMLBackup.Import();
+                    DAMErrorLog.OpenListWithFilter(rec."Buffer Table ID");
                 end;
             }
             action(CreateXMLPort)
@@ -188,7 +166,7 @@ page 90001 "DAMTableCard"
                 begin
                     DAMObjectGenerator.DownloadAsMDDosFile(
                         DAMObjectGenerator.CreateALXMLPort(Rec),
-                        StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "From Table ID"));
+                        StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID"));
                 end;
             }
             action(CreateBufferTable)
@@ -202,23 +180,35 @@ page 90001 "DAMTableCard"
                 begin
                     DAMObjectGenerator.DownloadAsMDDosFile(
                         DAMObjectGenerator.CreateALTable(Rec),
-                        StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", "From Table ID"));
+                        StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."Old Version Table ID"));
                 end;
             }
 
         }
     }
     trigger OnAfterGetCurrRecord()
+    var
+        AllObj: Record AllObjWithCaption;
     begin
-        LinesEditable := not (0 in [Rec."From Table ID", Rec."To Table ID"]);
+        LinesEditable := not (0 in [Rec."Buffer Table ID", Rec."To Table ID"]);
+        ImportXMLPortIDStyle := 'Unfavorable';
+        BufferTableIDStyle := 'Unfavorable';
+        if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
+            ImportXMLPortIDStyle := 'Favorable';
+        if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
+            BufferTableIDStyle := 'Favorable';
     end;
 
     trigger OnModifyRecord(): Boolean
     begin
-        LinesEditable := not (0 in [Rec."From Table ID", Rec."To Table ID"]);
+        LinesEditable := not (0 in [Rec."Old Version Table ID", Rec."To Table ID"]);
     end;
 
     var
         [InDataSet]
         LinesEditable: Boolean;
+        [InDataSet]
+        ImportXMLPortIDStyle: Text;
+        [InDataSet]
+        BufferTableIDStyle: Text;
 }

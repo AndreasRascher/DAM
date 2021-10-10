@@ -604,9 +604,9 @@ codeunit 91003 DAMObjectGenerator
         DAMFieldBuffer: Record DAMFieldBuffer;
     begin
         DAMTable.Testfield("Import XMLPort ID");
-        DAMTable.Testfield("From Table ID");
+        DAMTable.Testfield("Old Version Table ID");
 
-        C.AppendLine('xmlport ' + format(DAMTable."Import XMLPort ID") + ' T' + format(DAMTable."From Table ID") + 'Import');
+        C.AppendLine('xmlport ' + format(DAMTable."Import XMLPort ID") + ' T' + format(DAMTable."Old Version Table ID") + 'Import');
         C.AppendLine('{');
         C.AppendLine('    Caption = ''' + DAMTable."From Table Caption" + ''';');
         C.AppendLine('    Direction = Import;');
@@ -621,8 +621,8 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DAMFieldBuffer, DAMTable."From Table ID", FALSE, FALSE, FALSE) THEN BEGIN
-            C.AppendLine('            tableelement(' + GetCleanTableName(DAMFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DAMTable."Buffer Table ID") + ')');
+        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN BEGIN
+            C.AppendLine('            tableelement(' + GetCleanTableName(DAMFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DAMFieldBuffer) + ''';');
             DAMFieldBuffer.FINDSET;
@@ -731,13 +731,13 @@ codeunit 91003 DAMObjectGenerator
         _FieldTypeText: Text;
     begin
         DAMTable.testfield("Buffer Table ID");
-        DAMTable.TestField("From Table ID");
-        FilterFields(DAMFieldBuffer, DAMTable."From Table ID", FALSE, FALSE, FALSE);
-        C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."From Table ID"));
+        DAMTable.TestField("Old Version Table ID");
+        FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
+        C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + DAMTable."From Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DAMFieldBuffer, DAMTable."From Table ID", FALSE, FALSE, FALSE) THEN
+        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
             REPEAT
                 CASE DAMFieldBuffer.Type OF
                     DAMFieldBuffer.Type::Code, DAMFieldBuffer.Type::Text:
@@ -761,7 +761,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyString(DAMTable."From Table ID") + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyString(DAMTable."Old Version Table ID") + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');
