@@ -1,8 +1,6 @@
 page 90002 "DAMTableCardPart"
 {
     PageType = ListPart;
-    ApplicationArea = All;
-    UsageCategory = Administration;
     SourceTable = DAMFields;
 
     layout
@@ -86,7 +84,7 @@ page 90002 "DAMTableCardPart"
                     DAMFields: Record DAMFields;
                     DAMTable: Record DAMTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec.Code));
+                    DAMTable.Get(Rec.GetRangeMin(rec."From Table ID"), Rec.GetRangeMin(rec."To Table ID"));
                     DAMFields.InitForTargetTable(DAMTable);
                 end;
             }
@@ -101,7 +99,7 @@ page 90002 "DAMTableCardPart"
                     DAMFields: Record DAMFields;
                     DAMTable: Record DAMTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec.Code));
+                    DAMTable.Get(Rec.GetRangeMin(rec."From Table ID"), Rec.GetRangeMin(rec."To Table ID"));
                     DAMFields.ProposeMatchingTargetFields(DAMTable);
                     DAMFields.ProposeValidationRules(DAMTable);
                 end;

@@ -1,8 +1,7 @@
 page 90004 "DAM Error Log List"
 {
-
     ApplicationArea = All;
-    Caption = 'DAMErrorLog';
+    CaptionML = DEU = 'DAM Fehlerprotokoll', ENU = 'DAM Error Log';
     PageType = List;
     SourceTable = DAMErrorLog;
     UsageCategory = Lists;

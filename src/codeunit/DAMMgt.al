@@ -1,4 +1,4 @@
-codeunit 90001 "DAMMgt"
+codeunit 91001 "DAMMgt"
 {
     procedure CheckBufferTableIsNotEmpty(TableID: Integer)
     var

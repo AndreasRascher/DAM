@@ -4,21 +4,50 @@ table 91001 "DAMTable"
 
     fields
     {
-        field(1; "Code"; Code[50])
+        field(1; "From Table ID"; Integer)
         {
+            CaptionML = DEU = 'Von Tab.-ID', ENU = 'From Tab.-ID';
             DataClassification = SystemMetadata;
-            CaptionML = DEU = 'Code', ENU = 'Code';
         }
-        field(10; "Description"; Text[100])
+        field(2; "To Table ID"; Integer)
         {
-            DataClassification = SystemMetadata;
-            CaptionML = DEU = 'Beschreibung', ENU = 'Description';
-        }
-        field(20; "From Table ID"; Integer)
-        {
-            CaptionML = DEU = 'Herkunft Tabellen ID', ENU = 'Source Table ID';
+            CaptionML = DEU = 'Nach Tabellen ID', ENU = 'To Table ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
+        }
+        field(3; "From Table Caption"; Text[250])
+        {
+            CaptionML = DEU = 'Von', ENU = 'From';
+            trigger OnLookup()
+            var
+                ObjectMgt: Codeunit ObjMgt;
+            begin
+                ObjectMgt.LookUpFromTable(Rec);
+            end;
+
+            trigger OnValidate()
+            var
+                ObjectMgt: Codeunit ObjMgt;
+            begin
+                ObjectMgt.ValidateFromTableCaption(Rec, xRec);
+            end;
+        }
+        field(4; "To Table Caption"; Text[250])
+        {
+            CaptionML = DEU = 'Nach', ENU = 'To';
+            trigger OnLookup()
+            var
+                ObjectMgt: Codeunit ObjMgt;
+            begin
+                ObjectMgt.LookUpToTable(Rec);
+            end;
+
+            trigger OnValidate()
+            var
+                ObjectMgt: Codeunit ObjMgt;
+            begin
+                ObjectMgt.ValidateToTableCaption(Rec, xRec);
+            end;
         }
         field(21; "Qty.Lines In Src. Table"; Integer)
         {
@@ -30,12 +59,6 @@ table 91001 "DAMTable"
             begin
                 ShowTableContent("From Table ID");
             end;
-        }
-        field(30; "To Table ID"; Integer)
-        {
-            CaptionML = DEU = 'Ziel Tabellen ID', ENU = 'Target Table ID';
-            DataClassification = SystemMetadata;
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
         field(31; "Qty.Lines In Trgt. Table"; Integer)
         {
@@ -65,8 +88,14 @@ table 91001 "DAMTable"
         }
         field(51; "Import XMLPort ID"; Integer)
         {
-            CaptionML = DEU = 'XMLPort für Import', ENU = 'Import XMLPortID';
+            CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
+        }
+        field(52; "Buffer Table ID"; Integer)
+        {
+            CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
+            MinValue = 50000;
+            MaxValue = 99999;
         }
         field(60; "Use OnInsert Trigger"; boolean)
         {
@@ -77,7 +106,7 @@ table 91001 "DAMTable"
 
     keys
     {
-        key(PK; "Code")
+        key(PK; "From Table ID", "To Table ID")
         {
             Clustered = true;
         }

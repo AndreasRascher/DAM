@@ -1,4 +1,4 @@
-table 91002 "DAMErrorLog"
+table 91003 "DAMErrorLog"
 {
     DataClassification = ToBeClassified;
 

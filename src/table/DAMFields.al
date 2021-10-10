@@ -1,15 +1,9 @@
-table 91003 "DAMFields"
+table 91002 "DAMFields"
 {
     DataClassification = SystemMetadata;
 
     fields
     {
-        field(1; "Code"; Code[50])
-        {
-            DataClassification = SystemMetadata;
-            CaptionML = DEU = 'Code', ENU = 'Code';
-            TableRelation = DAMTable.Code;
-        }
         field(20; "From Table ID"; Integer)
         {
             CaptionML = DEU = 'Herkunft Tabellen ID', ENU = 'Source Table ID';
@@ -25,7 +19,6 @@ table 91003 "DAMFields"
             begin
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
             end;
-
         }
         field(22; "From Field Caption"; Text[80])
         {
@@ -103,14 +96,15 @@ table 91003 "DAMFields"
 
     keys
     {
-        key(PK; "Code", "To Table ID", "To Field No.")
+        key(PK; "From Table ID", "To Table ID", "To Field No.")
         {
             Clustered = true;
         }
     }
     internal procedure FilterBy(DAMTable: Record DAMTable) NotIsEmpty: Boolean
     begin
-        Rec.SetRange(Code, DAMTable.Code);
+        Rec.SetRange("From Table ID", DAMTable."From Table ID");
+        Rec.SetRange("To Table ID", DAMTable."To Table ID");
         NotIsEmpty := not Rec.IsEmpty;
     end;
 
@@ -130,7 +124,6 @@ table 91003 "DAMFields"
                     DAMFields.FilterBy(DAMTable);
                     DAMFields.setrange("To Field No.", TargetRecRef.FieldIndex(i).Number);
                     if DAMFields.IsEmpty then begin
-                        DAMFields_NEW.Code := DAMTable.Code;
                         DAMFields_NEW."From Table ID" := DAMTable."From Table ID";
                         DAMFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
                         DAMFields_NEW."To Table ID" := DAMTable."To Table ID";

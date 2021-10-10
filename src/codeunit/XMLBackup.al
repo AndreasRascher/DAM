@@ -1,4 +1,4 @@
-codeunit 90005 XMLBackup
+codeunit 91005 XMLBackup
 {
 
     procedure Export();
@@ -41,7 +41,7 @@ codeunit 90005 XMLBackup
                     Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
                     FldRef := TargetRef.Field(FieldNodeID);
                     if XFieldNode.AsXmlElement().InnerText <> '' then
-                        EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText); //hier
+                        EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
                 end;
                 if not TargetRef.modify() then TargetRef.insert();
             end;
@@ -301,10 +301,10 @@ codeunit 90005 XMLBackup
                 TablesList.Add(ID.TableNo);
     end;
 
-    procedure CreateTagName(t_Name: Text) t_TagName: Text;
+    procedure CreateTagName(_Name: Text) _TagName: Text;
     begin
-        t_Name := DELCHR(t_Name, '=', ' ');
-        t_TagName := CONVERTSTR(t_Name, '\/-.()', '______')
+        _Name := DELCHR(_Name, '=', ' ');
+        _TagName := CONVERTSTR(_Name, '\/-.()', '______')
     end;
 
     procedure GetListOfKeyFieldIDs(VAR _RecRef: RecordRef; VAR KeyFieldIDsList: List of [Integer]);
@@ -327,7 +327,7 @@ codeunit 90005 XMLBackup
         _RecRef: RecordRef;
     begin
         _AllObj.SETRANGE("Object Type", _AllObj."Object Type"::Table);
-        _AllObj.SETRANGE("Object ID", 91000, 91001);
+        _AllObj.SETRANGE("Object ID", 91000, 91002);
         IF _AllObj.FINDSET(FALSE, FALSE) then
             REPEAT
                 _RecRef.OPEN(_AllObj."Object ID");
@@ -335,9 +335,9 @@ codeunit 90005 XMLBackup
                     REPEAT
                         if not RecordIDList.Contains(_RecRef.RecordId) then
                             RecordIDList.Add(_RecRef.RecordId);
-                    UNTIL _RecRef.NEXT() = 0;
+                    UNTIL _RecRef.Next() = 0;
                 _RecRef.close();
-            UNTIL _AllObj.NEXT() = 0;
+            UNTIL _AllObj.Next() = 0;
     end;
 
     procedure DownloadBlobContent(var TempTenantMedia: Record "Tenant Media"; FileName: Text): Text

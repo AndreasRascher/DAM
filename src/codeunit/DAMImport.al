@@ -1,4 +1,4 @@
-codeunit 90000 "DAMImport"
+codeunit 91000 "DAMImport"
 {
     procedure ProcessFullBuffer(BufferFilterView: Text)
     var
@@ -33,7 +33,7 @@ codeunit 90000 "DAMImport"
                                       5, DAMMgt.ProgressBar_GetRemainingTime());
             IF DAMMgt.ProgressBar_GetStep() MOD 50 = 0 then
                 COMMIT();
-        until BufferRef.NEXT() = 0;
+        until BufferRef.Next() = 0;
         DAMMgt.ProgressBar_Close();
         DAMErrorLog.OpenListWithFilter(BufferRef);
         DAMMgt.GetResultQtyMessage();
@@ -90,7 +90,7 @@ codeunit 90000 "DAMImport"
         TempDAMFields.findset();
         repeat
             DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", FALSE);
-        until TempDAMFields.NEXT() = 0;
+        until TempDAMFields.Next() = 0;
         IF TmpTargetRef.INSERT(FALSE) then;
     end;
 
@@ -118,7 +118,7 @@ codeunit 90000 "DAMImport"
                           TempDAMFields."Ignore Validation Error");
                     end;
             end
-        until TempDAMFields.NEXT() = 0;
+        until TempDAMFields.Next() = 0;
         TmpTargetRef.MODIFY(TRUE);
     end;
 

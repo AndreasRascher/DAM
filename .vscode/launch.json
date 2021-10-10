@@ -2,14 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "http://bc17/BC/",
+            "name": "Synchronize",
             "type": "al",
             "request": "launch",
             "environmentType": "OnPrem",
             "server": "http://bc17",
             "serverInstance": "BC",
             "authentication": "UserPassword",
-            "startupObjectId": 90003,
+            "startupObjectId": 91001,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,
@@ -17,7 +17,27 @@
             "enableLongRunningSqlStatements": true,
             "longRunningSqlStatementsThreshold": 500,
             "numberOfSqlStatements": 10,
-            "tenant": "default"
+            "tenant": "default",
+            "schemaUpdateMode": "Synchronize"
+        },
+        {
+            "name": "Recreate",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "OnPrem",
+            "server": "http://bc17",
+            "serverInstance": "BC",
+            "authentication": "UserPassword",
+            "startupObjectId": 91001,
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "launchBrowser": true,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "tenant": "default",
+            "schemaUpdateMode": "Recreate"
         }
         // {
         //     "name": "https://bcdev.graef.de/DEV/SignIn",
