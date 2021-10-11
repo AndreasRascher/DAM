@@ -608,7 +608,7 @@ codeunit 91003 DAMObjectGenerator
 
         C.AppendLine('xmlport ' + format(DAMTable."Import XMLPort ID") + ' T' + format(DAMTable."Old Version Table ID") + 'Import');
         C.AppendLine('{');
-        C.AppendLine('    Caption = ''' + DAMTable."From Table Caption" + ''';');
+        C.AppendLine('    Caption = ''' + DAMTable."Old Version Table Caption" + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -709,7 +709,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('            exit;');
         C.AppendLine('        end;');
         C.AppendLine('        BufferRef.OPEN(BufferTableNo);');
-        C.AppendLine('        IF NOT BufferRef.ISEMPTY then');
+        C.AppendLine('        IF NOT BufferRef.IsEmpty then');
         C.AppendLine('            BufferRef.DELETEALL();');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -735,7 +735,7 @@ codeunit 91003 DAMObjectGenerator
         FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
         C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."From Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
         C.AppendLine('  fields {');
         IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
             REPEAT

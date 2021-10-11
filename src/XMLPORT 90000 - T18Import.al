@@ -229,7 +229,7 @@ xmlport 90000 T18Import
             exit;
         end;
         BufferRef.OPEN(BufferTableNo);
-        IF NOT BufferRef.ISEMPTY then
+        IF NOT BufferRef.IsEmpty then
             BufferRef.DELETEALL();
     end;
 

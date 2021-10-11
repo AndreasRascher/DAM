@@ -14,7 +14,7 @@ page 90001 "DAMTableCard"
             group(General)
             {
                 CaptionML = ENU = 'General', DEU = 'Allgemein';
-                field("From Table Caption"; "From Table Caption")
+                field("From Table Caption"; "Old Version Table Caption")
                 {
                     ToolTip = 'Specifies the value of the Code field';
                     ApplicationArea = All;
@@ -96,7 +96,7 @@ page 90001 "DAMTableCard"
             {
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
                 Editable = LinesEditable;
-                SubPageLink = "From Table ID" = field("Old Version Table ID"), "To Table ID" = field("To Table ID");
+                SubPageLink = "From Table ID" = field("Buffer Table ID"), "To Table No." = field("To Table ID");
             }
         }
     }

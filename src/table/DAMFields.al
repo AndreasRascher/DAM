@@ -1,10 +1,10 @@
-table 91002 "DAMFields"
+table 91002 "DAMField"
 {
     DataClassification = SystemMetadata;
 
     fields
     {
-        field(20; "To Table ID"; Integer)
+        field(20; "To Table No."; Integer)
         {
             CaptionML = DEU = 'Ziel Tabellen ID', ENU = 'Target Table ID';
             DataClassification = SystemMetadata;
@@ -14,23 +14,23 @@ table 91002 "DAMFields"
         {
             CaptionML = DEU = 'Ziel Feldnr.', ENU = 'Target Field No.';
             DataClassification = SystemMetadata;
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(22; "To Field Caption"; Text[80])
         {
             CaptionML = DEU = 'Zielfeld Bezeichnung', ENU = 'Target Field Caption';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(23; "To Field Type"; Text[30])
         {
             CaptionML = DEU = 'Zielfeld Typ', ENU = 'Target Field Type';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table ID"), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table ID"));
+            CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(24; "From Table ID"; Integer)
         {
@@ -97,21 +97,21 @@ table 91002 "DAMFields"
 
     keys
     {
-        key(PK; "To Table ID", "To Field No.")
+        key(PK; "To Table No.", "To Field No.")
         {
             Clustered = true;
         }
     }
     internal procedure FilterBy(DAMTable: Record DAMTable) NotIsEmpty: Boolean
     begin
-        Rec.SetRange("To Table ID", DAMTable."To Table ID");
+        Rec.SetRange("To Table No.", DAMTable."To Table ID");
         NotIsEmpty := not Rec.IsEmpty;
     end;
 
     internal procedure InitForTargetTable(DAMTable: Record DAMTable): Boolean
     var
-        DAMFields: Record DAMFields;
-        DAMFields_NEW: Record DAMFields;
+        DAMFields: Record "DAMField";
+        DAMFields_NEW: Record "DAMField";
         TargetRecRef: RecordRef;
         i: Integer;
     begin
@@ -126,7 +126,7 @@ table 91002 "DAMFields"
                     if DAMFields.IsEmpty then begin
                         DAMFields_NEW."From Table ID" := DAMTable."Buffer Table ID";
                         DAMFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
-                        DAMFields_NEW."To Table ID" := DAMTable."To Table ID";
+                        DAMFields_NEW."To Table No." := DAMTable."To Table ID";
                         DAMFields_NEW.Insert(true);
                     end;
                 end;
@@ -137,8 +137,8 @@ table 91002 "DAMFields"
     var
         SourceField: Record Field;
         TargetField: Record Field;
-        DAMFields: Record DAMFields;
-        DAMFields2: Record DAMFields;
+        DAMFields: Record "DAMField";
+        DAMFields2: Record "DAMField";
         OldFieldName: text;
         Found: Boolean;
     begin
@@ -146,14 +146,14 @@ table 91002 "DAMFields"
         DAMFields.setrange("From Field No.", 0);
         if DAMFields.FindSet(false, false) then
             repeat
-                TargetField.Get(DAMFields."To Table ID", DAMFields."To Field No.");
+                TargetField.Get(DAMFields."To Table No.", DAMFields."To Field No.");
                 SourceField.SetRange(TableNo, DAMTable."Buffer Table ID");
                 SourceField.SetRange(Enabled, true);
                 SourceField.SetRange(Class, SourceField.Class::Normal);
                 SourceField.SetRange(FieldName, TargetField.FieldName);
                 Found := SourceField.FindFirst();
                 if not Found then
-                    if FindFieldNameInOldVersion(TargetField, DAMFields."To Table ID", OldFieldName) then begin
+                    if FindFieldNameInOldVersion(TargetField, DAMFields."To Table No.", OldFieldName) then begin
                         SourceField.SetRange(FieldName, OldFieldName);
                         Found := SourceField.FindFirst();
                     end;
@@ -168,14 +168,14 @@ table 91002 "DAMFields"
     internal procedure ProposeValidationRules(DAMTable: Record DAMTable): Boolean
     var
         TargetField: Record Field;
-        DAMFields: Record DAMFields;
-        DAMFields2: Record DAMFields;
+        DAMFields: Record "DAMField";
+        DAMFields2: Record "DAMField";
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.SetRange("Processing Action", DAMFields."Processing Action"::Transfer);
         if DAMFields.FindSet(false, false) then
             repeat
-                TargetField.Get(DAMFields."To Table ID", DAMFields."To Field No.");
+                TargetField.Get(DAMFields."To Table No.", DAMFields."To Field No.");
                 DAMFields2 := DAMFields;
                 case true of
                     TargetField.FieldName IN ['Global Dimension 1 Code',

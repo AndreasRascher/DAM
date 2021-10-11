@@ -1,13 +1,11 @@
 codeunit 91004 ObjMgt
 {
-    procedure LookUpFromTable(var DAMTable: Record DAMTable) OK: Boolean;
+    procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         AllObjectwithCaption: Page "All Objects with Caption";
     begin
-        //if not DAMFieldBuffer.FindSet() then
-        //    exit(false);
         DAMFieldBuffer.FindSet();
         repeat
             if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DAMFieldBuffer.TableNo) then begin
@@ -22,7 +20,7 @@ codeunit 91004 ObjMgt
         if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
             AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
             DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
-            DAMTable."From Table Caption" := TempAllObjWithCaption."Object Caption";
+            DAMTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
@@ -53,16 +51,16 @@ codeunit 91004 ObjMgt
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
     begin
-        if rec."From Table Caption" = xRec."From Table Caption" then
+        if rec."Old Version Table Caption" = xRec."Old Version Table Caption" then
             exit;
-        if rec."From Table Caption" = '' then
+        if rec."Old Version Table Caption" = '' then
             exit;
         // IsNumber
-        if Delchr(rec."From Table Caption", '=', '0123456789') = '' then begin
-            DAMFieldBuffer.SetFilter(TableNo, rec."From Table Caption");
+        if Delchr(rec."Old Version Table Caption", '=', '0123456789') = '' then begin
+            DAMFieldBuffer.SetFilter(TableNo, rec."Old Version Table Caption");
             if DAMFieldBuffer.FindFirst() then begin
                 Rec."Old Version Table ID" := DAMFieldBuffer.TableNo;
-                Rec."From Table Caption" := DAMFieldBuffer."Table Caption";
+                Rec."Old Version Table Caption" := DAMFieldBuffer."Table Caption";
             end;
         end;
     end;

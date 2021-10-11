@@ -5,7 +5,7 @@ codeunit 91001 "DAMMgt"
         RecRef: RecordRef;
     begin
         RecRef.OPEN(TableID);
-        if RecRef.ISEMPTY then ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, TableID);
+        if RecRef.IsEmpty then ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, TableID);
     end;
 
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
@@ -201,7 +201,7 @@ codeunit 91001 "DAMMgt"
             TargetRef.modify();
     end;
 
-    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DAMFields: Record DAMFields)
+    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DAMFields: Record "DAMField")
     var
         DAMErrorLog: Record DAMErrorLog;
         DAMErrorWrapper: Codeunit DAMErrorWrapper;
@@ -263,6 +263,8 @@ codeunit 91001 "DAMMgt"
         _Integer: Integer;
         OptionIndex: Integer;
         _OutStream: OutStream;
+        NoOfOptions: Integer;
+        OptionElement: text;
     begin
         CASE UPPERCASE(FORMAT(FieldRef_TO.TYPE)) OF
 
@@ -309,18 +311,14 @@ codeunit 91001 "DAMMgt"
                     exit(TRUE);
                 end ELSE begin
                     //Optionswert wird als Text übergeben
-                    IF STRPOS(UPPERCASE(FieldRef_TO.OPTIONCAPTION), UPPERCASE(FromText)) > 0 then begin
-                        IF FieldRef_TO.OPTIONCAPTION[1] = ',' then
-                            OptionIndex := 2
-                        ELSE
-                            OptionIndex := 1;
-                        Buggy
-                        WHILE STRPOS(UPPERCASE(SELECTSTR(OptionIndex, FieldRef_TO.OPTIONCAPTION)), UPPERCASE(FromText)) = 0 do begin
-                            OptionIndex += 1;
-                        end;
-                        FieldRef_TO.VALUE := OptionIndex - 1; //Optionswert beginnt mit 0
-                        exit(TRUE);
-                    end;
+                    NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
+                    FOR OptionIndex := 0 TO NoOfOptions DO BEGIN
+                        OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
+                        IF OptionElement = FromText THEN BEGIN
+                            FieldRef_TO.VALUE := OptionIndex;
+                            EXIT(TRUE);
+                        END;
+                    END;
                 end;
             'DATE':
                 begin

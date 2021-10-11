@@ -41,7 +41,7 @@ codeunit 91000 "DAMImport"
 
     procedure LoadFieldMapping(DAMTable: Record DAMTable)
     var
-        DAMFields: Record DAMFields;
+        DAMFields: Record "DAMField";
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.FindSet();  // raise error if empty
@@ -144,7 +144,7 @@ codeunit 91000 "DAMImport"
     end;
 
     var
-        TempDAMFields: Record DAMFields temporary;
+        TempDAMFields: Record "DAMField" temporary;
         DAMTable: Record DAMTable;
         DAMMgt: Codeunit DAMMgt;
         BufferTableID: Integer;

@@ -16,14 +16,14 @@ table 91001 "DAMTable"
             DataClassification = SystemMetadata;
 
         }
-        field(3; "From Table Caption"; Text[250])
+        field(3; "Old Version Table Caption"; Text[250])
         {
             CaptionML = DEU = 'Von Tabelle', ENU = 'From Table';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit ObjMgt;
             begin
-                ObjectMgt.LookUpFromTable(Rec);
+                ObjectMgt.LookUpOldVersionTable(Rec);
                 if "To Table ID" = 0 then begin
                     Rec.Validate("To Table Caption", Format("Old Version Table ID"));
                     ProposeObjectIDs();
@@ -126,7 +126,7 @@ table 91001 "DAMTable"
 
     trigger OnDelete()
     var
-        DAMFields: Record DAMFields;
+        DAMFields: Record "DAMField";
     begin
         if DAMFields.FilterBy(Rec) then
             DAMFields.DeleteAll(true);

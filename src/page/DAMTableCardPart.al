@@ -1,7 +1,7 @@
 page 90002 "DAMTableCardPart"
 {
     PageType = ListPart;
-    SourceTable = DAMFields;
+    SourceTable = "DAMField";
 
     layout
     {
@@ -9,22 +9,20 @@ page 90002 "DAMTableCardPart"
         {
             repeater(GroupName)
             {
-                field("Processing Action"; "Processing Action") { ApplicationArea = all; }
+                field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
                 field("To Field No."; Rec."To Field No.")
                 {
                     Visible = false;
-                    ToolTip = 'Specifies the value of the Trgt.Field No. field';
                     ApplicationArea = All;
                 }
                 field("To Field Caption"; Rec."To Field Caption")
                 {
-                    ToolTip = 'Specifies the value of the Trgt.Field Caption field';
                     ApplicationArea = All;
+                    StyleExpr = LineStyleExpr;
                 }
                 field("From Field Caption"; Rec."From Field Caption")
                 {
                     HideValue = HideFromFieldInfo;
-                    ToolTip = 'Specifies the value of the Src.Field Caption field';
                     ApplicationArea = All;
                 }
                 field("From Field No."; Rec."From Field No.")
@@ -82,10 +80,10 @@ page 90002 "DAMTableCardPart"
 
                 trigger OnAction()
                 var
-                    DAMFields: Record DAMFields;
+                    DAMFields: Record "DAMField";
                     DAMTable: Record DAMTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec."To Table ID"));
+                    DAMTable.Get(Rec.GetRangeMin(rec."To Table No."));
                     DAMFields.InitForTargetTable(DAMTable);
                 end;
             }
@@ -97,10 +95,10 @@ page 90002 "DAMTableCardPart"
 
                 trigger OnAction()
                 var
-                    DAMFields: Record DAMFields;
+                    DAMFields: Record "DAMField";
                     DAMTable: Record DAMTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec."To Table ID"));
+                    DAMTable.Get(Rec.GetRangeMin(rec."To Table No."));
                     DAMFields.ProposeMatchingTargetFields(DAMTable);
                     DAMFields.ProposeValidationRules(DAMTable);
                 end;
@@ -110,14 +108,26 @@ page 90002 "DAMTableCardPart"
     Var
         [InDataSet]
         HideFromFieldInfo: Boolean;
+        [InDataSet]
+        LineStyleExpr: text;
 
     trigger OnAfterGetRecord()
     begin
-        HideFromFieldInfo := Rec."Fixed Value" <> '';
+        UpdateControlVariables();
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
+        UpdateControlVariables();
+    end;
+
+    procedure UpdateControlVariables()
+    var
+        DAMErrorLog: Record DAMErrorLog;
+    begin
         HideFromFieldInfo := Rec."Fixed Value" <> '';
+        LineStyleExpr := '';
+        if DAMErrorLog.ErrorsExistFor(Rec, true) then
+            LineStyleExpr := 'Attention';
     end;
 }

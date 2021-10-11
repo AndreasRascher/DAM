@@ -56,7 +56,7 @@ table 91003 "DAMErrorLog"
         }
     }
 
-    procedure AddEntryForLastError(FromRecRef: recordref; ToRecRef: RecordRef; DAMFields: Record DAMFields);
+    procedure AddEntryForLastError(FromRecRef: recordref; ToRecRef: RecordRef; DAMFields: Record "DAMField");
     var
         _DAMErrorlog: Record DAMErrorLog;
     begin
@@ -68,7 +68,7 @@ table 91003 "DAMErrorLog"
 
         _DAMErrorlog."Import from Table No." := DAMFields."From Table ID";
         _DAMErrorlog."Import from Field No." := DAMFields."From Field No.";
-        _DAMErrorlog."Import to Table No." := DAMFields."To Table ID";
+        _DAMErrorlog."Import to Table No." := DAMFields."To Table No.";
         _DAMErrorlog."Import to Field No." := DAMFields."To Field No.";
         _DAMErrorlog."Ignore Error" := DAMFields."Ignore Validation Error";
 
@@ -96,14 +96,14 @@ table 91003 "DAMErrorLog"
         _DAMErrorlog.MODIFY(TRUE);
     end;
 
-    procedure AddEntryWithUserDefinedMessage(DAMFields: Record DAMFields; ErrorMessage: text)
+    procedure AddEntryWithUserDefinedMessage(DAMFields: Record "DAMField"; ErrorMessage: text)
     var
         _DAMErrorlog: Record DAMErrorLog;
     begin
         _DAMErrorlog.INSERT(TRUE);
         _DAMErrorlog."Import from Table No." := DAMFields."From Table ID";
         _DAMErrorlog."Import from Field No." := DAMFields."From Field No.";
-        _DAMErrorlog."Import to Table No." := DAMFields."To Table ID";
+        _DAMErrorlog."Import to Table No." := DAMFields."To Table No.";
         _DAMErrorlog."Import to Field No." := DAMFields."To Field No.";
 
         _DAMErrorlog.Errortext := COPYSTR(ErrorMessage, 1, MAXSTRLEN(_DAMErrorlog.Errortext));
@@ -123,10 +123,19 @@ table 91003 "DAMErrorLog"
 
     procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean
     begin
-        SETRANGE("From ID", BufferRef.RECORDID);
+        SETRANGE("From ID", BufferRef.RecordId);
         IF ExcludeIgnoreErrorRecords then
             SETRANGE("Ignore Error", FALSE);
-        exit(NOT Rec.ISEMPTY);
+        exit(not Rec.IsEmpty);
+    end;
+
+    procedure ErrorsExistFor(DAMField: Record "DAMField"; ExcludeIgnoreErrorRecords: Boolean): Boolean
+    begin
+        SetRange("Import to Table No.", DAMField."To Table No.");
+        SETRANGE("Import to Field No.", DAMField."To Field No.");
+        IF ExcludeIgnoreErrorRecords then
+            SETRANGE("Ignore Error", FALSE);
+        exit(not Rec.IsEmpty);
     end;
 
     procedure OpenList()

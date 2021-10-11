@@ -14,7 +14,7 @@ page 91003 "DAMTableList"
             repeater(DAMTableRepeater)
             {
                 field("Old Version Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; Visible = false; }
-                field("From Table Caption"; Rec."From Table Caption") { ApplicationArea = All; }
+                field("From Table Caption"; Rec."Old Version Table Caption") { ApplicationArea = All; }
                 field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; }
                 field("To Table Caption"; Rec."To Table Caption") { ApplicationArea = All; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
