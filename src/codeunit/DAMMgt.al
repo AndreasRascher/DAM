@@ -314,6 +314,7 @@ codeunit 91001 "DAMMgt"
                             OptionIndex := 2
                         ELSE
                             OptionIndex := 1;
+                        Buggy
                         WHILE STRPOS(UPPERCASE(SELECTSTR(OptionIndex, FieldRef_TO.OPTIONCAPTION)), UPPERCASE(FromText)) = 0 do begin
                             OptionIndex += 1;
                         end;
