@@ -735,7 +735,7 @@ codeunit 91003 DAMObjectGenerator
         FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
         C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
         C.AppendLine('  fields {');
         IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
             REPEAT

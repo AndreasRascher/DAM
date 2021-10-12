@@ -92,6 +92,19 @@ page 91001 "DAM Object Setup"
                 end;
             }
         }
+        area(Navigation)
+        {
+            action(Table_DAMFieldBuffer)
+            {
+                ApplicationArea = All;
+                CaptionML = DEU = 'Schema anzeigen';
+
+                trigger OnAction()
+                begin
+                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
+                end;
+            }
+        }
     }
 
     trigger OnOpenPage()

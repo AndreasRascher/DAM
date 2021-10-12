@@ -36,4 +36,12 @@ table 91000 "DAM Object Setup"
             Rec.Insert();
         end;
     end;
+
+    procedure CheckSchemaInfoHasBeenImporterd()
+    var
+        DAMFieldBuffer: Record DAMFieldBuffer;
+        SchemaInfoMissingErr: TextConst ENU = 'The Schema.txt file has not been imported.', DEU = 'Die Schema.txt wurde nicht importiert.';
+    begin
+        if DAMFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
+    end;
 }

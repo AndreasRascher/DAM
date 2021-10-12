@@ -37,6 +37,10 @@ page 90001 "DAMTableCard"
                     ToolTip = 'Specifies the value of the Buffer Table ID field.';
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
+                    trigger OnAssistEdit()
+                    begin
+                        Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+                    end;
                 }
             }
             group(Import)

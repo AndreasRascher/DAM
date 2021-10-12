@@ -3,22 +3,27 @@ codeunit 91004 ObjMgt
     procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
+        DAMSetup: Record "DAM Object Setup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         AllObjectwithCaption: Page "All Objects with Caption";
     begin
+        DAMSetup.CheckSchemaInfoHasBeenImporterd();
         DAMFieldBuffer.FindSet();
         repeat
             if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DAMFieldBuffer.TableNo) then begin
                 TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
                 TempAllObjWithCaption."Object ID" := DAMFieldBuffer.TableNo;
+                TempAllObjWithCaption."Object Name" := DAMFieldBuffer.TableName;
                 TempAllObjWithCaption."Object Caption" := DAMFieldBuffer."Table Caption";
                 TempAllObjWithCaption.Insert(false);
             end;
         until DAMFieldBuffer.Next() = 0;
-        AllObjectwithCaption.SetRecord(TempAllObjWithCaption);
-        AllObjectwithCaption.LookupMode(true);
-        if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
-            AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
+        //AllObjectwithCaption.SetRecord(TempAllObjWithCaption);
+        //AllObjectwithCaption.LookupMode(true);
+        if TempAllObjWithCaption.FindFirst() then;
+        if Page.RunModal(Page::"All Objects with Caption", TempAllObjWithCaption) = Action::LookupOK then begin
+            //if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
+            //AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
             DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
         end;

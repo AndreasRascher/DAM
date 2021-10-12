@@ -27,6 +27,7 @@ table 91001 "DAMTable"
                 if "To Table ID" = 0 then begin
                     Rec.Validate("To Table Caption", Format("Old Version Table ID"));
                     ProposeObjectIDs();
+                    InitTableFieldMapping();
                 end;
             end;
 
@@ -201,6 +202,19 @@ table 91001 "DAMTable"
                         end;
                     until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
             end;
+    end;
+
+    local procedure InitTableFieldMapping()
+    var
+        DAMFields: Record DAMField;
+        DAMSetup: record "DAM Object Setup";
+    begin
+        DAMSetup.CheckSchemaInfoHasBeenImporterd();
+        if not DAMFields.FilterBy(Rec) then begin
+            DAMFields.InitForTargetTable(Rec);
+            DAMFields.ProposeMatchingTargetFields(Rec);
+        end;
+
     end;
 
     procedure TryFindExportDataFile()
