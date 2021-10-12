@@ -1,4 +1,4 @@
-page 90002 "DAMTableCardPart"
+page 91003 "DAMTableCardPart"
 {
     PageType = ListPart;
     SourceTable = "DAMField";
@@ -49,21 +49,13 @@ page 90002 "DAMTableCardPart"
                     ToolTip = 'Specifies the value of the Src.Field Type field';
                     ApplicationArea = All;
                 }
-                field("Validate Method"; Rec."Validate Method")
-                {
-                    ToolTip = 'Specifies the value of the Validate Method field';
-                    ApplicationArea = All;
-                }
                 field("Validate Value"; Rec."Validate Value")
                 {
                     ToolTip = 'Specifies the value of the Validate Value field';
                     ApplicationArea = All;
                 }
-                field("Default Value"; Rec."Fixed Value")
-                {
-                    ToolTip = 'Specifies the value of the Default Value field';
-                    ApplicationArea = All;
-                }
+                field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
+                field("Fixed Value OnBeforeInsert"; Rec."Fixed Value OnBeforeInsert") { ApplicationArea = All; }
             }
         }
     }

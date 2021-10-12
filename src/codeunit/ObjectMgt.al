@@ -4,7 +4,7 @@ codeunit 91004 ObjMgt
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        AllObjectwithCaption: Page "All Objects with Caption";
+        DAMSelectTables: Page DAMSelectTables;
     begin
         DAMFieldBuffer.FindSet();
         repeat
@@ -15,10 +15,11 @@ codeunit 91004 ObjMgt
                 TempAllObjWithCaption.Insert(false);
             end;
         until DAMFieldBuffer.Next() = 0;
-        AllObjectwithCaption.SetRecord(TempAllObjWithCaption);
-        AllObjectwithCaption.LookupMode(true);
-        if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
-            AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
             DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
@@ -28,7 +29,7 @@ codeunit 91004 ObjMgt
     var
         AllObjWithCaption: Record AllObjWithCaption;
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        AllObjectwithCaptionList: Page "All Objects with Caption";
+        DAMSelectTables: Page DAMSelectTables;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
         if not AllObjWithCaption.FindSet() then
@@ -38,10 +39,11 @@ codeunit 91004 ObjMgt
             TempAllObjWithCaption.Insert(false);
         until AllObjWithCaption.Next() = 0;
 
-        AllObjectwithCaptionList.SetRecord(TempAllObjWithCaption);
-        AllObjectwithCaptionList.LookupMode(true);
-        if AllObjectwithCaptionList.RunModal() = Action::LookupOK then begin
-            AllObjectwithCaptionList.GetRecord(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
             DAMTable."To Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
@@ -88,7 +90,19 @@ codeunit 91004 ObjMgt
         FieldImport: XmlPort FieldBufferImport;
         FileName: Text;
         InStr: InStream;
+        Selection: Integer;
     begin
+        Selection := StrMenu('TextEncoding::Windows,TextEncoding::UTF8,TextEncoding::UTF16,TextEncoding::MSDos', 3, 'Wähle ein Encoding aus');
+        case Selection of
+            1:
+                FieldImport.TextEncoding := TextEncoding::Windows;
+            2:
+                FieldImport.TextEncoding := TextEncoding::UTF8;
+            3:
+                FieldImport.TextEncoding := TextEncoding::UTF16;
+            4:
+                FieldImport.TextEncoding := TextEncoding::MSDos;
+        end;
         if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then
             exit;
         FieldImport.SetSource(InStr);

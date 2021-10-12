@@ -38,7 +38,7 @@ codeunit 91002 "DAMErrorWrapper"
         _RecRef_TO := RecRef_TO;
     end;
 
-    LOCAL procedure FieldValidateRecRef(_RecRef_FROM: RecordRef; _FieldNo_FROM: Integer; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
+    LOCAL procedure FieldValidateRecRef(_RecRef_FROM: RecordRef; _FieldNo_FROM: Integer; var _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
     var
         ToField: FieldRef;
         FromField: FieldRef;

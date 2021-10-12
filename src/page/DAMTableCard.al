@@ -1,4 +1,4 @@
-page 90001 "DAMTableCard"
+page 91002 "DAMTableCard"
 {
     CaptionML = DEU = 'DAM Tabellenkarte', ENU = 'DAM Table Card';
     PageType = Document;
@@ -136,6 +136,9 @@ page 90001 "DAMTableCard"
                 begin
                     DAMImport.SetObjectIDs(Rec);
                     DAMImport.ProcessFullBuffer('');
+                    Rec.LastImportBy := UserId;
+                    Rec.LastImportToTargetAt := CurrentDateTime;
+                    Rec.Modify();
                 end;
             }
             action(OpenErrorLog)

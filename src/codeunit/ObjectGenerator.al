@@ -735,7 +735,7 @@ codeunit 91003 DAMObjectGenerator
         FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
         C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
         C.AppendLine('  fields {');
         IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
             REPEAT
@@ -840,14 +840,15 @@ codeunit 91003 DAMObjectGenerator
     begin
         _DAMFieldBuffer.SetRange(TableNo, TableIDInNAV);
         _DAMFieldBuffer.FindFirst();
-        _DAMFieldBuffer.SetFilter("No.", _DAMFieldBuffer."Primary Key");
+        _DAMFieldBuffer.SetFilter("No.", ConvertStr(_DAMFieldBuffer."Primary Key", ',', '|'));
         _DAMFieldBuffer.FindSet();
         repeat
             if ContainsLettersOnly(_DAMFieldBuffer.FieldName) then
-                KeyString += _DAMFieldBuffer.FieldName
+                KeyString += _DAMFieldBuffer.FieldName + ','
             else
-                KeyString += '"' + _DAMFieldBuffer.FieldName + '"';
+                KeyString += '"' + _DAMFieldBuffer.FieldName + '",';
         until _DAMFieldBuffer.Next() = 0;
+        KeyString := DelChr(KeyString, '>', ',');
     end;
 
     local procedure ContainsLettersOnly(String: text): Boolean

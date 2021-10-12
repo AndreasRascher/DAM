@@ -208,15 +208,16 @@ codeunit 91001 "DAMMgt"
         IsValidateSuccessful: Boolean;
     begin
         CLEARLASTERROR();
+        //20211012 Always use if codeunit run because client crashes with try function
         // VALIDATE
-        IF DAMFields."Validate Method" = DAMFields."Validate Method"::"try function" then begin
-            IsValidateSuccessful := TryValidateField(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
-        end ELSE begin
-            COMMIT();
-            DAMErrorWrapper.SetFieldValidateRecRef(SourceRef, DAMFields."From Field No.", TargetRef, DAMFields."To Field No.");
-            IsValidateSuccessful := DAMErrorWrapper.RUN();
-            DAMErrorWrapper.GetRecRefTo(TargetRef);
-        end;
+        // IF DAMFields."Validate Method" = DAMFields."Validate Method"::"Try function" then begin
+        //     IsValidateSuccessful := TryValidateField(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
+        // end ELSE begin
+        COMMIT();
+        DAMErrorWrapper.SetFieldValidateRecRef(SourceRef, DAMFields."From Field No.", TargetRef, DAMFields."To Field No.");
+        IsValidateSuccessful := DAMErrorWrapper.RUN();
+        DAMErrorWrapper.GetRecRefTo(TargetRef);
+        // end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
             DAMErrorLog.AddEntryForLastError(SourceRef, TargetRef, DAMFields);
@@ -226,7 +227,7 @@ codeunit 91001 "DAMMgt"
         end;
     end;
 
-    procedure ValidateFieldWithValue(VAR TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; UseIfCodeunitOnRun: Boolean; IgnoreErrorFlag: Boolean)
+    procedure ValidateFieldWithValue(VAR TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
     var
         DAMErrorLog: Record DAMErrorLog;
         DAMErrorWrapper: Codeunit DAMErrorWrapper;
@@ -234,14 +235,10 @@ codeunit 91001 "DAMMgt"
     begin
         ClearLastError();
         // VALIDATE
-        IF NOT UseIfCodeunitOnRun then begin
-            IsValidateSuccessful := TryValidateFieldWithValue(TargetRef, ToFieldNo, NewValue);
-        end ELSE begin
-            Commit();
-            DAMErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
-            IsValidateSuccessful := DAMErrorWrapper.RUN();
-            DAMErrorWrapper.GetRecRefTo(TargetRef);
-        end;
+        Commit();
+        DAMErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
+        IsValidateSuccessful := DAMErrorWrapper.RUN();
+        DAMErrorWrapper.GetRecRefTo(TargetRef);
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
             DAMErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);

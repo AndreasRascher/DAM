@@ -1,4 +1,4 @@
-page 90004 "DAM Error Log List"
+page 91001 "DAM Error Log List"
 {
     ApplicationArea = All;
     CaptionML = DEU = 'DAM Fehlerprotokoll', ENU = 'DAM Error Log';

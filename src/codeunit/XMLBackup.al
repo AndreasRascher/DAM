@@ -39,9 +39,11 @@ codeunit 91005 XMLBackup
                 XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
                 foreach XFieldNode in XFieldList do begin
                     Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
-                    FldRef := TargetRef.Field(FieldNodeID);
-                    if XFieldNode.AsXmlElement().InnerText <> '' then
-                        EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
+                    if TargetRef.FieldExist(FieldNodeID) then begin
+                        FldRef := TargetRef.Field(FieldNodeID);
+                        if XFieldNode.AsXmlElement().InnerText <> '' then
+                            EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
+                    end;
                 end;
                 if not TargetRef.modify() then TargetRef.insert();
             end;

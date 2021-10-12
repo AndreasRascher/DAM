@@ -73,15 +73,14 @@ table 91002 "DAMField"
                 UpdateProcessingAction(Rec.FieldNo("Fixed Value"));
             end;
         }
+        field(35; "Fixed Value OnBeforeInsert"; Text[250])
+        {
+            CaptionML = DEU = 'temp. Wert beim Einfügen';
+        }
         field(50; "Validate Value"; Boolean)
         {
             CaptionML = DEU = 'Validieren', ENU = 'Validate';
             InitValue = true;
-        }
-        field(51; "Validate Method"; Option)
-        {
-            OptionMembers = "Field Validate","Try function","if codeunit run";
-            OptionCaptionML = DEU = 'Feld Validierung,try function,if codeunit run', ENU = 'Field Validate,try function,if codeunit run';
         }
         field(52; "Ignore Validation Error"; Boolean)
         {
@@ -178,17 +177,17 @@ table 91002 "DAMField"
                 TargetField.Get(DAMFields."To Table No.", DAMFields."To Field No.");
                 DAMFields2 := DAMFields;
                 case true of
-                    TargetField.FieldName IN ['Global Dimension 1 Code',
-                                              'Global Dimension 2 Code',
-                                              'VAT Registration No.']:
-                        begin
-                            DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                        end;
-                    (TargetField.TableNo = DATabase::Item) and
-                    (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure']):
-                        begin
-                            DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                        end;
+                    // TargetField.FieldName IN ['Global Dimension 1 Code',
+                    //                           'Global Dimension 2 Code',
+                    //                           'VAT Registration No.']:
+                    //     begin
+                    //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                    //     end;
+                    // (TargetField.TableNo = DATabase::Item) and
+                    // (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure']):
+                    //     begin
+                    //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                    //     end;
                     (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
                     (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
                         begin
@@ -201,9 +200,7 @@ table 91002 "DAMField"
             until DAMFields.Next() = 0;
     end;
 
-    procedure FindFieldNameInOldVersion(TargetField: Record Field;
-        TargetTableNo: Integer; VAR
-                                    OldFieldName: Text) Found: Boolean
+    procedure FindFieldNameInOldVersion(TargetField: Record Field; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
     begin
         //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
         CLEAR(OldFieldName);
