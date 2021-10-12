@@ -114,6 +114,16 @@ table 91001 "DAMTable"
             CaptionML = DEU = 'OnInsert Trigger verwenden', ENU = 'Use OnInsert Trigger';
             InitValue = true;
         }
+        field(100; LastImportToTargetAt; DateTime)
+        {
+            CaptionML = DEU = 'Letzter Import am', ENU = 'Last Import At';
+        }
+        field(101; LastImportBy; Code[50])
+        {
+            CaptionML = DEU = 'Benutzer-ID', ENU = 'User ID';
+            DataClassification = EndUserIdentifiableInformation;
+            TableRelation = User."User Name";
+        }
     }
 
     keys
@@ -191,6 +201,22 @@ table 91001 "DAMTable"
                         end;
                     until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
             end;
+    end;
+
+    procedure TryFindExportDataFile()
+    var
+        DAMSetup: Record "DAM Object Setup";
+        FileMgt: Codeunit "File Management";
+        FilePath: Text;
+    begin
+        DAMSetup.Get();
+        if DAMSetup."Default Export Folder Path" = '' then exit;
+        if Rec.DataFilePath <> '' then exit;
+        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.txt', Rec."Old Version Table Caption"));
+        if FileMgt.ServerFileExists(FilePath) then begin
+            Rec.DataFilePath := FilePath;
+            Rec.Modify();
+        end;
     end;
 
 }

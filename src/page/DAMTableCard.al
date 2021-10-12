@@ -6,6 +6,7 @@ page 90001 "DAMTableCard"
     UsageCategory = Administration;
     SourceTable = DAMTable;
     DelayedInsert = true;
+    DataCaptionFields = "To Table Caption";
 
     layout
     {
@@ -136,6 +137,9 @@ page 90001 "DAMTableCard"
                 begin
                     DAMImport.SetObjectIDs(Rec);
                     DAMImport.ProcessFullBuffer('');
+                    Rec.LastImportBy := UserId;
+                    Rec.LastImportToTargetAt := CurrentDateTime;
+                    Rec.Modify();
                 end;
             }
             action(OpenErrorLog)

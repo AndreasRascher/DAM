@@ -840,14 +840,15 @@ codeunit 91003 DAMObjectGenerator
     begin
         _DAMFieldBuffer.SetRange(TableNo, TableIDInNAV);
         _DAMFieldBuffer.FindFirst();
-        _DAMFieldBuffer.SetFilter("No.", _DAMFieldBuffer."Primary Key");
+        _DAMFieldBuffer.SetFilter("No.", ConvertStr(_DAMFieldBuffer."Primary Key", ',', '|'));
         _DAMFieldBuffer.FindSet();
         repeat
             if ContainsLettersOnly(_DAMFieldBuffer.FieldName) then
-                KeyString += _DAMFieldBuffer.FieldName
+                KeyString += _DAMFieldBuffer.FieldName + ','
             else
-                KeyString += '"' + _DAMFieldBuffer.FieldName + '"';
+                KeyString += '"' + _DAMFieldBuffer.FieldName + '",';
         until _DAMFieldBuffer.Next() = 0;
+        KeyString := DelChr(KeyString, '>', ',');
     end;
 
     local procedure ContainsLettersOnly(String: text): Boolean

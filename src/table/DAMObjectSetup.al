@@ -16,6 +16,11 @@ table 91000 "DAM Object Setup"
             MinValue = 50000;
             MaxValue = 99999;
         }
+        field(30; "Default Export Folder Path"; Text[250])
+        {
+            CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

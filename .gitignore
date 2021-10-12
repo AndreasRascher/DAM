@@ -3,3 +3,5 @@
 .alpackages/*.app
 .vscode/rad.*
 *.app
+src/GEN/*.al
+

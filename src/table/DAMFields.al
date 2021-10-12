@@ -194,6 +194,10 @@ table 91002 "DAMField"
                         begin
                             DAMFields2."Validate Value" := false;
                         end;
+                    (TargetField.FieldName IN ['E-Mail']):
+                        begin
+                            DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                        end;
                 end;
 
                 if format(DAMFields2) <> Format(DAMFields) then

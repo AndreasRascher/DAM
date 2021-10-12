@@ -89,7 +89,7 @@ codeunit 91000 "DAMImport"
         TempDAMFields.SetFilter("To Field No.", DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/));
         TempDAMFields.findset();
         repeat
-            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", FALSE);
+            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", false);
         until TempDAMFields.Next() = 0;
         IF TmpTargetRef.INSERT(FALSE) then;
     end;
@@ -105,7 +105,10 @@ codeunit 91000 "DAMImport"
             case TempDAMFields."Processing Action" of
 
                 TempDAMFields."Processing Action"::Transfer:
-                    DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMFields);
+                    if TempDAMFields."Validate Value" then
+                        DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMFields)
+                    else
+                        DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", true);
 
                 TempDAMFields."Processing Action"::FixedValue:
                     begin
