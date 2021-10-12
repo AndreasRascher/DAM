@@ -6,6 +6,7 @@ page 91002 "DAMTableCard"
     UsageCategory = Administration;
     SourceTable = DAMTable;
     DelayedInsert = true;
+    DataCaptionFields = "To Table Caption";
 
     layout
     {
@@ -36,6 +37,10 @@ page 91002 "DAMTableCard"
                     ToolTip = 'Specifies the value of the Buffer Table ID field.';
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
+                    trigger OnAssistEdit()
+                    begin
+                        Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+                    end;
                 }
             }
             group(Import)

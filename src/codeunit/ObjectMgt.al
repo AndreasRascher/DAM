@@ -3,14 +3,17 @@ codeunit 91004 ObjMgt
     procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
+        DAMSetup: Record "DAM Object Setup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DAMSelectTables: Page DAMSelectTables;
     begin
+        DAMSetup.CheckSchemaInfoHasBeenImporterd();
         DAMFieldBuffer.FindSet();
         repeat
             if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DAMFieldBuffer.TableNo) then begin
                 TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
                 TempAllObjWithCaption."Object ID" := DAMFieldBuffer.TableNo;
+                TempAllObjWithCaption."Object Name" := DAMFieldBuffer.TableName;
                 TempAllObjWithCaption."Object Caption" := DAMFieldBuffer."Table Caption";
                 TempAllObjWithCaption.Insert(false);
             end;
