@@ -177,26 +177,26 @@ table 91002 "DAMField"
                 TargetField.Get(DAMFields."To Table No.", DAMFields."To Field No.");
                 DAMFields2 := DAMFields;
                 case true of
-                    // TargetField.FieldName IN ['Global Dimension 1 Code',
-                    //                           'Global Dimension 2 Code',
-                    //                           'VAT Registration No.']:
-                    //     begin
-                    //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                    //     end;
-                    // (TargetField.TableNo = DATabase::Item) and
-                    // (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure']):
-                    //     begin
-                    //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                    //     end;
-                    (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                    (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
-                        begin
-                            DAMFields2."Validate Value" := false;
-                        end;
-                    (TargetField.FieldName IN ['E-Mail']):
-                        begin
-                            DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                        end;
+                // TargetField.FieldName IN ['Global Dimension 1 Code',
+                //                           'Global Dimension 2 Code',
+                //                           'VAT Registration No.']:
+                //     begin
+                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                //     end;
+                // (TargetField.TableNo = DATabase::Item) and
+                // (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure']):
+                //     begin
+                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                //     end;
+                // (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
+                // (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
+                //     begin
+                //         DAMFields2."Validate Value" := false;
+                //     end;
+                // (TargetField.FieldName IN ['E-Mail']):
+                //     begin
+                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
+                //     end;
                 end;
 
                 if format(DAMFields2) <> Format(DAMFields) then
