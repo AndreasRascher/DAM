@@ -115,6 +115,10 @@ table 91001 "DAMTable"
             CaptionML = DEU = 'OnInsert Trigger verwenden', ENU = 'Use OnInsert Trigger';
             InitValue = true;
         }
+        field(61; "Sort Order"; Integer)
+        {
+            CaptionML = DEU = 'Sortierung', ENU = 'Sort Order';
+        }
         field(100; LastImportToTargetAt; DateTime)
         {
             CaptionML = DEU = 'Letzter Import am', ENU = 'Last Import At';
@@ -132,6 +136,10 @@ table 91001 "DAMTable"
         key(PK; "To Table ID")
         {
             Clustered = true;
+        }
+        key(Sorted; "Sort Order")
+        {
+
         }
     }
 
@@ -153,6 +161,24 @@ table 91001 "DAMTable"
         file.Open(DataFilePath, TextEncoding::MSDos);
         file.CreateInStream(InStr);
         Xmlport.Import(Rec."Import XMLPort ID", InStr);
+    end;
+
+    procedure DownloadALBufferTableFile()
+    var
+        DAMObjectGenerator: Codeunit DAMObjectGenerator;
+    begin
+        DAMObjectGenerator.DownloadAsMDDosFile(
+            DAMObjectGenerator.CreateALTable(Rec),
+            Rec.GetALBufferTableName());
+    end;
+
+    procedure DownloadALXMLPort()
+    var
+        DAMObjectGenerator: Codeunit DAMObjectGenerator;
+    begin
+        DAMObjectGenerator.DownloadAsMDDosFile(
+            DAMObjectGenerator.CreateALXMLPort(Rec),
+            StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID"));
     end;
 
     internal procedure ShowTableContent(TableID: Integer)
@@ -233,4 +259,36 @@ table 91001 "DAMTable"
         end;
     end;
 
+    procedure GetALBufferTableName() Name: Text;
+    begin
+        Name := StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."Old Version Table ID");
+    end;
+
+    procedure DownloadAllALBufferTableFiles(var DAMTable: Record DAMTable; FileEncoding: TextEncoding)
+    var
+        DAMTable2: Record DAMTable;
+        TenantMedia: Record "Tenant Media" temporary;
+        ObjGen: Codeunit DAMObjectGenerator;
+        DataCompression: Codeunit "Data Compression";
+        FileBlob: Codeunit "Temp Blob";
+        XMLBackup: Codeunit XMLBackup;
+        IStr: InStream;
+        OStr: OutStream;
+    begin
+        DAMTable2.Copy(DAMTable);
+        if DAMTable2.FindSet() then begin
+            DataCompression.CreateZipArchive();
+            repeat
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, FileEncoding);
+                OStr.WriteText(ObjGen.CreateALTable(DAMTable2).ToText());
+                FileBlob.CreateInStream(IStr, FileEncoding);
+                DataCompression.AddEntry(IStr, Rec.GetALBufferTableName());
+            until DAMTable2.Next() = 0;
+        end;
+        TenantMedia.Content.CreateOutStream(OStr);
+        DataCompression.SaveZipArchive(OStr);
+        TenantMedia.Content.CreateInStream(IStr);
+        XMLBackup.DownloadBlobContent(TenantMedia, 'BufferTables.zip', TextEncoding::MSDos);
+    end;
 }

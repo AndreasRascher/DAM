@@ -85,29 +85,27 @@ codeunit 91004 ObjMgt
                 Rec."To Table ID" := DAMFieldBuffer.TableNo;
                 Rec."To Table Caption" := DAMFieldBuffer."Table Caption";
             end;
+
         end;
     end;
 
     procedure ImportNAVSchemaFile()
     var
+        DAMSetup: Record "DAM Object Setup";
         FieldImport: XmlPort FieldBufferImport;
-        FileName: Text;
+        ServerFile: File;
         InStr: InStream;
-        Selection: Integer;
+        FileName: Text;
     begin
-        Selection := StrMenu('TextEncoding::Windows,TextEncoding::UTF8,TextEncoding::UTF16,TextEncoding::MSDos', 3, 'Wähle ein Encoding aus');
-        case Selection of
-            1:
-                FieldImport.TextEncoding := TextEncoding::Windows;
-            2:
-                FieldImport.TextEncoding := TextEncoding::UTF8;
-            3:
-                FieldImport.TextEncoding := TextEncoding::UTF16;
-            4:
-                FieldImport.TextEncoding := TextEncoding::MSDos;
-        end;
-        if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then
-            exit;
+        if DAMSetup.Get() then
+            if DAMSetup."Schema.xml File Path" <> '' then
+                if ServerFile.Open(DAMSetup."Schema.xml File Path") then begin
+                    ServerFile.CreateInStream(InStr);
+                end else begin
+                    if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then begin
+                        exit;
+                    end;
+                end;
         FieldImport.SetSource(InStr);
         FieldImport.Import();
     end;

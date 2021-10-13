@@ -169,12 +169,8 @@ page 91002 "DAMTableCard"
                 Image = ImportCodes;
 
                 trigger OnAction()
-                var
-                    DAMObjectGenerator: Codeunit DAMObjectGenerator;
                 begin
-                    DAMObjectGenerator.DownloadAsMDDosFile(
-                        DAMObjectGenerator.CreateALXMLPort(Rec),
-                        StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID"));
+                    rec.DownloadALXMLPort();
                 end;
             }
             action(CreateBufferTable)
@@ -183,12 +179,8 @@ page 91002 "DAMTableCard"
                 Image = ImportCodes;
 
                 trigger OnAction()
-                var
-                    DAMObjectGenerator: Codeunit DAMObjectGenerator;
                 begin
-                    DAMObjectGenerator.DownloadAsMDDosFile(
-                        DAMObjectGenerator.CreateALTable(Rec),
-                        StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."Old Version Table ID"));
+                    Rec.DownloadALBufferTableFile();
                 end;
             }
 

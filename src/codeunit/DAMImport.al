@@ -160,7 +160,7 @@ codeunit 91000 "DAMImport"
         //end;
     end;
 
-    local procedure TransferFieldsOnAfterInsert(BufferRef: RecordRef; TargetRef: RecordRef) OK: Boolean
+    local procedure TransferFieldsOnAfterInsert(BufferRef: RecordRef; TargetRef: RecordRef): Boolean
     var
         ToFieldRef: FieldRef;
     begin

@@ -6,6 +6,7 @@ page 91004 "DAMTableList"
     UsageCategory = Administration;
     SourceTable = DAMTable;
     CardPageId = DAMTableCard;
+    SourceTableView = sorting("Sort Order");
 
     layout
     {
@@ -13,6 +14,7 @@ page 91004 "DAMTableList"
         {
             repeater(DAMTableRepeater)
             {
+                field("Sort Order"; rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("Old Version Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; Visible = false; }
                 field("From Table Caption"; Rec."Old Version Table Caption") { ApplicationArea = All; }
                 field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; }
@@ -36,6 +38,30 @@ page 91004 "DAMTableList"
 
                 end;
             }
+            action(ImportBufferTables)
+            {
+                trigger OnAction()
+                var
+                    DAMTable: Record DAMTable;
+                begin
+                    if DAMTable.FindSet() then
+                        repeat
+                            DAMTable.ImportToBufferTable();
+                        until DAMTable.Next() = 0;
+                end;
+            }
+            action(ExportBufferTables)
+            {
+                trigger OnAction()
+                var
+                    DAMTable: Record DAMTable;
+                begin
+                    if DAMTable.FindSet() then
+                        repeat
+                            DAMTable.DownloadALBufferTableFile();
+                        until DAMTable.Next() = 0;
+                end;
+            }
         }
     }
 
@@ -43,7 +69,6 @@ page 91004 "DAMTableList"
     var
         AllObj: Record AllObjWithCaption;
     begin
-        LinesEditable := not (0 in [Rec."Buffer Table ID", Rec."To Table ID"]);
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';
         if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
@@ -54,8 +79,6 @@ page 91004 "DAMTableList"
     end;
 
     var
-        [InDataSet]
-        LinesEditable: Boolean;
         [InDataSet]
         ImportXMLPortIDStyle: Text;
         [InDataSet]

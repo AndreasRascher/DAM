@@ -21,6 +21,14 @@ table 91000 "DAM Object Setup"
             CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
             DataClassification = ToBeClassified;
         }
+        field(31; "Schema.xml File Path"; Text[250])
+        {
+            CaptionML = DEU = 'Pfad Schemadatei', ENU = 'Schema File Path';
+        }
+        field(32; "Backup.xml File Path"; Text[250])
+        {
+            CaptionML = DEU = 'Pfad Backup.xml', ENU = 'Backup.xml File Path';
+        }
     }
     keys
     {
