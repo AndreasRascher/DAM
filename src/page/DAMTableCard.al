@@ -140,7 +140,8 @@ page 91002 "DAMTableCard"
                     DAMImport: Codeunit DAMImport;
                 begin
                     DAMImport.SetObjectIDs(Rec);
-                    DAMImport.ProcessFullBuffer('');
+                    DAMImport.ProcessFullBuffer();
+                    Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := UserId;
                     Rec.LastImportToTargetAt := CurrentDateTime;
                     Rec.Modify();

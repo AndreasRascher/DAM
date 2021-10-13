@@ -34,14 +34,7 @@ codeunit 91004 ObjMgt
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DAMSelectTables: Page DAMSelectTables;
     begin
-        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-        if not AllObjWithCaption.FindSet() then
-            exit(false);
-        repeat
-            TempAllObjWithCaption := AllObjWithCaption;
-            TempAllObjWithCaption.Insert(false);
-        until AllObjWithCaption.Next() = 0;
-
+        LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
         DAMSelectTables.Set(TempAllObjWithCaption);
         DAMSelectTables.LookupMode(true);
@@ -50,6 +43,41 @@ codeunit 91004 ObjMgt
             DAMTable."To Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
+    end;
+
+    procedure AddSelectedTables() OK: Boolean;
+    var
+        TempAllObjWithCaption: Record AllObjWithCaption temporary;
+        DAMSelectTables: Page DAMSelectTables;
+        DAMTable: Record DAMTable;
+    begin
+        LoadTableList(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
+            if TempAllObjWithCaption.FindSet() then
+                repeat
+                    if not DAMTable.get(TempAllObjWithCaption."Object ID") then begin
+                        Clear(DAMTable);
+                        DAMTable.Validate("Old Version Table Caption", Format(TempAllObjWithCaption."Object ID"));
+                        DAMTable.Insert();
+                    end;
+                until TempAllObjWithCaption.Next() = 0;
+        end;
+    end;
+
+    local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+    begin
+        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
+        AllObjWithCaption.FindSet();
+        repeat
+            TempAllObjWithCaption := AllObjWithCaption;
+            TempAllObjWithCaption.Insert(false);
+        until AllObjWithCaption.Next() = 0;
     end;
 
     internal procedure ValidateFromTableCaption(var Rec: Record DAMTable; xRec: Record DAMTable)

@@ -129,6 +129,9 @@ table 91001 "DAMTable"
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = User."User Name";
         }
+        field(102; LastView; Blob)
+        {
+        }
     }
 
     keys
@@ -290,5 +293,26 @@ table 91001 "DAMTable"
         DataCompression.SaveZipArchive(OStr);
         TenantMedia.Content.CreateInStream(IStr);
         XMLBackup.DownloadBlobContent(TenantMedia, 'BufferTables.zip', TextEncoding::MSDos);
+    end;
+
+    procedure SaveTableLastView(TableView: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec.LastView);
+        Rec.Modify();
+        rec.LastView.CreateOutStream(Ostr);
+        OStr.WriteText(TableView);
+        Rec.Modify();
+    end;
+
+    procedure LoadTableLastView() TableView: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields(LastView);
+        if not rec.LastView.HasValue then exit('');
+        rec.LastView.CreateInStream(IStr);
+        IStr.ReadText(TableView);
     end;
 }

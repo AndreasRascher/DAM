@@ -44,7 +44,7 @@ page 91005 DAMSelectTables
         repeat
             allObjWithCaption := Rec;
             allObjWithCaption.Insert(false);
-        until allObjWithCaption.Next() = 0;
+        until Rec.Next() = 0;
         allObjWithCaption_SELECTED.Copy(allObjWithCaption, true);
         debug := allObjWithCaption_SELECTED.Count;
         HasLines := allObjWithCaption_SELECTED.FindFirst();

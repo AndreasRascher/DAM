@@ -26,6 +26,27 @@ page 91001 "DAM Error Log List"
             }
         }
     }
+    actions
+    {
+        area(Processing)
+        {
+            action(DeleteFilteredLines)
+            {
+                CaptionML = DEU = 'Zeilen löschen', ENU = 'Delete Lines';
+                ApplicationArea = All;
+                Image = Delete;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    Rec.DeleteAll();
+                end;
+            }
+        }
+    }
 
     trigger OnAfterGetRecord()
     begin

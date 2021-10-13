@@ -34,8 +34,10 @@ page 91004 "DAMTableList"
             action(SelectTablesToAdd)
             {
                 trigger OnAction()
+                var
+                    ObjMgt: Codeunit ObjMgt;
                 begin
-
+                    ObjMgt.AddSelectedTables();
                 end;
             }
             action(ImportBufferTables)
@@ -52,13 +54,14 @@ page 91004 "DAMTableList"
             }
             action(ExportBufferTables)
             {
+                CaptionML = DEU = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
                 var
                     DAMTable: Record DAMTable;
                 begin
                     if DAMTable.FindSet() then
                         repeat
-                            DAMTable.DownloadALBufferTableFile();
+                            DAMTable.DownloadAllALBufferTableFiles(Rec, TextEncoding::MSDos);
                         until DAMTable.Next() = 0;
                 end;
             }

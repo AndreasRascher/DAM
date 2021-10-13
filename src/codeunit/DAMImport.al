@@ -1,18 +1,22 @@
 codeunit 91000 "DAMImport"
 {
-    procedure ProcessFullBuffer(BufferFilterView: Text)
+    procedure ProcessFullBuffer()
     var
         DAMErrorLog: Record DAMErrorLog;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
+        BufferFilterView: Text;
     begin
         LoadFieldMapping(DAMTable);
 
         BufferRef.OPEN(BufferTableID);
-        if not ShowRequestPageFilterDialog(BufferRef, BufferFilterView) then
+        if DAMTable.LoadTableLastView() <> '' then
+            BufferRef.SetView(DAMTable.LoadTableLastView());
+
+        if not ShowRequestPageFilterDialog(BufferRef) then
             exit;
-        IF BufferFilterView <> '' then
-            BufferRef.SETVIEW(BufferFilterView);
+
+        DAMTable.SaveTableLastView(BufferRef.GetView());
 
         // Buffer loop
         BufferRef.findset();
@@ -139,7 +143,7 @@ codeunit 91000 "DAMImport"
         TmpTargetRef.MODIFY(TRUE);
     end;
 
-    procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef; FilterText: text) Continue: Boolean;
+    procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef) Continue: Boolean;
     var
         FPBuilder: FilterPageBuilder;
         PrimaryKeyRef: KeyRef;
@@ -156,7 +160,7 @@ codeunit 91000 "DAMImport"
         Continue := FPBuilder.RUNMODAL();
         //IF FPBuilder.RUNMODAL then begin
         BufferRef.SETVIEW(FPBuilder.GETVIEW(BufferRef.CAPTION));
-        FilterText := BufferRef.GETFILTERS;
+        //FilterText := BufferRef.GETFILTERS;
         //end;
     end;
 
