@@ -255,7 +255,7 @@ table 91001 "DAMTable"
         DAMSetup.Get();
         if DAMSetup."Default Export Folder Path" = '' then exit;
         if Rec.DataFilePath <> '' then exit;
-        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.txt', Rec."Old Version Table Caption"));
+        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.txt', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := FilePath;
             Rec.Modify();
@@ -286,7 +286,7 @@ table 91001 "DAMTable"
                 FileBlob.CreateOutStream(OStr, FileEncoding);
                 OStr.WriteText(ObjGen.CreateALTable(DAMTable2).ToText());
                 FileBlob.CreateInStream(IStr, FileEncoding);
-                DataCompression.AddEntry(IStr, Rec.GetALBufferTableName());
+                DataCompression.AddEntry(IStr, DAMTable2.GetALBufferTableName());
             until DAMTable2.Next() = 0;
         end;
         TenantMedia.Content.CreateOutStream(OStr);

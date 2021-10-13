@@ -778,11 +778,6 @@ codeunit 91003 DAMObjectGenerator
         DownloadFileWithEncoding(Content, FileName, TextEncoding::MSDos);
     end;
 
-    procedure DownloadAsUTF16File(Content: TextBuilder; FileName: text)
-    begin
-        DownloadFileWithEncoding(Content, FileName, TextEncoding::UTF16);
-    end;
-
     procedure DownloadFileWithEncoding(Content: TextBuilder; FileName: text; FileEncoding: TextEncoding)
     var
         FileManagement: Codeunit "File Management";

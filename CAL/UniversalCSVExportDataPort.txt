@@ -2,8 +2,8 @@ OBJECT Dataport 50004 DAMExport
 {
   OBJECT-PROPERTIES
   {
-    Date=10.10.21;
-    Time=21:26:20;
+    Date=13.10.21;
+    Time=22:47:23;
     Modified=Yes;
     Version List=DAM;
   }
@@ -55,6 +55,7 @@ OBJECT Dataport 50004 DAMExport
       { 1000000092;Label  ;220  ;220  ;3300 ;440  ;ParentControl=1000000000;
                                                    InPage=-1 }
       { 1000000001;TextBox;220  ;1980 ;12650;440  ;Name=ExportObjectIDFilterCtrl;
+                                                   HorzGlue=Both;
                                                    AssistEdit=Yes;
                                                    CaptionML=[DEU=Tabellen-ID Filter fuer Export;
                                                               ENU=Table ID Filter for Export];
@@ -109,16 +110,25 @@ OBJECT Dataport 50004 DAMExport
       ExportDuration@1000000002 : Duration;
       Progress@1000000003 : Dialog;
       ReadyMsg@1000000004 : Text[1024];
+      TAB@1000000005 : Text[1];
     BEGIN
       AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
       AllObjWithCaption.SETFILTER("Object ID",ExportTableIDFilter);
       IF NOT AllObjWithCaption.FINDSET THEN EXIT;
+      TAB[1] := 9; // TAB
+
+      REPEAT
+        IF NOT IsTableInLicense(AllObjWithCaption."Object ID") THEN
+        MESSAGE('Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.',AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
+      UNTIL AllObjWithCaption.NEXT = 0;
+
       ReadyMsg:='DAM EXPORT:';
+      AllObjWithCaption.FINDSET;
       REPEAT
         ExportToPath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.txt';
 
         EXPORT_ExportFullTable(ExportToPath,AllObjWithCaption."Object ID",FALSE,ExportDuration,FALSE,FALSE,'');
-        ReadyMsg += STRSUBSTNO('\%1: %2',AllObjWithCaption."Object Caption",ExportDuration);
+        ReadyMsg += STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
 
       UNTIL AllObjWithCaption.NEXT = 0;
       MESSAGE(ReadyMsg)
@@ -719,6 +729,15 @@ OBJECT Dataport 50004 DAMExport
         Pos += Content.GETSUBTEXT(Chunk,Pos,1024);
         ADOStream.WriteText(Chunk,0{LineBreak});
       END;
+    END;
+
+    PROCEDURE IsTableInLicense@1000000018(ObjectID@1000000000 : Integer) : Boolean;
+    VAR
+      _LicensePermission@1000000001 : Record 2000000043;
+    BEGIN
+      IF NOT _LicensePermission.GET(_LicensePermission."Object Type"::Table,ObjectID) THEN
+        EXIT(FALSE);
+      EXIT(_LicensePermission."Execute Permission"<>_LicensePermission."Execute Permission"::" ");
     END;
 
     BEGIN
