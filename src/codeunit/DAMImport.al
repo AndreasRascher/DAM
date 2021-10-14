@@ -1,17 +1,22 @@
 codeunit 91000 "DAMImport"
 {
-    procedure ProcessFullBuffer(BufferFilterView: Text)
+    procedure ProcessFullBuffer()
     var
         DAMErrorLog: Record DAMErrorLog;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
+        BufferFilterView: Text;
     begin
         LoadFieldMapping(DAMTable);
 
         BufferRef.OPEN(BufferTableID);
-        ShowRequestPageFilterDialog(BufferRef);
-        IF BufferFilterView <> '' then
-            BufferRef.SETVIEW(BufferFilterView);
+        if DAMTable.LoadTableLastView() <> '' then
+            BufferRef.SetView(DAMTable.LoadTableLastView());
+
+        if not ShowRequestPageFilterDialog(BufferRef) then
+            exit;
+
+        DAMTable.SaveTableLastView(BufferRef.GetView());
 
         // Buffer loop
         BufferRef.findset();
@@ -68,8 +73,11 @@ codeunit 91000 "DAMImport"
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef);
 
         ErrorsExist := DAMErrorLog.ErrorsExistFor(BufferRef, TRUE);
-        if not ErrorsExist then
+        if not ErrorsExist then begin
             Success := DAMMgt.InsertRecFromTmp(BufferRef, TargetRef, DAMTable."Use OnInsert Trigger");
+            if Success then
+                TransferFieldsOnAfterInsert(BufferRef, TargetRef);
+        end;
 
         DAMMgt.UpdateResultQty(Success, TRUE);
     end;
@@ -89,7 +97,7 @@ codeunit 91000 "DAMImport"
         TempDAMFields.SetFilter("To Field No.", DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/));
         TempDAMFields.findset();
         repeat
-            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", FALSE);
+            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", false);
         until TempDAMFields.Next() = 0;
         IF TmpTargetRef.INSERT(FALSE) then;
     end;
@@ -102,19 +110,32 @@ codeunit 91000 "DAMImport"
         TempDAMFields.SetFilter("To Field No.", DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*include*/));
         TempDAMFields.findset();
         repeat
-            case TempDAMFields."Processing Action" of
+            TempDAMFields.CalcFields("To Field Caption", "From Field Caption");
+            case true of
+                (TempDAMFields."Fixed Value OnBeforeInsert" <> ''):
+                    begin
+                        ToFieldRef := TmpTargetRef.Field(TempDAMFields."To Field No.");
+                        if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMFields."Fixed Value OnBeforeInsert", false) then
+                            Error('Invalid Fixed Value OnBeforeInsert %1', TempDAMFields."Fixed Value OnBeforeInsert");
+                        DAMMgt.ValidateFieldWithValue(TmpTargetRef, TempDAMFields."To Field No.",
+                          ToFieldRef.Value,
+                          TempDAMFields."Ignore Validation Error");
+                    end;
 
-                TempDAMFields."Processing Action"::Transfer:
-                    DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMFields);
+                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::Transfer):
+                    if TempDAMFields."Validate Value" then
+                        DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMFields)
+                    else
+                        DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", true);
 
-                TempDAMFields."Processing Action"::FixedValue:
+
+                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::FixedValue):
                     begin
                         ToFieldRef := TmpTargetRef.Field(TempDAMFields."To Field No.");
                         if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMFields."Fixed Value", false) then
                             Error('Invalid Fixed Value %1', TempDAMFields."Fixed Value");
                         DAMMgt.ValidateFieldWithValue(TmpTargetRef, TempDAMFields."To Field No.",
                           ToFieldRef.Value,
-                          TempDAMFields."Validate Method" = TempDAMFields."Validate Method"::"if codeunit run",
                           TempDAMFields."Ignore Validation Error");
                     end;
             end
@@ -122,7 +143,7 @@ codeunit 91000 "DAMImport"
         TmpTargetRef.MODIFY(TRUE);
     end;
 
-    procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef) FilterText: text;
+    procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef) Continue: Boolean;
     var
         FPBuilder: FilterPageBuilder;
         PrimaryKeyRef: KeyRef;
@@ -136,11 +157,51 @@ codeunit 91000 "DAMImport"
         for Index := 1 TO PrimaryKeyRef.FIELDCOUNT DO
             FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FIELDINDEX(Index).NUMBER);
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        FPBuilder.RUNMODAL();
+        Continue := FPBuilder.RUNMODAL();
         //IF FPBuilder.RUNMODAL then begin
         BufferRef.SETVIEW(FPBuilder.GETVIEW(BufferRef.CAPTION));
-        FilterText := BufferRef.GETFILTERS;
+        //FilterText := BufferRef.GETFILTERS;
         //end;
+    end;
+
+    local procedure TransferFieldsOnAfterInsert(BufferRef: RecordRef; TargetRef: RecordRef): Boolean
+    var
+        ToFieldRef: FieldRef;
+    begin
+        TempDAMFields.Reset();
+        TempDAMFields.SetFilter("To Field No.", DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*include*/));
+        TempDAMFields.SetFilter("Fixed Value OnBeforeInsert", '<>''''');
+        if not TempDAMFields.findset() then exit(false);
+        repeat
+            case true of
+                (TempDAMFields."Fixed Value OnBeforeInsert" <> ''):
+                    begin
+                        ToFieldRef := TargetRef.Field(TempDAMFields."To Field No.");
+                        if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMFields."Fixed Value OnBeforeInsert", false) then
+                            Error('Invalid Fixed Value OnBeforeInsert %1', TempDAMFields."Fixed Value OnBeforeInsert");
+                        DAMMgt.ValidateFieldWithValue(TargetRef, TempDAMFields."To Field No.",
+                          ToFieldRef.Value,
+                          TempDAMFields."Ignore Validation Error");
+                    end;
+
+                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::Transfer):
+                    if TempDAMFields."Validate Value" then
+                        DAMMgt.ValidateField(TargetRef, BufferRef, TempDAMFields)
+                    else
+                        DAMMgt.AssignFieldWithoutValidate(TargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", true);
+
+                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::FixedValue):
+                    begin
+                        ToFieldRef := TargetRef.Field(TempDAMFields."To Field No.");
+                        if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMFields."Fixed Value", false) then
+                            Error('Invalid Fixed Value %1', TempDAMFields."Fixed Value");
+                        DAMMgt.ValidateFieldWithValue(TargetRef, TempDAMFields."To Field No.",
+                          ToFieldRef.Value,
+                          TempDAMFields."Ignore Validation Error");
+                    end;
+            end
+        until TempDAMFields.Next() = 0;
+        TargetRef.MODIFY(TRUE);
     end;
 
     var

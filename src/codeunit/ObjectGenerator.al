@@ -625,10 +625,10 @@ codeunit 91003 DAMObjectGenerator
             C.AppendLine('            tableelement(' + GetCleanTableName(DAMFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DAMFieldBuffer) + ''';');
-            DAMFieldBuffer.FINDSET;
+            DAMFieldBuffer.FINDSET();
             REPEAT
                 C.AppendLine('                fieldelement("' + GetCleanFieldName(DAMFieldBuffer) + '"; ' + GetCleanTableName(DAMFieldBuffer) + '."' + DAMFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
-            UNTIL DAMFieldBuffer.NEXT = 0;
+            UNTIL DAMFieldBuffer.NEXT() = 0;
         END;
 
         C.AppendLine('                trigger OnBeforeInsertRecord()');
@@ -735,7 +735,7 @@ codeunit 91003 DAMObjectGenerator
         FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
         C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + ''', ENU = ''' + DAMFieldBuffer.TableName + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
         C.AppendLine('  fields {');
         IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
             REPEAT
@@ -774,15 +774,18 @@ codeunit 91003 DAMObjectGenerator
     end;
 
     procedure DownloadAsMDDosFile(Content: TextBuilder; FileName: text)
+    begin
+        DownloadFileWithEncoding(Content, FileName, TextEncoding::MSDos);
+    end;
+
+    procedure DownloadFileWithEncoding(Content: TextBuilder; FileName: text; FileEncoding: TextEncoding)
     var
         FileManagement: Codeunit "File Management";
         NewFile: File;
-        OStr: Outstream;
+        AllFileTypeTok: Label 'All Files (*.*)|*.*';
         FolderName: text;
-        ServerFileName: text;
         NewFileName: Text;
-        TXTFileType: Label 'Text Files (*.txt)|*.txt';
-        AllFileType: Label 'All Files (*.*)|*.*';
+        ServerFileName: text;
     begin
         NewFile.CreateTempFile();
         FolderName := FileManagement.GetDirectoryName(NewFile.Name);
@@ -790,13 +793,13 @@ codeunit 91003 DAMObjectGenerator
         ServerFileName := FolderName + '\' + FileName;
         NewFile.TextMode(true);
         NewFile.WriteMode(true);
-        NewFile.Create(ServerFileName, TextEncoding::MSDos);
+        NewFile.Create(ServerFileName, FileEncoding);
         NewFile.Write(Content.ToText());
         NewFile.Close();
 
         //FileManagement.DownloadTempFile(ServerFileName);
         NewFileName := FileManagement.GetFileName(ServerFileName);
-        Download(ServerFileName, '', '<TEMP>', AllFileType, NewFileName);
+        Download(ServerFileName, '', '<TEMP>', AllFileTypeTok, NewFileName);
     end;
 
 
@@ -840,20 +843,35 @@ codeunit 91003 DAMObjectGenerator
     begin
         _DAMFieldBuffer.SetRange(TableNo, TableIDInNAV);
         _DAMFieldBuffer.FindFirst();
-        _DAMFieldBuffer.SetFilter("No.", _DAMFieldBuffer."Primary Key");
+        _DAMFieldBuffer.SetFilter("No.", ConvertStr(_DAMFieldBuffer."Primary Key", ',', '|'));
         _DAMFieldBuffer.FindSet();
         repeat
             if ContainsLettersOnly(_DAMFieldBuffer.FieldName) then
-                KeyString += _DAMFieldBuffer.FieldName
+                KeyString += _DAMFieldBuffer.FieldName + ','
             else
-                KeyString += '"' + _DAMFieldBuffer.FieldName + '"';
+                KeyString += '"' + _DAMFieldBuffer.FieldName + '",';
         until _DAMFieldBuffer.Next() = 0;
+        KeyString := DelChr(KeyString, '>', ',');
     end;
 
     local procedure ContainsLettersOnly(String: text): Boolean
     var
-        Letters: Label 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', Locked = true;
+        LettersTok: Label 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', Locked = true;
     begin
-        EXIT(DELCHR(String, '=', Letters) = '');
+        EXIT(DELCHR(String, '=', LettersTok) = '');
+    end;
+
+    procedure Ansi2Ascii(_String: Text[250]) _Output: Text[250];
+    begin
+        // Converts from ANSI to ASCII
+        EXIT(CONVERTSTR(_String, 'Ã³ÚÔõÓÕþÛÙÞ´¯ý’µã¶÷ž¹¨ Íœ°úÏÎâßÝ¾·±Ð¬‡Š«Œ‹“”‘–—¤•ËÈÊš›™',
+                                'ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®ÁÂÀÊËÈÍÎÏÌÓßÔÒÚÛÙ'));
+    end;
+
+    procedure Ascii2Ansi(_String: Text[250]) _Output: Text[250];
+    begin
+        // Converts from ANSI to ASCII
+        EXIT(CONVERTSTR(_String, 'ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®ÁÂÀÊËÈÍÎÏÌÓßÔÒÚÛÙ',
+                                'Ã³ÚÔõÓÕþÛÙÞ´¯ý’µã¶÷ž¹¨ Íœ°úÏÎâßÝ¾·±Ð¬‡Š«Œ‹“”‘–—¤•ËÈÊš›™'));
     end;
 }

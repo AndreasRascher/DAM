@@ -16,6 +16,19 @@ table 91000 "DAM Object Setup"
             MinValue = 50000;
             MaxValue = 99999;
         }
+        field(30; "Default Export Folder Path"; Text[250])
+        {
+            CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
+            DataClassification = ToBeClassified;
+        }
+        field(31; "Schema.xml File Path"; Text[250])
+        {
+            CaptionML = DEU = 'Pfad Schemadatei', ENU = 'Schema File Path';
+        }
+        field(32; "Backup.xml File Path"; Text[250])
+        {
+            CaptionML = DEU = 'Pfad Backup.xml', ENU = 'Backup.xml File Path';
+        }
     }
     keys
     {
@@ -30,5 +43,13 @@ table 91000 "DAM Object Setup"
             Rec."Object ID Dataport (Export)" := 50004;
             Rec.Insert();
         end;
+    end;
+
+    procedure CheckSchemaInfoHasBeenImporterd()
+    var
+        DAMFieldBuffer: Record DAMFieldBuffer;
+        SchemaInfoMissingErr: TextConst ENU = 'The Schema.txt file has not been imported.', DEU = 'Die Schema.txt wurde nicht importiert.';
+    begin
+        if DAMFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;
 }

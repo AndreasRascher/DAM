@@ -1,4 +1,4 @@
-page 90004 "DAM Error Log List"
+page 91001 "DAM Error Log List"
 {
     ApplicationArea = All;
     CaptionML = DEU = 'DAM Fehlerprotokoll', ENU = 'DAM Error Log';
@@ -23,6 +23,27 @@ page 90004 "DAM Error Log List"
                 field("Ignore Error"; Rec."Ignore Error") { ApplicationArea = All; StyleExpr = TextStyle; }
                 field("DAM User"; Rec."DAM User") { ApplicationArea = All; StyleExpr = TextStyle; }
                 field("DAM Errorlog Created At"; Rec."DAM Errorlog Created At") { ApplicationArea = All; StyleExpr = TextStyle; }
+            }
+        }
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(DeleteFilteredLines)
+            {
+                CaptionML = DEU = 'Zeilen löschen', ENU = 'Delete Lines';
+                ApplicationArea = All;
+                Image = Delete;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    Rec.DeleteAll();
+                end;
             }
         }
     }

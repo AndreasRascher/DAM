@@ -1,4 +1,4 @@
-page 90001 "DAMTableCard"
+page 91002 "DAMTableCard"
 {
     CaptionML = DEU = 'DAM Tabellenkarte', ENU = 'DAM Table Card';
     PageType = Document;
@@ -6,6 +6,7 @@ page 90001 "DAMTableCard"
     UsageCategory = Administration;
     SourceTable = DAMTable;
     DelayedInsert = true;
+    DataCaptionFields = "To Table Caption";
 
     layout
     {
@@ -36,6 +37,10 @@ page 90001 "DAMTableCard"
                     ToolTip = 'Specifies the value of the Buffer Table ID field.';
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
+                    trigger OnAssistEdit()
+                    begin
+                        Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+                    end;
                 }
             }
             group(Import)
@@ -94,8 +99,9 @@ page 90001 "DAMTableCard"
             }
             part(FieldsPart; DAMTableCardPart)
             {
+                ApplicationArea = all;
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
-                Editable = LinesEditable;
+                //Editable = LinesEditable;
                 SubPageLink = "From Table ID" = field("Buffer Table ID"), "To Table No." = field("To Table ID");
             }
         }
@@ -135,7 +141,11 @@ page 90001 "DAMTableCard"
                     DAMImport: Codeunit DAMImport;
                 begin
                     DAMImport.SetObjectIDs(Rec);
-                    DAMImport.ProcessFullBuffer('');
+                    DAMImport.ProcessFullBuffer();
+                    Rec.Get(Rec.RecordId);
+                    Rec.LastImportBy := UserId;
+                    Rec.LastImportToTargetAt := CurrentDateTime;
+                    Rec.Modify();
                 end;
             }
             action(OpenErrorLog)
@@ -161,12 +171,8 @@ page 90001 "DAMTableCard"
                 Image = ImportCodes;
 
                 trigger OnAction()
-                var
-                    DAMObjectGenerator: Codeunit DAMObjectGenerator;
                 begin
-                    DAMObjectGenerator.DownloadAsMDDosFile(
-                        DAMObjectGenerator.CreateALXMLPort(Rec),
-                        StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID"));
+                    rec.DownloadALXMLPort();
                 end;
             }
             action(CreateBufferTable)
@@ -175,12 +181,8 @@ page 90001 "DAMTableCard"
                 Image = ImportCodes;
 
                 trigger OnAction()
-                var
-                    DAMObjectGenerator: Codeunit DAMObjectGenerator;
                 begin
-                    DAMObjectGenerator.DownloadAsMDDosFile(
-                        DAMObjectGenerator.CreateALTable(Rec),
-                        StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."Old Version Table ID"));
+                    Rec.DownloadALBufferTableFile();
                 end;
             }
 

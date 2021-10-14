@@ -1,4 +1,4 @@
-page 91001 "DAM Object Setup"
+page 91000 "DAM Object Setup"
 {
     CaptionML = DEU = 'DAM Objekt Einrichtung', ENU = 'DAM Object Setup';
     PageType = Card;
@@ -16,6 +16,9 @@ page 91001 "DAM Object Setup"
                 field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
                 field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
                 field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
+                field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
+                field("Schema File Path"; Rec."Schema.xml File Path") { ApplicationArea = All; }
+                field("Backup.xml File Path"; "Backup.xml File Path") { ApplicationArea = All; }
             }
         }
     }
@@ -58,22 +61,6 @@ page 91001 "DAM Object Setup"
                     ObjMgt.ImportNAVSchemaFile();
                 end;
             }
-            action(AddXMLPortAndXMLPort)
-            {
-                CaptionML = DEU = 'AL Objekte erstellen';
-                ApplicationArea = All;
-                Image = DataEntry;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
-
-                trigger OnAction()
-
-                begin
-                    Message('ToDo');
-                end;
-            }
             action(XMLExport)
             {
                 ApplicationArea = All;
@@ -104,6 +91,19 @@ page 91001 "DAM Object Setup"
                     XMLBackup: Codeunit XMLBackup;
                 begin
                     XMLBackup.Import();
+                end;
+            }
+        }
+        area(Navigation)
+        {
+            action(Table_DAMFieldBuffer)
+            {
+                ApplicationArea = All;
+                CaptionML = DEU = 'Schema anzeigen';
+
+                trigger OnAction()
+                begin
+                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
                 end;
             }
         }

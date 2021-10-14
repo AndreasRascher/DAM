@@ -9,8 +9,10 @@ codeunit 91005 XMLBackup
 
     procedure Import();
     var
+        DAMSetup: Record "DAM Object Setup";
         TargetRef: RecordRef;
         FldRef: FieldRef;
+        serverFile: file;
         InStr: InStream;
         FieldNodeID: Integer;
         TableNodeID: Integer;
@@ -21,9 +23,19 @@ codeunit 91005 XMLBackup
         XFieldList: XmlNodeList;
         XRecordList: XmlNodeList;
         XTableList: XmlNodeList;
+        FileFound: Boolean;
     begin
-        if not UploadIntoStream('Select a Backup.XML file', '', 'XML Files|*.xml', FileName, InStr) then
-            exit;
+        if DAMSetup.Get() and (DAMSetup."Backup.xml File Path" <> '') then
+            if ServerFile.Open(DAMSetup."Backup.xml File Path") then begin
+                FileFound := true;
+                ServerFile.CreateInStream(InStr);
+            end;
+
+        if not FileFound then
+            if not UploadIntoStream('Select a Backup.XML file', '', 'XML Files|*.xml', FileName, InStr) then begin
+                exit;
+            end;
+
         Clear(XDoc);
         if not XmlDocument.ReadFrom(InStr, XDoc) then
             Error('reading xml failed');
@@ -39,13 +51,17 @@ codeunit 91005 XMLBackup
                 XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
                 foreach XFieldNode in XFieldList do begin
                     Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
-                    FldRef := TargetRef.Field(FieldNodeID);
-                    if XFieldNode.AsXmlElement().InnerText <> '' then
-                        EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
+                    if TargetRef.FieldExist(FieldNodeID) then begin
+                        FldRef := TargetRef.Field(FieldNodeID);
+                        if XFieldNode.AsXmlElement().InnerText <> '' then
+                            EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
+                    end;
                 end;
                 if not TargetRef.modify() then TargetRef.insert();
             end;
         end;
+
+        Message('Import abgeschlossen');
     end;
 
     procedure AddAttribute(XNode: XmlNode; AttrName: Text; AttrValue: Text): Boolean
@@ -186,7 +202,7 @@ codeunit 91005 XMLBackup
         TempTenantMedia.Content.CreateOutStream(OStr);
         XDoc.WriteTo(OStr);
 
-        DownloadBlobContent(TempTenantMedia, 'Backup.xml');
+        DownloadBlobContent(TempTenantMedia, 'Backup.xml', TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);
@@ -340,7 +356,7 @@ codeunit 91005 XMLBackup
             UNTIL _AllObj.Next() = 0;
     end;
 
-    procedure DownloadBlobContent(var TempTenantMedia: Record "Tenant Media"; FileName: Text): Text
+    procedure DownloadBlobContent(var TempTenantMedia: Record "Tenant Media"; FileName: Text; FileEncoding: TextEncoding): Text
     var
         FileMgt: Codeunit "File Management";
         IsDownloaded: Boolean;
@@ -353,6 +369,7 @@ codeunit 91005 XMLBackup
         RDLFileTypeTok: TextConst DEU = 'SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc', ENU = 'SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc';
         TXTFileTypeTok: TextConst DEU = 'Textdateien (*.txt)|*.txt', ENU = 'Text Files (*.txt)|*.txt';
         XMLFileTypeTok: TextConst DEU = 'XML-Dateien (*.xml)|*.xml', ENU = 'XML Files (*.xml)|*.xml';
+        ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
     begin
         CASE UPPERCASE(FileMgt.GetExtension(FileName)) OF
             'XLSX':
@@ -363,13 +380,15 @@ codeunit 91005 XMLBackup
                 OutExt := TXTFileTypeTok;
             'RDL', 'RDLC':
                 OutExt := RDLFileTypeTok;
+            'ZIP':
+                OutExt := ZIPFileTypeTok;
         END;
         IF OutExt = '' then
             OutExt := AllFilesDescriptionTxt
         else
             OutExt += '|' + AllFilesDescriptionTxt;
 
-        TempTenantMedia.Content.CreateInStream(InStr);
+        TempTenantMedia.Content.CreateInStream(InStr, FileEncoding);
         IsDownloaded := DOWNLOADFROMSTREAM(InStr, ExportLbl, Path, OutExt, FileName);
         if IsDownloaded then
             exit(FileName);
@@ -403,8 +422,8 @@ codeunit 91005 XMLBackup
                 begin
                     Clear(TenantMedia.Content);
                     IF ValueAsText <> '' then begin
-                        TenantMedia.Content.CreateOutStream(OStream);
-                        Base64Convert.FromBase64(ValueAsText, OStream);
+                        // TenantMedia.Content.CreateOutStream(OStream);
+                        // Base64Convert.FromBase64(ValueAsText, OStream); TODO
                     end;
                     FldRef.Value(TenantMedia.Content);
                 end;
@@ -428,7 +447,8 @@ codeunit 91005 XMLBackup
                 end;
             FldRef.Type::DateTime:
                 begin
-                    Evaluate(DateTimeType, ValueAsText, 9);
+                    if not Evaluate(DateTimeType, ValueAsText, 9) then
+                        Evaluate(DateTimeType, ValueAsText);
                     FldRef.Value(DateTimeType);
                 end;
             FldRef.Type::Decimal:

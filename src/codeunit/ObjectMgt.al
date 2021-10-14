@@ -3,22 +3,26 @@ codeunit 91004 ObjMgt
     procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
+        DAMSetup: Record "DAM Object Setup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        AllObjectwithCaption: Page "All Objects with Caption";
+        DAMSelectTables: Page DAMSelectTables;
     begin
+        DAMSetup.CheckSchemaInfoHasBeenImporterd();
         DAMFieldBuffer.FindSet();
         repeat
             if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DAMFieldBuffer.TableNo) then begin
                 TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
                 TempAllObjWithCaption."Object ID" := DAMFieldBuffer.TableNo;
+                TempAllObjWithCaption."Object Name" := DAMFieldBuffer.TableName;
                 TempAllObjWithCaption."Object Caption" := DAMFieldBuffer."Table Caption";
                 TempAllObjWithCaption.Insert(false);
             end;
         until DAMFieldBuffer.Next() = 0;
-        AllObjectwithCaption.SetRecord(TempAllObjWithCaption);
-        AllObjectwithCaption.LookupMode(true);
-        if AllObjectwithCaption.RunModal() = Action::LookupOK then begin
-            AllObjectwithCaption.GetRecord(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
             DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
             DAMTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
@@ -28,23 +32,52 @@ codeunit 91004 ObjMgt
     var
         AllObjWithCaption: Record AllObjWithCaption;
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        AllObjectwithCaptionList: Page "All Objects with Caption";
+        DAMSelectTables: Page DAMSelectTables;
+    begin
+        LoadTableList(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
+            DAMTable."To Table ID" := TempAllObjWithCaption."Object ID";
+            DAMTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
+        end;
+    end;
+
+    procedure AddSelectedTables() OK: Boolean;
+    var
+        TempAllObjWithCaption: Record AllObjWithCaption temporary;
+        DAMSelectTables: Page DAMSelectTables;
+        DAMTable: Record DAMTable;
+    begin
+        LoadTableList(TempAllObjWithCaption);
+        if TempAllObjWithCaption.FindFirst() then;
+        DAMSelectTables.Set(TempAllObjWithCaption);
+        DAMSelectTables.LookupMode(true);
+        if DAMSelectTables.RunModal() = Action::LookupOK then begin
+            DAMSelectTables.GetSelection(TempAllObjWithCaption);
+            if TempAllObjWithCaption.FindSet() then
+                repeat
+                    if not DAMTable.get(TempAllObjWithCaption."Object ID") then begin
+                        Clear(DAMTable);
+                        DAMTable.Validate("Old Version Table Caption", Format(TempAllObjWithCaption."Object ID"));
+                        DAMTable.Insert();
+                    end;
+                until TempAllObjWithCaption.Next() = 0;
+        end;
+    end;
+
+    local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-        if not AllObjWithCaption.FindSet() then
-            exit(false);
+        AllObjWithCaption.FindSet();
         repeat
             TempAllObjWithCaption := AllObjWithCaption;
             TempAllObjWithCaption.Insert(false);
         until AllObjWithCaption.Next() = 0;
-
-        AllObjectwithCaptionList.SetRecord(TempAllObjWithCaption);
-        AllObjectwithCaptionList.LookupMode(true);
-        if AllObjectwithCaptionList.RunModal() = Action::LookupOK then begin
-            AllObjectwithCaptionList.GetRecord(TempAllObjWithCaption);
-            DAMTable."To Table ID" := TempAllObjWithCaption."Object ID";
-            DAMTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
-        end;
     end;
 
     internal procedure ValidateFromTableCaption(var Rec: Record DAMTable; xRec: Record DAMTable)
@@ -80,17 +113,29 @@ codeunit 91004 ObjMgt
                 Rec."To Table ID" := DAMFieldBuffer.TableNo;
                 Rec."To Table Caption" := DAMFieldBuffer."Table Caption";
             end;
+
         end;
     end;
 
     procedure ImportNAVSchemaFile()
     var
+        DAMSetup: Record "DAM Object Setup";
         FieldImport: XmlPort FieldBufferImport;
-        FileName: Text;
+        ServerFile: File;
         InStr: InStream;
+        FileName: Text;
+        TempBlob: Codeunit "Temp Blob";
     begin
-        if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then
-            exit;
+        if DAMSetup.Get() then
+            if DAMSetup."Schema.xml File Path" <> '' then
+                if ServerFile.Open(DAMSetup."Schema.xml File Path") then begin
+                    ServerFile.CreateInStream(InStr);
+                end else begin
+                    TempBlob.CreateInStream(InStr);
+                    if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then begin
+                        exit;
+                    end;
+                end;
         FieldImport.SetSource(InStr);
         FieldImport.Import();
     end;
