@@ -31,6 +31,11 @@
             "id": "AA0217",
             "action": "None",
             "justification": "Use a text constant or label for format string in StrSubstNo."
+        },
+        {
+            "id": "AA0470",
+            "action": "None",
+            "justification": "Variable '???' with placeholders should have a comment explaining their content."
         }
     ]
 }
