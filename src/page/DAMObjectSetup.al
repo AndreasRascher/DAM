@@ -16,9 +16,30 @@ page 91000 "DAM Object Setup"
                 field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
                 field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
                 field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
-                field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
-                field("Schema File Path"; Rec."Schema.xml File Path") { ApplicationArea = All; }
-                field("Backup.xml File Path"; "Backup.xml File Path") { ApplicationArea = All; }
+                field("Default Export Folder Path"; Rec."Default Export Folder Path")
+                {
+                    ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+                    end;
+                }
+                field("Schema File Path"; Rec."Schema.xml File Path")
+                {
+                    ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
+                    end;
+                }
+                field("Backup.xml File Path"; "Backup.xml File Path")
+                {
+                    ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        Rec."Backup.xml File Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+                    end;
+                }
             }
         }
     }

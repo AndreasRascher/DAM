@@ -120,22 +120,26 @@ codeunit 91004 ObjMgt
     procedure ImportNAVSchemaFile()
     var
         DAMSetup: Record "DAM Object Setup";
+        TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort FieldBufferImport;
         ServerFile: File;
         InStr: InStream;
         FileName: Text;
-        TempBlob: Codeunit "Temp Blob";
+        FileFound: Boolean;
     begin
-        if DAMSetup.Get() then
-            if DAMSetup."Schema.xml File Path" <> '' then
-                if ServerFile.Open(DAMSetup."Schema.xml File Path") then begin
-                    ServerFile.CreateInStream(InStr);
-                end else begin
-                    TempBlob.CreateInStream(InStr);
-                    if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then begin
-                        exit;
-                    end;
-                end;
+        if DAMSetup.Get() and (DAMSetup."Schema.xml File Path" <> '') then
+            if ServerFile.Open(DAMSetup."Schema.xml File Path") then begin
+                ServerFile.CreateInStream(InStr);
+                FileFound := true;
+            end;
+
+        if not FileFound then begin
+            TempBlob.CreateInStream(InStr);
+            if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then begin
+                exit;
+            end;
+        end;
+
         FieldImport.SetSource(InStr);
         FieldImport.Import();
     end;

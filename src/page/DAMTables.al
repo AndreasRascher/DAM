@@ -35,18 +35,17 @@ page 91005 DAMSelectTables
 
     procedure GetSelection(var allObjWithCaption_SELECTED: Record AllObjWithCaption temporary) HasLines: Boolean
     var
-        allObjWithCaption: Record AllObjWithCaption temporary;
-        allObjWithCaption2: Record AllObjWithCaption temporary;
+        tempAllObjWithCaption: Record AllObjWithCaption temporary;
         debug: Integer;
     begin
         CurrPage.SetSelectionFilter(Rec);
         debug := Rec.Count;
         if not Rec.FindSet() then exit(false);
         repeat
-            allObjWithCaption := Rec;
-            allObjWithCaption.Insert(false);
+            tempAllObjWithCaption := Rec;
+            tempAllObjWithCaption.Insert(false);
         until Rec.Next() = 0;
-        allObjWithCaption_SELECTED.Copy(allObjWithCaption, true);
+        allObjWithCaption_SELECTED.Copy(tempAllObjWithCaption, true);
         debug := allObjWithCaption_SELECTED.Count;
         HasLines := allObjWithCaption_SELECTED.FindFirst();
     end;

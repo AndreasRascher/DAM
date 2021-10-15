@@ -132,6 +132,10 @@ table 91001 "DAMTable"
         field(102; LastView; Blob)
         {
         }
+        field(103; "Import Duration (Longest)"; Duration)
+        {
+            CaptionML = DEU = 'Import Dauer(Längste)', ENU = 'Import Duration (Longest)';
+        }
     }
 
     keys
@@ -230,6 +234,8 @@ table 91001 "DAMTable"
                         end;
                     until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
             end;
+        TryFindBufferTableID(false);
+        TryFindXMLPortID(false);
     end;
 
     local procedure InitTableFieldMapping()
@@ -256,8 +262,34 @@ table 91001 "DAMTable"
         if Rec.DataFilePath <> '' then exit;
         FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.txt', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
-            Rec.DataFilePath := FilePath;
+            Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
+        end;
+    end;
+
+    procedure TryFindBufferTableID(DoModify: Boolean)
+    var
+        TableMeta: Record "Table Metadata";
+    begin
+        TableMeta.SetRange(ID, 50000, 99999);
+        TableMeta.SetRange(Name, StrSubstNo('T%1Buffer', Rec."Old Version Table ID"));
+        if TableMeta.FindFirst() then begin
+            Rec."Buffer Table ID" := TableMeta.ID;
+            if DoModify then
+                Rec.Modify();
+        end;
+    end;
+
+    procedure TryFindXMLPortID(DoModify: Boolean)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+    begin
+        AllObjWithCaption.SetRange("Object ID", 50000, 99999);
+        AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Import', Rec."Old Version Table ID"));
+        if AllObjWithCaption.FindFirst() then begin
+            Rec."Import XMLPort ID" := AllObjWithCaption."Object ID";
+            if DoModify then
+                Rec.Modify();
         end;
     end;
 
@@ -274,7 +306,7 @@ table 91001 "DAMTable"
     procedure DownloadAllALBufferTableFiles(var DAMTable: Record DAMTable; FileEncoding: TextEncoding)
     var
         DAMTable2: Record DAMTable;
-        TenantMedia: Record "Tenant Media" temporary;
+        tempTenantMedia: Record "Tenant Media" temporary;
         ObjGen: Codeunit DAMObjectGenerator;
         DataCompression: Codeunit "Data Compression";
         FileBlob: Codeunit "Temp Blob";
@@ -300,10 +332,10 @@ table 91001 "DAMTable"
                 DataCompression.AddEntry(IStr, DAMTable2.GetALXMLPortName());
             until DAMTable2.Next() = 0;
         end;
-        TenantMedia.Content.CreateOutStream(OStr);
+        tempTenantMedia.Content.CreateOutStream(OStr);
         DataCompression.SaveZipArchive(OStr);
-        TenantMedia.Content.CreateInStream(IStr);
-        XMLBackup.DownloadBlobContent(TenantMedia, 'BufferTablesAndXMLPorts.zip', TextEncoding::MSDos);
+        tempTenantMedia.Content.CreateInStream(IStr);
+        XMLBackup.DownloadBlobContent(tempTenantMedia, 'BufferTablesAndXMLPorts.zip', TextEncoding::MSDos);
     end;
 
     procedure SaveTableLastView(TableView: Text)

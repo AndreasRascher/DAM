@@ -46,17 +46,8 @@ page 91002 "DAMTableCard"
             group(Import)
             {
                 CaptionML = DEU = 'Import', ENU = 'Import';
-                field("Src.Table ID"; Rec."Old Version Table ID")
-                {
-                    ToolTip = 'Specifies the value of the Src.Table ID field';
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
-                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table")
-                {
-                    ToolTip = 'Specifies the value of the Qty.Lines In Src. Table field';
-                    ApplicationArea = All;
-                }
+                field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
+                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; }
 
                 grid(dummy)
                 {
@@ -79,22 +70,13 @@ page 91002 "DAMTableCard"
                 CaptionML = DEU = 'Datenmigration', ENU = 'Data Migration';
                 field("Trgt.Table ID"; Rec."To Table ID")
                 {
-                    ToolTip = 'Specifies the value of the Trgt.Table ID field';
                     ApplicationArea = All;
                     ShowMandatory = true;
                 }
 
-                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table")
-                {
-                    ToolTip = 'Specifies the value of the Qty.Lines In Trgt. Table field';
-                    ApplicationArea = All;
-                }
+                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
 
-                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger")
-                {
-                    ToolTip = 'Specifies the value of the Use OnInsert Trigger field';
-                    ApplicationArea = All;
-                }
+                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
 
             }
             part(FieldsPart; DAMTableCardPart)
@@ -102,7 +84,7 @@ page 91002 "DAMTableCard"
                 ApplicationArea = all;
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
                 //Editable = LinesEditable;
-                SubPageLink = "From Table ID" = field("Buffer Table ID"), "To Table No." = field("To Table ID");
+                SubPageLink = "To Table No." = field("To Table ID");
             }
         }
     }
@@ -139,12 +121,16 @@ page 91002 "DAMTableCard"
                 trigger OnAction()
                 var
                     DAMImport: Codeunit DAMImport;
+                    Start: DateTime;
                 begin
                     DAMImport.SetObjectIDs(Rec);
+                    Start := CurrentDateTime;
                     DAMImport.ProcessFullBuffer();
                     Rec.Get(Rec.RecordId);
-                    Rec.LastImportBy := UserId;
+                    Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
                     Rec.LastImportToTargetAt := CurrentDateTime;
+                    if Rec."Import Duration (Longest)" < (CurrentDateTime - Start) then
+                        Rec."Import Duration (Longest)" := (CurrentDateTime - Start);
                     Rec.Modify();
                 end;
             }
@@ -168,7 +154,7 @@ page 91002 "DAMTableCard"
             action(CreateXMLPort)
             {
                 ApplicationArea = All;
-                Image = ImportCodes;
+                Image = XMLSetup;
 
                 trigger OnAction()
                 begin
@@ -178,7 +164,7 @@ page 91002 "DAMTableCard"
             action(CreateBufferTable)
             {
                 ApplicationArea = All;
-                Image = ImportCodes;
+                Image = Table;
 
                 trigger OnAction()
                 begin
@@ -192,7 +178,6 @@ page 91002 "DAMTableCard"
     var
         AllObj: Record AllObjWithCaption;
     begin
-        LinesEditable := not (0 in [Rec."Buffer Table ID", Rec."To Table ID"]);
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';
         if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
@@ -201,14 +186,8 @@ page 91002 "DAMTableCard"
             BufferTableIDStyle := 'Favorable';
     end;
 
-    trigger OnModifyRecord(): Boolean
-    begin
-        LinesEditable := not (0 in [Rec."Old Version Table ID", Rec."To Table ID"]);
-    end;
 
     var
-        [InDataSet]
-        LinesEditable: Boolean;
         [InDataSet]
         ImportXMLPortIDStyle: Text;
         [InDataSet]

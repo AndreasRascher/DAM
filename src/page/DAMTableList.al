@@ -24,6 +24,8 @@ page 91004 "DAMTableList"
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
+                field("Qty.Lines In Src. Table"; "Qty.Lines In Src. Table") { ApplicationArea = All; }
+                field("Import Duration (Longest)"; "Import Duration (Longest)") { ApplicationArea = All; }
             }
         }
     }

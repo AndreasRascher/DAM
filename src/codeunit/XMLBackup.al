@@ -39,13 +39,13 @@ codeunit 91005 XMLBackup
         Clear(XDoc);
         if not XmlDocument.ReadFrom(InStr, XDoc) then
             Error('reading xml failed');
-        XDoc.SelectNodes('//DAMTable', XTableList);
+        XDoc.SelectNodes('//DAM/child::*', XTableList);
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
             Clear(TargetRef);
             TargetRef.Open(TableNodeID, false);
             //XRecordList := XTableNode.AsXmlElement().GetChildNodes();
-            XTableNode.SelectNodes('child::*', XRecordList); // select all element children
+            XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
             foreach XRecordNode in XRecordList do begin
                 //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
                 XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
@@ -54,7 +54,7 @@ codeunit 91005 XMLBackup
                     if TargetRef.FieldExist(FieldNodeID) then begin
                         FldRef := TargetRef.Field(FieldNodeID);
                         if XFieldNode.AsXmlElement().InnerText <> '' then
-                            EvaluateFldRef(FldRef, XFieldNode.AsXmlElement().InnerText);
+                            FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
                     end;
                 end;
                 if not TargetRef.modify() then TargetRef.insert();
@@ -79,130 +79,43 @@ codeunit 91005 XMLBackup
             exit(XAttribute.Value());
     end;
 
-    PROCEDURE XMLFormatFieldRef(VAR _FldRef: FieldRef) _ValueInXMLFormat: Text;
-    VAR
-        _Bool: Boolean;
-        _Date: Date;
-        _Time: Time;
-        _DateTime: DateTime;
-        _Duration: Duration;
-        _Integer: Integer;
-    BEGIN
-        CASE UPPERCASE(Format(_FldRef.TYPE)) OF
-            'DECIMAL', 'INTEGER', 'BIGINTEGER':
-                exit(Format(_FldRef.VALUE));
-            'CODE', 'TEXT', 'TABLEFILTER', 'BIGTEXT', 'DATEFORMULA', 'GUID':
-                exit(Format(_FldRef.VALUE));
-            'BOOLEAN':
-                BEGIN
-                    _Bool := _FldRef.VALUE;
-                    IF _Bool then exit('1');
-                    exit('0');
-                END;
-            'OPTION':
-                BEGIN
-                    _Integer := _FldRef.VALUE;
-                    exit(Format(_Integer));
-                END;
-            'DATE':
-                BEGIN
-                    _Date := _FldRef.VALUE;
-                    exit(Format(_Date, 0, 9));
-                END;
-            'TIME':
-                BEGIN
-                    _Time := _FldRef.VALUE;
-                    exit(Format(_Time, 0, 9));
-                END;
-            'DATETIME':
-                BEGIN
-                    _DateTime := _FldRef.VALUE;
-                    exit(Format(_DateTime, 0, 9));
-                END;
-            'DURATION':
-                BEGIN
-                    _Duration := _FldRef.VALUE;
-                    exit(Format(_Duration, 0, 9));
-                END;
-            ELSE
-                ERROR('Unbehandelter Datentyp:%1', UPPERCASE(Format(_FldRef.TYPE)));
-        END;
-    END;
-
-    PROCEDURE IsFieldEmpty(VAR _FieldRef: FieldRef) IsEmpty: Boolean;
-    VAR
-        _GUID: GUID;
-        _Date: Date;
-        _Time: Time;
-        _DateTime: DateTime;
-    BEGIN
-        CASE UPPERCASE(Format(_FieldRef.TYPE)) OF
-            'DECIMAL', 'INTEGER', 'BIGINTEGER':
-                exit(Format(_FieldRef.VALUE) = '0');
-            'CODE', 'TEXT', 'TABLEFILTER', 'BIGTEXT':
-                exit(Format(_FieldRef.VALUE) = '');
-            'OPTION':
-                exit(Format(_FieldRef.VALUE) = SELECTSTR(1, _FieldRef.OPTIONCAPTION));
-            'BOOLEAN':
-                exit(Format(_FieldRef.VALUE) = 'FALSE');
-            'DATE':
-                IF EVALUATE(_Date, Format(_FieldRef.VALUE)) then
-                    exit(_Date = 0D);
-            'TIME':
-                IF EVALUATE(_Time, Format(_FieldRef.VALUE)) then
-                    exit(_Time = 0T);
-            'DATETIME':
-                IF EVALUATE(_DateTime, Format(_FieldRef.VALUE)) then
-                    exit(_DateTime = 0DT);
-            'BINARY', 'BLOB':
-                exit(Format(_FieldRef.VALUE) = '');
-            'DATEFORMULA':
-                exit(Format(_FieldRef.VALUE) = '');
-            'DURATION':
-                exit(Format(_FieldRef.VALUE) = '0');
-            'GUID':
-                IF EVALUATE(_GUID, Format(_FieldRef.VALUE)) then
-                    exit(ISNULLGUID(_GUID));
-            'RECORDID':
-                exit(Format(_FieldRef.VALUE) = '0');
-            ELSE
-                ERROR('Unbehandelter Datentyp:%1', UPPERCASE(Format(_FieldRef.TYPE)));
-        END;
-    end;
-
     local procedure ExportXML();
     VAR
-        _AllObj: Record AllObj;
-        TempTenantMedia: Record "Tenant Media" temporary;
+        allObj: Record AllObj;
+        tempTenantMedia: Record "Tenant Media" temporary;
         tableID: Integer;
-        OStr: OutStream;
-        _RootNode: XMLNode;
-        _XMLNode_Table: XMLNode;
+        oStr: OutStream;
+        rootNode: XMLNode;
+        tableNode: XMLNode;
+        fieldDefinitionNode: XmlNode;
     begin
         // DOKUMENT
         Clear(XDoc);
         XDoc := XmlDocument.Create();
 
         // ROOT
-        _RootNode := XmlElement.Create('DAM').AsXmlNode();
-        XDoc.Add(_RootNode);
-        AddAttribute(_RootNode, 'Version', '1.1');
+        rootNode := XmlElement.Create('DAM').AsXmlNode();
+        XDoc.Add(rootNode);
+        AddAttribute(rootNode, 'Version', '1.1');
 
         // Table Loop
         CreateTableIDList(TablesList);
         foreach tableID in Tableslist do
             IF GetTableLineCount(tableID) > 0 then begin
-                _AllObj.GET(_AllObj."Object Type"::Table, tableID);
-                _XMLNode_Table := XmlElement.Create(CreateTagName(_AllObj."Object Name")).AsXmlNode();
-                _RootNode.AsXmlElement().Add(_XMLNode_Table);
-                AddAttribute(_XMLNode_Table, 'ID', Format(tableID));
-                AddTable(_XMLNode_Table, _AllObj."Object ID");
+                allObj.GET(allObj."Object Type"::Table, tableID);
+                tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
+                rootNode.AsXmlElement().Add(tableNode);
+
+                AddAttribute(tableNode, 'ID', Format(tableID));
+                fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
+                tableNode.AsXmlElement().Add(fieldDefinitionNode);
+                AddTable(tableNode, allObj."Object ID");
             end;
 
-        TempTenantMedia.Content.CreateOutStream(OStr);
-        XDoc.WriteTo(OStr);
+        tempTenantMedia.Content.CreateOutStream(oStr);
+        XDoc.WriteTo(oStr);
 
-        DownloadBlobContent(TempTenantMedia, 'Backup.xml', TextEncoding::UTF8);
+        DownloadBlobContent(tempTenantMedia, 'Backup.xml', TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);
@@ -218,94 +131,290 @@ codeunit 91005 XMLBackup
                 _LineCount += 1;
     end;
 
-    LOCAL procedure AddTable(VAR _XMLNode_Start: XMLNode; i_TableID: Integer);
+    local procedure AddTable(VAR _XMLNode_Start: XMLNode; i_TableID: Integer);
     VAR
-        TempTenantMedia: Record "Tenant Media" temporary;
+        tempTenantMedia: Record "Tenant Media" temporary;
         ID: RecordId;
-        _RecRef: RecordRef;
-        _FieldRef: FieldRef;
-        _Boolean: Boolean;
+        recRef: RecordRef;
+        fldRef: FieldRef;
+        booleanType: Boolean;
         i: Integer;
-        _XMLNode_Field: XMLNode;
-        _XMLNode_Record: XMLNode;
-        _XText: XmlText;
-        _KeyFieldIDs: List of [Integer];
-        _KeyFieldID: Integer;
+        fieldNode: XMLNode;
+        recordNode: XMLNode;
+        textNode: XmlText;
+        fieldIDsList: List of [Integer];
+        keyFieldID: Integer;
+        fieldValueAsText: Text;
     begin
         foreach ID in RecordIDList do begin
             if ID.TableNo = i_TableID then begin
-                _XMLNode_Record := XmlElement.Create('RECORD').AsXmlNode();
-                _XMLNode_Start.AsXmlElement().Add(_XMLNode_Record);
-                _RecRef.Get(ID);
-                GetListOfKeyFieldIDs(_RecRef, _KeyFieldIDs);
+                recordNode := XmlElement.Create('RECORD').AsXmlNode();
+                _XMLNode_Start.AsXmlElement().Add(recordNode);
+                recRef.Get(ID);
+                GetListOfKeyFieldIDs(recRef, fieldIDsList);
                 // Add Key Fields As Attributes
-                foreach _KeyFieldID in _KeyFieldIDs do begin
-                    _FieldRef := _RecRef.FIELD(_KeyFieldID);
-                    AddAttribute(_XMLNode_Record, CreateTagName(_FieldRef.NAME), XMLFormatFieldRef(_FieldRef));
+                foreach keyFieldID in fieldIDsList do begin
+                    fldRef := recRef.FIELD(keyFieldID);
+                    AddAttribute(recordNode, CreateTagName(fldRef.NAME), FldRefValueText(fldRef));
                 end;
                 // Add Fields with Value
-                for i := 1 TO _RecRef.FIELDCOUNT do begin
-                    _FieldRef := _RecRef.FIELDINDEX(i);
-                    IF NOT IsFieldEmpty(_FieldRef) then begin
-                        _XMLNode_Field := XmlElement.Create('FIELD').AsXmlNode();
-                        _XMLNode_Record.AsXmlElement().Add(_XMLNode_Field);
-                        AddAttribute(_XMLNode_Field, 'ID', Format(_FieldRef.NUMBER));
-                        AddAttribute(_XMLNode_Field, 'NAME', Format(_FieldRef.NAME));
-
-                        CASE UPPERCASE(Format(_FieldRef.TYPE)) OF
-                            'BLOB':
-                                begin
-                                    _FieldRef.CALCFIELD();
-                                    CLEAR(TempTenantMedia);
-                                    TempTenantMedia.Content := _FieldRef.VALUE;
-                                    IF TempTenantMedia.Content.HASVALUE then begin
-                                        AddBigText(_XMLNode_Field, _FieldRef)
-                                    end;
-                                end;
-                            'BOOLEAN':
-                                begin
-                                    _Boolean := _FieldRef.VALUE;
-                                    IF _Boolean then begin
-                                        _XText := XmlText.Create('1');
-                                        _XMLNode_Field.AsXmlElement().Add(_XText);
-                                    end ELSE begin
-                                        _XText := XmlText.Create('0');
-                                        _XMLNode_Field.AsXmlElement().Add(_XText);
-                                    end;
-                                end;
-                            'OPTION':
-                                begin
-                                    _XText := XmlText.Create(XMLFormatFieldRef(_FieldRef));
-                                    _XMLNode_Field.AsXmlElement().Add(_XText);
-                                end;
-                            ELSE begin
-                                    _XText := XmlText.Create(Format(_FieldRef.VALUE));
-                                    _XMLNode_Field.AsXmlElement().Add(_XText);
-                                end;
-                        end; // end_CASE
+                for i := 1 TO recRef.FIELDCOUNT do begin
+                    fldRef := recRef.FIELDINDEX(i);
+                    if not FldRefIsEmpty(fldRef) then begin
+                        fieldNode := XmlElement.Create('FIELD').AsXmlNode();
+                        recordNode.AsXmlElement().Add(fieldNode);
+                        AddAttribute(fieldNode, 'ID', Format(fldRef.NUMBER));
+                        fieldValueAsText := FldRefValueText(fldRef);
+                        textNode := XmlText.Create(fieldValueAsText);
+                        fieldNode.AsXmlElement().Add(textNode);
                     end;
                 end;
             end;
         end;
     end;
 
-    LOCAL procedure AddBigText(VAR _XMLNode: XMLNode; VAR fr_FieldRef: FieldRef);
-    VAR
-        TempTenantMedia: record "Tenant Media" temporary;
-        bt_BigText: BigText;
-        is_InStream: InStream;
-        XCDATA: XmlCData;
+    procedure FldRefIsEmpty(FldRef: FieldRef) IsEmpty: Boolean
+    var
+        booleanType: Boolean;
+        guidType: Guid;
+        fieldTypeText: Text;
+        dateType: Date;
+        timeType: Time;
+        integerType: Integer;
+        durationtype: Duration;
     begin
-        fr_FieldRef.CALCFIELD();
-        TempTenantMedia.Content := fr_FieldRef.VALUE;
-        IF NOT TempTenantMedia.Content.HASVALUE then
-            exit;
-        TempTenantMedia.Content.CREATEINSTREAM(is_InStream);
-        bt_BigText.READ(is_InStream);
-        IF bt_BigText.LENGTH = 0 then
-            exit;
-        XCDATA := XmlCData.Create(Format(bt_BigText));
-        _XMLNode.AsXmlElement().Add(XCDATA);
+        fieldTypeText := Strsubstno('%1="%2"', Format(FldRef.Type), FldRef.Value);
+        case FldRef.Type of
+            FieldType::Boolean:
+                begin
+                    booleanType := FldRef.Value;
+                    IsEmpty := not booleanType;
+                end;
+            FieldType::BigInteger, Fieldtype::Integer, Fieldtype::Decimal:
+                IsEmpty := Format(FldRef.Value) = '0';
+            Fieldtype::Time:
+                begin
+                    timeType := FldRef.Value;
+                    IsEmpty := timeType = 0T;
+                end;
+            Fieldtype::Date:
+                begin
+                    dateType := FldRef.Value;
+                    IsEmpty := dateType = 0D;
+                end;
+            Fieldtype::Text, Fieldtype::Code, Fieldtype::DateFormula, Fieldtype::DateTime:
+                IsEmpty := Format(FldRef.Value) = '';
+            FieldType::Guid:
+                begin
+                    guidType := FldRef.Value;
+                    IsEmpty := IsNullGuid(guidType);
+                end;
+            Fieldtype::Blob:
+                begin
+                    FldRef.CalcField();
+                    IsEmpty := (Format(FldRef.Value) = '0');
+                end;
+            Fieldtype::Media, Fieldtype::MediaSet:
+                IsEmpty := IsNullGuid(Format(FldRef.Value));
+            Fieldtype::Option:
+                begin
+                    integerType := FldRef.Value;
+                    IsEmpty := integerType = 0;
+                end;
+            Fieldtype::Duration:
+                begin
+                    durationtype := FldRef.Value;
+                    IsEmpty := durationtype = 0;
+                end;
+
+            else
+                Error('IsEmptyFldRef: unhandled field type %1', FldRef.Type);
+        end; // end_case
+    end;
+
+    procedure FldRefEvaluate(var FldRef: FieldRef; ValueAsText: Text)
+    var
+        TenantMedia: Record "Tenant Media";
+        Base64Convert: Codeunit "Base64 Convert";
+        DateFormulaType: DateFormula;
+        RecordIDType: RecordId;
+        BigIntegerType: BigInteger;
+        BooleanType: Boolean;
+        DateType: Date;
+        DateTimeType: DateTime;
+        DecimalType: Decimal;
+        DurationType: Duration;
+        GUIDType: Guid;
+        IntegerType: Integer;
+        OStream: OutStream;
+        TimeType: Time;
+    begin
+        case FldRef.TYPE OF
+            FldRef.Type::BigInteger:
+                begin
+                    Evaluate(BigIntegerType, ValueAsText);
+                    FldRef.Value(BigIntegerType);
+                end;
+            FldRef.Type::Blob:
+                begin
+                    Clear(TenantMedia.Content);
+                    IF ValueAsText <> '' then begin
+                        TenantMedia.Content.CreateOutStream(OStream);
+                        Base64Convert.FromBase64(ValueAsText, OStream);
+                    end;
+                    FldRef.Value(TenantMedia.Content);
+                end;
+            FldRef.Type::Boolean:
+                begin
+                    Evaluate(BooleanType, ValueAsText, 9);
+                    FldRef.Value(BooleanType);
+                end;
+            FldRef.Type::Text,
+            FldRef.Type::Code:
+                FldRef.Value(ValueAsText);
+            FldRef.Type::Date:
+                begin
+                    Evaluate(DateType, ValueAsText, 9);
+                    FldRef.Value(DateType);
+                end;
+            FldRef.Type::DateFormula:
+                begin
+                    Evaluate(DateFormulaType, ValueAsText, 9);
+                    FldRef.Value(DateFormulaType);
+                end;
+            FldRef.Type::DateTime:
+                begin
+                    Evaluate(DateTimeType, ValueAsText, 9);
+                    FldRef.Value(DateTimeType);
+                end;
+            FldRef.Type::Decimal:
+                begin
+                    Evaluate(DecimalType, ValueAsText, 9);
+                    FldRef.Value(DecimalType);
+                end;
+            FldRef.Type::Duration:
+                begin
+                    Evaluate(DurationType, ValueAsText, 9);
+                    FldRef.Value(DurationType);
+                end;
+            FldRef.Type::Guid:
+                begin
+                    Evaluate(GuidType, ValueAsText, 9);
+                    FldRef.Value(GuidType);
+                end;
+            FldRef.Type::Integer,
+            FldRef.Type::Option:
+                begin
+                    Evaluate(IntegerType, ValueAsText, 9);
+                    FldRef.Value(IntegerType);
+                end;
+            //FldRef.Type::Media:
+            //    ;
+            //FldRef.Type::MediaSet:
+            //    ;
+            FldRef.Type::RecordId:
+                begin
+                    Evaluate(RecordIDType, ValueAsText, 9);
+                    FldRef.Value(RecordIDType);
+                end;
+            FldRef.Type::Time:
+                begin
+                    Evaluate(TimeType, ValueAsText, 9);
+                    FldRef.Value(TimeType);
+                end;
+            FldRef.Type::TableFilter:
+                ;
+            else
+                Error('unhandled field type %1', FldRef.Type);
+        end;
+
+    end;
+
+    procedure FldRefValueText(var FldRef: FieldRef) ValueText: Text;
+    begin
+        case Format(FldRef.Type) OF
+            'BLOB':
+                GetBlobFieldAsText(FldRef, true, ValueText);
+            'Media':
+                GetMediaFieldAsText(FldRef, true, ValueText);
+            'MediaSet':
+                Error('not Implemented');
+            'BigInteger',
+            'Boolean',
+            'Code',
+            'Date',
+            'DateFormula',
+            'DateTime',
+            'Decimal',
+            'Duration',
+            'GUID',
+            'Integer',
+            'Option',
+            'RecordId',
+            'TableFilter',
+            'Text',
+            'Time':
+                ValueText := FORMAT(FldRef.VALUE, 0, 9);
+            else
+                Error('unhandled Fieldtype %1', FldRef.Type);
+        end;
+    end;
+
+    local procedure CreateListOfExportFields(var RecRef: RecordRef; var FieldIDs: List of [Dictionary of [Text, Text]])
+    var
+        FldRef: FieldRef;
+        FieldProps: Dictionary of [Text, Text];
+        FldIndex: Integer;
+    begin
+        for FldIndex := 1 to RecRef.FieldCount do begin
+            FldRef := RecRef.FieldIndex(FldIndex);
+            If (FldRef.Class = FldRef.Class::Normal) and FldRef.Active then begin
+                Clear(FieldProps);
+                FieldProps.Add('ID', Format(FldRef.Number));
+                FieldProps.Add('Name', FldRef.Name);
+                FieldIDs.Add(FieldProps);
+            end;
+        end;
+    end;
+
+    procedure CreateFieldDefinitionNode(tableID: Integer) XFieldDefinition: XmlNode
+    var
+        recRef: RecordRef;
+        fldRef: FieldRef;
+        fieldID: Dictionary of [Text, Text];
+        ID: Integer;
+        fieldIDs: List of [Dictionary of [Text, Text]];
+        xField: XmlNode;
+    begin
+        recRef.Open(tableID);
+        recRef.Init();
+        XFieldDefinition := XmlElement.Create('FieldDefinition').AsXmlNode();
+        CreateListOfExportFields(recRef, fieldIDs);
+        foreach fieldID in fieldIDs do begin
+            Clear(fldRef);
+            Evaluate(ID, fieldID.Get('ID'));
+            fldRef := recRef.Field(ID);
+            xField := XmlElement.Create('Field').AsXmlNode();
+            AddAttribute(xField, 'Number', format(fldRef.Number));
+            AddAttribute(xField, 'Type', FORMAT(fldRef.TYPE));
+            if fldRef.Length <> 0 then
+                AddAttribute(xField, 'Length', FORMAT(fldRef.LENGTH));
+            if fldRef.Class <> FieldClass::Normal then
+                AddAttribute(xField, 'Class', FORMAT(fldRef.CLASS));
+            if not fldRef.Active then
+                AddAttribute(xField, 'Active', FORMAT(fldRef.Active, 0, 9));
+            AddAttribute(xField, 'Name', FORMAT(fldRef.Name, 0, 9));
+            AddAttribute(xField, 'Caption', FORMAT(fldRef.Caption, 0, 9));
+            if not (fldRef.Type in [FieldType::Blob, FieldType::Media, FieldType::MediaSet]) then
+                AddAttribute(xField, 'InitValue', Format(recRef.Field(fldRef.Number).Value, 0, 9));
+            If fldRef.Type = FieldType::Option then begin
+                AddAttribute(xField, 'OptionCaption', FORMAT(fldRef.OptionCaption));
+                AddAttribute(xField, 'OptionMembers', FORMAT(fldRef.OptionMembers));
+            end;
+            if fldRef.Relation <> 0 then
+                AddAttribute(xField, 'Relation', FORMAT(fldRef.Relation));
+            XFieldDefinition.AsXmlElement().Add(xField);
+        end;
     end;
 
     procedure CreateTableIDList(TablesList: List of [Integer]);
@@ -371,7 +480,7 @@ codeunit 91005 XMLBackup
         XMLFileTypeTok: TextConst DEU = 'XML-Dateien (*.xml)|*.xml', ENU = 'XML Files (*.xml)|*.xml';
         ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
     begin
-        CASE UPPERCASE(FileMgt.GetExtension(FileName)) OF
+        case uppercase(FileMgt.GetExtension(FileName)) OF
             'XLSX':
                 OutExt := ExcelFileTypeTok;
             'XML':
@@ -382,7 +491,7 @@ codeunit 91005 XMLBackup
                 OutExt := RDLFileTypeTok;
             'ZIP':
                 OutExt := ZIPFileTypeTok;
-        END;
+        end;
         IF OutExt = '' then
             OutExt := AllFilesDescriptionTxt
         else
@@ -395,102 +504,48 @@ codeunit 91005 XMLBackup
         exit('');
     end;
 
-    procedure EvaluateFldRef(var FldRef: FieldRef; ValueAsText: Text)
+    procedure GetMediaFieldAsText(var FldRef: FieldRef; Base64Encode: Boolean; var MediaContentAsText: Text) OK: Boolean
     var
         TenantMedia: Record "Tenant Media";
         Base64Convert: Codeunit "Base64 Convert";
-        DateFormulaType: DateFormula;
-        RecordIDType: RecordId;
-        BigIntegerType: BigInteger;
-        BooleanType: Boolean;
-        DateType: Date;
-        DateTimeType: DateTime;
-        DecimalType: Decimal;
-        DurationType: Duration;
-        GUIDType: Guid;
-        IntegerType: Integer;
-        OStream: OutStream;
-        TimeType: Time;
+        MediaID: Guid;
+        IStream: InStream;
     begin
-        CASE FldRef.TYPE OF
-            FldRef.Type::BigInteger:
-                begin
-                    Evaluate(BigIntegerType, ValueAsText);
-                    FldRef.Value(BigIntegerType);
-                end;
-            FldRef.Type::Blob:
-                begin
-                    Clear(TenantMedia.Content);
-                    IF ValueAsText <> '' then begin
-                        // TenantMedia.Content.CreateOutStream(OStream);
-                        // Base64Convert.FromBase64(ValueAsText, OStream); TODO
-                    end;
-                    FldRef.Value(TenantMedia.Content);
-                end;
-            FldRef.Type::Boolean:
-                begin
-                    Evaluate(BooleanType, ValueAsText, 9);
-                    FldRef.Value(BooleanType);
-                end;
-            FldRef.Type::Text,
-            FldRef.Type::Code:
-                FldRef.Value(ValueAsText);
-            FldRef.Type::Date:
-                begin
-                    Evaluate(DateType, ValueAsText, 9);
-                    FldRef.Value(DateType);
-                end;
-            FldRef.Type::DateFormula:
-                begin
-                    Evaluate(DateFormulaType, ValueAsText, 9);
-                    FldRef.Value(DateFormulaType);
-                end;
-            FldRef.Type::DateTime:
-                begin
-                    if not Evaluate(DateTimeType, ValueAsText, 9) then
-                        Evaluate(DateTimeType, ValueAsText);
-                    FldRef.Value(DateTimeType);
-                end;
-            FldRef.Type::Decimal:
-                begin
-                    Evaluate(DecimalType, ValueAsText, 9);
-                    FldRef.Value(DecimalType);
-                end;
-            FldRef.Type::Duration:
-                begin
-                    Evaluate(DurationType, ValueAsText, 9);
-                    FldRef.Value(DurationType);
-                end;
-            FldRef.Type::Guid:
-                begin
-                    Evaluate(GuidType, ValueAsText, 9);
-                    FldRef.Value(GuidType);
-                end;
-            FldRef.Type::Integer,
-            FldRef.Type::Option:
-                begin
-                    Evaluate(IntegerType, ValueAsText, 9);
-                    FldRef.Value(IntegerType);
-                end;
-            //FldRef.Type::Media:
-            //    ;
-            //FldRef.Type::MediaSet:
-            //    ;
-            FldRef.Type::RecordId:
-                begin
-                    Evaluate(RecordIDType, ValueAsText, 9);
-                    FldRef.Value(RecordIDType);
-                end;
-            FldRef.Type::Time:
-                begin
-                    Evaluate(TimeType, ValueAsText, 9);
-                    FldRef.Value(TimeType);
-                end;
-            FldRef.Type::TableFilter:
-                ;
+        Clear(MediaContentAsText);
+        if FldRef.Type <> FieldType::Media then
+            exit(false);
+        if not Evaluate(MediaID, Format(FldRef.Value)) then
+            exit(false);
+        If (Format(FldRef.Value) = '') then
+            exit(true);
+        if IsNullGuid(MediaID) then
+            exit(true);
+        TenantMedia.Get(MediaID);
+        TenantMedia.calcfields(Content);
+        if TenantMedia.Content.HasValue then begin
+            TenantMedia.Content.CreateInStream(IStream);
+            if Base64Encode then
+                MediaContentAsText := Base64Convert.ToBase64(IStream)
             else
-                Error('unhandled field type %1', FldRef.Type);
+                IStream.ReadText(MediaContentAsText);
         end;
+    end;
+
+    procedure GetBlobFieldAsText(var FldRef: FieldRef; Base64Encode: Boolean; var BlobContentAsText: Text) OK: Boolean
+    var
+        TenantMedia: Record "Tenant Media";
+        Base64Convert: Codeunit "Base64 Convert";
+        IStream: InStream;
+    begin
+        OK := true;
+        TenantMedia.Content := FldRef.Value;
+        if not TenantMedia.Content.HasValue then
+            exit(false);
+        TenantMedia.Content.CreateInStream(IStream);
+        if Base64Encode then
+            BlobContentAsText := Base64Convert.ToBase64(IStream)
+        else
+            IStream.ReadText(BlobContentAsText);
     end;
 
     var
