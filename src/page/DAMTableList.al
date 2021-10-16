@@ -35,6 +35,7 @@ page 91004 "DAMTableList"
         {
             action(SelectTablesToAdd)
             {
+                CaptionML = DEU = 'Tab. hinzufügen';
                 ApplicationArea = all;
                 trigger OnAction()
                 var
@@ -45,6 +46,7 @@ page 91004 "DAMTableList"
             }
             action(ImportBufferTables)
             {
+                CaptionML = DEU = 'Alle Dateien in Puffertabellen einlesen';
                 ApplicationArea = all;
                 trigger OnAction()
                 var
@@ -64,7 +66,7 @@ page 91004 "DAMTableList"
                     end;
                 end;
             }
-            action(ExportBufferTables)
+            action(ExportALObjects)
             {
                 ApplicationArea = all;
                 CaptionML = DEU = 'Puffertabellen Objekte runterladen';
@@ -78,8 +80,35 @@ page 91004 "DAMTableList"
                         until DAMTable.Next() = 0;
                 end;
             }
+            action(TransferSelectedToTargetTable)
+            {
+                ApplicationArea = all;
+                CaptionML = DEU = 'Markierte Tabellen in Zieltabellen übernehmen';
+                trigger OnAction()
+                var
+                    DAMTable: Record DAMTable;
+                    DAMTable_SELECTED: Record DAMTable;
+                    DAMImport: Codeunit DAMImport;
+                begin
+                    DAMTable_SELECTED.SetCurrentKey("Sort Order");
+                    if not GetSelection(DAMTable_SELECTED) then
+                        exit;
+                    DAMTable_SELECTED.FindSet();
+                    repeat
+                        DAMTable := DAMTable_SELECTED;
+                        DAMImport.ProcessDAMTable(DAMTable);
+                    until DAMTable_SELECTED.Next() = 0;
+                end;
+            }
         }
     }
+
+    procedure GetSelection(var DAMTable_SELECTED: Record DAMTable) HasLines: Boolean
+    begin
+        Clear(DAMTable_SELECTED);
+        CurrPage.SetSelectionFilter(DAMTable_SELECTED);
+        HasLines := DAMTable_SELECTED.FindFirst();
+    end;
 
     trigger OnAfterGetRecord()
     var

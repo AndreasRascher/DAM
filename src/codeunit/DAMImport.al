@@ -1,5 +1,21 @@
 codeunit 91000 "DAMImport"
 {
+    procedure ProcessDAMTable(DAMTable: Record DAMTable)
+    var
+        start: DateTime;
+    begin
+        SetObjectIDs(DAMTable);
+        NoUserInteraction := true;
+        start := CurrentDateTime;
+        ProcessFullBuffer();
+        DAMTable.Get(DAMTable.RecordId);
+        DAMTable.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DAMTable.LastImportBy));
+        DAMTable.LastImportToTargetAt := CurrentDateTime;
+        if DAMTable."Import Duration (Longest)" < (CurrentDateTime - start) then
+            DAMTable."Import Duration (Longest)" := (CurrentDateTime - start);
+        DAMTable.Modify();
+    end;
+
     procedure ProcessFullBuffer()
     var
         DAMErrorLog: Record DAMErrorLog;
@@ -8,13 +24,16 @@ codeunit 91000 "DAMImport"
     begin
         InitGlobalParams(BufferRef);
 
-        if DAMTable.LoadTableLastView() <> '' then
-            BufferRef.SetView(DAMTable.LoadTableLastView());
+        if not NoUserInteraction then
+            if DAMTable.LoadTableLastView() <> '' then
+                BufferRef.SetView(DAMTable.LoadTableLastView());
 
-        if not ShowRequestPageFilterDialog(BufferRef) then
-            exit;
+        if not NoUserInteraction then
+            if not ShowRequestPageFilterDialog(BufferRef) then
+                exit;
 
-        DAMTable.SaveTableLastView(BufferRef.GetView());
+        if not NoUserInteraction then
+            DAMTable.SaveTableLastView(BufferRef.GetView());
 
         // Buffer loop
         BufferRef.findset();
@@ -210,4 +229,5 @@ codeunit 91000 "DAMImport"
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
         BufferTableID: Integer;
+        NoUserInteraction: Boolean;
 }

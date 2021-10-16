@@ -187,6 +187,9 @@ table 91002 "DAMField"
         TargetField: Record Field;
         DAMFields: Record "DAMField";
         DAMFields2: Record "DAMField";
+        ProdBOMHeader: Record "Production BOM Header";
+        RoutingHeader: Record "Routing Header";
+        Vendor: Record Vendor;
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.SetRange("Processing Action", DAMFields."Processing Action"::Transfer);
@@ -195,26 +198,44 @@ table 91002 "DAMField"
                 TargetField.Get(DAMFields."To Table No.", DAMFields."To Field No.");
                 DAMFields2 := DAMFields;
                 case true of
-                // TargetField.FieldName IN ['Global Dimension 1 Code',
-                //                           'Global Dimension 2 Code',
-                //                           'VAT Registration No.']:
-                //     begin
-                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                //     end;
-                // (TargetField.TableNo = DATabase::Item) and
-                // (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure']):
-                //     begin
-                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                //     end;
-                // (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                // (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
-                //     begin
-                //         DAMFields2."Validate Value" := false;
-                //     end;
-                // (TargetField.FieldName IN ['E-Mail']):
-                //     begin
-                //         DAMFields2."Validate Method" := DAMFields2."Validate Method"::"if codeunit run";
-                //     end;
+                    TargetField.FieldName IN ['Global Dimension 1 Code',
+                                              'Global Dimension 2 Code',
+                                              'VAT Registration No.']:
+                        begin
+                            DAMFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = DATabase::Item) and
+                    (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure', 'Indirect Cost %']):
+                        begin
+                            DAMFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
+                    (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
+                        begin
+                            DAMFields2."Validate Value" := false;
+                        end;
+                    (TargetField.TableNo IN [Database::Vendor]) and
+                    (TargetField.FieldName IN ['Prices Including VAT']):
+                        begin
+                            DAMFields2."Validate Value" := false;
+                        end;
+                    (TargetField.FieldName IN ['E-Mail']):
+                        begin
+                            DAMFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = DATabase::"Production BOM Header") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
+                            DAMFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
+                        end;
+                    (TargetField.TableNo = DATabase::"Routing Header") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            RoutingHeader.Status := RoutingHeader.Status::"Under Development";
+                            DAMFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
+                        end;
+
                 end;
 
                 if format(DAMFields2) <> Format(DAMFields) then

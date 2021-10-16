@@ -120,22 +120,13 @@ page 91002 "DAMTableCard"
                 trigger OnAction()
                 var
                     DAMImport: Codeunit DAMImport;
-                    Start: DateTime;
                 begin
-                    DAMImport.SetObjectIDs(Rec);
-                    Start := CurrentDateTime;
-                    DAMImport.ProcessFullBuffer();
-                    Rec.Get(Rec.RecordId);
-                    Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
-                    Rec.LastImportToTargetAt := CurrentDateTime;
-                    if Rec."Import Duration (Longest)" < (CurrentDateTime - Start) then
-                        Rec."Import Duration (Longest)" := (CurrentDateTime - Start);
-                    Rec.Modify();
+                    DAMImport.ProcessDAMTable(Rec);
                 end;
             }
             action(RetryBufferRecordsWithError)
             {
-                CaptionML = DEU = 'Datensätze mit Fehlern erneut verarbeiten';
+                CaptionML = DEU = 'Fehler erneut verarbeiten';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
