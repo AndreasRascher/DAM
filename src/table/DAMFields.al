@@ -82,6 +82,11 @@ table 91002 "DAMField"
             CaptionML = DEU = 'Validieren', ENU = 'Validate';
             InitValue = true;
         }
+        field(51; "Use Try Function"; Boolean)
+        {
+            CaptionML = DEU = 'Try Function verwenden', ENU = 'Use Try Function';
+            InitValue = true;
+        }
         field(52; "Ignore Validation Error"; Boolean)
         {
             CaptionML = DEU = 'Fehler ignorieren ', ENU = 'Ignore Errors';

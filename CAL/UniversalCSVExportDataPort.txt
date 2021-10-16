@@ -2,8 +2,8 @@ OBJECT Dataport 50004 DAMExport
 {
   OBJECT-PROPERTIES
   {
-    Date=13.10.21;
-    Time=22:47:23;
+    Date=15.10.21;
+    Time=17:52:52;
     Modified=Yes;
     Version List=DAM;
   }
@@ -45,7 +45,7 @@ OBJECT Dataport 50004 DAMExport
                                                    InColumnHeading=Yes }
       { 1000000000;TextBox;220  ;770  ;12650;440  ;Name=ExportFolderPathCtrl;
                                                    InPage=-1;
-                                                   CaptionML=[DEU=Order fuer Tabellendaten;
+                                                   CaptionML=[DEU=Order fÅr Tabellendaten;
                                                               ENU=Folder for Table Data];
                                                    SourceExpr=ExportToFolderPath;
                                                    OnValidate=BEGIN
@@ -57,7 +57,7 @@ OBJECT Dataport 50004 DAMExport
       { 1000000001;TextBox;220  ;1980 ;12650;440  ;Name=ExportObjectIDFilterCtrl;
                                                    HorzGlue=Both;
                                                    AssistEdit=Yes;
-                                                   CaptionML=[DEU=Tabellen-ID Filter fuer Export;
+                                                   CaptionML=[DEU=Tabellen-ID Filter fÅr Export;
                                                               ENU=Table ID Filter for Export];
                                                    SourceExpr=ExportTableIDFilter;
                                                    OnAssistEdit=BEGIN

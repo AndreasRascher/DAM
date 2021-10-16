@@ -54,6 +54,7 @@ page 91003 "DAMTableCardPart"
                     ToolTip = 'Specifies the value of the Validate Value field';
                     ApplicationArea = All;
                 }
+                field("Use Try Function"; "Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
                 field("Fixed Value OnBeforeInsert"; Rec."Fixed Value OnBeforeInsert") { ApplicationArea = All; }
             }

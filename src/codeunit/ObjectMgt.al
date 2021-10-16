@@ -3,7 +3,7 @@ codeunit 91004 ObjMgt
     procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
-        DAMSetup: Record "DAM Object Setup";
+        DAMSetup: Record "DAM Setup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DAMSelectTables: Page DAMSelectTables;
     begin
@@ -119,7 +119,7 @@ codeunit 91004 ObjMgt
 
     procedure ImportNAVSchemaFile()
     var
-        DAMSetup: Record "DAM Object Setup";
+        DAMSetup: Record "DAM Setup";
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort FieldBufferImport;
         ServerFile: File;

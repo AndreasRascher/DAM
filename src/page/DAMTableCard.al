@@ -83,7 +83,6 @@ page 91002 "DAMTableCard"
             {
                 ApplicationArea = all;
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
-                //Editable = LinesEditable;
                 SubPageLink = "To Table No." = field("To Table ID");
             }
         }

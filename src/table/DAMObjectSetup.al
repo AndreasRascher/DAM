@@ -1,4 +1,4 @@
-table 91000 "DAM Object Setup"
+table 91000 "DAM Setup"
 {
     CaptionML = DEU = 'DAM Objekt Einrichtung', ENU = 'DAM Object Setup';
     DataClassification = ToBeClassified;
@@ -29,6 +29,11 @@ table 91000 "DAM Object Setup"
         {
             CaptionML = DEU = 'Pfad Backup.xml', ENU = 'Backup.xml File Path';
         }
+        field(40; "Allow Usage of Try Function"; Boolean)
+        {
+            CaptionML = DEU = ' Verwendung von Try Funktion zulassen', ENU = 'Allow Usage of Try Function';
+            InitValue = true;
+        }
     }
     keys
     {
@@ -52,4 +57,15 @@ table 91000 "DAM Object Setup"
     begin
         if DAMFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;
+
+    procedure GetRecordOnce()
+    begin
+        if RecordHasBeenRead then
+            exit;
+        Get;
+        RecordHasBeenRead := true;
+    end;
+
+    var
+        RecordHasBeenRead: Boolean;
 }

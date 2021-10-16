@@ -204,20 +204,15 @@ codeunit 91001 "DAMMgt"
     procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DAMFields: Record "DAMField")
     var
         DAMErrorLog: Record DAMErrorLog;
-        DAMErrorWrapper: Codeunit DAMErrorWrapper;
         IsValidateSuccessful: Boolean;
     begin
         CLEARLASTERROR();
-        //20211012 Always use if codeunit run because client crashes with try function
-        // VALIDATE
-        // IF DAMFields."Validate Method" = DAMFields."Validate Method"::"Try function" then begin
-        //     IsValidateSuccessful := TryValidateField(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
-        // end ELSE begin
-        COMMIT();
-        DAMErrorWrapper.SetFieldValidateRecRef(SourceRef, DAMFields."From Field No.", TargetRef, DAMFields."To Field No.");
-        IsValidateSuccessful := DAMErrorWrapper.RUN();
-        DAMErrorWrapper.GetRecRefTo(TargetRef);
-        // end;
+        DAMSetup.GetRecordOnce();
+        IF DAMFields."Use Try Function" and DAMSetup."Allow Usage of Try Function" then begin
+            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
+        end ELSE begin
+            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
+        end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
             DAMErrorLog.AddEntryForLastError(SourceRef, TargetRef, DAMFields);
@@ -349,9 +344,19 @@ codeunit 91001 "DAMMgt"
     end;
 
     [TryFunction]
-    procedure TryValidateField(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef)
+    procedure DoTryFunctionValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef)
     begin
         ValidateFieldImplementation(SourceRef, FromFieldNo, ToFieldNo, TargetRef);
+    end;
+
+    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef) IsValidateSuccessful: Boolean
+    var
+        DAMErrorWrapper: Codeunit DAMErrorWrapper;
+    begin
+        COMMIT();
+        DAMErrorWrapper.SetFieldValidateRecRef(SourceRef, FromFieldNo, TargetRef, ToFieldNo);
+        IsValidateSuccessful := DAMErrorWrapper.RUN();
+        DAMErrorWrapper.GetRecRefTo(TargetRef);
     end;
 
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FromFieldno: Integer; ToFieldNo: Integer; VAR TargetRecRef: RecordRef)
@@ -380,6 +385,7 @@ codeunit 91001 "DAMMgt"
     end;
 
     var
+        DAMSetup: Record "DAM Setup";
         ProgressBar_IsOpen: Boolean;
         ProgressBar_LastUpdate: DateTime;
         ProgressBar_StartTime: DateTime;

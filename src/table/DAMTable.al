@@ -168,13 +168,14 @@ table 91001 "DAMTable"
         file.Open(DataFilePath, TextEncoding::MSDos);
         file.CreateInStream(InStr);
         Xmlport.Import(Rec."Import XMLPort ID", InStr);
+        rec.CalcFields("Qty.Lines In Src. Table");
     end;
 
     procedure DownloadALBufferTableFile()
     var
         DAMObjectGenerator: Codeunit DAMObjectGenerator;
     begin
-        DAMObjectGenerator.DownloadAsMDDosFile(
+        DAMObjectGenerator.DownloadFile(
             DAMObjectGenerator.CreateALTable(Rec),
             Rec.GetALBufferTableName());
     end;
@@ -183,8 +184,7 @@ table 91001 "DAMTable"
     var
         DAMObjectGenerator: Codeunit DAMObjectGenerator;
     begin
-        DAMObjectGenerator.DownloadAsMDDosFile(
-            DAMObjectGenerator.CreateALXMLPort(Rec), Rec.GetALXMLPortName());
+        DAMObjectGenerator.DownloadFile(DAMObjectGenerator.CreateALXMLPort(Rec), Rec.GetALXMLPortName());
     end;
 
     internal procedure ShowTableContent(TableID: Integer)
@@ -195,7 +195,7 @@ table 91001 "DAMTable"
 
     local procedure ProposeObjectIDs()
     var
-        DAMSetup: Record "DAM Object Setup";
+        DAMSetup: Record "DAM Setup";
         DAMTable: Record DAMTable;
         Numbers: Record Integer;
         UsedBufferTableIDs: List of [Integer];
@@ -241,7 +241,7 @@ table 91001 "DAMTable"
     local procedure InitTableFieldMapping()
     var
         DAMFields: Record DAMField;
-        DAMSetup: record "DAM Object Setup";
+        DAMSetup: record "DAM Setup";
     begin
         DAMSetup.CheckSchemaInfoHasBeenImporterd();
         if not DAMFields.FilterBy(Rec) then begin
@@ -253,7 +253,7 @@ table 91001 "DAMTable"
 
     procedure TryFindExportDataFile()
     var
-        DAMSetup: Record "DAM Object Setup";
+        DAMSetup: Record "DAM Setup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
@@ -303,16 +303,16 @@ table 91001 "DAMTable"
         Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID");
     end;
 
-    procedure DownloadAllALBufferTableFiles(var DAMTable: Record DAMTable; FileEncoding: TextEncoding)
+    procedure DownloadAllALBufferTableFiles(var DAMTable: Record DAMTable)
     var
         DAMTable2: Record DAMTable;
-        tempTenantMedia: Record "Tenant Media" temporary;
         ObjGen: Codeunit DAMObjectGenerator;
         DataCompression: Codeunit "Data Compression";
         FileBlob: Codeunit "Temp Blob";
-        XMLBackup: Codeunit XMLBackup;
         IStr: InStream;
         OStr: OutStream;
+        toFileName: text;
+        ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
     begin
         DAMTable2.Copy(DAMTable);
         if DAMTable2.FindSet() then begin
@@ -320,22 +320,24 @@ table 91001 "DAMTable"
             repeat
                 //Table
                 Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, FileEncoding);
+                FileBlob.CreateOutStream(OStr);
                 OStr.WriteText(ObjGen.CreateALTable(DAMTable2).ToText());
-                FileBlob.CreateInStream(IStr, FileEncoding);
+                FileBlob.CreateInStream(IStr);
                 DataCompression.AddEntry(IStr, DAMTable2.GetALBufferTableName());
                 //XMLPort
                 Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, FileEncoding);
+                FileBlob.CreateOutStream(OStr);
                 OStr.WriteText(ObjGen.CreateALXMLPort(DAMTable2).ToText());
-                FileBlob.CreateInStream(IStr, FileEncoding);
+                FileBlob.CreateInStream(IStr);
                 DataCompression.AddEntry(IStr, DAMTable2.GetALXMLPortName());
             until DAMTable2.Next() = 0;
         end;
-        tempTenantMedia.Content.CreateOutStream(OStr);
+        Clear(FileBlob);
+        FileBlob.CreateOutStream(OStr);
         DataCompression.SaveZipArchive(OStr);
-        tempTenantMedia.Content.CreateInStream(IStr);
-        XMLBackup.DownloadBlobContent(tempTenantMedia, 'BufferTablesAndXMLPorts.zip', TextEncoding::MSDos);
+        FileBlob.CreateInStream(IStr);
+        toFileName := 'BufferTablesAndXMLPorts.zip';
+        DownloadFromStream(iStr, 'Download', 'ToFolder', ZIPFileTypeTok, toFileName);
     end;
 
     procedure SaveTableLastView(TableView: Text)
@@ -358,4 +360,5 @@ table 91001 "DAMTable"
         rec.LastView.CreateInStream(IStr);
         IStr.ReadText(TableView);
     end;
+
 }

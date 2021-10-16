@@ -9,7 +9,7 @@ codeunit 91005 XMLBackup
 
     procedure Import();
     var
-        DAMSetup: Record "DAM Object Setup";
+        DAMSetup: Record "DAM Setup";
         TargetRef: RecordRef;
         FldRef: FieldRef;
         serverFile: file;
@@ -24,6 +24,7 @@ codeunit 91005 XMLBackup
         XRecordList: XmlNodeList;
         XTableList: XmlNodeList;
         FileFound: Boolean;
+        Start: DateTime;
     begin
         if DAMSetup.Get() and (DAMSetup."Backup.xml File Path" <> '') then
             if ServerFile.Open(DAMSetup."Backup.xml File Path") then begin
@@ -36,17 +37,17 @@ codeunit 91005 XMLBackup
                 exit;
             end;
 
+        Start := CurrentDateTime;
         Clear(XDoc);
         if not XmlDocument.ReadFrom(InStr, XDoc) then
             Error('reading xml failed');
         XDoc.SelectNodes('//DAM/child::*', XTableList);
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
-            Clear(TargetRef);
-            TargetRef.Open(TableNodeID, false);
-            //XRecordList := XTableNode.AsXmlElement().GetChildNodes();
             XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
             foreach XRecordNode in XRecordList do begin
+                Clear(TargetRef);
+                TargetRef.Open(TableNodeID, false);
                 //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
                 XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
                 foreach XFieldNode in XFieldList do begin
@@ -61,7 +62,7 @@ codeunit 91005 XMLBackup
             end;
         end;
 
-        Message('Import abgeschlossen');
+        Message('Import abgeschlossen\ Import Dauer: %1', CurrentDateTime - Start);
     end;
 
     procedure AddAttribute(XNode: XmlNode; AttrName: Text; AttrValue: Text): Boolean
@@ -115,7 +116,7 @@ codeunit 91005 XMLBackup
         tempTenantMedia.Content.CreateOutStream(oStr);
         XDoc.WriteTo(oStr);
 
-        DownloadBlobContent(tempTenantMedia, 'Backup.xml', TextEncoding::UTF8);
+        DownloadBlobContent(tempTenantMedia, FORMAT(CURRENTDATETIME, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>') + '_Backup.xml', TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);
@@ -155,7 +156,7 @@ codeunit 91005 XMLBackup
                 // Add Key Fields As Attributes
                 foreach keyFieldID in fieldIDsList do begin
                     fldRef := recRef.FIELD(keyFieldID);
-                    AddAttribute(recordNode, CreateTagName(fldRef.NAME), FldRefValueText(fldRef));
+                    AddAttribute(recordNode, CreateTagName(fldRef.NAME), GetFldRefValueAsText(fldRef));
                 end;
                 // Add Fields with Value
                 for i := 1 TO recRef.FIELDCOUNT do begin
@@ -164,7 +165,7 @@ codeunit 91005 XMLBackup
                         fieldNode := XmlElement.Create('FIELD').AsXmlNode();
                         recordNode.AsXmlElement().Add(fieldNode);
                         AddAttribute(fieldNode, 'ID', Format(fldRef.NUMBER));
-                        fieldValueAsText := FldRefValueText(fldRef);
+                        fieldValueAsText := GetFldRefValueAsText(fldRef);
                         textNode := XmlText.Create(fieldValueAsText);
                         fieldNode.AsXmlElement().Add(textNode);
                     end;
@@ -182,13 +183,18 @@ codeunit 91005 XMLBackup
         timeType: Time;
         integerType: Integer;
         durationtype: Duration;
+        InitRef: RecordRef;
     begin
+        InitRef.Open(FldRef.Record().Number);
+        InitRef.Init();
+        IsEmpty := (InitRef.Field(FldRef.Number).Value = FldRef.Value);
+        exit(IsEmpty);
         fieldTypeText := Strsubstno('%1="%2"', Format(FldRef.Type), FldRef.Value);
         case FldRef.Type of
             FieldType::Boolean:
                 begin
                     booleanType := FldRef.Value;
-                    IsEmpty := not booleanType;
+                    IsEmpty := (booleanType = false);
                 end;
             FieldType::BigInteger, Fieldtype::Integer, Fieldtype::Decimal:
                 IsEmpty := Format(FldRef.Value) = '0';
@@ -202,7 +208,7 @@ codeunit 91005 XMLBackup
                     dateType := FldRef.Value;
                     IsEmpty := dateType = 0D;
                 end;
-            Fieldtype::Text, Fieldtype::Code, Fieldtype::DateFormula, Fieldtype::DateTime:
+            Fieldtype::Text, Fieldtype::Code, Fieldtype::DateFormula, Fieldtype::DateTime, Fieldtype::RecordId:
                 IsEmpty := Format(FldRef.Value) = '';
             FieldType::Guid:
                 begin
@@ -325,12 +331,12 @@ codeunit 91005 XMLBackup
             FldRef.Type::TableFilter:
                 ;
             else
-                Error('unhandled field type %1', FldRef.Type);
+                Error('FldRefEvaluate: unhandled field type %1', FldRef.Type);
         end;
 
     end;
 
-    procedure FldRefValueText(var FldRef: FieldRef) ValueText: Text;
+    procedure GetFldRefValueAsText(var FldRef: FieldRef) ValueText: Text;
     begin
         case Format(FldRef.Type) OF
             'BLOB':
@@ -353,10 +359,11 @@ codeunit 91005 XMLBackup
             'RecordId',
             'TableFilter',
             'Text',
-            'Time':
+            'Time',
+            'RecordID':
                 ValueText := FORMAT(FldRef.VALUE, 0, 9);
             else
-                Error('unhandled Fieldtype %1', FldRef.Type);
+                Error('GetFldRefValueAsText:unhandled Fieldtype %1', FldRef.Type);
         end;
     end;
 
@@ -448,21 +455,22 @@ codeunit 91005 XMLBackup
 
     procedure MarkAll();
     VAR
-        _AllObj: Record AllObj;
         _RecRef: RecordRef;
+        TableID: Integer;
+        TablesToExport: List of [Integer];
     begin
-        _AllObj.SETRANGE("Object Type", _AllObj."Object Type"::Table);
-        _AllObj.SETRANGE("Object ID", 91000, 91005);
-        IF _AllObj.FINDSET(FALSE, FALSE) then
-            REPEAT
-                _RecRef.OPEN(_AllObj."Object ID");
-                IF _RecRef.FINDSET() then
-                    REPEAT
-                        if not RecordIDList.Contains(_RecRef.RecordId) then
-                            RecordIDList.Add(_RecRef.RecordId);
-                    UNTIL _RecRef.Next() = 0;
-                _RecRef.close();
-            UNTIL _AllObj.Next() = 0;
+        TablesToExport.Add(Database::DAMTable);
+        TablesToExport.Add(Database::DAMField);
+        foreach TableID in TablesToExport do begin
+            _RecRef.OPEN(TableID);
+            if _RecRef.FINDSET(false, false) then
+                repeat
+                    if not RecordIDList.Contains(_RecRef.RecordId) then
+                        RecordIDList.Add(_RecRef.RecordId);
+                until _RecRef.Next() = 0;
+            _RecRef.close();
+
+        end;
     end;
 
     procedure DownloadBlobContent(var TempTenantMedia: Record "Tenant Media"; FileName: Text; FileEncoding: TextEncoding): Text

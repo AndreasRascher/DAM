@@ -3,10 +3,12 @@ codeunit 91000 "DAMImport"
     procedure ProcessFullBuffer()
     var
         DAMErrorLog: Record DAMErrorLog;
+        APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
-        BufferFilterView: Text;
     begin
+        APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
+
         LoadFieldMapping(DAMTable);
 
         BufferRef.OPEN(BufferTableID);

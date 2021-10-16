@@ -1,10 +1,10 @@
-page 91000 "DAM Object Setup"
+page 91000 "DAM Setup"
 {
-    CaptionML = DEU = 'DAM Objekt Einrichtung', ENU = 'DAM Object Setup';
+    CaptionML = DEU = 'DAM Einrichtung', ENU = 'DAM Setup';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = "DAM Object Setup";
+    SourceTable = "DAM Setup";
 
     layout
     {
@@ -13,32 +13,55 @@ page 91000 "DAM Object Setup"
             group(General)
             {
                 CaptionML = DEU = 'Allgemein', ENU = 'General';
-                field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
-                field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
-                field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
-                field("Default Export Folder Path"; Rec."Default Export Folder Path")
+                group(VerticalAlign)
                 {
-                    ApplicationArea = All;
-                    trigger OnValidate()
-                    begin
-                        Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
-                    end;
-                }
-                field("Schema File Path"; Rec."Schema.xml File Path")
-                {
-                    ApplicationArea = All;
-                    trigger OnValidate()
-                    begin
-                        Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
-                    end;
-                }
-                field("Backup.xml File Path"; "Backup.xml File Path")
-                {
-                    ApplicationArea = All;
-                    trigger OnValidate()
-                    begin
-                        Rec."Backup.xml File Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
-                    end;
+                    ShowCaption = false;
+                    group(ObjectIDs)
+                    {
+                        CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
+                        field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
+                        field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
+                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
+                    }
+                    group(Paths)
+                    {
+                        CaptionML = DEU = 'Pfade', ENU = 'Paths';
+                        field("Default Export Folder Path"; Rec."Default Export Folder Path")
+                        {
+                            ApplicationArea = All;
+                            trigger OnValidate()
+                            begin
+                                Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+                            end;
+
+                            trigger OnLookup(var Text: Text): Boolean
+                            begin
+                                LookUpFolderPath(Text);
+                                Rec."Default Export Folder Path" := Text;
+                            end;
+                        }
+                        field("Schema File Path"; Rec."Schema.xml File Path")
+                        {
+                            ApplicationArea = All;
+                            trigger OnValidate()
+                            begin
+                                Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
+                            end;
+                        }
+                        field("Backup.xml File Path"; "Backup.xml File Path")
+                        {
+                            ApplicationArea = All;
+                            trigger OnValidate()
+                            begin
+                                Rec."Backup.xml File Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+                            end;
+                        }
+                    }
+                    group(Performance)
+                    {
+                        field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = all; }
+                        field(SessionID; SessionId()) { ApplicationArea = all; }
+                    }
                 }
             }
         }
@@ -62,7 +85,7 @@ page 91000 "DAM Object Setup"
                 var
                     ObjGen: Codeunit DAMObjectGenerator;
                 begin
-                    ObjGen.DownloadAsMDDosFile(ObjGen.CreateNAV2009Dataport(Rec."Object ID Dataport (Export)"), 'DAMExport.txt');
+                    ObjGen.DownloadFileUTF8(ObjGen.CreateNAV2009Dataport(Rec."Object ID Dataport (Export)"), 'DAMExport.txt');
                 end;
             }
             action(ImportNAV2009Schema)
@@ -84,6 +107,7 @@ page 91000 "DAM Object Setup"
             }
             action(XMLExport)
             {
+                CaptionML = DEU = 'Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
                 Promoted = true;
@@ -100,6 +124,7 @@ page 91000 "DAM Object Setup"
             }
             action(XMLImport)
             {
+                CaptionML = DEU = 'Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
                 Promoted = true;
@@ -114,6 +139,16 @@ page 91000 "DAM Object Setup"
                     XMLBackup.Import();
                 end;
             }
+            action(TableList)
+            {
+                ApplicationArea = All;
+                Image = Table;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+                RunObject = page DAMTableList;
+            }
         }
         area(Navigation)
         {
@@ -127,11 +162,38 @@ page 91000 "DAM Object Setup"
                     Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
                 end;
             }
+            action(TestFileEncoding)
+            {
+                ApplicationArea = all;
+
+                trigger OnAction()
+                begin
+                    Message('%1', TryFunctionTest());
+                end;
+            }
         }
     }
+    [TryFunction]
+    procedure TryFunctionTest()
+    var
+        MyDate: Date;
+    begin
+        Evaluate(MyDate, '1233453423');
+    end;
+
+    procedure LookUpFolderPath(var Result: Text) OK: Boolean
+    var
+        FileRec: Record File;
+    begin
+        clear(Result);
+        if Page.RunModal(Page::FileBrowser, FileRec) = Action::LookupOK then begin
+            Result := FileRec.Path;
+        end;
+    end;
 
     trigger OnOpenPage()
     begin
         Rec.InsertWhenEmpty();
     end;
+
 }

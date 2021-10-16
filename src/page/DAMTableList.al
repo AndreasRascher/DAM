@@ -74,7 +74,7 @@ page 91004 "DAMTableList"
                 begin
                     if DAMTable.FindSet() then
                         repeat
-                            DAMTable.DownloadAllALBufferTableFiles(Rec, TextEncoding::MSDos);
+                            DAMTable.DownloadAllALBufferTableFiles(Rec);
                         until DAMTable.Next() = 0;
                 end;
             }
