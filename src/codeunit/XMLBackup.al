@@ -459,6 +459,7 @@ codeunit 91005 XMLBackup
         TableID: Integer;
         TablesToExport: List of [Integer];
     begin
+        TablesToExport.Add(Database::"DAM Setup");
         TablesToExport.Add(Database::DAMTable);
         TablesToExport.Add(Database::DAMField);
         foreach TableID in TablesToExport do begin
