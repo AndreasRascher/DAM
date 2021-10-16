@@ -56,7 +56,6 @@ page 91003 "DAMTableCardPart"
                 }
                 field("Use Try Function"; "Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
-                field("Fixed Value OnBeforeInsert"; Rec."Fixed Value OnBeforeInsert") { ApplicationArea = All; }
             }
         }
     }

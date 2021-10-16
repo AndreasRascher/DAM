@@ -22,7 +22,6 @@ table 91002 "DAMField"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(23; "To Field Type"; Text[30])
         {
@@ -30,13 +29,19 @@ table 91002 "DAMField"
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(24; "From Table ID"; Integer)
         {
             CaptionML = DEU = 'Herkunft Tabellen ID', ENU = 'Source Table ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+        }
+        field(25; "To Field Name"; Text[80])
+        {
+            CaptionML = DEU = 'Zielfeld Name', ENU = 'Target Field Name';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(Field.FieldName where(TableNo = field("To Table No."), "No." = field("To Field No.")));
         }
         field(31; "From Field No."; Integer)
         {
@@ -69,13 +74,21 @@ table 91002 "DAMField"
         {
             CaptionML = DEU = 'Fester Wert', ENU = 'Fixed Value';
             trigger OnValidate()
+            var
+                ConfigValidateMgt: Codeunit "Config. Validate Management";
+                RecRef: RecordRef;
+                FldRef: FieldRef;
+                ErrorMsg: Text;
             begin
+                Rec.TestField("To Table No.");
+                Rec.TestField("To Field No.");
+                RecRef.Open(Rec."To Table No.");
+                FldRef := RecRef.Field(Rec."To Field No.");
+                ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
+                if ErrorMsg <> '' then
+                    Error(ErrorMsg);
                 UpdateProcessingAction(Rec.FieldNo("Fixed Value"));
             end;
-        }
-        field(35; "Fixed Value OnBeforeInsert"; Text[250])
-        {
-            CaptionML = DEU = 'temp. Wert beim Einfügen';
         }
         field(50; "Validate Value"; Boolean)
         {

@@ -4,3 +4,4 @@
 .vscode/rad.*
 *.app
 src/GEN/*.al
+.snapshots/*

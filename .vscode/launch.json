@@ -11,7 +11,8 @@
             "authentication": "UserPassword",
             "breakOnNext": "WebClient",
             "executionContext": "Profile",
-            "snapshotVerbosity": "SnapPoint"
+            "snapshotVerbosity": "Full",
+            "userId": "MODUS"
         },
         {
             "name": "BC19:Publish & Synchronize",
@@ -21,7 +22,8 @@
             "server": "http://bc19/",
             "serverInstance": "BC",
             "authentication": "UserPassword",
-            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "startupObjectId": 91002,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,
@@ -30,7 +32,7 @@
             "longRunningSqlStatementsThreshold": 500,
             "numberOfSqlStatements": 10,
             "tenant": "default",
-            "schemaUpdateMode": "Synchronize"
+            "schemaUpdateMode": "Synchronize"            
         }
         // {
         //     "name": "BC17:Publish & Synchronize",

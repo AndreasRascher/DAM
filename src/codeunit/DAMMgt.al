@@ -10,8 +10,16 @@ codeunit 91001 "DAMMgt"
 
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
     begin
-        ProgressBar.OPEN(ProgressBarContent);
+        ProgressBar.Open(ProgressBarContent);
         ProgressBar_Total := BufferRef.COUNT;
+        ProgressBar_StartTime := CURRENTDATETIME;
+        ProgressBar_IsOpen := TRUE;
+    end;
+
+    procedure ProgressBar_Open(TotalLineCount: Integer; ProgressBarContent: Text)
+    begin
+        ProgressBar.Open(ProgressBarContent);
+        ProgressBar_Total := TotalLineCount;
         ProgressBar_StartTime := CURRENTDATETIME;
         ProgressBar_IsOpen := TRUE;
     end;
@@ -56,7 +64,7 @@ codeunit 91001 "DAMMgt"
             exit;
         if (FORMAT(ProgressBar_LastUpdate) = '') then
             ProgressBar_LastUpdate := CURRENTDATETIME;
-        if (CURRENTDATETIME - ProgressBar_LastUpdate) < 500 then
+        if (CURRENTDATETIME - ProgressBar_LastUpdate) < 1000 then
             exit;
         if Number1 <> 0 then
             ProgressBar.UPDATE(Number1, Value1);
@@ -194,8 +202,8 @@ codeunit 91001 "DAMMgt"
         FromField: FieldRef;
         ToField: FieldRef;
     begin
-        FromField := SourceRef.FIELD(FromFieldNo);
-        ToField := TargetRef.FIELD(ToFieldNo);
+        FromField := SourceRef.field(FromFieldNo);
+        ToField := TargetRef.field(ToFieldNo);
         ToField.VALUE := FromField.VALUE;
         IF DoModify then
             TargetRef.modify();
@@ -206,7 +214,7 @@ codeunit 91001 "DAMMgt"
         DAMErrorLog: Record DAMErrorLog;
         IsValidateSuccessful: Boolean;
     begin
-        CLEARLASTERROR();
+        ClearLastError();
         DAMSetup.GetRecordOnce();
         IF DAMFields."Use Try Function" and DAMSetup."Allow Usage of Try Function" then begin
             IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
@@ -364,8 +372,8 @@ codeunit 91001 "DAMMgt"
         FromField: FieldRef;
         ToField: FieldRef;
     begin
-        FromField := SourceRecRef.FIELD(FromFieldno);
-        ToField := TargetRecRef.FIELD(ToFieldNo);
+        FromField := SourceRecRef.field(FromFieldno);
+        ToField := TargetRecRef.field(ToFieldNo);
         ToField.VALIDATE(FromField.VALUE);
         TargetRecRef.modify();
     end;
@@ -380,7 +388,7 @@ codeunit 91001 "DAMMgt"
     var
         ToField: FieldRef;
     begin
-        ToField := TargetRecRef.FIELD(ToFieldNo);
+        ToField := TargetRecRef.field(ToFieldNo);
         ToField.VALIDATE(NewValue);
     end;
 

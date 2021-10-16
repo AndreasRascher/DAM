@@ -133,6 +133,35 @@ page 91002 "DAMTableCard"
                     Rec.Modify();
                 end;
             }
+            action(RetryBufferRecordsWithError)
+            {
+                CaptionML = DEU = 'Datensätze mit Fehlern erneut verarbeiten';
+                ApplicationArea = All;
+                Image = TransferOrder;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    DAMImport: Codeunit DAMImport;
+                    DAMErrorLogQry: Query DAMErrorLogQry;
+                    RecIdList: list of [RecordID];
+                begin
+                    DAMErrorLogQry.setrange(Import_from_Table_No_, REc."Buffer Table ID");
+                    DAMErrorLogQry.Open();
+                    while DAMErrorLogQry.Read() do begin
+                        RecIdList.Add(DAMErrorLogQry.FromID);
+                    end;
+                    DAMImport.SetObjectIDs(Rec);
+                    DAMImport.ProcessFullBuffer(RecIdList);
+                    Rec.Get(Rec.RecordId);
+                    Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
+                    Rec.LastImportToTargetAt := CurrentDateTime;
+                    Rec.Modify();
+                end;
+            }
             action(OpenErrorLog)
             {
                 Caption = 'Fehlerprotokoll öffnen';

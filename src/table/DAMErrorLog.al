@@ -60,7 +60,7 @@ table 91003 "DAMErrorLog"
     var
         _DAMErrorlog: Record DAMErrorLog;
     begin
-        _DAMErrorlog.INSERT(TRUE);
+
         _DAMErrorlog."From ID" := FromRecRef.RecordId;
         _DAMErrorlog."To ID" := ToRecRef.RecordId;
         _DAMErrorlog."From ID (Text)" := CopyStr(Format(_DAMErrorlog."From ID"), 1, MaxStrLen(_DAMErrorlog."From ID (Text)"));
@@ -76,7 +76,7 @@ table 91003 "DAMErrorLog"
         _DAMErrorlog.ErrorCode := CopyStr(GETLASTERRORCODE, 1, MaxStrLen(_DAMErrorlog.ErrorCode));
         _DAMErrorlog."DAM User" := CopyStr(USERID, 1, MaxStrLen(_DAMErrorlog."DAM User"));
         _DAMErrorlog."DAM Errorlog Created At" := CURRENTDATETIME;
-        _DAMErrorlog.MODIFY(TRUE);
+        _DAMErrorlog.INSERT(TRUE);
     end;
 
     procedure AddEntryForLastError(ToRecRef: RecordRef; ToFieldNo: Integer; IgnoreError: Boolean);
