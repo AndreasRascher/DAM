@@ -121,7 +121,7 @@ page 91002 "DAMTableCard"
                 var
                     DAMImport: Codeunit DAMImport;
                 begin
-                    DAMImport.ProcessDAMTable(Rec);
+                    DAMImport.ProcessDAMTable(Rec, false);
                 end;
             }
             action(RetryBufferRecordsWithError)

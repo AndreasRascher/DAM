@@ -1,11 +1,11 @@
 codeunit 91000 "DAMImport"
 {
-    procedure ProcessDAMTable(DAMTable: Record DAMTable)
+    procedure ProcessDAMTable(DAMTable: Record DAMTable; NoUserInteraction_New: Boolean)
     var
         start: DateTime;
     begin
         SetObjectIDs(DAMTable);
-        NoUserInteraction := true;
+        NoUserInteraction := NoUserInteraction_New;
         start := CurrentDateTime;
         ProcessFullBuffer();
         DAMTable.Get(DAMTable.RecordId);
@@ -186,7 +186,7 @@ codeunit 91000 "DAMImport"
                     end;
             end
         until TempDAMFields.Next() = 0;
-        TmpTargetRef.MODIFY(TRUE);
+        TmpTargetRef.MODIFY(false);
     end;
 
     procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef) Continue: Boolean;
@@ -211,10 +211,10 @@ codeunit 91000 "DAMImport"
     end;
 
     local procedure InitGlobalParams(var BufferRef: RecordRef)
-    var
-        APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
+    // var
+    //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
-        APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
+        // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
         LoadFieldMapping(DAMTable);
         BufferRef.OPEN(BufferTableID);
         KeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);

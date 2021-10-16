@@ -190,6 +190,8 @@ table 91002 "DAMField"
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
         Vendor: Record Vendor;
+        Customer: Record Customer;
+        Contact: Record Contact;
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.SetRange("Processing Action", DAMFields."Processing Action"::Transfer);
@@ -216,6 +218,16 @@ table 91002 "DAMField"
                         end;
                     (TargetField.TableNo IN [Database::Vendor]) and
                     (TargetField.FieldName IN ['Prices Including VAT']):
+                        begin
+                            DAMFields2."Validate Value" := false;
+                        end;
+                    (TargetField.TableNo IN [Database::Customer]) and
+                    (TargetField.FieldName IN ['Block Payment Tolerance']):
+                        begin
+                            DAMFields2."Validate Value" := false;
+                        end;
+                    (TargetField.TableNo IN [Database::Contact]) and
+                    (TargetField.FieldName IN ['Company No.']):
                         begin
                             DAMFields2."Validate Value" := false;
                         end;

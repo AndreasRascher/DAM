@@ -96,7 +96,7 @@ page 91004 "DAMTableList"
                     DAMTable_SELECTED.FindSet();
                     repeat
                         DAMTable := DAMTable_SELECTED;
-                        DAMImport.ProcessDAMTable(DAMTable);
+                        DAMImport.ProcessDAMTable(DAMTable, true);
                     until DAMTable_SELECTED.Next() = 0;
                 end;
             }
