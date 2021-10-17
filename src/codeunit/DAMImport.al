@@ -8,6 +8,7 @@ codeunit 91000 "DAMImport"
         NoUserInteraction := NoUserInteraction_New;
         start := CurrentDateTime;
         ProcessFullBuffer();
+
         DAMTable.Get(DAMTable.RecordId);
         DAMTable.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DAMTable.LastImportBy));
         DAMTable.LastImportToTargetAt := CurrentDateTime;
@@ -24,16 +25,7 @@ codeunit 91000 "DAMImport"
     begin
         InitGlobalParams(BufferRef);
 
-        if not NoUserInteraction then
-            if DAMTable.LoadTableLastView() <> '' then
-                BufferRef.SetView(DAMTable.LoadTableLastView());
-
-        if not NoUserInteraction then
-            if not ShowRequestPageFilterDialog(BufferRef) then
-                exit;
-
-        if not NoUserInteraction then
-            DAMTable.SaveTableLastView(BufferRef.GetView());
+        EditView(BufferRef);
 
         // Buffer loop
         BufferRef.findset();
@@ -145,6 +137,11 @@ codeunit 91000 "DAMImport"
         BufferTableID := DAMTable."Buffer Table ID";
     end;
 
+    procedure SetBufferTableView(bufferTableViewNEW: text)
+    begin
+        BufferTableView := bufferTableViewNEW;
+    end;
+
     procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef)
     begin
         IF NOT TmpTargetRef.ISTEMPORARY then
@@ -221,6 +218,26 @@ codeunit 91000 "DAMImport"
         NonKeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
     end;
 
+    local procedure EditView(var BufferRef: RecordRef)
+    begin
+
+        if NoUserInteraction then
+            exit;
+
+        if BufferTableView = '' then begin
+            if DAMTable.LoadTableLastView() <> '' then
+                BufferRef.SetView(DAMTable.LoadTableLastView());
+
+            if not ShowRequestPageFilterDialog(BufferRef) then
+                exit;
+
+            DAMTable.SaveTableLastView(BufferRef.GetView());
+        end else begin
+            BufferRef.SetView(BufferTableView);
+        end;
+
+    end;
+
 
     var
         TempDAMFields: Record "DAMField" temporary;
@@ -228,6 +245,7 @@ codeunit 91000 "DAMImport"
         DAMMgt: Codeunit DAMMgt;
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
+        BufferTableView: Text;
         BufferTableID: Integer;
         NoUserInteraction: Boolean;
 }

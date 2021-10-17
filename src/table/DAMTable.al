@@ -8,7 +8,7 @@ table 91001 "DAMTable"
         {
             CaptionML = DEU = 'Nach Tabellen ID', ENU = 'To Table ID';
             DataClassification = SystemMetadata;
-
+            NotBlank = true;
         }
         field(2; "Old Version Table ID"; Integer)
         {
@@ -144,9 +144,12 @@ table 91001 "DAMTable"
         {
             Clustered = true;
         }
-        key(Sorted; "Sort Order")
+        key(Sorted; "Sort Order") { }
+    }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "To Table ID", "To Table Caption")
         {
-
         }
     }
 

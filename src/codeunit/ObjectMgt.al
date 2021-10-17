@@ -30,7 +30,6 @@ codeunit 91004 ObjMgt
 
     procedure LookUpToTable(var DAMTable: Record DAMTable) OK: Boolean;
     var
-        AllObjWithCaption: Record AllObjWithCaption;
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DAMSelectTables: Page DAMSelectTables;
     begin

@@ -25,6 +25,7 @@ page 91002 "DAMTableCard"
                 {
                     ToolTip = 'Specifies the value of the Description field';
                     ApplicationArea = All;
+                    Importance = Promoted;
                 }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID")
                 {
@@ -47,7 +48,7 @@ page 91002 "DAMTableCard"
             {
                 CaptionML = DEU = 'Import', ENU = 'Import';
                 field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
-                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; }
+                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; Importance = Promoted; }
 
                 grid(dummy)
                 {

@@ -30,6 +30,40 @@ page 91001 "DAM Error Log List"
     {
         area(Processing)
         {
+            action(HideIgnored)
+            {
+                CaptionML = DEU = 'Ignorierte Fehler ausblenden', ENU = 'Hide ignored Errors';
+                ApplicationArea = All;
+                Image = ShowList;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+                Visible = ShowIgnoredErrorLines;
+
+                trigger OnAction()
+                begin
+                    Rec.SetRange("Ignore Error", false);
+                    ShowIgnoredErrorLines := false;
+                end;
+            }
+            action(ShowIgnored)
+            {
+                CaptionML = DEU = 'Ignorierte Fehler anzeigen', ENU = 'Show ignored Errors';
+                ApplicationArea = All;
+                Image = ShowList;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+                Visible = not ShowIgnoredErrorLines;
+
+                trigger OnAction()
+                begin
+                    Rec.SetRange("Ignore Error");
+                    ShowIgnoredErrorLines := true;
+                end;
+            }
             action(DeleteFilteredLines)
             {
                 CaptionML = DEU = 'Zeilen löschen', ENU = 'Delete Lines';
@@ -40,10 +74,89 @@ page 91001 "DAM Error Log List"
                 PromotedOnly = true;
                 PromotedCategory = Process;
 
+
                 trigger OnAction()
                 begin
                     Rec.DeleteAll();
+
                 end;
+            }
+            action(AddTableFilter)
+            {
+                CaptionML = DEU = 'Tabellenfilter', ENU = 'TableFilter';
+                ApplicationArea = all;
+                Image = FilterLines;
+                Promoted = true;
+
+                trigger OnAction()
+                var
+                    allObjWithCaption: Record AllObjWithCaption;
+                    NAVAppInstalledApp: Record "NAV App Installed App";
+                    selection: Integer;
+                    mI: ModuleInfo;
+                    choices: text;
+                begin
+                    NavApp.GetCurrentModuleInfo(mI);
+                    NAVAppInstalledApp.SetRange("App ID", mI.Id);
+                    NAVAppInstalledApp.FindFirst();
+                    allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
+                    allObjWithCaption.Setrange("Object Type", allObjWithCaption."Object Type"::Table);
+                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5',
+                        Database::"DAM Setup",
+                        Database::DAMErrorLog,
+                        Database::DAMField,
+                        Database::DAMFieldBuffer,
+                        Database::DAMTable);
+                    if allObjWithCaption.FindSet() then
+                        repeat
+                            choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
+                        until allObjWithCaption.Next() = 0;
+                    choices := choices.TrimEnd(',');
+                    selection := StrMenu(choices);
+                    if selection = 0 then exit;
+                    allObjWithCaption.Find('-');
+                    if selection > 1 then
+                        allObjWithCaption.Next(selection - 1);
+                    Rec.SetRange("Import from Table No.", allObjWithCaption."Object ID");
+                    CurrPage.Update(false);
+
+
+                    //                     IF Object.FIND('-') THEN
+                    //                         REPEAT
+                    //                             Object.CALCFIELDS(Caption);
+                    //                             Choices += CONVERTSTR(Object.Caption, ',', '_') + ',';
+                    //                         UNTIL Object.NEXT = 0;
+                    //                     IF Choices <> '' THEN
+                    //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
+                    //                     Selection := STRMENU(Choices);
+                    //                     IF Selection = 0 THEN
+                    //                         EXIT;
+                    //                     Object.FIND('-');
+                    //                     IF Selection > 1 THEN
+                    //                         Object.NEXT(Selection - 1);
+                    //                     SETRANGE("Import from Buffertable No.", Object.ID);
+                    //                     CurrPage.UPDATE(FALSE);
+
+                    //                     AddContextFilter - OnAction()
+                    // DAMErrorLog.OPEN;
+                    //                     WHILE DAMErrorLog.READ DO BEGIN
+                    //                         ResultTextArr[COMPRESSARRAY(ResultTextArr) + 1] := DAMErrorLog.DAM_Context_Descr;
+                    //                     END;
+                    //                     FOR Index := 1 TO ARRAYLEN(ResultTextArr) DO BEGIN
+                    //                         Choices += CONVERTSTR(ResultTextArr[Index], ',', '_') + ',';
+                    //                     END;
+                    //                     IF Choices <> '' THEN
+                    //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
+                    //                     Selection := STRMENU(Choices);
+                    //                     IF Selection = 0 THEN
+                    //                         EXIT;
+
+                    //                     IF Selection > 1 THEN
+                    //                         SETRANGE("DAM Context Descr.", ResultTextArr[Selection]);
+                    //                     CurrPage.UPDATE(FALSE);
+
+                end;
+
             }
         }
     }
@@ -56,11 +169,14 @@ page 91001 "DAM Error Log List"
     local procedure SetStyle(): Text
     begin
         IF Rec."Ignore Error" then
-            exit('Subordinate');
+            //exit('Subordinate');
+            exit('Ambiguous');
         exit('');
     end;
 
     var
+        [InDataSet]
+        ShowIgnoredErrorLines: Boolean;
         [InDataSet]
         TextStyle: Text;
 }

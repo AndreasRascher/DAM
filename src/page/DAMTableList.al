@@ -83,7 +83,7 @@ page 91004 "DAMTableList"
             action(TransferSelectedToTargetTable)
             {
                 ApplicationArea = all;
-                CaptionML = DEU = 'Markierte Tabellen in Zieltabellen übernehmen';
+                CaptionML = DEU = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()
                 var
                     DAMTable: Record DAMTable;
