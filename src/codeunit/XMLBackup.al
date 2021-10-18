@@ -462,6 +462,7 @@ codeunit 91005 XMLBackup
         TablesToExport.Add(Database::"DAM Setup");
         TablesToExport.Add(Database::DAMTable);
         TablesToExport.Add(Database::DAMField);
+        TablesToExport.Add(Database::DAMTask);
         foreach TableID in TablesToExport do begin
             _RecRef.OPEN(TableID);
             if _RecRef.FINDSET(false, false) then

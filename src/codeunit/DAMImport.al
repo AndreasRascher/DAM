@@ -23,7 +23,7 @@ codeunit 91000 "DAMImport"
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
     begin
-        InitGlobalParams(BufferRef);
+        InitGlobalParams(BufferRef, KeyFieldsFilter, NonKeyFieldsFilter);
 
         EditView(BufferRef);
 
@@ -63,7 +63,7 @@ codeunit 91000 "DAMImport"
         if RecIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
 
-        InitGlobalParams(BufferRef);
+        InitGlobalParams(BufferRef, KeyFieldsFilter, NonKeyFieldsFilter);
 
         // Buffer loop
         ID := RecIdToProcessList.Get(1);
@@ -94,18 +94,19 @@ codeunit 91000 "DAMImport"
         DAMMgt.GetResultQtyMessage();
     end;
 
-    procedure LoadFieldMapping(DAMTable: Record DAMTable)
+    procedure LoadFieldMapping(DAMTable: Record DAMTable; var TempDAMFields_FOUND: record DAMField temporary) OK: Boolean
     var
         DAMFields: Record "DAMField";
+        tempDAMFields: record DAMField temporary;
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.FindSet(false, false);  // raise error if empty
-        if TempDAMFields.IsTemporary then
-            TempDAMFields.DeleteAll(false);
         repeat
-            TempDAMFields := DAMFields;
-            TempDAMFields.Insert(false);
+            tempDAMFields := DAMFields;
+            tempDAMFields.Insert(false);
         until DAMFields.Next() = 0;
+        TempDAMFields_FOUND.Copy(tempDAMFields, true);
+        OK := TempDAMFields_FOUND.FindFirst();
     end;
 
     procedure ProcessSingleBufferRecord(BufferRef: RecordRef)
@@ -207,15 +208,15 @@ codeunit 91000 "DAMImport"
         //end;
     end;
 
-    local procedure InitGlobalParams(var BufferRef: RecordRef)
+    procedure InitGlobalParams(var BufferRef: RecordRef; var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text)
     // var
     //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
         // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        LoadFieldMapping(DAMTable);
+        LoadFieldMapping(DAMTable, TempDAMFields);
         BufferRef.OPEN(BufferTableID);
-        KeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
-        NonKeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
+        BuffKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
+        BuffNonKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
     end;
 
     local procedure EditView(var BufferRef: RecordRef)
