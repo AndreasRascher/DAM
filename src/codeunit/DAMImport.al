@@ -120,7 +120,7 @@ codeunit 91000 "DAMImport"
         TargetRef.OPEN(DAMTable."To Table ID", TRUE);
         //ReplaceValuesBeforeProcessing(BufferRef);
 
-        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef);
+        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, KeyFieldsFilter, TempDAMFields);
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef);
 
         ErrorsExist := DAMErrorLog.ErrorsExistFor(BufferRef, TRUE);
@@ -143,16 +143,16 @@ codeunit 91000 "DAMImport"
         BufferTableView := bufferTableViewNEW;
     end;
 
-    procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef)
+    procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; KeyFieldsFilter: text; var TmpDAMField: record DAMField temporary)
     begin
         IF NOT TmpTargetRef.ISTEMPORARY then
             ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
-        TempDAMFields.Reset();
-        TempDAMFields.SetFilter("To Field No.", KeyFieldsFilter);
-        TempDAMFields.findset();
+        TmpDAMField.Reset();
+        TmpDAMField.SetFilter("To Field No.", KeyFieldsFilter);
+        TmpDAMField.findset();
         repeat
-            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", false);
-        until TempDAMFields.Next() = 0;
+            DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDAMField."From Field No.", BufferRef, TmpDAMField."To Field No.", false);
+        until TmpDAMField.Next() = 0;
         IF TmpTargetRef.INSERT(FALSE) then;
     end;
 

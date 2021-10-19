@@ -166,49 +166,15 @@ page 91000 "DAM Setup"
                     Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
                 end;
             }
-            action(TestFileEncoding)
+            action(Test)
             {
                 ApplicationArea = all;
 
                 trigger OnAction()
                 var
-                    MI: ModuleInfo;
-                    AllObj: Record AllObj;
-                    AllObjWithCaption: Record AllObjWithCaption;
-                    App: Record "NAV App Installed App";
+                    DAMTestRunner: Codeunit DAMTestRunner;
                 begin
-                    //Message('%1', TryFunctionTest());
-                    //NavApp.GetCallerModuleInfo();
-                    NavApp.GetCurrentModuleInfo(MI);
-                    App.SetRange("App ID", MI.Id);
-                    App.FindFirst();
-                    AllObj.Get(AllObj."Object Type"::Table, Database::"DAM Setup");
-                    Message('AllObj."App Package ID": %1\' +
-                            '"App Runtime Package ID" %2\' +
-                            'ApplicationIdentifier %3\' +
-                            'MI.Id %4\' +
-                            'MI.Name %5\' +
-                            'MI.Appversion %6\' +
-                            'App."Package ID" %7\',
-
-                     AllObj."App Package ID",
-                     AllObj."App Runtime Package ID",
-                     ApplicationIdentifier(),
-                     MI.Id,
-                     MI.Name,
-                     MI.AppVersion,
-                     App."Package ID"
-                     );
-
-
-                    // Message(MI.Id);
-                    // AllObj.Reset();
-                    // AllObj.Setrange("App Package ID", MI.Id);
-                    // Message('%1', AllObj.Count);
-                    // AllObj.Reset();
-                    // AllObj.Setrange(app, MI.Id);
-                    // Message('%1', AllObj.Count);
-
+                    DAMTestRunner.Run();
                 end;
             }
         }

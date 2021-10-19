@@ -1,237 +1,122 @@
-// codeunit 91006 DAMTestRunner
-// {
-//     Subtype = TestRunner;
-//     TestIsolation = Disabled;
-//     trigger OnRun()
-//     var
-//         DAMTable: Record DAMTable;
-//         DAMTest: Codeunit DAMTest;
-//     begin
-//         Clear(DAMTest);
-//         DAMTable.Get(Database::Contact);
-//         DAMTest.SetUpTestParams(DAMTable);
-//         Codeunit.Run(Codeunit::DAMTest);
-//     end;
+codeunit 91006 DAMTestRunner
+{
+    Subtype = TestRunner;
+    TestIsolation = Disabled;
+    trigger OnRun()
+    var
+        DAMTable: Record DAMTable;
+        DAMTest: Codeunit DAMTest;
+        BufferRef: RecordRef;
+    begin
+        Clear(DAMTest);
+        DAMTable.Get(Database::Contact);
+        BufferRef.Open(DAMTable."Buffer Table ID");
+        BufferRef.FindFirst();
+        DAMTest.SetUpTestParams(DAMTable, BufferRef);
+        DAMTest.Run();
+    end;
 
-//     trigger OnAfterTestRun(CodeunitId: Integer; CodeunitName: Text; FunctionName: Text; Permissions: TestPermissions; Success: Boolean)
-//     var
-//         DAMVariableStorage: Codeunit DAMVariableStorage;
-//     begin
-//         IF not Success then DAMVariableStorage.AddEntryForLastError();
-//     end;
-// }
-// codeunit 91007 DAMTest
-// {
-//     Subtype = Test;
+    trigger OnAfterTestRun(CodeunitId: Integer; CodeunitName: Text; FunctionName: Text; Permissions: TestPermissions; Success: Boolean)
+    var
+        // DAMVariableStorage: Codeunit DAMVariableStorage;
+        LastError: Text;
+    begin
+        IF not Success then
+            LastError := GetLastErrorText();
+        ClearLastError();
+    end;
+}
+codeunit 91007 DAMTest
+{
+    Subtype = Test;
 
-//     [Test]
-//     procedure FillTargetRef()
-//     var
-//         DAMImport: Codeunit DAMImport;
-//         BufferRef, TmpTargetRef : RecordRef;
-//     begin
-//         DAMImport.AssignKeyFieldsAndInsertTmpRec(BufferRef, TmpTargetRef);
-//     end;
-//     #region Field1To10
-//     [Test]
-//     procedure ValidateNonKeyField1()
-//     var
-//         TempDAMField: Record DAMField temporary;
-//     begin
-//         DAMVariableStorage.GetDAMFields(TempDAMField);
-//         TempDAMField.Reset();
-//         TempDAMField.SetFilter("To Field No.", NonKeyFieldsFilter);
-//         TempDAMField.findset();
-//         DAMVariableStorage.SetDAMFields(TempDAMField);
-//         ValidateNonKeyFieldsAndModify(TempDAMField);
-//     end;
+    [Test]
+    procedure FillTargetRef()
+    var
+        DAMImport: Codeunit DAMImport;
+    begin
+        DAMImport.AssignKeyFieldsAndInsertTmpRec(BufferRef, TmpTargetRef, KeyFieldsFilter, TempDAMField);
+    end;
 
-//     [Test]
-//     procedure ValidateNonKeyField2()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
+    [Test]
+    procedure ValidateNonKeyField1()
+    begin
+        TempDAMField.Reset();
+        TempDAMField.SetFilter("To Field No.", NonKeyFieldsFilter);
+        TempDAMField.findset();
+        ValidateNonKeyFieldsAndModify(TempDAMField);
+    end;
 
-//     [Test]
-//     procedure ValidateNonKeyField3()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
+    [Test]
+    procedure ValidateNonKeyField2()
+    begin
+        if (TempDAMField.next() = 1) then ValidateNonKeyFieldsAndModify(CurrDAMField);
+    end;
 
-//     [Test]
-//     procedure ValidateNonKeyField4()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
+    procedure ValidateNonKeyFieldsAndModify(var CurrTempDAMField: Record DAMField temporary)
+    var
+        DAMMgt: Codeunit DAMMgt;
+        ToFieldRef: FieldRef;
+    begin
+        case true of
+            (CurrTempDAMField."Processing Action" = CurrTempDAMField."Processing Action"::Transfer):
+                begin
+                    if CurrTempDAMField."Validate Value" then
+                        DAMMgt.ValidateFieldImplementation(BufferRef,
+                        CurrTempDAMField."From Field No.",
+                        CurrTempDAMField."To Field No.",
+                        TmpTargetRef)
+                    else
+                        DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, CurrTempDAMField."From Field No.", BufferRef, CurrTempDAMField."To Field No.", true);
+                end;
+            (CurrTempDAMField."Processing Action" = CurrTempDAMField."Processing Action"::FixedValue):
+                begin
+                    ToFieldRef := TmpTargetRef.Field(CurrTempDAMField."To Field No.");
+                    if not DAMMgt.EvaluateFieldRef(ToFieldRef, CurrTempDAMField."Fixed Value", false) then
+                        Error('Invalid Fixed Value %1', CurrTempDAMField."Fixed Value");
+                    DAMMgt.ValidateFieldWithValue(TmpTargetRef, CurrTempDAMField."To Field No.",
+                      ToFieldRef.Value,
+                      CurrTempDAMField."Ignore Validation Error");
+                end;
+        end;
+        TmpTargetRef.Modify();
+    end;
 
-//     [Test]
-//     procedure ValidateNonKeyField5()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
+    procedure SetUpTestParams(dAMTable_NEW: Record DAMTable; CurrBufferRef: RecordRef)
+    var
+        DAMImport: Codeunit DAMImport;
+        DAMMgt: Codeunit DAMMgt;
+    begin
+        DAMTable.Copy(dAMTable_NEW);
+        BufferRef := CurrBufferRef;
+        DAMImport.LoadFieldMapping(DAMTable, TempDAMField);
+        TmpTargetRef.Open(DAMTable."To Table ID", true);
+        KeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(bufferRef.NUMBER, true /*include*/);
+        NonKeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(bufferRef.NUMBER, false /*exclude*/);
+    end;
 
-//     [Test]
-//     procedure ValidateNonKeyField6()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField7()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField8()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField9()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField10()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-//     #endregion Field1To10
-//     #region Field11to20
-//     [Test]
-//     procedure ValidateNonKeyField11()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField12()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField13()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField14()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField15()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField16()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField17()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField18()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField19()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-
-//     [Test]
-//     procedure ValidateNonKeyField20()
-//     begin
-//         if DAMVariableStorage.GetNextField(CurrDAMField) then ValidateNonKeyFieldsAndModify(CurrDAMField);
-//     end;
-//     #endregion Field11to20
-//     procedure ValidateNonKeyFieldsAndModify(var CurrTempDAMField: Record DAMField temporary)
-//     var
-//         DAMMgt: Codeunit DAMMgt;
-//         BufferRef, TmpTargetRef : RecordRef;
-//         ToFieldRef: FieldRef;
-//     begin
-//         DAMVariableStorage.GetRecRef(BufferRef, TmpTargetRef);
-//         case true of
-//             (CurrTempDAMField."Processing Action" = CurrTempDAMField."Processing Action"::Transfer):
-//                 begin
-//                     if CurrTempDAMField."Validate Value" then
-//                         DAMMgt.ValidateFieldImplementation(BufferRef,
-//                         CurrTempDAMField."From Field No.",
-//                         CurrTempDAMField."To Field No.",
-//                         TmpTargetRef)
-//                     else
-//                         DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, CurrTempDAMField."From Field No.", BufferRef, CurrTempDAMField."To Field No.", true);
-//                 end;
-//             (CurrTempDAMField."Processing Action" = CurrTempDAMField."Processing Action"::FixedValue):
-//                 begin
-//                     ToFieldRef := TmpTargetRef.Field(CurrTempDAMField."To Field No.");
-//                     if not DAMMgt.EvaluateFieldRef(ToFieldRef, CurrTempDAMField."Fixed Value", false) then
-//                         Error('Invalid Fixed Value %1', CurrTempDAMField."Fixed Value");
-//                     DAMMgt.ValidateFieldWithValue(TmpTargetRef, CurrTempDAMField."To Field No.",
-//                       ToFieldRef.Value,
-//                       CurrTempDAMField."Ignore Validation Error");
-//                 end;
-//         end;
-//         TmpTargetRef.Modify();
-//         DAMVariableStorage.SetRecRef(BufferRef, TmpTargetRef);
-//     end;
-
-//     procedure SetUpTestParams(DAMTable_NEW: Record DAMTable)
-//     var
-//         TempDAMFields: Record DAMField temporary;
-//         DAMImport: Codeunit DAMImport;
-//         DAMMgt: Codeunit DAMMgt;
-//         BufferRef: RecordRef;
-//         TmpTargetRef: RecordRef;
-//     begin
-//         DAMTable.Copy(DAMTable_NEW);
-//         DAMImport.LoadFieldMapping(DAMTable, TempDAMFields);
-//         DAMVariableStorage.SetDAMFields(TempDAMFields);
-//         BufferRef.OPEN(DAMTable."Buffer Table ID");
-//         TmpTargetRef.Open(DAMTable."To Table ID", true);
-//         DAMVariableStorage.SetRecRef(BufferRef, TmpTargetRef);
-//         KeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
-//         NonKeyFieldsFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
-//     end;
-
-//     var
-//         CurrDAMField: Record DAMField;
-//         DAMTable: Record DAMTable;
-//         DAMVariableStorage: Codeunit DAMVariableStorage;
-//         KeyFieldsFilter: Text;
-//         NonKeyFieldsFilter: Text;
-// }
+    var
+        CurrDAMField: Record DAMField;
+        TempDAMField: Record DAMField temporary;
+        DAMTable: Record DAMTable;
+        BufferRef, TmpTargetRef : RecordRef;
+        KeyFieldsFilter: Text;
+        NonKeyFieldsFilter: Text;
+}
 // codeunit 91008 DAMVariableStorage
 // {
 //     SingleInstance = true;
 
 //     procedure SetRecRef(var _FromRecRef: Recordref; var _ToRecRef: RecordRef);
 //     begin
-//         FromRecRef := _FromRecRef;
-//         ToRecRef := _ToRecRef;
+//         FromRecRef := _FromRecRef.Duplicate();
+//         ToRecRef := _ToRecRef.Duplicate();
 //     end;
 
 //     procedure GetRecRef(var _FromRecRef: Recordref; var _ToRecRef: RecordRef);
 //     begin
-//         _FromRecRef := FromRecRef;
-//         _ToRecRef := ToRecRef;
+//         _FromRecRef := FromRecRef.Duplicate();
+//         _ToRecRef := ToRecRef.Duplicate();
 //     end;
 
 //     procedure SetDAMFields(var DAMField_NEW: Record DAMField temporary)
