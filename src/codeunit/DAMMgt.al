@@ -163,17 +163,7 @@ codeunit 91001 "DAMMgt"
     var
         TargetRef: RecordRef;
         TargetRef2: RecordRef;
-        KeyField: FieldRef;
-        KeyRef: KeyRef;
     begin
-        // Setup Tables missing
-        // // don't insert empty Keys
-        // KeyRef := BufferRef.KEYINDEX(1);
-        // KeyField := KeyRef.FIELDINDEX(1);
-        // IF UPPERCASE(FORMAT(KeyField.TYPE)) IN ['CODE', 'TEXT'] then
-        //     IF FORMAT(KeyField.VALUE) = '' then
-        //         exit(FALSE);
-
         TargetRef.OPEN(TmpTargetRef.NUMBER, FALSE);
         CopyRecordRef(TmpTargetRef, TargetRef);
 

@@ -15,6 +15,7 @@ page 91007 FileBrowser
             {
                 field(CurrFolder; CurrFolder)
                 {
+                    ShowCaption = false;
                     ApplicationArea = All;
                     trigger OnValidate()
                     begin
@@ -26,12 +27,6 @@ page 91007 FileBrowser
             repeater(Entries)
             {
                 Editable = false;
-
-                field(Data; Rec.Data)
-                {
-                    ToolTip = 'Specifies the value of the Data field.';
-                    ApplicationArea = All;
-                }
                 field("Date"; Rec."Date")
                 {
                     ToolTip = 'Specifies the value of the Date field.';
@@ -76,21 +71,6 @@ page 91007 FileBrowser
         }
     }
 
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
-                ApplicationArea = All;
-
-                trigger OnAction()
-                begin
-
-                end;
-            }
-        }
-    }
 
     trigger OnOpenPage()
     begin

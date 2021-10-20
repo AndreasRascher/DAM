@@ -134,18 +134,16 @@ codeunit 91005 XMLBackup
 
     local procedure AddTable(VAR _XMLNode_Start: XMLNode; i_TableID: Integer);
     VAR
-        tempTenantMedia: Record "Tenant Media" temporary;
         ID: RecordId;
         recRef: RecordRef;
         fldRef: FieldRef;
-        booleanType: Boolean;
         i: Integer;
+        keyFieldID: Integer;
+        fieldIDsList: List of [Integer];
+        fieldValueAsText: Text;
         fieldNode: XMLNode;
         recordNode: XMLNode;
         textNode: XmlText;
-        fieldIDsList: List of [Integer];
-        keyFieldID: Integer;
-        fieldValueAsText: Text;
     begin
         foreach ID in RecordIDList do begin
             if ID.TableNo = i_TableID then begin
@@ -176,66 +174,12 @@ codeunit 91005 XMLBackup
 
     procedure FldRefIsEmpty(FldRef: FieldRef) IsEmpty: Boolean
     var
-        booleanType: Boolean;
-        guidType: Guid;
-        fieldTypeText: Text;
-        dateType: Date;
-        timeType: Time;
-        integerType: Integer;
-        durationtype: Duration;
         InitRef: RecordRef;
     begin
         InitRef.Open(FldRef.Record().Number);
         InitRef.Init();
         IsEmpty := (InitRef.Field(FldRef.Number).Value = FldRef.Value);
         exit(IsEmpty);
-        fieldTypeText := Strsubstno('%1="%2"', Format(FldRef.Type), FldRef.Value);
-        case FldRef.Type of
-            FieldType::Boolean:
-                begin
-                    booleanType := FldRef.Value;
-                    IsEmpty := (booleanType = false);
-                end;
-            FieldType::BigInteger, Fieldtype::Integer, Fieldtype::Decimal:
-                IsEmpty := Format(FldRef.Value) = '0';
-            Fieldtype::Time:
-                begin
-                    timeType := FldRef.Value;
-                    IsEmpty := timeType = 0T;
-                end;
-            Fieldtype::Date:
-                begin
-                    dateType := FldRef.Value;
-                    IsEmpty := dateType = 0D;
-                end;
-            Fieldtype::Text, Fieldtype::Code, Fieldtype::DateFormula, Fieldtype::DateTime, Fieldtype::RecordId:
-                IsEmpty := Format(FldRef.Value) = '';
-            FieldType::Guid:
-                begin
-                    guidType := FldRef.Value;
-                    IsEmpty := IsNullGuid(guidType);
-                end;
-            Fieldtype::Blob:
-                begin
-                    FldRef.CalcField();
-                    IsEmpty := (Format(FldRef.Value) = '0');
-                end;
-            Fieldtype::Media, Fieldtype::MediaSet:
-                IsEmpty := IsNullGuid(Format(FldRef.Value));
-            Fieldtype::Option:
-                begin
-                    integerType := FldRef.Value;
-                    IsEmpty := integerType = 0;
-                end;
-            Fieldtype::Duration:
-                begin
-                    durationtype := FldRef.Value;
-                    IsEmpty := durationtype = 0;
-                end;
-
-            else
-                Error('IsEmptyFldRef: unhandled field type %1', FldRef.Type);
-        end; // end_case
     end;
 
     procedure FldRefEvaluate(var FldRef: FieldRef; ValueAsText: Text)

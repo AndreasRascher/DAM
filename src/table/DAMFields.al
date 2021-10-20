@@ -189,9 +189,9 @@ table 91002 "DAMField"
         DAMFields2: Record "DAMField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-        Vendor: Record Vendor;
-        Customer: Record Customer;
-        Contact: Record Contact;
+    // Vendor: Record Vendor;
+    // Customer: Record Customer;
+    // Contact: Record Contact;
     begin
         DAMFields.FilterBy(DAMTable);
         DAMFields.SetRange("Processing Action", DAMFields."Processing Action"::Transfer);

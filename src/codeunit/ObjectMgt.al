@@ -47,8 +47,8 @@ codeunit 91004 ObjMgt
     procedure AddSelectedTables() OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DAMSelectTables: Page DAMSelectTables;
         DAMTable: Record DAMTable;
+        DAMSelectTables: Page DAMSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;

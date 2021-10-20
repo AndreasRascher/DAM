@@ -4,6 +4,7 @@ page 91005 DAMSelectTables
     PageType = List;
     SourceTable = AllObjWithCaption;
     SourceTableTemporary = true;
+    UsageCategory = None;
 
     layout
     {

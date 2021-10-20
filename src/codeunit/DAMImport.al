@@ -120,7 +120,7 @@ codeunit 91000 "DAMImport"
         TargetRef.OPEN(DAMTable."To Table ID", TRUE);
         //ReplaceValuesBeforeProcessing(BufferRef);
 
-        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, KeyFieldsFilter, TempDAMFields);
+        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, KeyFieldsFilter, TempDAMField_COLLECTION);
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef);
 
         ErrorsExist := DAMErrorLog.ErrorsExistFor(BufferRef, TRUE);
@@ -160,30 +160,30 @@ codeunit 91000 "DAMImport"
     var
         ToFieldRef: FieldRef;
     begin
-        TempDAMFields.Reset();
-        TempDAMFields.SetFilter("To Field No.", NonKeyFieldsFilter);
-        TempDAMFields.findset();
+        TempDAMField_COLLECTION.Reset();
+        TempDAMField_COLLECTION.SetFilter("To Field No.", NonKeyFieldsFilter);
+        TempDAMField_COLLECTION.findset();
         repeat
-            TempDAMFields.CalcFields("To Field Caption", "From Field Caption");
+            TempDAMField_COLLECTION.CalcFields("To Field Caption", "From Field Caption");
             case true of
-                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::Transfer):
-                    if TempDAMFields."Validate Value" then
-                        DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMFields)
+                (TempDAMField_COLLECTION."Processing Action" = TempDAMField_COLLECTION."Processing Action"::Transfer):
+                    if TempDAMField_COLLECTION."Validate Value" then
+                        DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMField_COLLECTION)
                     else
-                        DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMFields."From Field No.", BufferRef, TempDAMFields."To Field No.", true);
+                        DAMMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDAMField_COLLECTION."From Field No.", BufferRef, TempDAMField_COLLECTION."To Field No.", true);
 
 
-                (TempDAMFields."Processing Action" = TempDAMFields."Processing Action"::FixedValue):
+                (TempDAMField_COLLECTION."Processing Action" = TempDAMField_COLLECTION."Processing Action"::FixedValue):
                     begin
-                        ToFieldRef := TmpTargetRef.Field(TempDAMFields."To Field No.");
-                        if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMFields."Fixed Value", false) then
-                            Error('Invalid Fixed Value %1', TempDAMFields."Fixed Value");
-                        DAMMgt.ValidateFieldWithValue(TmpTargetRef, TempDAMFields."To Field No.",
+                        ToFieldRef := TmpTargetRef.Field(TempDAMField_COLLECTION."To Field No.");
+                        if not DAMMgt.EvaluateFieldRef(ToFieldRef, TempDAMField_COLLECTION."Fixed Value", false) then
+                            Error('Invalid Fixed Value %1', TempDAMField_COLLECTION."Fixed Value");
+                        DAMMgt.ValidateFieldWithValue(TmpTargetRef, TempDAMField_COLLECTION."To Field No.",
                           ToFieldRef.Value,
-                          TempDAMFields."Ignore Validation Error");
+                          TempDAMField_COLLECTION."Ignore Validation Error");
                     end;
             end
-        until TempDAMFields.Next() = 0;
+        until TempDAMField_COLLECTION.Next() = 0;
         TmpTargetRef.MODIFY(false);
     end;
 
@@ -213,7 +213,7 @@ codeunit 91000 "DAMImport"
     //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
         // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        LoadFieldMapping(DAMTable, TempDAMFields);
+        LoadFieldMapping(DAMTable, TempDAMField_COLLECTION);
         BufferRef.OPEN(BufferTableID);
         BuffKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
         BuffNonKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
@@ -241,7 +241,7 @@ codeunit 91000 "DAMImport"
 
 
     var
-        TempDAMFields: Record "DAMField" temporary;
+        TempDAMField_COLLECTION: Record "DAMField" temporary;
         DAMTable: Record DAMTable;
         DAMMgt: Codeunit DAMMgt;
         KeyFieldsFilter: Text;

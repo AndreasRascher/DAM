@@ -36,6 +36,7 @@ page 91004 "DAMTableList"
             action(SelectTablesToAdd)
             {
                 CaptionML = DEU = 'Tab. hinzufügen';
+                Image = Add;
                 ApplicationArea = all;
                 trigger OnAction()
                 var
@@ -46,6 +47,7 @@ page 91004 "DAMTableList"
             }
             action(ImportBufferTables)
             {
+                Image = ImportDatabase;
                 CaptionML = DEU = 'Alle Dateien in Puffertabellen einlesen';
                 ApplicationArea = all;
                 trigger OnAction()
@@ -68,6 +70,7 @@ page 91004 "DAMTableList"
             }
             action(ExportALObjects)
             {
+                Image = ExportFile;
                 ApplicationArea = all;
                 CaptionML = DEU = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
@@ -82,6 +85,7 @@ page 91004 "DAMTableList"
             }
             action(TransferSelectedToTargetTable)
             {
+                Image = TransferToLines;
                 ApplicationArea = all;
                 CaptionML = DEU = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()

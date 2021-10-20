@@ -37,7 +37,7 @@ page 91000 "DAM Setup"
                             trigger OnLookup(var Text: Text): Boolean
                             begin
                                 LookUpFolderPath(Text);
-                                Rec."Default Export Folder Path" := Text;
+                                Rec."Default Export Folder Path" := CopyStr(Text, 1, MaxStrLen(Rec."Default Export Folder Path"));
                             end;
                         }
                         field("Schema File Path"; Rec."Schema.xml File Path")
@@ -63,8 +63,8 @@ page 91000 "DAM Setup"
                     }
                     group(Debugging)
                     {
-                        field(SessionID; SessionId()) { ApplicationArea = all; }
-                        field(UserID; UserId) { ApplicationArea = all; }
+                        field(SessionID; SessionId()) { ApplicationArea = all; Caption = 'SessionID'; }
+                        field(UserID; UserId) { ApplicationArea = all; Caption = 'User ID'; }
                     }
                 }
             }
@@ -160,6 +160,7 @@ page 91000 "DAM Setup"
             {
                 ApplicationArea = All;
                 CaptionML = DEU = 'Schema anzeigen';
+                Image = ShowMatrix;
 
                 trigger OnAction()
                 begin

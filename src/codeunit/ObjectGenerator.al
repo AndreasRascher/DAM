@@ -926,12 +926,10 @@ codeunit 91003 DAMObjectGenerator
 
     procedure DownloadFile(Content: TextBuilder; toFileName: text)
     var
-        allFilesTok: Label 'All Files (*.*)|*.*';
-        TxtFileTok: Label 'Text Files (*.txt)|*.txt';
-        folderName: text;
         tempBlob: Codeunit "Temp Blob";
-        oStr: OutStream;
         iStr: InStream;
+        allFilesTok: Label 'All Files (*.*)|*.*';
+        oStr: OutStream;
     begin
         tempBlob.CreateOutStream(oStr);
         oStr.WriteText(Content.ToText());
@@ -944,7 +942,6 @@ codeunit 91003 DAMObjectGenerator
         tempBlob: Codeunit "Temp Blob";
         iStr: InStream;
         allFilesTok: Label 'All Files (*.*)|*.*';
-        TxtFileTok: Label 'Text Files (*.txt)|*.txt';
         oStr: OutStream;
         DefaultEncoding: TextEncoding;
     begin

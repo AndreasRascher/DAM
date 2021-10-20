@@ -62,7 +62,7 @@ table 91000 "DAM Setup"
     begin
         if RecordHasBeenRead then
             exit;
-        Get;
+        Get();
         RecordHasBeenRead := true;
     end;
 
