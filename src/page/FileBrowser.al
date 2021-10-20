@@ -74,12 +74,38 @@ page 91007 FileBrowser
 
 
     trigger OnOpenPage()
+    var
+        FileMgt: Codeunit "File Management";
     begin
         if CurrFolder = '' then
-            Rec.SetRange(Path, 'C:\');
+            Rec.SetRange(Path, 'C:\')
+        else begin
+            CurrFolder := FileMgt.GetDirectoryName(CurrFolder);
+            Rec.SetRange(Path, CurrFolder);
+        end;
+    end;
 
+    procedure SetupFileBrowser(CurrFolderNew: text; BrowseForFolderNew: Boolean)
+    begin
+        BrowseForFolder := BrowseForFolderNew;
+        CurrFolder := CurrFolderNew;
+    end;
+
+    procedure GetSelectedPath(): Text
+    var
+        FileMgt: Codeunit "File Management";
+    begin
+        if BrowseForFolder then
+            exit(Rec.Path)
+        else begin
+            if Rec."Is a file" then
+                exit(FileMgt.CombinePath(Rec.Path, Rec.Name))
+            else
+                exit('');
+        end;
     end;
 
     var
         CurrFolder: Text;
+        BrowseForFolder: Boolean;
 }

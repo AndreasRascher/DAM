@@ -20,14 +20,47 @@ table 91000 "DAM Setup"
         {
             CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
             DataClassification = ToBeClassified;
+            trigger OnValidate()
+            begin
+                Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+            end;
+
+            trigger OnLookup()
+            var
+                DAMMgt: Codeunit DAMMgt;
+            begin
+                Rec."Default Export Folder Path" := DAMMgt.LookUpPath(Rec."Default Export Folder Path", true);
+            end;
         }
         field(31; "Schema.xml File Path"; Text[250])
         {
             CaptionML = DEU = 'Pfad Schemadatei', ENU = 'Schema File Path';
+            trigger OnValidate()
+            begin
+                Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
+            end;
+
+            trigger OnLookup()
+            var
+                DAMMgt: Codeunit DAMMgt;
+            begin
+                Rec."Schema.xml File Path" := DAMMgt.LookUpPath(Rec."Schema.xml File Path", false);
+            end;
         }
         field(32; "Backup.xml File Path"; Text[250])
         {
             CaptionML = DEU = 'Pfad Backup.xml', ENU = 'Backup.xml File Path';
+            trigger OnValidate()
+            begin
+                Rec."Backup.xml File Path" := DelChr(Rec."Backup.xml File Path", '<>', '"');
+            end;
+
+            trigger OnLookup()
+            var
+                DAMMgt: Codeunit DAMMgt;
+            begin
+                Rec."Backup.xml File Path" := DAMMgt.LookUpPath(Rec."Backup.xml File Path", false);
+            end;
         }
         field(40; "Allow Usage of Try Function"; Boolean)
         {

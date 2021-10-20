@@ -15,13 +15,13 @@ page 91002 "DAMTableCard"
             group(General)
             {
                 CaptionML = ENU = 'General', DEU = 'Allgemein';
-                field("From Table Caption"; "Old Version Table Caption")
+                field("From Table Caption"; Rec."Old Version Table Caption")
                 {
                     ToolTip = 'Specifies the value of the Code field';
                     ApplicationArea = All;
                     ShowMandatory = true;
                 }
-                field("To Table Caption"; "To Table Caption")
+                field("To Table Caption"; Rec."To Table Caption")
                 {
                     ToolTip = 'Specifies the value of the Description field';
                     ApplicationArea = All;
@@ -43,20 +43,6 @@ page 91002 "DAMTableCard"
                         Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
                     end;
                 }
-            }
-            group(TableMigration)
-            {
-                CaptionML = DEU = 'migration', ENU = 'Migration';
-                field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
-                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; Importance = Promoted; }
-                field("Trgt.Table ID"; Rec."To Table ID")
-                {
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
-                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
-                field("No.of Fields in Trgt. Table"; "No.of Fields in Trgt. Table") { ApplicationArea = All; }
-
                 grid(dummy)
                 {
                     GridLayout = Rows;
@@ -72,8 +58,23 @@ page 91002 "DAMTableCard"
                     }
                 }
             }
+            group(TableMigration)
+            {
+                CaptionML = DEU = 'Tabellen', ENU = 'Tables';
+                field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
+                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; Importance = Promoted; }
+                field("Trgt.Table ID"; Rec."To Table ID")
+                {
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
+                field("No.of Fields in Trgt. Table"; "No.of Fields in Trgt. Table") { ApplicationArea = All; }
+
+            }
             group(DataMigration)
             {
+                CaptionML = DEU = 'Datenmigration', ENU = 'Data Migration';
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
             }
             part(FieldsPart; DAMTableCardPart)
@@ -142,7 +143,7 @@ page 91002 "DAMTableCard"
                     while DAMErrorLogQry.Read() do begin
                         RecIdList.Add(DAMErrorLogQry.FromID);
                     end;
-                    DAMImport.SetObjectIDs(Rec);
+                    DAMImport.SetDAMTableToProcess(Rec);
                     DAMImport.ProcessFullBuffer(RecIdList);
                     Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));

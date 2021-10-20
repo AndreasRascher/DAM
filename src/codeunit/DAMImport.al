@@ -4,7 +4,7 @@ codeunit 91000 "DAMImport"
     var
         start: DateTime;
     begin
-        SetObjectIDs(DAMTable);
+        SetDAMTableToProcess(DAMTable);
         NoUserInteraction := NoUserInteraction_New;
         start := CurrentDateTime;
         ProcessFullBuffer();
@@ -20,8 +20,7 @@ codeunit 91000 "DAMImport"
     procedure ProcessFullBuffer()
     var
         DAMErrorLog: Record DAMErrorLog;
-        BufferRef: RecordRef;
-        BufferRef2: RecordRef;
+        BufferRef, BufferRef2 : RecordRef;
     begin
         InitGlobalParams(BufferRef, KeyFieldsFilter, NonKeyFieldsFilter);
 
@@ -37,7 +36,7 @@ codeunit 91000 "DAMImport"
                                            '\Restlaufzeit: ########################################5#');
         DAMMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
-            BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
+            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2);
             DAMMgt.ProgressBar_NextStep();
             DAMMgt.ProgressBar_Update(0, '',
@@ -51,6 +50,13 @@ codeunit 91000 "DAMImport"
         DAMMgt.ProgressBar_Close();
         DAMErrorLog.OpenListWithFilter(BufferRef);
         DAMMgt.GetResultQtyMessage();
+        if (CurrDAMTask."Line No." <> 0) then begin
+            CurrDAMTask.get(CurrDAMTask.RecordId);
+            CurrDAMTask."No. of Records" := DAMMgt.ProgressBar_GetTotal();
+            CurrDAMTask."No. of Records imported" := DAMMgt.GetResultQty_QtySuccess();
+            CurrDAMTask."No. of Records failed" := DAMMgt.GetResultQty_QtyFailed();
+            CurrDAMTask.Modify();
+        end;
     end;
 
     procedure ProcessFullBuffer(var RecIdToProcessList: list of [RecordID])
@@ -121,7 +127,7 @@ codeunit 91000 "DAMImport"
 
 
         // DAMErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        TargetRef.OPEN(DAMTable."To Table ID", TRUE);
+        TargetRef.OPEN(CurrDAMTable."To Table ID", TRUE);
         // //ReplaceValuesBeforeProcessing(BufferRef);
 
         // DAMTestRunner.InitializeValidationTests(BufferRef, DAMTable);
@@ -133,17 +139,22 @@ codeunit 91000 "DAMImport"
 
         ErrorsExist := DAMErrorLog.ErrorsExistFor(BufferRef, TRUE);
         if not ErrorsExist then begin
-            Success := DAMMgt.InsertRecFromTmp(BufferRef, TargetRef, DAMTable."Use OnInsert Trigger");
+            Success := DAMMgt.InsertRecFromTmp(BufferRef, TargetRef, CurrDAMTable."Use OnInsert Trigger");
         end;
 
         DAMMgt.UpdateResultQty(Success, TRUE);
     end;
 
-    procedure SetObjectIDs(DAMTable_NEW: Record DAMTable)
+    procedure SetDAMTableToProcess(DAMTable_NEW: Record DAMTable)
     begin
-        DAMTable.Copy(DAMTable_NEW);
-        DAMMgt.CheckBufferTableIsNotEmpty(DAMTable."Buffer Table ID");
-        BufferTableID := DAMTable."Buffer Table ID";
+        CurrDAMTable.Copy(DAMTable_NEW);
+        DAMMgt.CheckBufferTableIsNotEmpty(CurrDAMTable."Buffer Table ID");
+        BufferTableID := CurrDAMTable."Buffer Table ID";
+    end;
+
+    procedure SetDAMTaskToProcess(DAMTask: record DAMTask)
+    begin
+        CurrDAMTask := DAMTask;
     end;
 
     procedure SetBufferTableView(bufferTableViewNEW: text)
@@ -223,7 +234,7 @@ codeunit 91000 "DAMImport"
     //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
         // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        LoadFieldMapping(DAMTable, TempDAMField_COLLECTION);
+        LoadFieldMapping(CurrDAMTable, TempDAMField_COLLECTION);
         BufferRef.OPEN(BufferTableID);
         BuffKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
         BuffNonKeyFieldFilter := DAMMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
@@ -236,13 +247,13 @@ codeunit 91000 "DAMImport"
             exit;
 
         if BufferTableView = '' then begin
-            if DAMTable.LoadTableLastView() <> '' then
-                BufferRef.SetView(DAMTable.LoadTableLastView());
+            if CurrDAMTable.LoadTableLastView() <> '' then
+                BufferRef.SetView(CurrDAMTable.LoadTableLastView());
 
             if not ShowRequestPageFilterDialog(BufferRef) then
                 exit;
 
-            DAMTable.SaveTableLastView(BufferRef.GetView());
+            CurrDAMTable.SaveTableLastView(BufferRef.GetView());
         end else begin
             BufferRef.SetView(BufferTableView);
         end;
@@ -252,7 +263,8 @@ codeunit 91000 "DAMImport"
 
     var
         TempDAMField_COLLECTION: Record "DAMField" temporary;
-        DAMTable: Record DAMTable;
+        CurrDAMTable: Record DAMTable;
+        CurrDAMTask: Record DAMTask;
         DAMMgt: Codeunit DAMMgt;
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;

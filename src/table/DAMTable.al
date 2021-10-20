@@ -102,6 +102,13 @@ table 91001 "DAMTable"
                         Message(FileNotAccessibleFromServiceLabelMsg, DataFilePath);
                 end;
             end;
+
+            trigger OnLookup()
+            var
+                DAMMgt: Codeunit DAMMgt;
+            begin
+                Rec.DataFilePath := DAMMgt.LookUpPath(Rec.DataFilePath, false);
+            end;
         }
         field(51; "Import XMLPort ID"; Integer)
         {

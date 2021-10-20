@@ -29,16 +29,6 @@ page 91000 "DAM Setup"
                         field("Default Export Folder Path"; Rec."Default Export Folder Path")
                         {
                             ApplicationArea = All;
-                            trigger OnValidate()
-                            begin
-                                Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
-                            end;
-
-                            trigger OnLookup(var Text: Text): Boolean
-                            begin
-                                LookUpFolderPath(Text);
-                                Rec."Default Export Folder Path" := CopyStr(Text, 1, MaxStrLen(Rec."Default Export Folder Path"));
-                            end;
                         }
                         field("Schema File Path"; Rec."Schema.xml File Path")
                         {
@@ -186,16 +176,6 @@ page 91000 "DAM Setup"
         MyDate: Date;
     begin
         Evaluate(MyDate, '1233453423');
-    end;
-
-    procedure LookUpFolderPath(var Result: Text) OK: Boolean
-    var
-        FileRec: Record File;
-    begin
-        clear(Result);
-        if Page.RunModal(Page::FileBrowser, FileRec) = Action::LookupOK then begin
-            Result := FileRec.Path;
-        end;
     end;
 
     trigger OnOpenPage()

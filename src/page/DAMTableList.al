@@ -14,7 +14,7 @@ page 91004 "DAMTableList"
         {
             repeater(DAMTableRepeater)
             {
-                field("Sort Order"; rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
+                field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("Old Version Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; Visible = false; }
                 field("From Table Caption"; Rec."Old Version Table Caption") { ApplicationArea = All; }
                 field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; }
@@ -24,8 +24,8 @@ page 91004 "DAMTableList"
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field("Qty.Lines In Src. Table"; "Qty.Lines In Src. Table") { ApplicationArea = All; }
-                field("Import Duration (Longest)"; "Import Duration (Longest)") { ApplicationArea = All; }
+                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; }
+                field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
             }
         }
     }

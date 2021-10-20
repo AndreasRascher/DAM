@@ -57,14 +57,23 @@ table 91006 DAMTask
         {
             CaptionML = DEU = 'Bearbeitungzeit', ENU = 'Processing Time';
         }
+        field(101; "No. of Records"; Integer)
+        {
+            CaptionML = DEU = 'Anz. Datensätze', ENU = 'No. of Records';
+        }
+        field(102; "No. of Records failed"; Integer)
+        {
+            CaptionML = DEU = 'Anz. fehlgeschlagen', ENU = 'No. of Records failed';
+        }
+        field(103; "No. of Records imported"; Integer)
+        {
+            CaptionML = DEU = 'Anz. importiert', ENU = 'No. of Records imported';
+        }
     }
 
     keys
     {
-        key(PK; "Line No.")
-        {
-            Clustered = true;
-        }
+        key(PK; "Line No.") { Clustered = true; }
     }
 
     procedure SaveTableView(TableView: Text)

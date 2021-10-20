@@ -383,6 +383,18 @@ codeunit 91001 "DAMMgt"
         ToField.VALIDATE(NewValue);
     end;
 
+    procedure LookUpPath(CurrentPath: Text; LookUpFolder: Boolean) ResultPath: Text[250]
+    var
+        FileRec: Record File;
+        FileBrowser: Page FileBrowser;
+    begin
+        FileBrowser.SetupFileBrowser(CurrentPath, LookUpFolder);
+        FileBrowser.LookupMode(true);
+        if not (FileBrowser.RunModal() = Action::LookupOK) then
+            exit(CurrentPath);
+        ResultPath := FileBrowser.GetSelectedPath();
+    end;
+
     var
         DAMSetup: Record "DAM Setup";
         ProgressBar_IsOpen: Boolean;

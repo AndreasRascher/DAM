@@ -14,10 +14,7 @@ page 91006 DAMTaskList
             repeater(GroupName)
             {
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; }
-                field("Type"; Rec."Type")
-                {
-                    ApplicationArea = All;
-                }
+                field("Type"; Rec."Type") { ApplicationArea = All; }
                 field(ID; Rec.ID) { ApplicationArea = All; }
                 field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
                 field(CurrFilter; CurrFilter)
@@ -43,6 +40,9 @@ page 91006 DAMTaskList
                     end;
                 }
                 field("Import Duration (Longest)"; Rec."Processing Time") { ApplicationArea = All; }
+                field("No. of Records"; Rec."No. of Records") { ApplicationArea = All; }
+                field("No. of Records failed"; Rec."No. of Records failed") { ApplicationArea = All; }
+                field("No. of Records imported"; Rec."No. of Records imported") { ApplicationArea = All; }
             }
         }
     }
@@ -113,8 +113,9 @@ page 91006 DAMTaskList
                     If not Rec.FindRelated(DAMTable) then exit;
                     Start := CurrentDateTime;
                     DAMImport.SetBufferTableView(Rec.GetStoredTableView());
-                    DAMImport.SetObjectIDs(DAMTable);
+                    DAMImport.SetDAMTableToProcess(DAMTable);
                     DAMImport.ProcessFullBuffer();
+                    DAMTask.get(DAMTask.RecordId);
                     DAMTask."Processing Time" := CurrentDateTime - Start;
                     DAMTask.Modify();
                 end;
