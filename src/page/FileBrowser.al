@@ -11,8 +11,9 @@ page 91007 FileBrowser
     {
         area(Content)
         {
-            group(GroupName)
+            group(General)
             {
+                ShowCaption = false;
                 field(CurrFolder; CurrFolder)
                 {
                     ShowCaption = false;

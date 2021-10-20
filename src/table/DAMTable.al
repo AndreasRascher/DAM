@@ -72,7 +72,7 @@ table 91001 "DAMTable"
         }
         field(31; "Qty.Lines In Trgt. Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Zeilen in Zieltabelle', ENU = 'Qty.Lines in source table';
+            CaptionML = DEU = 'Anz. Zeilen in Zieltabelle', ENU = 'Qty. lines in target table';
             FieldClass = FlowField;
             CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("To Table ID")));
             Editable = false;
@@ -80,6 +80,13 @@ table 91001 "DAMTable"
             begin
                 ShowTableContent("Old Version Table ID");
             end;
+        }
+        field(32; "No.of Fields in Trgt. Table"; Integer)
+        {
+            CaptionML = DEU = 'Anz. Felder in Zieltabelle', ENU = 'No. of fields in target table';
+            FieldClass = FlowField;
+            CalcFormula = count(DAMField where("To Table No." = field("To Table ID")));
+            Editable = false;
         }
         field(50; DataFilePath; Text[250])
         {

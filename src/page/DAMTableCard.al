@@ -44,11 +44,18 @@ page 91002 "DAMTableCard"
                     end;
                 }
             }
-            group(Import)
+            group(TableMigration)
             {
-                CaptionML = DEU = 'Import', ENU = 'Import';
+                CaptionML = DEU = 'migration', ENU = 'Migration';
                 field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
                 field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; Importance = Promoted; }
+                field("Trgt.Table ID"; Rec."To Table ID")
+                {
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
+                field("No.of Fields in Trgt. Table"; "No.of Fields in Trgt. Table") { ApplicationArea = All; }
 
                 grid(dummy)
                 {
@@ -67,18 +74,7 @@ page 91002 "DAMTableCard"
             }
             group(DataMigration)
             {
-
-                CaptionML = DEU = 'Datenmigration', ENU = 'Data Migration';
-                field("Trgt.Table ID"; Rec."To Table ID")
-                {
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
-
-                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
-
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
-
             }
             part(FieldsPart; DAMTableCardPart)
             {
@@ -204,8 +200,8 @@ page 91002 "DAMTableCard"
             ImportXMLPortIDStyle := 'Favorable';
         if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
             BufferTableIDStyle := 'Favorable';
+        Rec.TryFindExportDataFile();
     end;
-
 
     var
         [InDataSet]

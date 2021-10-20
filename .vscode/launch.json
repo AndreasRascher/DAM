@@ -1,48 +1,29 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "snapshotInitialize: Your own server",
-            "type": "al",
-            "request": "snapshotInitialize",
-            "environmentType": "OnPrem",
-            "server": "http://bc19",
-            "serverInstance": "BC",
-            "authentication": "UserPassword",
-            "breakOnNext": "WebClient",
-            "executionContext": "Profile",
-            "snapshotVerbosity": "Full",
-            "userId": "MODUS"
-        },
-        {
-            "name": "BC19:Publish & Synchronize",
-            "type": "al",
-            "request": "launch",
-            "environmentType": "OnPrem",
-            "server": "http://bc19/",
-            "serverInstance": "BC",
-            "authentication": "UserPassword",
-            "startupObjectType": "Page",
-            "startupObjectId": 91002,
-            "breakOnError": true,
-            "breakOnRecordWrite": false,
-            "launchBrowser": true,
-            "enableSqlInformationDebugger": true,
-            "enableLongRunningSqlStatements": true,
-            "longRunningSqlStatementsThreshold": 500,
-            "numberOfSqlStatements": 10,
-            "tenant": "default",
-            "schemaUpdateMode": "Synchronize"            
-        }
         // {
-        //     "name": "BC17:Publish & Synchronize",
+        //     "name": "snapshotInitialize: Your own server",
+        //     "type": "al",
+        //     "request": "snapshotInitialize",
+        //     "environmentType": "OnPrem",
+        //     "server": "http://bc19",
+        //     "serverInstance": "BC",
+        //     "authentication": "UserPassword",
+        //     "breakOnNext": "WebClient",
+        //     "executionContext": "Profile",
+        //     "snapshotVerbosity": "Full",
+        //     "userId": "MODUS"
+        // },
+        // {
+        //     "name": "BC19:Publish & Synchronize",
         //     "type": "al",
         //     "request": "launch",
         //     "environmentType": "OnPrem",
-        //     "server": "http://bc17",
+        //     "server": "http://bc19/",
         //     "serverInstance": "BC",
         //     "authentication": "UserPassword",
-        //     "startupObjectId": 91000,
+        //     "startupObjectType": "Page",
+        //     "startupObjectId": 91002,
         //     "breakOnError": true,
         //     "breakOnRecordWrite": false,
         //     "launchBrowser": true,
@@ -51,8 +32,27 @@
         //     "longRunningSqlStatementsThreshold": 500,
         //     "numberOfSqlStatements": 10,
         //     "tenant": "default",
-        //     "schemaUpdateMode": "Synchronize"
+        //     "schemaUpdateMode": "Synchronize"            
         // }
+        {
+            "name": "BC17:Publish & Synchronize",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "OnPrem",
+            "server": "http://bc17",
+            "serverInstance": "BC",
+            "authentication": "UserPassword",
+            "startupObjectId": 91000,
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "launchBrowser": true,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "tenant": "default",
+            "schemaUpdateMode": "Synchronize"
+        }
         // {
         //     "name": "https://bcdev.graef.de/DEV/SignIn",
         //     "request": "launch",

@@ -96,15 +96,16 @@ codeunit 91000 "DAMImport"
 
     procedure LoadFieldMapping(DAMTable: Record DAMTable; var TempDAMFields_FOUND: record DAMField temporary) OK: Boolean
     var
-        DAMFields: Record "DAMField";
+        dAMField: Record "DAMField";
         tempDAMFields: record DAMField temporary;
     begin
-        DAMFields.FilterBy(DAMTable);
-        DAMFields.FindSet(false, false);  // raise error if empty
+        dAMField.FilterBy(DAMTable);
+        dAMField.SetFilter("Processing Action", '<>%1', dAMField."Processing Action"::Ignore);
+        dAMField.FindSet(false, false);  // raise error if empty
         repeat
-            tempDAMFields := DAMFields;
+            tempDAMFields := dAMField;
             tempDAMFields.Insert(false);
-        until DAMFields.Next() = 0;
+        until dAMField.Next() = 0;
         TempDAMFields_FOUND.Copy(tempDAMFields, true);
         OK := TempDAMFields_FOUND.FindFirst();
     end;
@@ -112,13 +113,20 @@ codeunit 91000 "DAMImport"
     procedure ProcessSingleBufferRecord(BufferRef: RecordRef)
     var
         DAMErrorLog: Record DAMErrorLog;
+        DAMTestRunner: Codeunit DAMTestRunner;
         TargetRef: RecordRef;
         ErrorsExist: Boolean;
         Success: Boolean;
     begin
-        DAMErrorLog.DeleteExistingLogForBufferRec(BufferRef);
+
+
+        // DAMErrorLog.DeleteExistingLogForBufferRec(BufferRef);
         TargetRef.OPEN(DAMTable."To Table ID", TRUE);
-        //ReplaceValuesBeforeProcessing(BufferRef);
+        // //ReplaceValuesBeforeProcessing(BufferRef);
+
+        // DAMTestRunner.InitializeValidationTests(BufferRef, DAMTable);
+        // DAMTestRunner.Run();
+        // DAMTestRunner.GetResultRef(TargetRef);
 
         AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, KeyFieldsFilter, TempDAMField_COLLECTION);
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef);
@@ -166,6 +174,8 @@ codeunit 91000 "DAMImport"
         repeat
             TempDAMField_COLLECTION.CalcFields("To Field Caption", "From Field Caption");
             case true of
+                (TempDAMField_COLLECTION."Processing Action" = TempDAMField_COLLECTION."Processing Action"::Ignore):
+                    ;
                 (TempDAMField_COLLECTION."Processing Action" = TempDAMField_COLLECTION."Processing Action"::Transfer):
                     if TempDAMField_COLLECTION."Validate Value" then
                         DAMMgt.ValidateField(TmpTargetRef, BufferRef, TempDAMField_COLLECTION)
