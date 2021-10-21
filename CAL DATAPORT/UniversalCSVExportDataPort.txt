@@ -2,8 +2,8 @@ OBJECT Dataport 50004 DAMExport
 {
   OBJECT-PROPERTIES
   {
-    Date=15.10.21;
-    Time=17:52:52;
+    Date=21.10.21;
+    Time=20:45:06;
     Modified=Yes;
     Version List=DAM;
   }
@@ -23,8 +23,8 @@ OBJECT Dataport 50004 DAMExport
   {
     PROPERTIES
     {
-      Width=13200;
-      Height=3410;
+      Width=11220;
+      Height=4290;
       SourceTable=Table2000000058;
       OnOpenForm=BEGIN
                    THIS_OnOpenForm
@@ -43,41 +43,42 @@ OBJECT Dataport 50004 DAMExport
                                                    InColumnHeading=Yes }
       { 1000000004;Label  ;0    ;0    ;0    ;0    ;InPage=-1;
                                                    InColumnHeading=Yes }
-      { 1000000000;TextBox;220  ;770  ;12650;440  ;Name=ExportFolderPathCtrl;
+      { 1000000000;TextBox;330  ;770  ;10670;440  ;Name=ExportFolderPathCtrl;
+                                                   HorzGlue=Both;
                                                    InPage=-1;
-                                                   CaptionML=[DEU=Order fÅr Tabellendaten;
-                                                              ENU=Folder for Table Data];
+                                                   CaptionML=[DEU=Ordner fuer Exportdateien;
+                                                              ENU=Folder for export files];
                                                    SourceExpr=ExportToFolderPath;
                                                    OnValidate=BEGIN
                                                                 CheckFolderPath(ExportToFolderPath);
                                                               END;
                                                                }
-      { 1000000092;Label  ;220  ;220  ;3300 ;440  ;ParentControl=1000000000;
+      { 1000000092;Label  ;330  ;220  ;10670;440  ;HorzGlue=Both;
+                                                   ParentControl=1000000000;
                                                    InPage=-1 }
-      { 1000000001;TextBox;220  ;1980 ;12650;440  ;Name=ExportObjectIDFilterCtrl;
+      { 1000000001;TextBox;330  ;2860 ;10670;440  ;Name=ExportObjectIDFilterCtrl;
                                                    HorzGlue=Both;
                                                    AssistEdit=Yes;
-                                                   CaptionML=[DEU=Tabellen-ID Filter fÅr Export;
+                                                   CaptionML=[DEU=Tabellen-ID Filter fuer Export;
                                                               ENU=Table ID Filter for Export];
                                                    SourceExpr=ExportTableIDFilter;
                                                    OnAssistEdit=BEGIN
                                                                   LookUpObjIDFilter
                                                                 END;
                                                                  }
-      { 1000000003;Label  ;220  ;1430 ;10670;440  ;ParentControl=1000000001;
+      { 1000000003;Label  ;330  ;2310 ;10670;440  ;ParentControl=1000000001;
                                                    InPage=-1 }
-      { 1000000005;CommandButton;220;2640;3300;550;Name=ExportCtrl;
-                                                   CaptionML=[DEU=Daten exportieren;
+      { 1000000005;CommandButton;330;3520;4180;550;Name=ExportCtrl;
+                                                   CaptionML=[DEU=Tabellendaten exportieren;
                                                               ENU=Export Data];
                                                    OnPush=BEGIN
                                                             THIS_ExportCtrl_OnPush
                                                           END;
                                                            }
-      { 1000000007;CommandButton;4400;2640;3300;550;
-                                                   Name=ExportCtrl;
+      { 1000000007;CommandButton;330;1430;4180;550;Name=ExportCtrl;
                                                    InPage=-1;
-                                                   CaptionML=[DEU=Schema exportieren (Felder);
-                                                              ENU=Export Schema (Fields)];
+                                                   CaptionML=[DEU=Tabellenschema exportieren;
+                                                              ENU=Export table schema];
                                                    OnPush=BEGIN
                                                             THIS_ExportFieldsCtrl_OnPush
                                                           END;
@@ -98,7 +99,7 @@ OBJECT Dataport 50004 DAMExport
       IF ISCLEAR(FSO) THEN
         CREATE(FSO);
       IF NOT FSO.FolderExists(FolderPathToCheck) THEN
-       ERROR(STRSUBSTNO('UngÅltiger Ordnerpfad: %1',FolderPathToCheck));
+       ERROR(STRSUBSTNO('UngÔøΩltiger Ordnerpfad: %1',FolderPathToCheck));
       IF ExportToFolderPath[STRLEN(ExportToFolderPath)]<>'\' THEN
         ExportToFolderPath += '\';
     END;
@@ -303,7 +304,7 @@ OBJECT Dataport 50004 DAMExport
         _ExportFieldBuffer.TableNo := DATABASE::Field;
         _ExportFieldBuffer."No." := 50001;
         _ExportFieldBuffer.FieldName := 'Primary Key';
-        _ExportFieldBuffer."Field Caption" := 'PrimÑrschlÅssel';
+        _ExportFieldBuffer."Field Caption" := 'PrimÔøΩrschlÔøΩssel';
         _ExportFieldBuffer.Type := _ExportFieldBuffer.Type::Text;
         _ExportFieldBuffer.Len := 250;
         _ExportFieldBuffer.INSERT;

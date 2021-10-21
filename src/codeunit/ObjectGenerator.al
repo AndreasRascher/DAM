@@ -1,8 +1,8 @@
 codeunit 91003 DAMObjectGenerator
 {
-    procedure CreateNAV2009Dataport(ObjectID: Integer) C: TextBuilder;
+    procedure CreateNAVDataport(ObjectID: Integer) C: TextBuilder;
     begin
-        c.AppendLine('OBJECT Dataport 50004 DAMExport');
+        c.AppendLine('OBJECT Dataport ' + format(ObjectID) + ' DAMExport');
         c.AppendLine('{');
         c.AppendLine('  OBJECT-PROPERTIES');
         c.AppendLine('  {');

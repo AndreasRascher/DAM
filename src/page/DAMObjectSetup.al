@@ -19,9 +19,9 @@ page 91000 "DAM Setup"
                     group(ObjectIDs)
                     {
                         CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
+                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
                         field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
                         field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
-                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
                     }
                     group(Paths)
                     {
@@ -65,9 +65,9 @@ page 91000 "DAM Setup"
     {
         area(Processing)
         {
-            action(CreateNAV2009ExportObject)
+            action(CreateNAVExportObject)
             {
-                CaptionML = DEU = 'NAV2009 Export Dataport erstellen';
+                CaptionML = DEU = 'NAV Export Dataport erstellen';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
@@ -79,12 +79,12 @@ page 91000 "DAM Setup"
                 var
                     ObjGen: Codeunit DAMObjectGenerator;
                 begin
-                    ObjGen.DownloadFileUTF8(ObjGen.CreateNAV2009Dataport(Rec."Object ID Dataport (Export)"), 'DAMExport.txt');
+                    ObjGen.DownloadFileUTF8(ObjGen.CreateNAVDataport(Rec."Object ID Dataport (Export)"), 'DAMExport.txt');
                 end;
             }
-            action(ImportNAV2009Schema)
+            action(ImportNAVSchema)
             {
-                CaptionML = DEU = 'NAV2009 Schema.txt importieren';
+                CaptionML = DEU = 'NAV Schema.txt importieren';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
