@@ -1,6 +1,6 @@
 table 91000 "DAM Setup"
 {
-    CaptionML = DEU = 'DAM Objekt Einrichtung', ENU = 'DAM Object Setup';
+    CaptionML = DEU = 'DAM Einrichtung', ENU = 'DAM Setup';
     DataClassification = ToBeClassified;
 
     fields

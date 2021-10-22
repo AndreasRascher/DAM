@@ -5,6 +5,7 @@ page 91000 "DAM Setup"
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = "DAM Setup";
+    PromotedActionCategoriesML = DEU = 'NAV,Backup,Listen,,', ENU = 'NAV,Backup,Lists,,';
 
     layout
     {
@@ -19,33 +20,16 @@ page 91000 "DAM Setup"
                     group(ObjectIDs)
                     {
                         CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
-                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; }
-                        field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; }
-                        field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; }
+                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; ShowMandatory = true; }
+                        field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
+                        field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                     }
                     group(Paths)
                     {
                         CaptionML = DEU = 'Pfade', ENU = 'Paths';
-                        field("Default Export Folder Path"; Rec."Default Export Folder Path")
-                        {
-                            ApplicationArea = All;
-                        }
-                        field("Schema File Path"; Rec."Schema.xml File Path")
-                        {
-                            ApplicationArea = All;
-                            trigger OnValidate()
-                            begin
-                                Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
-                            end;
-                        }
-                        field("Backup.xml File Path"; "Backup.xml File Path")
-                        {
-                            ApplicationArea = All;
-                            trigger OnValidate()
-                            begin
-                                Rec."Backup.xml File Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
-                            end;
-                        }
+                        field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
+                        field("Schema File Path"; Rec."Schema.xml File Path") { ApplicationArea = All; }
+                        field("Backup.xml File Path"; Rec."Backup.xml File Path") { ApplicationArea = All; }
                     }
                     group(Performance)
                     {
@@ -63,7 +47,7 @@ page 91000 "DAM Setup"
 
     actions
     {
-        area(Processing)
+        area(Creation)
         {
             action(CreateNAVExportObject)
             {
@@ -73,7 +57,7 @@ page 91000 "DAM Setup"
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
-                PromotedCategory = Process;
+                PromotedCategory = New;
 
                 trigger OnAction()
                 var
@@ -90,7 +74,7 @@ page 91000 "DAM Setup"
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
-                PromotedCategory = Process;
+                PromotedCategory = New;
 
                 trigger OnAction()
                 var
@@ -99,6 +83,61 @@ page 91000 "DAM Setup"
                     ObjMgt.ImportNAVSchemaFile();
                 end;
             }
+        }
+        area(Reporting)
+        {
+            action(Table_DAMFieldBuffer)
+            {
+                ApplicationArea = All;
+                CaptionML = DEU = 'Schema anzeigen';
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                Image = ShowMatrix;
+                Visible = false;
+
+                trigger OnAction()
+                begin
+                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
+                end;
+            }
+            action(TableList)
+            {
+                CaptionML = DEU = 'Tabellenübersicht', ENU = 'Table List';
+                ApplicationArea = All;
+                Image = Table;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                RunObject = page DAMTableList;
+            }
+            action(TaskList)
+            {
+                CaptionML = DEU = 'Aufgabenliste', ENU = 'Task List';
+                ApplicationArea = All;
+                Image = TaskList;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                RunObject = page DAMTaskList;
+            }
+            action(ErrorLog)
+            {
+                CaptionML = DEU = 'Fehlerprotokoll', ENU = 'Error Log';
+                ApplicationArea = All;
+                Image = Log;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                RunObject = page "DAM Error Log List";
+            }
+        }
+        area(Processing)
+        {
             action(XMLExport)
             {
                 CaptionML = DEU = 'Backup erstellen';
@@ -133,42 +172,8 @@ page 91000 "DAM Setup"
                     XMLBackup.Import();
                 end;
             }
-            action(TableList)
-            {
-                ApplicationArea = All;
-                Image = Table;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
-                RunObject = page DAMTableList;
-            }
         }
-        area(Navigation)
-        {
-            action(Table_DAMFieldBuffer)
-            {
-                ApplicationArea = All;
-                CaptionML = DEU = 'Schema anzeigen';
-                Image = ShowMatrix;
 
-                trigger OnAction()
-                begin
-                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
-                end;
-            }
-            action(Test)
-            {
-                ApplicationArea = all;
-
-                trigger OnAction()
-                var
-                    DAMTestRunner: Codeunit DAMTestRunner;
-                begin
-                    DAMTestRunner.Run();
-                end;
-            }
-        }
     }
     [TryFunction]
     procedure TryFunctionTest()

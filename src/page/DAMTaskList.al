@@ -1,6 +1,6 @@
 page 91006 DAMTaskList
 {
-    CaptionML = DEU = 'DAM Aufgabeliste', ENU = 'DAM Task List';
+    CaptionML = DEU = 'DAM Aufgabenliste', ENU = 'DAM Task List';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
