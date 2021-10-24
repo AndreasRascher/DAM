@@ -32,7 +32,7 @@
             "longRunningSqlStatementsThreshold": 500,
             "numberOfSqlStatements": 10,
             "tenant": "default",
-            "schemaUpdateMode": "Synchronize"            
+            "schemaUpdateMode": "ForceSync"            
         }
         // {
         //     "name": "BC17:Publish & Synchronize",

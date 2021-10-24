@@ -197,9 +197,9 @@ page 91002 "DAMTableCard"
     begin
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';
-        if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
+        if Rec.ImportXMLPortExits() then
             ImportXMLPortIDStyle := 'Favorable';
-        if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
+        if Rec.BufferTableExits() then
             BufferTableIDStyle := 'Favorable';
         Rec.TryFindExportDataFile();
     end;

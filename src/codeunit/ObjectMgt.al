@@ -141,5 +141,6 @@ codeunit 91004 ObjMgt
 
         FieldImport.SetSource(InStr);
         FieldImport.Import();
+        Message('Import abgeschlossen');
     end;
 }

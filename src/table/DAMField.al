@@ -159,6 +159,10 @@ table 91002 "DAMField"
         OldFieldName: text;
         Found: Boolean;
     begin
+        if not DAMTable.BufferTableExits() then begin
+            Message('Keine Puffertabelle mit der ID %1 vorhand', DAMTable."Buffer Table ID");
+            exit;
+        end;
         DAMFields.FilterBy(DAMTable);
         DAMFields.setrange("From Field No.", 0);
         if DAMFields.FindSet(false, false) then

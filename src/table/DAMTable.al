@@ -378,4 +378,20 @@ table 91001 "DAMTable"
         IStr.ReadText(TableView);
     end;
 
+    procedure BufferTableExits(): boolean
+    var
+        AllObj: Record AllObjWithCaption;
+    begin
+        if (Rec."Buffer Table ID" = 0) then exit(false);
+        exit(AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID"));
+    end;
+
+    procedure ImportXMLPortExits(): boolean
+    var
+        AllObj: Record AllObjWithCaption;
+    begin
+        if (Rec."Import XMLPort ID" = 0) then exit(false);
+        exit(AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID"));
+    end;
+
 }
