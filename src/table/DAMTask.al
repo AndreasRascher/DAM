@@ -2,6 +2,8 @@ table 91006 DAMTask
 {
     DataClassification = SystemMetadata;
     CaptionML = DEU = 'DAM Aufgabe', ENU = 'DAM Tast';
+    LookupPageId = DAMTaskList;
+    DrillDownPageId = DAMTaskList;
 
     fields
     {
@@ -76,6 +78,14 @@ table 91006 DAMTask
         key(PK; "Line No.") { Clustered = true; }
     }
 
+    fieldgroups
+    {
+        fieldgroup(Brick; "No. of Records", "No. of Records failed", "No. of Records imported")
+        {
+            Caption = 'MyBrick';
+        }
+    }
+
     procedure SaveTableView(TableView: Text)
     var
         OStr: OutStream;
@@ -102,11 +112,14 @@ table 91006 DAMTask
         DAMTable: Record DAMTable;
         RecRef: RecordRef;
         StoredTableView: text;
+        TableMetadata: Record "Table Metadata";
     begin
         StoredTableView := GetStoredTableView();
         if StoredTableView = '' then exit('');
         if not Rec.FindRelated(DAMTable) then exit;
         if DAMTable."Buffer Table ID" = 0 then
+            exit;
+        if not TableMetadata.Get(DAMTable."Buffer Table ID") then
             exit;
         RecRef.Open(DAMTable."Buffer Table ID");
         RecRef.SetView(StoredTableView);

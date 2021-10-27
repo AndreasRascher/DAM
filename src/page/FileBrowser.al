@@ -43,10 +43,18 @@ page 91007 FileBrowser
                     ToolTip = 'Specifies the value of the Name field.';
                     ApplicationArea = All;
                     trigger OnDrillDown()
+                    var
+                        FileRec: Record File;
                     begin
                         if not "Is a file" then begin
                             CurrFolder := CurrFolder + '\' + Rec.Name;
                             CurrFolder := CurrFolder.Replace('\\', '\');
+                            //CurrFolder := Rec.Path;
+                            // Evaluate Path Expression
+                            FileRec.SetRange(Path, CurrFolder);
+                            if FileRec.FindFirst() then
+                                CurrFolder := FileRec.Path;
+
                             Rec.SetRange(Path, CurrFolder);
                             CurrPage.Update();
                         end;

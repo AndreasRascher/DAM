@@ -1,6 +1,8 @@
 table 91001 "DAMTable"
 {
     DataClassification = SystemMetadata;
+    LookupPageId = DAMTableList;
+    DrillDownPageId = DAMTableList;
 
     fields
     {
@@ -163,6 +165,9 @@ table 91001 "DAMTable"
     fieldgroups
     {
         fieldgroup(DropDown; "To Table ID", "To Table Caption")
+        {
+        }
+        fieldgroup(Brick; "To Table Caption", "Qty.Lines In Src. Table")
         {
         }
     }
