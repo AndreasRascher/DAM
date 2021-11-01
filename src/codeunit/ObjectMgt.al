@@ -134,7 +134,7 @@ codeunit 91004 ObjMgt
 
         if not FileFound then begin
             TempBlob.CreateInStream(InStr);
-            if not UploadIntoStream('Select a Schema.XML file', '', 'Text Files|*.txt', FileName, InStr) then begin
+            if not UploadIntoStream('Select a Schema.csv file', '', 'CSV Files|*.csv', FileName, InStr) then begin
                 exit;
             end;
         end;

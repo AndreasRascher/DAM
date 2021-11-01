@@ -110,9 +110,9 @@ table 91006 DAMTask
     procedure GetStoredTableViewAsFilter() FilterExpr: Text
     var
         DAMTable: Record DAMTable;
+        TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
         StoredTableView: text;
-        TableMetadata: Record "Table Metadata";
     begin
         StoredTableView := GetStoredTableView();
         if StoredTableView = '' then exit('');

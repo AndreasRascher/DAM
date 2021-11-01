@@ -1,8 +1,7 @@
 page 91007 FileBrowser
 {
     PageType = Worksheet;
-    ApplicationArea = All;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = File;
     InsertAllowed = false;
     DeleteAllowed = false;

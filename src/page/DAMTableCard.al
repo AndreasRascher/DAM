@@ -192,8 +192,6 @@ page 91002 "DAMTableCard"
         }
     }
     trigger OnAfterGetCurrRecord()
-    var
-        AllObj: Record AllObjWithCaption;
     begin
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';

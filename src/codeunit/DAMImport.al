@@ -119,7 +119,7 @@ codeunit 91000 "DAMImport"
     procedure ProcessSingleBufferRecord(BufferRef: RecordRef)
     var
         DAMErrorLog: Record DAMErrorLog;
-        DAMTestRunner: Codeunit DAMTestRunner;
+        // DAMTestRunner: Codeunit DAMTestRunner;
         TargetRef: RecordRef;
         ErrorsExist: Boolean;
         Success: Boolean;

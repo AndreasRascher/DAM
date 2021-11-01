@@ -2,6 +2,7 @@ table 91000 "DAM Setup"
 {
     CaptionML = DEU = 'DAM Einrichtung', ENU = 'DAM Setup';
     DataClassification = ToBeClassified;
+    DataPerCompany = false;
 
     fields
     {
@@ -10,9 +11,9 @@ table 91000 "DAM Setup"
         { CaptionML = DEU = 'Objekt ID Bereich für Puffertabellen', ENU = 'Obj. ID Range Buffer Tables'; }
         field(11; "Obj. ID Range XMLPorts"; Text[250])
         { CaptionML = DEU = 'Objekt ID Bereich für XMLPorts (Import)', ENU = 'Obj. ID Range XMLPorts (Import)'; }
-        field(20; "Object ID Dataport (Export)"; Integer)
+        field(20; "Object ID Export Object"; Integer)
         {
-            CaptionML = DEU = 'Objekt ID für Dataport (Export)', ENU = 'Object ID Dataport (Export)';
+            CaptionML = DEU = 'Export Objekt ID (Dataport/XMLPort)', ENU = 'Export Object ID (Dataport/XMLPort)';
             MinValue = 50000;
             MaxValue = 99999;
         }
@@ -74,11 +75,16 @@ table 91000 "DAM Setup"
     }
 
     internal procedure InsertWhenEmpty()
+    var
+        fileMgt: Codeunit "File Management";
     begin
         if not Rec.Get() then begin
             Rec."Obj. ID Range Buffer Tables" := '90000..90099';
             Rec."Obj. ID Range XMLPorts" := '90000..90099';
-            Rec."Object ID Dataport (Export)" := 50004;
+            Rec."Object ID Export Object" := 50004;
+            // Docker
+            if fileMgt.ServerDirectoryExists('C:\RUN\MY') then
+                Rec."Default Export Folder Path" := 'C:\RUN\MY';
             Rec.Insert();
         end;
     end;
@@ -86,7 +92,7 @@ table 91000 "DAM Setup"
     procedure CheckSchemaInfoHasBeenImporterd()
     var
         DAMFieldBuffer: Record DAMFieldBuffer;
-        SchemaInfoMissingErr: TextConst ENU = 'The Schema.txt file has not been imported.', DEU = 'Die Schema.txt wurde nicht importiert.';
+        SchemaInfoMissingErr: TextConst ENU = 'The Schema.csv file has not been imported.', DEU = 'Die Schema.csv wurde nicht importiert.';
     begin
         if DAMFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;

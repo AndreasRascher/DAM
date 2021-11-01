@@ -20,7 +20,7 @@ page 91000 "DAM Setup"
                     group(ObjectIDs)
                     {
                         CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
-                        field("Object ID Dataport (Export)"; Rec."Object ID Dataport (Export)") { ApplicationArea = All; ShowMandatory = true; }
+                        field("Object ID Export Object"; Rec."Object ID Export Object") { ApplicationArea = All; ShowMandatory = true; }
                         field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
                         field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                     }
@@ -51,7 +51,7 @@ page 91000 "DAM Setup"
         {
             action(CreateNAVExportObject)
             {
-                CaptionML = DEU = 'NAV Export Dataport erstellen';
+                CaptionML = DEU = 'NAV Export Objekt erstellen';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
@@ -62,13 +62,24 @@ page 91000 "DAM Setup"
                 trigger OnAction()
                 var
                     ObjGen: Codeunit DAMObjectGenerator;
+                    Choice: Integer;
+                    NAVVersionSelectionTok: TextConst DEU = 'Dataport (Versionen bis NAV2009R2),XMLPort (Versionen NAV2013 bis NAV2018 sowie Business Central 13 + 14),Abbrechen',
+                                                   ENU = 'Dataport (Versions up to NAV2009R2),XMLPort (Versions from NAV2013 to NAV2018 and Business Central 13 & 14),Cancel';
                 begin
-                    ObjGen.DownloadFileUTF8(ObjGen.CreateNAVDataport(Rec."Object ID Dataport (Export)"), 'DAMExport.txt');
+                    Choice := StrMenu(NAVVersionSelectionTok, 3);
+                    case Choice of
+                        1:
+                            ObjGen.DownloadFileUTF8(ObjGen.GetNavClassicDataport(Rec."Object ID Export Object"),
+                            'Dataport_' + format(Rec."Object ID Export Object") + '_DAMExport.txt');
+                        2:
+                            ObjGen.DownloadFileUTF8(ObjGen.GetNAVRTCXMLPort(Rec."Object ID Export Object"),
+                            'XMLPort_' + format(Rec."Object ID Export Object") + '_DAMExport.txt');
+                    end;
                 end;
             }
             action(ImportNAVSchema)
             {
-                CaptionML = DEU = 'NAV Schema.txt importieren';
+                CaptionML = DEU = 'NAV Schema.csv importieren';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
@@ -175,17 +186,8 @@ page 91000 "DAM Setup"
         }
 
     }
-    [TryFunction]
-    procedure TryFunctionTest()
-    var
-        MyDate: Date;
-    begin
-        Evaluate(MyDate, '1233453423');
-    end;
-
     trigger OnOpenPage()
     begin
-        Rec.InsertWhenEmpty();
+        rec.InsertWhenEmpty();
     end;
-
 }
