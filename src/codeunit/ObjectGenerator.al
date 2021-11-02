@@ -267,6 +267,7 @@ codeunit 91003 DAMObjectGenerator
         IF NOT IncludeDisabled THEN
             Fields_Found.SETRANGE(Enabled, TRUE);
         Debug := Fields_Found.Count;
+        Fields_Found.SetFilter(Class, '%1|%2', Fields_Found.Class::Normal, Fields_Found.Class::FlowField);
         IF NOT IncludeFlowFields THEN
             Fields_Found.SETRANGE(Class, Fields_Found.Class::Normal);
         IF NOT IncludeBlob THEN
