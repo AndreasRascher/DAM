@@ -74,10 +74,14 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('                trigger OnBeforeInsertRecord()');
         C.AppendLine('                begin');
         C.AppendLine('                    ReceivedLinesCount += 1;');
+        C.AppendLine('                end;');
         C.AppendLine('');
-        C.AppendLine('                    //SKIP HEADER LINES');
-        C.AppendLine('                    IF ReceivedLinesCount <= StartFromLine then');
-        C.AppendLine('                        currXMLport.SKIP();');
+        C.AppendLine('                trigger OnAfterInitRecord()');
+        C.AppendLine('                begin');
+        C.AppendLine('                    if FileHasHeader then begin');
+        C.AppendLine('                        FileHasHeader := false;');
+        C.AppendLine('                        currXMLport.Skip();');
+        C.AppendLine('                    end;');
         C.AppendLine('                end;');
         C.AppendLine('            }');
         C.AppendLine('        }');
@@ -114,7 +118,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('');
         C.AppendLine('    var');
         C.AppendLine('        ReceivedLinesCount: Integer;');
-        C.AppendLine('        StartFromLine: Integer;');
+        C.AppendLine('        FileHasHeader: Boolean;');
         C.AppendLine('');
         C.AppendLine('    procedure GetFieldCaption(_TableNo: Integer;');
         C.AppendLine('    _FieldNo: Integer) _FieldCpt: Text[1024]');
