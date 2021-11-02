@@ -23,7 +23,7 @@
             "serverInstance": "BC",
             "authentication": "UserPassword",
             "startupObjectType": "Page",
-            "startupObjectId": 91008,
+            "startupObjectId": 91000,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,
@@ -32,7 +32,7 @@
             "longRunningSqlStatementsThreshold": 500,
             "numberOfSqlStatements": 10,
             "tenant": "default",
-            "schemaUpdateMode": "Synchronize"            
+            "schemaUpdateMode": "ForceSync"            
         }
         // {
         //     "name": "BC17:Publish & Synchronize",

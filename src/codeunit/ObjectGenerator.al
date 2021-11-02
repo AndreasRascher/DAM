@@ -61,7 +61,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN BEGIN
+        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE) THEN BEGIN
             C.AppendLine('            tableelement(' + GetCleanTableName(DAMFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DAMFieldBuffer) + ''';');
@@ -176,7 +176,7 @@ codeunit 91003 DAMObjectGenerator
     begin
         DAMTable.testfield("Buffer Table ID");
         DAMTable.TestField("Old Version Table ID");
-        FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE);
+        FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE);
         C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
@@ -266,10 +266,8 @@ codeunit 91003 DAMObjectGenerator
         IF NOT IncludeDisabled THEN
             Fields_Found.SETRANGE(Enabled, TRUE);
         Debug := Fields_Found.Count;
-        // AUSNAHME FÜR TABELLE 54296, hier alle FlowFields als echte Felder übernehmen
-        IF TableNo <> 54296 THEN
-            IF NOT IncludeFlowFields THEN
-                Fields_Found.SETRANGE(Class, Fields_Found.Class::Normal);
+        IF NOT IncludeFlowFields THEN
+            Fields_Found.SETRANGE(Class, Fields_Found.Class::Normal);
         IF NOT IncludeBlob THEN
             Fields_Found.SETFILTER(Type, '<>%1', Fields_Found.Type::BLOB);
         // Fields_Found.Setrange(FieldName, 'Picture');
