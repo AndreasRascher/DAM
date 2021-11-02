@@ -2,8 +2,9 @@ OBJECT XMLport 50022 DAM Export
 {
   OBJECT-PROPERTIES
   {
-    Date=01.11.21;
-    Time=12:00:00;
+    Date=02.11.21;
+    Time=17:06:58;
+    Modified=Yes;
     Version List=DAM;
   }
   PROPERTIES
@@ -2566,8 +2567,7 @@ OBJECT XMLport 50022 DAM Export
 
       { 55003;4  ;Field     ;
                   Name=ExportFlowFieldsCtrl;
-                  SourceExpr=ExportFlowFields;
-                  ShowCaption=No }
+                  SourceExpr=ExportFlowFields }
 
       { 55000;2  ;Group     ;
                   CaptionML=DEU=Aktionen;
@@ -2810,8 +2810,10 @@ OBJECT XMLport 50022 DAM Export
       SetObsoleteFieldFilter(_fields);
       _fields.FINDSET;
       REPEAT
-        _exportFieldBuffer := _fields;
-        _exportFieldBuffer.INSERT;
+        IF NOT (_fields."No." IN [24{OptionString},25{ObsoleteState},26{ObsoleteReason},27{DataClassification}]) THEN BEGIN
+          _exportFieldBuffer := _fields;
+          _exportFieldBuffer.INSERT;
+        END;
       UNTIL _fields.NEXT = 0;
 
       IF _ExportTableID = DATABASE::Field THEN BEGIN
@@ -3063,7 +3065,8 @@ OBJECT XMLport 50022 DAM Export
       IF NOT AllObj.GET(AllObj."Object Type"::Table,2000000136) THEN EXIT;
 
       recRef.OPEN(2000000136);
-
+      IF NOT recRef.FIELDEXIST(11) THEN
+        EXIT;
       fieldRef := recRef.FIELD(11); //TableMetadata.TableType
       fieldRef.SETFILTER('>0');
       IF recRef.FINDSET THEN
