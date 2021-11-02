@@ -114,6 +114,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    begin');
         C.AppendLine('        ClearBufferBeforeImportTable(' + GetCleanTableName(DAMFieldBuffer) + '.RECORDID.TABLENO);');
+        C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    var');
@@ -181,7 +182,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, FALSE, FALSE) THEN
+        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE) THEN
             REPEAT
                 CASE DAMFieldBuffer.Type OF
                     DAMFieldBuffer.Type::Code, DAMFieldBuffer.Type::Text:
