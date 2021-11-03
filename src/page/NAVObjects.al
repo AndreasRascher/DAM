@@ -16,6 +16,7 @@ page 91008 NAVObjects
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    ShowCaption = false;
                     trigger OnValidate()
                     begin
                         ExportDataPort_SaveText(DataportContent);
@@ -29,6 +30,7 @@ page 91008 NAVObjects
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    ShowCaption = false;
                     trigger OnValidate()
                     begin
                         ExportXMLPort_SaveText(XMLPortContent);
