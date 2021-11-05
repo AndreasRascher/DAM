@@ -2,8 +2,8 @@ OBJECT XMLport 50022 DAM Export
 {
   OBJECT-PROPERTIES
   {
-    Date=02.11.21;
-    Time=17:06:58;
+    Date=05.11.21;
+    Time=13:00:47;
     Modified=Yes;
     Version List=DAM;
   }
@@ -2548,6 +2548,11 @@ OBJECT XMLport 50022 DAM Export
                                CheckFolderPathRTC(ExportToFolderPath);
                              END;
 
+                  OnLookup=BEGIN
+                             IF Text <> '' THEN
+                             HYPERLINK(Text);
+                           END;
+
                   ShowCaption=No }
 
       { 1000000004;3;Group  ;
@@ -2749,7 +2754,7 @@ OBJECT XMLport 50022 DAM Export
         ELSE _Result := FORMAT(fieldRef.VALUE,0,9);
       END; // END_CASE
 
-      IF (recRef.NUMBER = DATABASE::Field) AND (UPPERCASE(FORMAT(fieldRef.TYPE)) = 'OPTION')THEN BEGIN
+      IF (recRef.NUMBER = DATABASE::Field) AND (fieldNo = _Field.FIELDNO(Type))THEN BEGIN
         recRef.SETTABLE(_Field);
         IF (fieldRef.NUMBER=_Field.FIELDNO(Type)) THEN
           CASE _Field.Type OF
@@ -2774,17 +2779,17 @@ OBJECT XMLport 50022 DAM Export
       END;
     END;
 
-    LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text[1024]);
+    LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text[1024]) ResultText : Text[1024];
     VAR
       CharArray@1109900001 : Text[30];
       Chunk@1000000000 : Text[1];
       TextOLD@1000000001 : BigText;
       i@1000000002 : Integer;
     BEGIN
-      CharArray[1] :=  9; // TAB
+      CharArray[1] := 9; // TAB
       CharArray[2] := 10; // LF
       CharArray[3] := 13; // CR
-      Text := DELCHR(Text,'=',CharArray);
+      ResultText := DELCHR(Text,'=',CharArray);
     END;
 
     LOCAL PROCEDURE ReplaceStr@1000000015(_Text@1000000000 : Text[1024];_FindWhat@1000000001 : Text[1024];_ReplaceWith@1000000002 : Text[1024]) _NewText : Text[1024];
@@ -2810,7 +2815,12 @@ OBJECT XMLport 50022 DAM Export
       SetObsoleteFieldFilter(_fields);
       _fields.FINDSET;
       REPEAT
-        IF NOT (_fields."No." IN [24{OptionString},25{ObsoleteState},26{ObsoleteReason},27{DataClassification}]) THEN BEGIN
+        IF _ExportTableID = DATABASE::Field THEN BEGIN
+          IF NOT (_fields."No." IN [24{OptionString},25{ObsoleteState},26{ObsoleteReason},27{DataClassification}]) THEN BEGIN
+            _exportFieldBuffer := _fields;
+            _exportFieldBuffer.INSERT;
+          END;
+       END ELSE BEGIN
           _exportFieldBuffer := _fields;
           _exportFieldBuffer.INSERT;
         END;
@@ -2970,13 +2980,13 @@ OBJECT XMLport 50022 DAM Export
           currTableRef.OPEN(_TableNo,FALSE);
           valueAsText := currTableRef.CAPTION;
         END;
-        (ExportFieldBuffer.TableNo = DATABASE::Field) AND (ExportFieldBuffer."No."=50001): BEGIN
+        (ExportFieldBuffer.TableNo = DATABASE::Field) AND (ExportFieldBuffer."No." = 50001): BEGIN
           _TableNo := ExportRecRef.FIELD(1).VALUE;
           currTableRef.OPEN(_TableNo,FALSE);
           valueAsText := GetListOfKeyFieldIDs(currTableRef.NUMBER);
         END;
         //OptionString
-        (ExportFieldBuffer.TableNo = DATABASE::Field) AND (ExportFieldBuffer."No."=50002): BEGIN
+        (ExportFieldBuffer.TableNo = DATABASE::Field) AND (ExportFieldBuffer."No." = 50002): BEGIN
           ExportRecRef.SETTABLE(field);
           IF field.Type = field.Type::Option THEN BEGIN
             currTableRef.OPEN(field.TableNo,FALSE);
@@ -3001,7 +3011,7 @@ OBJECT XMLport 50022 DAM Export
       END; // END_CASE
 
       valueAsText := ReplaceStr(valueAsText,FieldSeparator,'');  // Remove FieldSeparator from Value
-      RemoveSpecialChars(valueAsText);
+      valueAsText := RemoveSpecialChars(valueAsText);
 
       // Add Closing Sign
       IF LastFieldNo <> ExportFieldBuffer."No." THEN

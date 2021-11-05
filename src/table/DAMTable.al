@@ -282,7 +282,7 @@ table 91001 "DAMTable"
         DAMSetup.Get();
         if DAMSetup."Default Export Folder Path" = '' then exit;
         if Rec.DataFilePath <> '' then exit;
-        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.txt', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
+        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();

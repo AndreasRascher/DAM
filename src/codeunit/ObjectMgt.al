@@ -99,7 +99,7 @@ codeunit 91004 ObjMgt
 
     internal procedure ValidateToTableCaption(var Rec: Record DAMTable; xRec: Record DAMTable)
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
+        allObjWithCaption: Record AllObjWithCaption;
     begin
         if rec."To Table Caption" = xRec."To Table Caption" then
             exit;
@@ -107,12 +107,10 @@ codeunit 91004 ObjMgt
             exit;
         // IsNumber
         if Delchr(rec."To Table Caption", '=', '0123456789') = '' then begin
-            DAMFieldBuffer.SetFilter(TableNo, rec."To Table Caption");
-            if DAMFieldBuffer.FindFirst() then begin
-                Rec."To Table ID" := DAMFieldBuffer.TableNo;
-                Rec."To Table Caption" := DAMFieldBuffer."Table Caption";
+            if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."To Table Caption") then begin
+                Rec."To Table ID" := allObjWithCaption."Object ID";
+                Rec."To Table Caption" := allObjWithCaption."Object Caption";
             end;
-
         end;
     end;
 
