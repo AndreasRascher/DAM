@@ -6,5 +6,7 @@
     "al.enableCodeActions": true,
     "al.enableCodeAnalysis": true,
     "al.ruleSetPath": ".vscode\\CodeAnalyzerRules.json",
-    "CRS.FileNamePattern": "<ObjectNameShort>.al"
+    "CRS.FileNamePattern": "<ObjectNameShort>.al",
+    "CRS.ObjectNamePrefix": "DAM",
+    "CRS.RenameWithGit": true
  }

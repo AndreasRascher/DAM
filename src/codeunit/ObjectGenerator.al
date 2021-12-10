@@ -209,7 +209,7 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyString(DAMTable."Old Version Table ID") + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DAMTable."Old Version Table ID") + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');
@@ -259,30 +259,30 @@ codeunit 91003 DAMObjectGenerator
         CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
     end;
 
-    local procedure FilterFields(VAR Fields_Found: Record DAMFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
+    procedure FilterFields(VAR DAMFieldBuffer_FOUND: Record DAMFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
     var
         Debug: Integer;
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
-        CLEAR(Fields_Found);
-        Fields_Found.SETRANGE(TableNo, TableNo);
-        Debug := Fields_Found.Count;
+        CLEAR(DAMFieldBuffer_FOUND);
+        DAMFieldBuffer_FOUND.SETRANGE(TableNo, TableNo);
+        Debug := DAMFieldBuffer_FOUND.Count;
         IF NOT IncludeDisabled THEN
-            Fields_Found.SETRANGE(Enabled, TRUE);
-        Debug := Fields_Found.Count;
-        Fields_Found.SetFilter(Class, '%1|%2', Fields_Found.Class::Normal, Fields_Found.Class::FlowField);
+            DAMFieldBuffer_FOUND.SETRANGE(Enabled, TRUE);
+        Debug := DAMFieldBuffer_FOUND.Count;
+        DAMFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DAMFieldBuffer_FOUND.Class::Normal, DAMFieldBuffer_FOUND.Class::FlowField);
         IF NOT IncludeFlowFields THEN
-            Fields_Found.SETRANGE(Class, Fields_Found.Class::Normal);
+            DAMFieldBuffer_FOUND.SETRANGE(Class, DAMFieldBuffer_FOUND.Class::Normal);
         IF NOT IncludeBlob THEN
-            Fields_Found.SETFILTER(Type, '<>%1', Fields_Found.Type::BLOB);
+            DAMFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DAMFieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.Setrange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
-        Debug := Fields_Found.Count;
-        Fields_Found.Setrange(FieldName);
-        HasFields := Fields_Found.FindFirst();
+        Debug := DAMFieldBuffer_FOUND.Count;
+        DAMFieldBuffer_FOUND.Setrange(FieldName);
+        HasFields := DAMFieldBuffer_FOUND.FindFirst();
     end;
 
-    local procedure BuildKeyString(TableIDInNAV: Integer) KeyString: Text
+    local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
     var
         dAMFieldBuffer: Record DAMFieldBuffer;
     begin

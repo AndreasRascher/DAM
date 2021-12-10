@@ -146,6 +146,33 @@ page 91000 "DAM Setup"
                 PromotedCategory = Report;
                 RunObject = page "DAM Error Log List";
             }
+            action(TestImportGenBuffer)
+            {
+                CaptionML = DEU = 'TestImportGenBuff', ENU = 'TestImportGenBuff';
+                ApplicationArea = All;
+                Image = Import;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                trigger OnAction()
+                var
+                    TempBlob: Codeunit "Temp Blob";
+                    GenBuffImport: XmlPort GenBuffImport;
+                    InStr: InStream;
+                    FileName: Text;
+                    Start: DateTime;
+                begin
+                    TempBlob.CreateInStream(InStr);
+                    if not UploadIntoStream('Select a *.csv file', '', 'CSV Files|*.csv', FileName, InStr) then begin
+                        exit;
+                    end;
+                    Start := CurrentDateTime;
+                    GenBuffImport.SetSource(InStr);
+                    GenBuffImport.Import();
+                    Message('Import abgeschlossen\Dauer %1', CurrentDateTime - Start);
+                end;
+            }
         }
         area(Processing)
         {

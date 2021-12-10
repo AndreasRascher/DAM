@@ -390,7 +390,7 @@ codeunit 91001 "DAMMgt"
         FileBrowser.SetupFileBrowser(CurrentPath, LookUpFolder);
         FileBrowser.LookupMode(true);
         if not (FileBrowser.RunModal() = Action::LookupOK) then
-            exit(CurrentPath);
+            exit(CopyStr(CurrentPath, 1, 250));
         ResultPath := CopyStr(FileBrowser.GetSelectedPath(), 1, MaxStrLen(ResultPath));
     end;
 
