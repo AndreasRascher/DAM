@@ -1,4 +1,4 @@
-codeunit 91002 "DAMErrorWrapper"
+codeunit 91002 "DMTErrorWrapper"
 {
     trigger OnRun()
     begin

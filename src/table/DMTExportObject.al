@@ -1,4 +1,4 @@
-table 91004 DAMExportObject
+table 91004 "DMTExportObject"
 {
     DataClassification = ToBeClassified;
     DataPerCompany = false;

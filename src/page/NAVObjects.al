@@ -3,7 +3,7 @@ page 91008 NAVObjects
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = "DAMExportObject";
+    SourceTable = DMTExportObject;
 
     layout
     {

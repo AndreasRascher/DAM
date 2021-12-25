@@ -1,10 +1,10 @@
-page 91006 DAMTaskList
+page 91006 "DMTTaskList"
 {
-    CaptionML = DEU = 'DAM Aufgabenliste', ENU = 'DAM Task List';
+    CaptionML = DEU = 'DMT Aufgabenliste', ENU = 'DMT Task List';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = DAMTask;
+    SourceTable = DMTTask;
     AutoSplitKey = true;
 
     layout
@@ -14,7 +14,7 @@ page 91006 DAMTaskList
             repeater(GroupName)
             {
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; }
-                field("Type"; Rec."Type") { ApplicationArea = All; }
+                field(Type; Rec."Type") { ApplicationArea = All; }
                 field(ID; Rec.ID) { ApplicationArea = All; }
                 field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
                 field(CurrFilter; CurrFilter)
@@ -24,17 +24,17 @@ page 91006 DAMTaskList
                     Editable = false;
                     trigger OnDrillDown()
                     var
-                        DAMTable: Record DAMTable;
-                        DAMImport: Codeunit DAMImport;
+                        DMTTable: Record DMTTable;
+                        DMTImport: Codeunit "DMTImport";
                         BufferRef: RecordRef;
                     begin
                         if Rec.Type <> Rec.Type::ImportToTarget then
                             exit;
-                        if not Rec.FindRelated(DAMTable) then
+                        if not Rec.FindRelated(DMTTable) then
                             exit;
-                        BufferRef.Open(DAMTable."Buffer Table ID");
+                        BufferRef.Open(DMTTable."Buffer Table ID");
                         Commit();
-                        if DAMImport.ShowRequestPageFilterDialog(BufferRef) then
+                        if DMTImport.ShowRequestPageFilterDialog(BufferRef) then
                             Rec.SaveTableView(BufferRef.GetView());
                         CurrFilter := rec.GetStoredTableViewAsFilter();
                     end;
@@ -62,14 +62,14 @@ page 91006 DAMTaskList
 
                 trigger OnAction()
                 var
-                    DAMTask_SELECTED: Record DAMTask;
+                    DMTTask_SELECTED: Record DMTTask;
                 begin
-                    if not GetSelection(DAMTask_SELECTED) then
+                    if not GetSelection(DMTTask_SELECTED) then
                         exit;
-                    DAMTask_SELECTED.FindSet();
+                    DMTTask_SELECTED.FindSet();
                     repeat
-                        RunTask(DAMTask_SELECTED);
-                    until DAMTask_SELECTED.Next() = 0;
+                        RunTask(DMTTask_SELECTED);
+                    until DMTTask_SELECTED.Next() = 0;
 
                 end;
             }
@@ -86,45 +86,45 @@ page 91006 DAMTaskList
         CurrFilter := rec.GetStoredTableViewAsFilter();
     end;
 
-    procedure GetSelection(var DAMTask_SELECTED: Record DAMTask) HasLines: Boolean
+    procedure GetSelection(var DMTTask_SELECTED: Record DMTTask) HasLines: Boolean
     begin
-        Clear(DAMTask_SELECTED);
-        CurrPage.SetSelectionFilter(DAMTask_SELECTED);
-        HasLines := DAMTask_SELECTED.FindFirst();
+        Clear(DMTTask_SELECTED);
+        CurrPage.SetSelectionFilter(DMTTask_SELECTED);
+        HasLines := DMTTask_SELECTED.FindFirst();
     end;
 
-    procedure RunTask(DAMTask: Record DAMTask)
+    procedure RunTask(DMTTask: Record DMTTask)
     var
-        DAMTable: Record DAMTable;
-        DAMImport: Codeunit DAMImport;
+        DMTTable: Record DMTTable;
+        DMTImport: Codeunit "DMTImport";
         Start: DateTime;
     begin
-        case DAMTask.Type of
-            damtask.Type::ImportToBuffer:
+        case DMTTask.Type of
+            dmttask.Type::ImportToBuffer:
                 begin
-                    If not Rec.FindRelated(DAMTable) then exit;
+                    If not Rec.FindRelated(DMTTable) then exit;
                     Start := CurrentDateTime;
-                    DAMTable.ImportToBufferTable();
-                    DAMTask."Processing Time" := CurrentDateTime - Start;
-                    DAMTask.Modify();
+                    DMTTable.ImportToBufferTable();
+                    DMTTask."Processing Time" := CurrentDateTime - Start;
+                    DMTTask.Modify();
                 end;
-            damtask.Type::ImportToTarget:
+            dmttask.Type::ImportToTarget:
                 begin
-                    If not Rec.FindRelated(DAMTable) then exit;
+                    If not Rec.FindRelated(DMTTable) then exit;
                     Start := CurrentDateTime;
-                    DAMImport.SetBufferTableView(Rec.GetStoredTableView());
-                    DAMImport.SetDAMTableToProcess(DAMTable);
-                    DAMImport.ProcessFullBuffer();
-                    DAMTask.get(DAMTask.RecordId);
-                    DAMTask."Processing Time" := CurrentDateTime - Start;
-                    DAMTask.Modify();
+                    DMTImport.SetBufferTableView(Rec.GetStoredTableView());
+                    DMTImport.SetDMTTableToProcess(DMTTable);
+                    DMTImport.ProcessFullBuffer();
+                    DMTTask.get(DMTTask.RecordId);
+                    DMTTask."Processing Time" := CurrentDateTime - Start;
+                    DMTTask.Modify();
                 end;
-            DAMTask.Type::RunCodeunit:
+            DMTTask.Type::RunCodeunit:
                 begin
                     Start := CurrentDateTime;
-                    Codeunit.Run(DAMTask.ID);
-                    DAMTask."Processing Time" := CurrentDateTime - Start;
-                    DAMTask.Modify();
+                    Codeunit.Run(DMTTask.ID);
+                    DMTTask."Processing Time" := CurrentDateTime - Start;
+                    DMTTask.Modify();
                 end;
         end;
     end;

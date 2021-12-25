@@ -1,7 +1,7 @@
-page 91003 "DAMTableCardPart"
+page 91003 "DMTTableCardPart"
 {
     PageType = ListPart;
-    SourceTable = "DAMField";
+    SourceTable = "DMTField";
 
     layout
     {
@@ -72,11 +72,11 @@ page 91003 "DAMTableCardPart"
 
                 trigger OnAction()
                 var
-                    DAMFields: Record "DAMField";
-                    DAMTable: Record DAMTable;
+                    DMTFields: Record "DMTField";
+                    DMTTable: Record DMTTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec."To Table No."));
-                    DAMFields.InitForTargetTable(DAMTable);
+                    DMTTable.Get(Rec.GetRangeMin(rec."To Table No."));
+                    DMTFields.InitForTargetTable(DMTTable);
                 end;
             }
             action(ProposeMatchingFields)
@@ -87,12 +87,12 @@ page 91003 "DAMTableCardPart"
 
                 trigger OnAction()
                 var
-                    DAMFields: Record "DAMField";
-                    DAMTable: Record DAMTable;
+                    DMTFields: Record "DMTField";
+                    DMTTable: Record DMTTable;
                 begin
-                    DAMTable.Get(Rec.GetRangeMin(rec."To Table No."));
-                    DAMFields.ProposeMatchingTargetFields(DAMTable);
-                    DAMFields.ProposeValidationRules(DAMTable);
+                    DMTTable.Get(Rec.GetRangeMin(rec."To Table No."));
+                    DMTFields.ProposeMatchingTargetFields(DMTTable);
+                    DMTFields.ProposeValidationRules(DMTTable);
                 end;
             }
         }
@@ -115,11 +115,11 @@ page 91003 "DAMTableCardPart"
 
     procedure UpdateControlVariables()
     var
-        DAMErrorLog: Record DAMErrorLog;
+        DMTErrorLog: Record DMTErrorLog;
     begin
         HideFromFieldInfo := Rec."Fixed Value" <> '';
         LineStyleExpr := '';
-        if DAMErrorLog.ErrorsExistFor(Rec, true) then
+        if DMTErrorLog.ErrorsExistFor(Rec, true) then
             LineStyleExpr := 'Attention';
     end;
 }

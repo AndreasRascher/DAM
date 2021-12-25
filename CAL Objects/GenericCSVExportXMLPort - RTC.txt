@@ -1,11 +1,11 @@
-OBJECT XMLport 50022 DAM Export
+OBJECT XMLport 50022 DMT Export
 {
   OBJECT-PROPERTIES
   {
     Date=05.11.21;
     Time=13:00:47;
     Modified=Yes;
-    Version List=DAM;
+    Version List=DMT;
   }
   PROPERTIES
   {
@@ -23,7 +23,7 @@ OBJECT XMLport 50022 DAM Export
 
     OnPreXMLport=BEGIN
                    IF ExportTableID = 0 THEN BEGIN
-                     ERROR('Keine Aktion ausgewÑhlt');
+                     ERROR('Keine Aktion ausgewÔøΩhlt');
                    END;
                  END;
 
@@ -2628,7 +2628,7 @@ OBJECT XMLport 50022 DAM Export
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text[1024];exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text[1024]);
     VAR
       fileMgt@1000000010 : Codeunit 419;
-      damExport@1000000002 : XMLport 50022;
+      dmtExport@1000000002 : XMLport 50022;
       serverFile@1000000007 : File;
       serverFilePath@1000000019 : Text;
       outStream@1000000020 : OutStream;
@@ -2645,7 +2645,7 @@ OBJECT XMLport 50022 DAM Export
 
       start := CURRENTDATETIME;
       progress.OPEN(STRSUBSTNO('Export %1',CONVERTSTR(exportToFilePath,'\','/')));
-      damExport.InitExport(exportTableID,TableView);
+      dmtExport.InitExport(exportTableID,TableView);
 
       serverFile.CREATETEMPFILE;
       serverFilePath := serverFile.NAME;
@@ -2653,8 +2653,8 @@ OBJECT XMLport 50022 DAM Export
 
       serverFile.CREATE(serverFilePath);
       serverFile.CREATEOUTSTREAM(outStream);
-      damExport.SETDESTINATION(outStream);
-      damExport.EXPORT;
+      dmtExport.SETDESTINATION(outStream);
+      dmtExport.EXPORT;
       serverFile.CLOSE;
 
       fileMgt.DownloadToFile(serverFilePath,exportToFilePath);
@@ -2838,7 +2838,7 @@ OBJECT XMLport 50022 DAM Export
 
         _exportFieldBuffer."No." := 50001;
         _exportFieldBuffer.FieldName := 'Primary Key';
-        _exportFieldBuffer."Field Caption" := 'PrimÑrschlÅssel';
+        _exportFieldBuffer."Field Caption" := 'PrimÔøΩrschlÔøΩssel';
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50002;

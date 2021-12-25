@@ -1,10 +1,10 @@
-page 91000 "DAM Setup"
+page 91000 "DMT Setup"
 {
-    CaptionML = DEU = 'DAM Einrichtung', ENU = 'DAM Setup';
+    CaptionML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = "DAM Setup";
+    SourceTable = "DMT Setup";
     PromotedActionCategoriesML = DEU = 'NAV,Backup,Listen,,', ENU = 'NAV,Backup,Lists,,';
 
     layout
@@ -38,7 +38,7 @@ page 91000 "DAM Setup"
                     group(Debugging)
                     {
                         field(SessionID; SessionId()) { ApplicationArea = all; Caption = 'SessionID'; }
-                        field(UserID; UserId) { ApplicationArea = all; Caption = 'User ID'; }
+                        field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }
                     }
                 }
             }
@@ -61,7 +61,7 @@ page 91000 "DAM Setup"
 
                 trigger OnAction()
                 var
-                    ObjGen: Codeunit DAMObjectGenerator;
+                    ObjGen: Codeunit DMTObjectGenerator;
                     Choice: Integer;
                     NAVVersionSelectionTok: TextConst DEU = 'Dataport (Versionen bis NAV2009R2),XMLPort (Versionen NAV2013 bis NAV2018 sowie Business Central 13 + 14),Abbrechen',
                                                    ENU = 'Dataport (Versions up to NAV2009R2),XMLPort (Versions from NAV2013 to NAV2018 and Business Central 13 & 14),Cancel';
@@ -70,10 +70,10 @@ page 91000 "DAM Setup"
                     case Choice of
                         1:
                             ObjGen.DownloadFileUTF8(ObjGen.GetNavClassicDataport(Rec."Object ID Export Object"),
-                            'Dataport_' + format(Rec."Object ID Export Object") + '_DAMExport.txt');
+                            'Dataport_' + format(Rec."Object ID Export Object") + '_DMTExport.txt');
                         2:
                             ObjGen.DownloadFileUTF8(ObjGen.GetNAVRTCXMLPort(Rec."Object ID Export Object"),
-                            'XMLPort_' + format(Rec."Object ID Export Object") + '_DAMExport.txt');
+                            'XMLPort_' + format(Rec."Object ID Export Object") + '_DMTExport.txt');
                     end;
                 end;
             }
@@ -89,7 +89,7 @@ page 91000 "DAM Setup"
 
                 trigger OnAction()
                 var
-                    ObjMgt: Codeunit ObjMgt;
+                    ObjMgt: Codeunit DMTObjMgt;
                 begin
                     ObjMgt.ImportNAVSchemaFile();
                 end;
@@ -97,7 +97,7 @@ page 91000 "DAM Setup"
         }
         area(Reporting)
         {
-            action(Table_DAMFieldBuffer)
+            action("Table_DMTFieldBuffer")
             {
                 ApplicationArea = All;
                 CaptionML = DEU = 'Schema anzeigen';
@@ -110,7 +110,7 @@ page 91000 "DAM Setup"
 
                 trigger OnAction()
                 begin
-                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DAMFieldBuffer));
+                    Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DMTFieldBuffer));
                 end;
             }
             action(TableList)
@@ -122,7 +122,7 @@ page 91000 "DAM Setup"
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Report;
-                RunObject = page DAMTableList;
+                RunObject = page DMTTableList;
             }
             action(TaskList)
             {
@@ -133,7 +133,7 @@ page 91000 "DAM Setup"
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Report;
-                RunObject = page DAMTaskList;
+                RunObject = page DMTTaskList;
             }
             action(ErrorLog)
             {
@@ -144,7 +144,7 @@ page 91000 "DAM Setup"
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Report;
-                RunObject = page "DAM Error Log List";
+                RunObject = page "DMT Error Log List";
             }
             action(TestImportGenBuffer)
             {
@@ -188,7 +188,7 @@ page 91000 "DAM Setup"
 
                 trigger OnAction()
                 var
-                    XMLBackup: Codeunit XMLBackup;
+                    XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Export();
                 end;
@@ -205,7 +205,7 @@ page 91000 "DAM Setup"
 
                 trigger OnAction()
                 var
-                    XMLBackup: Codeunit XMLBackup;
+                    XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
                 end;

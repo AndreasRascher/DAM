@@ -1,18 +1,18 @@
-page 91004 "DAMTableList"
+page 91004 "DMTTableList"
 {
-    CaptionML = DEU = 'DAM Tabellenübersicht', ENU = 'DAM Table List';
+    CaptionML = DEU = 'DMT Tabellenübersicht', ENU = 'DMT Table List';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = DAMTable;
-    CardPageId = DAMTableCard;
+    SourceTable = DMTTable;
+    CardPageId = DMTTableCard;
     SourceTableView = sorting("Sort Order");
 
     layout
     {
         area(Content)
         {
-            repeater(DAMTableRepeater)
+            repeater(DMTTableRepeater)
             {
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("Old Version Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; Visible = false; }
@@ -40,7 +40,7 @@ page 91004 "DAMTableList"
                 ApplicationArea = all;
                 trigger OnAction()
                 var
-                    ObjMgt: Codeunit ObjMgt;
+                    ObjMgt: Codeunit DMTObjMgt;
                 begin
                     ObjMgt.AddSelectedTables();
                 end;
@@ -52,17 +52,17 @@ page 91004 "DAMTableList"
                 ApplicationArea = all;
                 trigger OnAction()
                 var
-                    DAMTable: Record DAMTable;
+                    DMTTable: Record DMTTable;
                     Progress: Dialog;
                     Start: DateTime;
                 begin
-                    if DAMTable.FindSet() then begin
+                    if DMTTable.FindSet() then begin
                         Start := CurrentDateTime;
                         Progress.Open('Puffertabellen werden eingelesen\ Tabelle: ############1#');
                         repeat
-                            Progress.Update(1, DAMTable."To Table Caption");
-                            DAMTable.ImportToBufferTable();
-                        until DAMTable.Next() = 0;
+                            Progress.Update(1, DMTTable."To Table Caption");
+                            DMTTable.ImportToBufferTable();
+                        until DMTTable.Next() = 0;
                         Progress.Close();
                         Message('Vorgang abgeschlossen\Dauer %1', CurrentDateTime - Start);
                     end;
@@ -75,12 +75,12 @@ page 91004 "DAMTableList"
                 CaptionML = DEU = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
                 var
-                    DAMTable: Record DAMTable;
+                    DMTTable: Record DMTTable;
                 begin
-                    if DAMTable.FindSet() then
+                    if DMTTable.FindSet() then
                         repeat
-                            DAMTable.DownloadAllALBufferTableFiles(Rec);
-                        until DAMTable.Next() = 0;
+                            DMTTable.DownloadAllALBufferTableFiles(Rec);
+                        until DMTTable.Next() = 0;
                 end;
             }
             action(TransferSelectedToTargetTable)
@@ -90,28 +90,28 @@ page 91004 "DAMTableList"
                 CaptionML = DEU = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()
                 var
-                    DAMTable: Record DAMTable;
-                    DAMTable_SELECTED: Record DAMTable;
-                    DAMImport: Codeunit DAMImport;
+                    DMTTable: Record DMTTable;
+                    DMTTable_SELECTED: Record DMTTable;
+                    DMTImport: Codeunit "DMTImport";
                 begin
-                    DAMTable_SELECTED.SetCurrentKey("Sort Order");
-                    if not GetSelection(DAMTable_SELECTED) then
+                    DMTTable_SELECTED.SetCurrentKey("Sort Order");
+                    if not GetSelection(DMTTable_SELECTED) then
                         exit;
-                    DAMTable_SELECTED.FindSet();
+                    DMTTable_SELECTED.FindSet();
                     repeat
-                        DAMTable := DAMTable_SELECTED;
-                        DAMImport.ProcessDAMTable(DAMTable, true);
-                    until DAMTable_SELECTED.Next() = 0;
+                        DMTTable := DMTTable_SELECTED;
+                        DMTImport.ProcessDMTTable(DMTTable, true);
+                    until DMTTable_SELECTED.Next() = 0;
                 end;
             }
         }
     }
 
-    procedure GetSelection(var DAMTable_SELECTED: Record DAMTable) HasLines: Boolean
+    procedure GetSelection(var DMTTable_SELECTED: Record DMTTable) HasLines: Boolean
     begin
-        Clear(DAMTable_SELECTED);
-        CurrPage.SetSelectionFilter(DAMTable_SELECTED);
-        HasLines := DAMTable_SELECTED.FindFirst();
+        Clear(DMTTable_SELECTED);
+        CurrPage.SetSelectionFilter(DMTTable_SELECTED);
+        HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
     trigger OnAfterGetRecord()

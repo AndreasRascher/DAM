@@ -12,7 +12,7 @@ xmlport 90000 GenBuffImport
     {
         textelement(Root)
         {
-            tableelement(GenBuffTable; DAMGenBuffTable)
+            tableelement(GenBuffTable; "DMTGenBuffTable")
             {
                 textelement(FieldContent)
                 {
@@ -59,19 +59,12 @@ xmlport 90000 GenBuffImport
 
         actions
         {
-            area(processing)
-            {
-                action(ActionName)
-                {
-
-                }
-            }
         }
     }
 
     trigger OnPreXmlPort()
     var
-        GenBuffTable: Record DAMGenBuffTable;
+        GenBuffTable: Record "DMTGenBuffTable";
     begin
         if GenBuffTable.FindLast() then
             LastEntryNo := GenBuffTable."Entry No.";

@@ -1,11 +1,11 @@
-OBJECT Dataport 50079 DAMExport
+OBJECT Dataport 50079 DMTExport
 {
   OBJECT-PROPERTIES
   {
     Date=05.11.21;
     Time=12:49:01;
     Modified=Yes;
-    Version List=DAM;
+    Version List=DMT;
   }
   PROPERTIES
   {
@@ -630,7 +630,7 @@ OBJECT Dataport 50079 DAMExport
 
         _exportFieldBuffer."No." := 50001;
         _exportFieldBuffer.FieldName := 'Primary Key';
-        _exportFieldBuffer."Field Caption" := 'PrimÑrschlÅssel';
+        _exportFieldBuffer."Field Caption" := 'PrimÔøΩrschlÔøΩssel';
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50002;

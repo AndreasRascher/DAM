@@ -1,8 +1,8 @@
-table 91001 "DAMTable"
+table 91001 "DMTTable"
 {
     DataClassification = SystemMetadata;
-    LookupPageId = DAMTableList;
-    DrillDownPageId = DAMTableList;
+    LookupPageId = DMTTableList;
+    DrillDownPageId = DMTTableList;
 
     fields
     {
@@ -23,7 +23,7 @@ table 91001 "DAMTable"
             CaptionML = DEU = 'Von Tabelle', ENU = 'From Table';
             trigger OnLookup()
             var
-                ObjectMgt: Codeunit ObjMgt;
+                ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.LookUpOldVersionTable(Rec);
                 if "To Table ID" = 0 then begin
@@ -35,7 +35,7 @@ table 91001 "DAMTable"
 
             trigger OnValidate()
             var
-                ObjectMgt: Codeunit ObjMgt;
+                ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.ValidateFromTableCaption(Rec, xRec);
                 if ("To Table ID" = 0) and ("Old Version Table ID" <> 0) then begin
@@ -49,14 +49,14 @@ table 91001 "DAMTable"
             CaptionML = DEU = 'In Tabelle', ENU = 'To Table';
             trigger OnLookup()
             var
-                ObjectMgt: Codeunit ObjMgt;
+                ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.LookUpToTable(Rec);
             end;
 
             trigger OnValidate()
             var
-                ObjectMgt: Codeunit ObjMgt;
+                ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.ValidateToTableCaption(Rec, xRec);
             end;
@@ -87,7 +87,7 @@ table 91001 "DAMTable"
         {
             CaptionML = DEU = 'Anz. Felder in Zieltabelle', ENU = 'No. of fields in target table';
             FieldClass = FlowField;
-            CalcFormula = count(DAMField where("To Table No." = field("To Table ID")));
+            CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
             Editable = false;
         }
         field(50; DataFilePath; Text[250])
@@ -107,9 +107,9 @@ table 91001 "DAMTable"
 
             trigger OnLookup()
             var
-                DAMMgt: Codeunit DAMMgt;
+                DMTMgt: Codeunit DMTMgt;
             begin
-                Rec.DataFilePath := DAMMgt.LookUpPath(Rec.DataFilePath, false);
+                Rec.DataFilePath := DMTMgt.LookUpPath(Rec.DataFilePath, false);
             end;
         }
         field(51; "Import XMLPort ID"; Integer)
@@ -174,10 +174,10 @@ table 91001 "DAMTable"
 
     trigger OnDelete()
     var
-        DAMFields: Record "DAMField";
+        DMTFields: Record "DMTField";
     begin
-        if DAMFields.FilterBy(Rec) then
-            DAMFields.DeleteAll(true);
+        if DMTFields.FilterBy(Rec) then
+            DMTFields.DeleteAll(true);
     end;
 
     internal procedure ImportToBufferTable()
@@ -195,18 +195,18 @@ table 91001 "DAMTable"
 
     procedure DownloadALBufferTableFile()
     var
-        DAMObjectGenerator: Codeunit DAMObjectGenerator;
+        DMTObjectGenerator: Codeunit DMTObjectGenerator;
     begin
-        DAMObjectGenerator.DownloadFile(
-            DAMObjectGenerator.CreateALTable(Rec),
+        DMTObjectGenerator.DownloadFile(
+            DMTObjectGenerator.CreateALTable(Rec),
             Rec.GetALBufferTableName());
     end;
 
     procedure DownloadALXMLPort()
     var
-        DAMObjectGenerator: Codeunit DAMObjectGenerator;
+        DMTObjectGenerator: Codeunit DMTObjectGenerator;
     begin
-        DAMObjectGenerator.DownloadFile(DAMObjectGenerator.CreateALXMLPort(Rec), Rec.GetALXMLPortName());
+        DMTObjectGenerator.DownloadFile(DMTObjectGenerator.CreateALXMLPort(Rec), Rec.GetALXMLPortName());
     end;
 
     internal procedure ShowTableContent(TableID: Integer)
@@ -217,27 +217,27 @@ table 91001 "DAMTable"
 
     local procedure ProposeObjectIDs()
     var
-        DAMSetup: Record "DAM Setup";
-        DAMTable: Record DAMTable;
+        DMTSetup: Record "DMT Setup";
+        DMTTable: Record DMTTable;
         Numbers: Record Integer;
         UsedBufferTableIDs: List of [Integer];
         UsedXMLPortIDs: List of [Integer];
     begin
-        if not DAMSetup.Get() then
-            DAMSetup.InsertWhenEmpty();
-        DAMSetup.Get();
+        if not DMTSetup.Get() then
+            DMTSetup.InsertWhenEmpty();
+        DMTSetup.Get();
         // Collect used numbers
-        if DAMTable.FindSet() then
+        if DMTTable.FindSet() then
             repeat
-                if DAMTable."Import XMLPort ID" <> 0 then
-                    UsedXMLPortIDs.Add(DAMTable."Import XMLPort ID");
-                if DAMTable."Buffer Table ID" <> 0 then
-                    UsedBufferTableIDs.Add(DAMTable."Buffer Table ID");
-            until DAMTable.Next() = 0;
+                if DMTTable."Import XMLPort ID" <> 0 then
+                    UsedXMLPortIDs.Add(DMTTable."Import XMLPort ID");
+                if DMTTable."Buffer Table ID" <> 0 then
+                    UsedBufferTableIDs.Add(DMTTable."Buffer Table ID");
+            until DMTTable.Next() = 0;
         // Buffer Table ID - Assign Next Number in Filter
-        if DAMSetup."Obj. ID Range Buffer Tables" <> '' then
+        if DMTSetup."Obj. ID Range Buffer Tables" <> '' then
             if rec."Buffer Table ID" = 0 then begin
-                Numbers.SetFilter(Number, DAMSetup."Obj. ID Range Buffer Tables");
+                Numbers.SetFilter(Number, DMTSetup."Obj. ID Range Buffer Tables");
                 if Numbers.FindSet() then
                     repeat
                         if not UsedBufferTableIDs.Contains(Numbers.Number) then begin
@@ -246,9 +246,9 @@ table 91001 "DAMTable"
                     until (Numbers.Next() = 0) or (rec."Buffer Table ID" <> 0);
             end;
         // Import XMLPort ID - Assign Next Number in Filter
-        if DAMSetup."Obj. ID Range XMLPorts" <> '' then
+        if DMTSetup."Obj. ID Range XMLPorts" <> '' then
             if rec."Import XMLPort ID" = 0 then begin
-                Numbers.SetFilter(Number, DAMSetup."Obj. ID Range XMLPorts");
+                Numbers.SetFilter(Number, DMTSetup."Obj. ID Range XMLPorts");
                 if Numbers.FindSet() then
                     repeat
                         if not UsedXMLPortIDs.Contains(Numbers.Number) then begin
@@ -262,27 +262,27 @@ table 91001 "DAMTable"
 
     local procedure InitTableFieldMapping()
     var
-        DAMFields: Record DAMField;
-        DAMSetup: record "DAM Setup";
+        DMTFields: Record "DMTField";
+        DMTSetup: record "DMT Setup";
     begin
-        DAMSetup.CheckSchemaInfoHasBeenImporterd();
-        if not DAMFields.FilterBy(Rec) then begin
-            DAMFields.InitForTargetTable(Rec);
-            DAMFields.ProposeMatchingTargetFields(Rec);
+        DMTSetup.CheckSchemaInfoHasBeenImporterd();
+        if not DMTFields.FilterBy(Rec) then begin
+            DMTFields.InitForTargetTable(Rec);
+            DMTFields.ProposeMatchingTargetFields(Rec);
         end;
 
     end;
 
     procedure TryFindExportDataFile()
     var
-        DAMSetup: Record "DAM Setup";
+        DMTSetup: Record "DMT Setup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
-        DAMSetup.Get();
-        if DAMSetup."Default Export Folder Path" = '' then exit;
+        DMTSetup.Get();
+        if DMTSetup."Default Export Folder Path" = '' then exit;
         if Rec.DataFilePath <> '' then exit;
-        FilePath := FileMgt.CombinePath(DAMSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
+        FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
@@ -325,10 +325,10 @@ table 91001 "DAMTable"
         Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID");
     end;
 
-    procedure DownloadAllALBufferTableFiles(var DAMTable: Record DAMTable)
+    procedure DownloadAllALBufferTableFiles(var DMTTable: Record DMTTable)
     var
-        DAMTable2: Record DAMTable;
-        ObjGen: Codeunit DAMObjectGenerator;
+        DMTTable2: Record DMTTable;
+        ObjGen: Codeunit DMTObjectGenerator;
         DataCompression: Codeunit "Data Compression";
         FileBlob: Codeunit "Temp Blob";
         IStr: InStream;
@@ -336,23 +336,23 @@ table 91001 "DAMTable"
         toFileName: text;
         ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
     begin
-        DAMTable2.Copy(DAMTable);
-        if DAMTable2.FindSet() then begin
+        DMTTable2.Copy(DMTTable);
+        if DMTTable2.FindSet() then begin
             DataCompression.CreateZipArchive();
             repeat
                 //Table
                 Clear(FileBlob);
                 FileBlob.CreateOutStream(OStr);
-                OStr.WriteText(ObjGen.CreateALTable(DAMTable2).ToText());
+                OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
                 FileBlob.CreateInStream(IStr);
-                DataCompression.AddEntry(IStr, DAMTable2.GetALBufferTableName());
+                DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
                 //XMLPort
                 Clear(FileBlob);
                 FileBlob.CreateOutStream(OStr);
-                OStr.WriteText(ObjGen.CreateALXMLPort(DAMTable2).ToText());
+                OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
                 FileBlob.CreateInStream(IStr);
-                DataCompression.AddEntry(IStr, DAMTable2.GetALXMLPortName());
-            until DAMTable2.Next() = 0;
+                DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
+            until DMTTable2.Next() = 0;
         end;
         Clear(FileBlob);
         FileBlob.CreateOutStream(OStr);

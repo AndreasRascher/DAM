@@ -1,10 +1,10 @@
-query 91000 DAMErrorLogQry
+query 91000 "DMTErrorLogQry"
 {
     QueryType = Normal;
 
     elements
     {
-        dataitem(DataItemName; DAMErrorLog)
+        dataitem(DataItemName; DMTErrorLog)
         {
             column(FromID; "From ID") { }
             column(Import_from_Table_No_; "Import from Table No.") { }

@@ -1,10 +1,10 @@
-page 91002 "DAMTableCard"
+page 91002 "DMTTableCard"
 {
-    CaptionML = DEU = 'DAM Tabellenkarte', ENU = 'DAM Table Card';
+    CaptionML = DEU = 'DMT Tabellenkarte', ENU = 'DMT Table Card';
     PageType = Document;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = DAMTable;
+    SourceTable = DMTTable;
     DelayedInsert = true;
     DataCaptionFields = "To Table Caption";
 
@@ -77,7 +77,7 @@ page 91002 "DAMTableCard"
                 CaptionML = DEU = 'Datenmigration', ENU = 'Data Migration';
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
             }
-            part(FieldsPart; DAMTableCardPart)
+            part(FieldsPart; DMTTableCardPart)
             {
                 ApplicationArea = all;
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
@@ -117,9 +117,9 @@ page 91002 "DAMTableCard"
 
                 trigger OnAction()
                 var
-                    DAMImport: Codeunit DAMImport;
+                    DMTImport: Codeunit DMTImport;
                 begin
-                    DAMImport.ProcessDAMTable(Rec, false);
+                    DMTImport.ProcessDMTTable(Rec, false);
                 end;
             }
             action(RetryBufferRecordsWithError)
@@ -134,17 +134,17 @@ page 91002 "DAMTableCard"
 
                 trigger OnAction()
                 var
-                    DAMImport: Codeunit DAMImport;
-                    DAMErrorLogQry: Query DAMErrorLogQry;
+                    DMTImport: Codeunit DMTImport;
+                    DMTErrorLogQry: Query DMTErrorLogQry;
                     RecIdList: list of [RecordID];
                 begin
-                    DAMErrorLogQry.setrange(Import_from_Table_No_, REc."Buffer Table ID");
-                    DAMErrorLogQry.Open();
-                    while DAMErrorLogQry.Read() do begin
-                        RecIdList.Add(DAMErrorLogQry.FromID);
+                    DMTErrorLogQry.setrange(Import_from_Table_No_, REc."Buffer Table ID");
+                    DMTErrorLogQry.Open();
+                    while DMTErrorLogQry.Read() do begin
+                        RecIdList.Add(DMTErrorLogQry.FromID);
                     end;
-                    DAMImport.SetDAMTableToProcess(Rec);
-                    DAMImport.ProcessFullBuffer(RecIdList);
+                    DMTImport.SetDMTTableToProcess(Rec);
+                    DMTImport.ProcessFullBuffer(RecIdList);
                     Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
                     Rec.LastImportToTargetAt := CurrentDateTime;
@@ -163,9 +163,9 @@ page 91002 "DAMTableCard"
 
                 trigger OnAction()
                 var
-                    DAMErrorLog: Record DAMErrorLog;
+                    DMTErrorLog: Record DMTErrorLog;
                 begin
-                    DAMErrorLog.OpenListWithFilter(rec."Buffer Table ID");
+                    DMTErrorLog.OpenListWithFilter(rec."Buffer Table ID");
                 end;
             }
             action(CreateXMLPort)

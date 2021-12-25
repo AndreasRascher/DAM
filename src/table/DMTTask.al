@@ -1,9 +1,9 @@
-table 91006 DAMTask
+table 91006 "DMTTask"
 {
     DataClassification = SystemMetadata;
-    CaptionML = DEU = 'DAM Aufgabe', ENU = 'DAM Tast';
-    LookupPageId = DAMTaskList;
-    DrillDownPageId = DAMTaskList;
+    CaptionML = DEU = 'DMT Aufgabe', ENU = 'DMT Tast';
+    LookupPageId = DMTTaskList;
+    DrillDownPageId = DMTTaskList;
 
     fields
     {
@@ -25,22 +25,22 @@ table 91006 DAMTask
         }
         field(11; ID; integer)
         {
-            TableRelation = if (Type = const(ImportToBuffer)) DAMTable."To Table ID" else
-            if (Type = const(ImportToTarget)) DAMTable."To Table ID" else
+            TableRelation = if (Type = const(ImportToBuffer)) DMTTable."To Table ID" else
+            if (Type = const(ImportToTarget)) DMTTable."To Table ID" else
             if (Type = const(RunCodeunit)) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit), "Object ID" = filter(50000 ..));
             ValidateTableRelation = false;
 
             trigger OnValidate()
             var
-                DAMTable: Record DAMTable;
+                DMTTable: Record DMTTable;
                 AllObjWithCaption: Record AllObjWithCaption;
             begin
                 case Type of
                     Type::ImportToBuffer, Type::ImportToTarget:
                         begin
-                            DAMTable.Get(Rec.ID);
-                            DAMTable.testfield("Buffer Table ID");
-                            Rec."Context Description" := DAMTable."To Table Caption";
+                            DMTTable.Get(Rec.ID);
+                            DMTTable.testfield("Buffer Table ID");
+                            Rec."Context Description" := DMTTable."To Table Caption";
                         end;
                     Type::RunCodeunit:
                         begin
@@ -109,31 +109,31 @@ table 91006 DAMTask
 
     procedure GetStoredTableViewAsFilter() FilterExpr: Text
     var
-        DAMTable: Record DAMTable;
+        DMTTable: Record DMTTable;
         TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
         StoredTableView: text;
     begin
         StoredTableView := GetStoredTableView();
         if StoredTableView = '' then exit('');
-        if not Rec.FindRelated(DAMTable) then exit;
-        if DAMTable."Buffer Table ID" = 0 then
+        if not Rec.FindRelated(DMTTable) then exit;
+        if DMTTable."Buffer Table ID" = 0 then
             exit;
-        if not TableMetadata.Get(DAMTable."Buffer Table ID") then
+        if not TableMetadata.Get(DMTTable."Buffer Table ID") then
             exit;
-        RecRef.Open(DAMTable."Buffer Table ID");
+        RecRef.Open(DMTTable."Buffer Table ID");
         RecRef.SetView(StoredTableView);
         FilterExpr := RecRef.GetFilters();
     end;
 
-    internal procedure FindRelated(var DAMTable: Record DAMTable) OK: Boolean
+    internal procedure FindRelated(var DMTTable: Record DMTTable) OK: Boolean
     begin
-        Clear(DAMTable);
+        Clear(DMTTable);
         if not (Rec.Type IN [Rec.Type::ImportToBuffer, Rec.Type::ImportToTarget]) then
             exit(false);
         if Rec.ID = 0 then
             exit(false);
-        OK := DAMTable.Get(Rec.ID);
+        OK := DMTTable.Get(Rec.ID);
     end;
 
     internal procedure FindRelated(var AllObjWithCaption_Codeunit: Record AllObjWithCaption) OK: Boolean;

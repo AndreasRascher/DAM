@@ -1,67 +1,67 @@
-codeunit 91004 ObjMgt
+codeunit 91004 "DMTObjMgt"
 {
-    procedure LookUpOldVersionTable(var DAMTable: Record DAMTable) OK: Boolean;
+    procedure LookUpOldVersionTable(var DMTTable: Record DMTTable) OK: Boolean;
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
-        DAMSetup: Record "DAM Setup";
+        DMTFieldBuffer: Record DMTFieldBuffer;
+        DMTSetup: Record "DMT Setup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DAMSelectTables: Page DAMSelectTables;
+        DMTSelectTables: Page DMTSelectTables;
     begin
-        DAMSetup.CheckSchemaInfoHasBeenImporterd();
-        DAMFieldBuffer.FindSet();
+        DMTSetup.CheckSchemaInfoHasBeenImporterd();
+        DMTFieldBuffer.FindSet();
         repeat
-            if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DAMFieldBuffer.TableNo) then begin
+            if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DMTFieldBuffer.TableNo) then begin
                 TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
-                TempAllObjWithCaption."Object ID" := DAMFieldBuffer.TableNo;
-                TempAllObjWithCaption."Object Name" := DAMFieldBuffer.TableName;
-                TempAllObjWithCaption."Object Caption" := DAMFieldBuffer."Table Caption";
+                TempAllObjWithCaption."Object ID" := DMTFieldBuffer.TableNo;
+                TempAllObjWithCaption."Object Name" := DMTFieldBuffer.TableName;
+                TempAllObjWithCaption."Object Caption" := DMTFieldBuffer."Table Caption";
                 TempAllObjWithCaption.Insert(false);
             end;
-        until DAMFieldBuffer.Next() = 0;
+        until DMTFieldBuffer.Next() = 0;
         if TempAllObjWithCaption.FindFirst() then;
-        DAMSelectTables.Set(TempAllObjWithCaption);
-        DAMSelectTables.LookupMode(true);
-        if DAMSelectTables.RunModal() = Action::LookupOK then begin
-            DAMSelectTables.GetSelection(TempAllObjWithCaption);
-            DAMTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
-            DAMTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
+        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.LookupMode(true);
+        if DMTSelectTables.RunModal() = Action::LookupOK then begin
+            DMTSelectTables.GetSelection(TempAllObjWithCaption);
+            DMTTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
+            DMTTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
-    procedure LookUpToTable(var DAMTable: Record DAMTable) OK: Boolean;
+    procedure LookUpToTable(var DMTTable: Record DMTTable) OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DAMSelectTables: Page DAMSelectTables;
+        DMTSelectTables: Page DMTSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
-        DAMSelectTables.Set(TempAllObjWithCaption);
-        DAMSelectTables.LookupMode(true);
-        if DAMSelectTables.RunModal() = Action::LookupOK then begin
-            DAMSelectTables.GetSelection(TempAllObjWithCaption);
-            DAMTable."To Table ID" := TempAllObjWithCaption."Object ID";
-            DAMTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
+        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.LookupMode(true);
+        if DMTSelectTables.RunModal() = Action::LookupOK then begin
+            DMTSelectTables.GetSelection(TempAllObjWithCaption);
+            DMTTable."To Table ID" := TempAllObjWithCaption."Object ID";
+            DMTTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
     procedure AddSelectedTables() OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DAMTable: Record DAMTable;
-        DAMSelectTables: Page DAMSelectTables;
+        DMTTable: Record DMTTable;
+        DMTSelectTables: Page DMTSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
-        DAMSelectTables.Set(TempAllObjWithCaption);
-        DAMSelectTables.LookupMode(true);
-        if DAMSelectTables.RunModal() = Action::LookupOK then begin
-            DAMSelectTables.GetSelection(TempAllObjWithCaption);
+        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.LookupMode(true);
+        if DMTSelectTables.RunModal() = Action::LookupOK then begin
+            DMTSelectTables.GetSelection(TempAllObjWithCaption);
             if TempAllObjWithCaption.FindSet() then
                 repeat
-                    if not DAMTable.get(TempAllObjWithCaption."Object ID") then begin
-                        Clear(DAMTable);
-                        DAMTable.Validate("Old Version Table Caption", Format(TempAllObjWithCaption."Object ID"));
-                        DAMTable.Insert();
+                    if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
+                        Clear(DMTTable);
+                        DMTTable.Validate("Old Version Table Caption", Format(TempAllObjWithCaption."Object ID"));
+                        DMTTable.Insert();
                     end;
                 until TempAllObjWithCaption.Next() = 0;
         end;
@@ -79,9 +79,9 @@ codeunit 91004 ObjMgt
         until AllObjWithCaption.Next() = 0;
     end;
 
-    internal procedure ValidateFromTableCaption(var Rec: Record DAMTable; xRec: Record DAMTable)
+    internal procedure ValidateFromTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
+        DMTFieldBuffer: Record DMTFieldBuffer;
     begin
         if rec."Old Version Table Caption" = xRec."Old Version Table Caption" then
             exit;
@@ -89,15 +89,15 @@ codeunit 91004 ObjMgt
             exit;
         // IsNumber
         if Delchr(rec."Old Version Table Caption", '=', '0123456789') = '' then begin
-            DAMFieldBuffer.SetFilter(TableNo, rec."Old Version Table Caption");
-            if DAMFieldBuffer.FindFirst() then begin
-                Rec."Old Version Table ID" := DAMFieldBuffer.TableNo;
-                Rec."Old Version Table Caption" := DAMFieldBuffer."Table Caption";
+            DMTFieldBuffer.SetFilter(TableNo, rec."Old Version Table Caption");
+            if DMTFieldBuffer.FindFirst() then begin
+                Rec."Old Version Table ID" := DMTFieldBuffer.TableNo;
+                Rec."Old Version Table Caption" := DMTFieldBuffer."Table Caption";
             end;
         end;
     end;
 
-    internal procedure ValidateToTableCaption(var Rec: Record DAMTable; xRec: Record DAMTable)
+    internal procedure ValidateToTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
     var
         allObjWithCaption: Record AllObjWithCaption;
     begin
@@ -116,7 +116,7 @@ codeunit 91004 ObjMgt
 
     procedure ImportNAVSchemaFile()
     var
-        DAMSetup: Record "DAM Setup";
+        DMTSetup: Record "DMT Setup";
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort FieldBufferImport;
         ServerFile: File;
@@ -124,8 +124,8 @@ codeunit 91004 ObjMgt
         FileName: Text;
         FileFound: Boolean;
     begin
-        if DAMSetup.Get() and (DAMSetup."Schema.xml File Path" <> '') then
-            if ServerFile.Open(DAMSetup."Schema.xml File Path") then begin
+        if DMTSetup.Get() and (DMTSetup."Schema.xml File Path" <> '') then
+            if ServerFile.Open(DMTSetup."Schema.xml File Path") then begin
                 ServerFile.CreateInStream(InStr);
                 FileFound := true;
             end;

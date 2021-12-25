@@ -1,9 +1,9 @@
-page 91001 "DAM Error Log List"
+page 91001 "DMT Error Log List"
 {
     ApplicationArea = All;
-    CaptionML = DEU = 'DAM Fehlerprotokoll', ENU = 'DAM Error Log';
+    CaptionML = DEU = 'DMT Fehlerprotokoll', ENU = 'DMT Error Log';
     PageType = List;
-    SourceTable = DAMErrorLog;
+    SourceTable = DMTErrorLog;
     UsageCategory = Lists;
     Editable = false;
 
@@ -21,8 +21,8 @@ page 91001 "DAM Error Log List"
                 field(Errortext; Rec.Errortext) { ApplicationArea = All; StyleExpr = TextStyle; }
                 field(ErrorCode; Rec.ErrorCode) { ApplicationArea = All; StyleExpr = TextStyle; }
                 field("Ignore Error"; Rec."Ignore Error") { ApplicationArea = All; StyleExpr = TextStyle; }
-                field("DAM User"; Rec."DAM User") { ApplicationArea = All; StyleExpr = TextStyle; }
-                field("DAM Errorlog Created At"; Rec."DAM Errorlog Created At") { ApplicationArea = All; StyleExpr = TextStyle; }
+                field("DMT User"; Rec."DMT User") { ApplicationArea = All; StyleExpr = TextStyle; }
+                field("DMT Errorlog Created At"; Rec."DMT Errorlog Created At") { ApplicationArea = All; StyleExpr = TextStyle; }
             }
         }
     }
@@ -102,11 +102,11 @@ page 91001 "DAM Error Log List"
                     allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
                     allObjWithCaption.Setrange("Object Type", allObjWithCaption."Object Type"::Table);
                     allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5',
-                        Database::"DAM Setup",
-                        Database::DAMErrorLog,
-                        Database::DAMField,
-                        Database::DAMFieldBuffer,
-                        Database::DAMTable);
+                        Database::"DMT Setup",
+                        Database::DMTErrorLog,
+                        Database::"DMTField",
+                        Database::DMTFieldBuffer,
+                        Database::DMTTable);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
@@ -138,9 +138,9 @@ page 91001 "DAM Error Log List"
                     //                     CurrPage.UPDATE(FALSE);
 
                     //                     AddContextFilter - OnAction()
-                    // DAMErrorLog.OPEN;
-                    //                     WHILE DAMErrorLog.READ DO BEGIN
-                    //                         ResultTextArr[COMPRESSARRAY(ResultTextArr) + 1] := DAMErrorLog.DAM_Context_Descr;
+                    // DMTErrorLog.OPEN;
+                    //                     WHILE DMTErrorLog.READ DO BEGIN
+                    //                         ResultTextArr[COMPRESSARRAY(ResultTextArr) + 1] := DMTErrorLog.DMT_Context_Descr;
                     //                     END;
                     //                     FOR Index := 1 TO ARRAYLEN(ResultTextArr) DO BEGIN
                     //                         Choices += CONVERTSTR(ResultTextArr[Index], ',', '_') + ',';
@@ -152,7 +152,7 @@ page 91001 "DAM Error Log List"
                     //                         EXIT;
 
                     //                     IF Selection > 1 THEN
-                    //                         SETRANGE("DAM Context Descr.", ResultTextArr[Selection]);
+                    //                         SETRANGE("DMT Context Descr.", ResultTextArr[Selection]);
                     //                     CurrPage.UPDATE(FALSE);
 
                 end;

@@ -1,6 +1,6 @@
-table 91000 "DAM Setup"
+table 91000 "DMT Setup"
 {
-    CaptionML = DEU = 'DAM Einrichtung', ENU = 'DAM Setup';
+    CaptionML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
     DataClassification = ToBeClassified;
     DataPerCompany = false;
 
@@ -16,6 +16,7 @@ table 91000 "DAM Setup"
             CaptionML = DEU = 'Export Objekt ID (Dataport/XMLPort)', ENU = 'Export Object ID (Dataport/XMLPort)';
             MinValue = 50000;
             MaxValue = 99999;
+            BlankZero = true;
         }
         field(30; "Default Export Folder Path"; Text[250])
         {
@@ -28,9 +29,9 @@ table 91000 "DAM Setup"
 
             trigger OnLookup()
             var
-                DAMMgt: Codeunit DAMMgt;
+                DMTMgt: Codeunit DMTMgt;
             begin
-                Rec."Default Export Folder Path" := DAMMgt.LookUpPath(Rec."Default Export Folder Path", true);
+                Rec."Default Export Folder Path" := DMTMgt.LookUpPath(Rec."Default Export Folder Path", true);
             end;
         }
         field(31; "Schema.xml File Path"; Text[250])
@@ -43,9 +44,9 @@ table 91000 "DAM Setup"
 
             trigger OnLookup()
             var
-                DAMMgt: Codeunit DAMMgt;
+                DMTMgt: Codeunit DMTMgt;
             begin
-                Rec."Schema.xml File Path" := DAMMgt.LookUpPath(Rec."Schema.xml File Path", false);
+                Rec."Schema.xml File Path" := DMTMgt.LookUpPath(Rec."Schema.xml File Path", false);
             end;
         }
         field(32; "Backup.xml File Path"; Text[250])
@@ -58,9 +59,9 @@ table 91000 "DAM Setup"
 
             trigger OnLookup()
             var
-                DAMMgt: Codeunit DAMMgt;
+                DMTMgt: Codeunit DMTMgt;
             begin
-                Rec."Backup.xml File Path" := DAMMgt.LookUpPath(Rec."Backup.xml File Path", false);
+                Rec."Backup.xml File Path" := DMTMgt.LookUpPath(Rec."Backup.xml File Path", false);
             end;
         }
         field(40; "Allow Usage of Try Function"; Boolean)
@@ -81,7 +82,6 @@ table 91000 "DAM Setup"
         if not Rec.Get() then begin
             Rec."Obj. ID Range Buffer Tables" := '90000..90099';
             Rec."Obj. ID Range XMLPorts" := '90000..90099';
-            Rec."Object ID Export Object" := 50004;
             // Docker
             if fileMgt.ServerDirectoryExists('C:\RUN\MY') then
                 Rec."Default Export Folder Path" := 'C:\RUN\MY';
@@ -91,10 +91,10 @@ table 91000 "DAM Setup"
 
     procedure CheckSchemaInfoHasBeenImporterd()
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
+        DMTFieldBuffer: Record DMTFieldBuffer;
         SchemaInfoMissingErr: TextConst ENU = 'The Schema.csv file has not been imported.', DEU = 'Die Schema.csv wurde nicht importiert.';
     begin
-        if DAMFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
+        if DMTFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;
 
     procedure GetRecordOnce()

@@ -1,7 +1,7 @@
 {
   "id": "492ba9be-193c-48f2-a405-ab6ba7a6da55",
-  "name": "DAM",
-  "publisher": "Default publisher",
+  "name": "Data Migration Tool",
+  "publisher": "Andreas Rascher",
   "version": "1.0.0.2",
   "brief": "",
   "description": "",
@@ -24,7 +24,7 @@
       "to": 91009
     }
   ],
-  "contextSensitiveHelpUrl": "https://DAM.com/help/",
+  "contextSensitiveHelpUrl": "https://DMT.com/help/",
   "showMyCode": true,
   "runtime": "6.0",
   "target":"OnPrem"

@@ -1,4 +1,4 @@
-codeunit 91005 XMLBackup
+codeunit 91005 "DMTXMLBackup"
 {
 
     procedure Export();
@@ -9,7 +9,7 @@ codeunit 91005 XMLBackup
 
     procedure Import();
     var
-        DAMSetup: Record "DAM Setup";
+        DMTSetup: Record "DMT Setup";
         TargetRef: RecordRef;
         FldRef: FieldRef;
         serverFile: file;
@@ -26,8 +26,8 @@ codeunit 91005 XMLBackup
         FileFound: Boolean;
         Start: DateTime;
     begin
-        if DAMSetup.Get() and (DAMSetup."Backup.xml File Path" <> '') then
-            if ServerFile.Open(DAMSetup."Backup.xml File Path") then begin
+        if DMTSetup.Get() and (DMTSetup."Backup.xml File Path" <> '') then
+            if ServerFile.Open(DMTSetup."Backup.xml File Path") then begin
                 FileFound := true;
                 ServerFile.CreateInStream(InStr);
             end;
@@ -41,7 +41,7 @@ codeunit 91005 XMLBackup
         Clear(XDoc);
         if not XmlDocument.ReadFrom(InStr, XDoc) then
             Error('reading xml failed');
-        XDoc.SelectNodes('//DAM/child::*', XTableList);
+        XDoc.SelectNodes('//DMT/child::*', XTableList);
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
             XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
@@ -95,7 +95,7 @@ codeunit 91005 XMLBackup
         XDoc := XmlDocument.Create();
 
         // ROOT
-        rootNode := XmlElement.Create('DAM').AsXmlNode();
+        rootNode := XmlElement.Create('DMT').AsXmlNode();
         XDoc.Add(rootNode);
         AddAttribute(rootNode, 'Version', '1.1');
 
@@ -403,10 +403,10 @@ codeunit 91005 XMLBackup
         TableID: Integer;
         TablesToExport: List of [Integer];
     begin
-        TablesToExport.Add(Database::"DAM Setup");
-        TablesToExport.Add(Database::DAMTable);
-        TablesToExport.Add(Database::DAMField);
-        TablesToExport.Add(Database::DAMTask);
+        TablesToExport.Add(Database::"DMT Setup");
+        TablesToExport.Add(Database::DMTTable);
+        TablesToExport.Add(Database::"DMTField");
+        TablesToExport.Add(Database::DMTTask);
         foreach TableID in TablesToExport do begin
             _RecRef.OPEN(TableID);
             if _RecRef.FINDSET(false, false) then

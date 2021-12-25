@@ -1,54 +1,54 @@
-codeunit 91003 DAMObjectGenerator
+codeunit 91003 "DMTObjectGenerator"
 {
     procedure GetNavClassicDataport(ObjectID: Integer) Content: text;
     var
-        DAMExportObject: Record DAMExportObject;
-        DAMSetup: Record "DAM Setup";
+        DMTExportObject: Record DMTExportObject;
+        DMTSetup: Record "DMT Setup";
         BigTextContent: BigText;
         IStr: instream;
     begin
-        DAMExportObject.get();
-        DAMSetup.Get();
-        DAMSetup.TestField("Object ID Export Object");
-        DAMExportObject.CalcFields(ExportDataPort);
-        DAMExportObject.ExportDataPort.CreateInStream(IStr);
+        DMTExportObject.get();
+        DMTSetup.Get();
+        DMTSetup.TestField("Object ID Export Object");
+        DMTExportObject.CalcFields(ExportDataPort);
+        DMTExportObject.ExportDataPort.CreateInStream(IStr);
         BigTextContent.Read(IStr);
         BigTextContent.GetSubText(Content, 1);
-        Content := Content.Replace('OBJECT Dataport 50004 DAMExport',
-                                   'OBJECT Dataport ' + Format(DAMSetup."Object ID Export Object") + ' DAMExport')
+        Content := Content.Replace('OBJECT Dataport 50004 DMTExport',
+                                   'OBJECT Dataport ' + Format(DMTSetup."Object ID Export Object") + ' DMTExport')
     end;
 
     procedure GetNAVRTCXMLPort(ObjectID: Integer) Content: text;
     var
-        DAMExportObject: Record "DAMExportObject";
-        DAMSetup: Record "DAM Setup";
+        DMTExportObject: Record DMTExportObject;
+        DMTSetup: Record "DMT Setup";
         BigTextContent: BigText;
         IStr: instream;
     begin
-        DAMExportObject.Get();
-        DAMSetup.get();
-        DAMSetup.TestField("Object ID Export Object");
-        DAMExportObject.CalcFields(ExportXMLPort);
-        DAMExportObject.ExportDataPort.CreateInStream(IStr);
+        DMTExportObject.Get();
+        DMTSetup.get();
+        DMTSetup.TestField("Object ID Export Object");
+        DMTExportObject.CalcFields(ExportXMLPort);
+        DMTExportObject.ExportDataPort.CreateInStream(IStr);
         BigTextContent.Read(IStr);
         BigTextContent.GetSubText(Content, 1);
 
-        Content := Content.Replace('OBJECT XMLport 50022 DAM Export',
-                                   'OBJECT XMLport ' + Format(DAMSetup."Object ID Export Object") + ' DAM Export');
-        Content := Content.Replace('damExport@1000000002 : XMLport 50022;',
-                                   'damExport@1000000002 : XMLport ' + Format(DAMSetup."Object ID Export Object") + ';')
+        Content := Content.Replace('OBJECT XMLport 50022 DMT Export',
+                                   'OBJECT XMLport ' + Format(DMTSetup."Object ID Export Object") + ' DMT Export');
+        Content := Content.Replace('dmtExport@1000000002 : XMLport 50022;',
+                                   'dmtExport@1000000002 : XMLport ' + Format(DMTSetup."Object ID Export Object") + ';')
     end;
 
-    procedure CreateALXMLPort(DAMTable: Record DAMTable) C: TextBuilder
+    procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
+        DMTFieldBuffer: Record DMTFieldBuffer;
     begin
-        DAMTable.Testfield("Import XMLPort ID");
-        DAMTable.Testfield("Old Version Table ID");
+        DMTTable.Testfield("Import XMLPort ID");
+        DMTTable.Testfield("Old Version Table ID");
 
-        C.AppendLine('xmlport ' + format(DAMTable."Import XMLPort ID") + ' T' + format(DAMTable."Old Version Table ID") + 'Import');
+        C.AppendLine('xmlport ' + format(DMTTable."Import XMLPort ID") + ' T' + format(DMTTable."Old Version Table ID") + 'Import');
         C.AppendLine('{');
-        C.AppendLine('    Caption = ''' + DAMTable."Old Version Table Caption" + ''';');
+        C.AppendLine('    Caption = ''' + DMTTable."Old Version Table Caption" + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -61,14 +61,14 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE) THEN BEGIN
-            C.AppendLine('            tableelement(' + GetCleanTableName(DAMFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ')');
+        IF FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE) THEN BEGIN
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ')');
             C.AppendLine('            {');
-            C.AppendLine('                XmlName = ''' + GetCleanTableName(DAMFieldBuffer) + ''';');
-            DAMFieldBuffer.FINDSET();
+            C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
+            DMTFieldBuffer.FINDSET();
             REPEAT
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(DAMFieldBuffer) + '"; ' + GetCleanTableName(DAMFieldBuffer) + '."' + DAMFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
-            UNTIL DAMFieldBuffer.NEXT() = 0;
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+            UNTIL DMTFieldBuffer.NEXT() = 0;
         END;
 
         C.AppendLine('                trigger OnBeforeInsertRecord()');
@@ -106,17 +106,17 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'';');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ';');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID") + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -173,43 +173,43 @@ codeunit 91003 DAMObjectGenerator
         C.AppendLine('}');
     end;
 
-    procedure CreateALTable(DAMTable: Record DAMTable) C: TextBuilder
+    procedure CreateALTable(DMTTable: Record DMTTable) C: TextBuilder
     var
-        DAMFieldBuffer: Record DAMFieldBuffer;
+        DMTFieldBuffer: Record DMTFieldBuffer;
         _FieldTypeText: Text;
     begin
-        DAMTable.testfield("Buffer Table ID");
-        DAMTable.TestField("Old Version Table ID");
-        FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE);
-        C.AppendLine('table ' + FORMAT(DAMTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DAMTable."Old Version Table ID"));
+        DMTTable.testfield("Buffer Table ID");
+        DMTTable.TestField("Old Version Table ID");
+        FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE);
+        C.AppendLine('table ' + FORMAT(DMTTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID"));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DAMTable."Old Version Table Caption" + '(DAM)' + ''', ENU = ''' + DAMFieldBuffer.TableName + '(DAM)' + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DMTTable."Old Version Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DAMFieldBuffer, DAMTable."Old Version Table ID", FALSE, true, FALSE) THEN
+        IF FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE) THEN
             REPEAT
-                CASE DAMFieldBuffer.Type OF
-                    DAMFieldBuffer.Type::Code, DAMFieldBuffer.Type::Text:
-                        _FieldTypeText := STRSUBSTNO('%1[%2]', DAMFieldBuffer.Type, DAMFieldBuffer.Len);
+                CASE DMTFieldBuffer.Type OF
+                    DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
+                        _FieldTypeText := STRSUBSTNO('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
                     ELSE
-                        _FieldTypeText := FORMAT(DAMFieldBuffer.Type);
+                        _FieldTypeText := FORMAT(DMTFieldBuffer.Type);
                 END;
-                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DAMFieldBuffer."No.", DAMFieldBuffer.FieldName, _FieldTypeText));
+                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
                 // field(1; "No."; Code[20])
                 C.AppendLine('        {');
-                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DAMFieldBuffer.FieldName, DAMFieldBuffer."Field Caption"));
+                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
 
-                IF DAMFieldBuffer.Type = DAMFieldBuffer.Type::Option THEN BEGIN
-                    C.AppendLine('            OptionMembers = ' + DAMFieldBuffer.OPTIONSTRING + ';');
-                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DAMFieldBuffer.OPTIONSTRING, '=', '"'), DelChr(DAMFieldBuffer.OPTIONCAPTION, '=', '"')));
+                IF DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option THEN BEGIN
+                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OPTIONSTRING + ';');
+                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OPTIONSTRING, '=', '"'), DelChr(DMTFieldBuffer.OPTIONCAPTION, '=', '"')));
                 END;
 
                 C.AppendLine('        }');
 
-            UNTIL DAMFieldBuffer.NEXT() = 0;
+            UNTIL DMTFieldBuffer.NEXT() = 0;
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DAMTable."Old Version Table ID") + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DMTTable."Old Version Table ID") + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');
@@ -249,42 +249,42 @@ codeunit 91003 DAMObjectGenerator
         DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
     end;
 
-    local procedure GetCleanFieldName(VAR Field: Record DAMFieldBuffer) CleanFieldName: Text
+    local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := DelChr(Field.FieldName, '=', '&-%/\(),. ');
     end;
 
-    local procedure GetCleanTableName(Field: Record DAMFieldBuffer) CleanFieldName: Text
+    local procedure GetCleanTableName(Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
     end;
 
-    procedure FilterFields(VAR DAMFieldBuffer_FOUND: Record DAMFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
+    procedure FilterFields(VAR DMTFieldBuffer_FOUND: Record DMTFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
     var
         Debug: Integer;
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
-        CLEAR(DAMFieldBuffer_FOUND);
-        DAMFieldBuffer_FOUND.SETRANGE(TableNo, TableNo);
-        Debug := DAMFieldBuffer_FOUND.Count;
+        CLEAR(DMTFieldBuffer_FOUND);
+        DMTFieldBuffer_FOUND.SETRANGE(TableNo, TableNo);
+        Debug := DMTFieldBuffer_FOUND.Count;
         IF NOT IncludeDisabled THEN
-            DAMFieldBuffer_FOUND.SETRANGE(Enabled, TRUE);
-        Debug := DAMFieldBuffer_FOUND.Count;
-        DAMFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DAMFieldBuffer_FOUND.Class::Normal, DAMFieldBuffer_FOUND.Class::FlowField);
+            DMTFieldBuffer_FOUND.SETRANGE(Enabled, TRUE);
+        Debug := DMTFieldBuffer_FOUND.Count;
+        DMTFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DMTFieldBuffer_FOUND.Class::Normal, DMTFieldBuffer_FOUND.Class::FlowField);
         IF NOT IncludeFlowFields THEN
-            DAMFieldBuffer_FOUND.SETRANGE(Class, DAMFieldBuffer_FOUND.Class::Normal);
+            DMTFieldBuffer_FOUND.SETRANGE(Class, DMTFieldBuffer_FOUND.Class::Normal);
         IF NOT IncludeBlob THEN
-            DAMFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DAMFieldBuffer_FOUND.Type::BLOB);
+            DMTFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.Setrange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
-        Debug := DAMFieldBuffer_FOUND.Count;
-        DAMFieldBuffer_FOUND.Setrange(FieldName);
-        HasFields := DAMFieldBuffer_FOUND.FindFirst();
+        Debug := DMTFieldBuffer_FOUND.Count;
+        DMTFieldBuffer_FOUND.Setrange(FieldName);
+        HasFields := DMTFieldBuffer_FOUND.FindFirst();
     end;
 
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
     var
-        dAMFieldBuffer: Record DAMFieldBuffer;
+        dAMFieldBuffer: Record DMTFieldBuffer;
     begin
         dAMFieldBuffer.SetRange(TableNo, TableIDInNAV);
         dAMFieldBuffer.FindFirst();

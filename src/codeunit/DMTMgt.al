@@ -1,4 +1,4 @@
-codeunit 91001 "DAMMgt"
+codeunit 91001 "DMTMgt"
 {
     procedure CheckBufferTableIsNotEmpty(TableID: Integer)
     var
@@ -200,21 +200,21 @@ codeunit 91001 "DAMMgt"
             TargetRef.modify();
     end;
 
-    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DAMFields: Record "DAMField")
+    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DMTFields: Record "DMTField")
     var
-        DAMErrorLog: Record DAMErrorLog;
+        DMTErrorLog: Record DMTErrorLog;
         IsValidateSuccessful: Boolean;
     begin
         ClearLastError();
-        DAMSetup.GetRecordOnce();
-        IF DAMFields."Use Try Function" and DAMSetup."Allow Usage of Try Function" then begin
-            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
+        DMTSetup.GetRecordOnce();
+        IF DMTFields."Use Try Function" and DMTSetup."Allow Usage of Try Function" then begin
+            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
         end ELSE begin
-            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DAMFields."From Field No.", DAMFields."To Field No.", TargetRef);
+            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
         end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
-            DAMErrorLog.AddEntryForLastError(SourceRef, TargetRef, DAMFields);
+            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTFields);
         end ELSE begin
             // Save Successful changes
             IF TargetRef.modify() then;
@@ -223,19 +223,19 @@ codeunit 91001 "DAMMgt"
 
     procedure ValidateFieldWithValue(VAR TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
     var
-        DAMErrorLog: Record DAMErrorLog;
-        DAMErrorWrapper: Codeunit DAMErrorWrapper;
+        DMTErrorLog: Record DMTErrorLog;
+        DMTErrorWrapper: Codeunit DMTErrorWrapper;
         IsValidateSuccessful: Boolean;
     begin
         ClearLastError();
         // VALIDATE
         Commit();
-        DAMErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
-        IsValidateSuccessful := DAMErrorWrapper.RUN();
-        DAMErrorWrapper.GetRecRefTo(TargetRef);
+        DMTErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
+        IsValidateSuccessful := DMTErrorWrapper.RUN();
+        DMTErrorWrapper.GetRecRefTo(TargetRef);
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
-            DAMErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
+            DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
         end ELSE begin
             // Save Successful changes
             IF TargetRef.modify() then;
@@ -350,12 +350,12 @@ codeunit 91001 "DAMMgt"
 
     procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef) IsValidateSuccessful: Boolean
     var
-        DAMErrorWrapper: Codeunit DAMErrorWrapper;
+        DMTErrorWrapper: Codeunit DMTErrorWrapper;
     begin
         COMMIT();
-        DAMErrorWrapper.SetFieldValidateRecRef(SourceRef, FromFieldNo, TargetRef, ToFieldNo);
-        IsValidateSuccessful := DAMErrorWrapper.RUN();
-        DAMErrorWrapper.GetRecRefTo(TargetRef);
+        DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, FromFieldNo, TargetRef, ToFieldNo);
+        IsValidateSuccessful := DMTErrorWrapper.RUN();
+        DMTErrorWrapper.GetRecRefTo(TargetRef);
     end;
 
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FromFieldno: Integer; ToFieldNo: Integer; VAR TargetRecRef: RecordRef)
@@ -395,7 +395,7 @@ codeunit 91001 "DAMMgt"
     end;
 
     var
-        DAMSetup: Record "DAM Setup";
+        DMTSetup: Record "DMT Setup";
         ProgressBar_IsOpen: Boolean;
         ProgressBar_LastUpdate: DateTime;
         ProgressBar_StartTime: DateTime;

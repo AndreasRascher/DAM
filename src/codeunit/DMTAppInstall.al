@@ -1,4 +1,4 @@
-codeunit 91009 "DAM App Install"
+codeunit 91009 "DMT App Install"
 {
     Subtype = Install;
 
@@ -38,9 +38,9 @@ codeunit 91009 "DAM App Install"
 
     local procedure PopulateAppWithDefaultData()
     var
-        DAMExportObject: Record DAMExportObject;
+        DMTExportObject: Record DMTExportObject;
     begin
-        DAMExportObject.DeleteAll();
-        NavApp.LoadPackageData(Database::DAMExportObject);
+        DMTExportObject.DeleteAll();
+        NavApp.LoadPackageData(Database::DMTExportObject);
     end;
 }

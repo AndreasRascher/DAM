@@ -1,4 +1,4 @@
-page 91005 DAMSelectTables
+page 91005 "DMTSelectTables"
 {
     CaptionML = DEU = 'Tabellen', ENU = 'Tables';
     PageType = List;

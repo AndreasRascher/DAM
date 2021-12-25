@@ -23,7 +23,7 @@
             "serverInstance": "BC",
             "authentication": "UserPassword",
             "startupObjectType": "Page",
-            "startupObjectId": 91000,
+            "startupObjectId": 91009,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,
