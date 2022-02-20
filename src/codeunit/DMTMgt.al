@@ -395,7 +395,7 @@ codeunit 91001 "DMTMgt"
     end;
 
     var
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         ProgressBar_IsOpen: Boolean;
         ProgressBar_LastUpdate: DateTime;
         ProgressBar_StartTime: DateTime;

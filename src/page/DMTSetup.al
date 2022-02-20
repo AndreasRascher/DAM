@@ -4,7 +4,7 @@ page 91000 "DMT Setup"
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = "DMT Setup";
+    SourceTable = "DMTSetup";
     PromotedActionCategoriesML = DEU = 'NAV,Backup,Listen,,', ENU = 'NAV,Backup,Lists,,';
 
     layout
@@ -157,11 +157,12 @@ page 91000 "DMT Setup"
                 PromotedCategory = Report;
                 trigger OnAction()
                 var
+                    DMTGenBuffTable: Record DMTGenBuffTable;
                     TempBlob: Codeunit "Temp Blob";
                     GenBuffImport: XmlPort GenBuffImport;
+                    Start: DateTime;
                     InStr: InStream;
                     FileName: Text;
-                    Start: DateTime;
                 begin
                     TempBlob.CreateInStream(InStr);
                     if not UploadIntoStream('Select a *.csv file', '', 'CSV Files|*.csv', FileName, InStr) then begin
@@ -169,8 +170,14 @@ page 91000 "DMT Setup"
                     end;
                     Start := CurrentDateTime;
                     GenBuffImport.SetSource(InStr);
+                    GenBuffImport.SetFilename(FileName);
                     GenBuffImport.Import();
                     Message('Import abgeschlossen\Dauer %1', CurrentDateTime - Start);
+
+                    if DMTGenBuffTable.FindFirst() then begin
+                        DMTGenBuffTable.InitFirstLineAsCaptions(DMTGenBuffTable."Import from Filename");
+                        Page.Run(Page::DMTGenBufferList);
+                    end;
                 end;
             }
         }

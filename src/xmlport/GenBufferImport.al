@@ -22,15 +22,19 @@ xmlport 90000 GenBuffImport
                         RecRef: RecordRef;
                     begin
                         CurrColIndex += 1;
+                        If MaxColCount < (CurrColIndex - 1000) then
+                            MaxColCount := (CurrColIndex - 1000);
                         RecRef.GetTable(GenBuffTable);
+                        RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, Maxstrlen(GenBuffTable."Import from Filename"));
                         RecRef.Field(CurrColIndex).Value := FieldContent;
                         RecRef.SetTable(GenBuffTable);
                     end;
                 }
                 trigger OnBeforeInsertRecord()
                 begin
-                    GenBuffTable."Entry No." := LastEntryNo + 1;
-                    LastEntryNo += 1;
+                    NextEntryNo += 1;
+                    GenBuffTable."Entry No." := NextEntryNo;
+                    GenBuffTable."Column Count" := MaxColCount;
                 end;
 
                 trigger OnAfterInitRecord()
@@ -66,11 +70,30 @@ xmlport 90000 GenBuffImport
     var
         GenBuffTable: Record "DMTGenBuffTable";
     begin
+        /* Delete old line on reimport*/
+        if CurrFileName <> '' then
+            if GenBuffTable.FilterByFileName(CurrFileName) then begin
+                GenBuffTable.DeleteAll();
+            end;
+
         if GenBuffTable.FindLast() then
-            LastEntryNo := GenBuffTable."Entry No.";
+            NextEntryNo := GenBuffTable."Entry No.";
+    end;
+
+    trigger OnPostXmlPort()
+    begin
+        GenBuffTable.UpdateMaxColCount(CurrFileName, MaxColCount);
+    end;
+
+
+    internal procedure SetFilename(FileNameNew: Text)
+    begin
+        CurrFileName := FileNameNew;
     end;
 
     var
         CurrColIndex: Integer;
-        LastEntryNo: Integer;
+        NextEntryNo: Integer;
+        CurrFileName: Text;
+        MaxColCount: Integer;
 }

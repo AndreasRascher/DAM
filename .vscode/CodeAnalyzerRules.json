@@ -41,6 +41,11 @@
             "id": "AA0206",
             "action": "None",
             "justification": "The variable '...' is initialized but not used."
+        },
+        {
+            "id":"AA0210",
+            "action":"None",
+            "justification":"The table ... does not contain a key with the field ..."
         }
     ]
 }

@@ -4,7 +4,9 @@ table 91008 "DMTGenBuffTable"
 
     fields
     {
-        field(1; "Entry No."; Integer) { DataClassification = ToBeClassified; }
+        field(1; "Entry No."; Integer) { }
+        field(10; "Import from Filename"; Text[250]) { }
+        field(11; "Column Count"; Integer) { }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
         field(1002; Fld002; Text[250]) { CaptionClass = GetFieldCaption(1002); }
         field(1003; Fld003; Text[250]) { CaptionClass = GetFieldCaption(1003); }
@@ -216,21 +218,50 @@ table 91008 "DMTGenBuffTable"
         }
     }
 
-    local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
+    internal procedure UpdateMaxColCount(FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
+    var
+        GenBuffTable: Record DMTGenBuffTable;
     begin
-        if not FieldCaptions.Get(FieldNo, FieldCaption) then
-            FieldCaption := Format(FieldNo);
-        FieldCaption := '3,' + FieldCaption;
+        if (FileName = '') or (MaxColCount = 0) then
+            exit(false);
+        if GenBuffTable.FilterByFileName(FileName) then
+            GenBuffTable.ModifyAll("Column Count", MaxColCount);
     end;
 
-    procedure SetFieldCaption(FieldNo: Integer; NewCaption: Text)
+    procedure InitFirstLineAsCaptions(FileName: Text)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
+        FieldIndex: Integer;
     begin
-        if FieldCaptions.ContainsKey(FieldNo) then
-            FieldCaptions.Set(FieldNo, NewCaption)
-        else
-            FieldCaptions.Add(FieldNo, NewCaption);
+        if not GenBuffTable.FindSetLinesByFileName(FileName) then
+            Error('No lines found for %1', FileName);
+        DMTGenBufferFieldCaptions.Dispose();
+        RecRef.GetTable(GenBuffTable);
+        for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin
+            DMTGenBufferFieldCaptions.AddCaption(FieldIndex, RecRef.Field(FieldIndex).Value);
+        end;
+    end;
+
+    internal procedure FilterByFileName(FileName: Text) HasLinesInFilter: Boolean
+    begin
+        Rec.SetRange("Import from Filename", CopyStr(FileName, 1, Maxstrlen(Rec."Import from Filename")));
+        HasLinesInFilter := not Rec.IsEmpty;
+    end;
+
+    internal procedure FindSetLinesByFileName(FileName: Text) FindSetOK: Boolean
+    begin
+        Rec.FilterByFileName(FileName);
+        FindSetOK := Rec.FindSet(false, false);
+    end;
+
+    local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
+    begin
+        if not DMTGenBufferFieldCaptions.HasCaption(FieldNo) then
+            FieldCaption := Format(FieldNo);
+        FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
     end;
 
     var
-        FieldCaptions: Dictionary of [Integer, Text];
+        DMTGenBufferFieldCaptions: Codeunit DMTGenBufferFieldCaptions;
 }

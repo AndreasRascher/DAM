@@ -101,12 +101,13 @@ page 91001 "DMT Error Log List"
                     NAVAppInstalledApp.FindFirst();
                     allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
                     allObjWithCaption.Setrange("Object Type", allObjWithCaption."Object Type"::Table);
-                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5',
-                        Database::"DMT Setup",
+                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6',
+                        Database::"DMTSetup",
                         Database::DMTErrorLog,
                         Database::"DMTField",
                         Database::DMTFieldBuffer,
-                        Database::DMTTable);
+                        Database::DMTTable,
+                        Database::DMTGenBuffTable);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';

@@ -1,4 +1,4 @@
-table 91000 "DMT Setup"
+table 91000 "DMTSetup"
 {
     CaptionML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
     DataClassification = ToBeClassified;

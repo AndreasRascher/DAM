@@ -217,7 +217,7 @@ table 91001 "DMTTable"
 
     local procedure ProposeObjectIDs()
     var
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         DMTTable: Record DMTTable;
         Numbers: Record Integer;
         UsedBufferTableIDs: List of [Integer];
@@ -263,7 +263,7 @@ table 91001 "DMTTable"
     local procedure InitTableFieldMapping()
     var
         DMTFields: Record "DMTField";
-        DMTSetup: record "DMT Setup";
+        DMTSetup: record "DMTSetup";
     begin
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
         if not DMTFields.FilterBy(Rec) then begin
@@ -275,7 +275,7 @@ table 91001 "DMTTable"
 
     procedure TryFindExportDataFile()
     var
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin

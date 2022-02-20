@@ -3,7 +3,7 @@ codeunit 91003 "DMTObjectGenerator"
     procedure GetNavClassicDataport(ObjectID: Integer) Content: text;
     var
         DMTExportObject: Record DMTExportObject;
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         BigTextContent: BigText;
         IStr: instream;
     begin
@@ -21,7 +21,7 @@ codeunit 91003 "DMTObjectGenerator"
     procedure GetNAVRTCXMLPort(ObjectID: Integer) Content: text;
     var
         DMTExportObject: Record DMTExportObject;
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         BigTextContent: BigText;
         IStr: instream;
     begin

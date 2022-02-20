@@ -3,7 +3,7 @@ codeunit 91004 "DMTObjMgt"
     procedure LookUpOldVersionTable(var DMTTable: Record DMTTable) OK: Boolean;
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DMTSelectTables: Page DMTSelectTables;
     begin
@@ -116,7 +116,7 @@ codeunit 91004 "DMTObjMgt"
 
     procedure ImportNAVSchemaFile()
     var
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort FieldBufferImport;
         ServerFile: File;

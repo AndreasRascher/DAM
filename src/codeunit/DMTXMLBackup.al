@@ -9,7 +9,7 @@ codeunit 91005 "DMTXMLBackup"
 
     procedure Import();
     var
-        DMTSetup: Record "DMT Setup";
+        DMTSetup: Record "DMTSetup";
         TargetRef: RecordRef;
         FldRef: FieldRef;
         serverFile: file;
@@ -403,7 +403,7 @@ codeunit 91005 "DMTXMLBackup"
         TableID: Integer;
         TablesToExport: List of [Integer];
     begin
-        TablesToExport.Add(Database::"DMT Setup");
+        TablesToExport.Add(Database::"DMTSetup");
         TablesToExport.Add(Database::DMTTable);
         TablesToExport.Add(Database::"DMTField");
         TablesToExport.Add(Database::DMTTask);
