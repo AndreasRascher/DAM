@@ -27,11 +27,22 @@ page 91002 "DMTTableCard"
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
+                field(ImportToBufferOption; Rec.ImportToBufferOption)
+                {
+                    ToolTip = 'Specifies the value of the ImportToBufferOption field.';
+                    ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID")
                 {
                     ToolTip = 'Specifies the value of the Import XMLPort ID field';
                     ApplicationArea = All;
                     StyleExpr = ImportXMLPortIDStyle;
+                    Enabled = ImportXMLPortID_ENABLED;
+                    Visible = ImportXMLPortID_VISIBLE;
                 }
                 field("Buffer Table ID"; Rec."Buffer Table ID")
                 {
@@ -191,6 +202,7 @@ page 91002 "DMTTableCard"
 
         }
     }
+
     trigger OnAfterGetCurrRecord()
     begin
         ImportXMLPortIDStyle := 'Unfavorable';
@@ -200,6 +212,13 @@ page 91002 "DMTTableCard"
         if Rec.BufferTableExits() then
             BufferTableIDStyle := 'Favorable';
         Rec.TryFindExportDataFile();
+        EnableControls();
+    end;
+
+    procedure EnableControls()
+    begin
+        ImportXMLPortID_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
+        ImportXMLPortID_VISIBLE := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
     end;
 
     var
@@ -207,4 +226,6 @@ page 91002 "DMTTableCard"
         ImportXMLPortIDStyle: Text;
         [InDataSet]
         BufferTableIDStyle: Text;
+        [InDataSet]
+        ImportXMLPortID_ENABLED, ImportXMLPortID_VISIBLE : Boolean;
 }

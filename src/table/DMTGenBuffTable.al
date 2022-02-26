@@ -255,6 +255,34 @@ table 91008 "DMTGenBuffTable"
         FindSetOK := Rec.FindSet(false, false);
     end;
 
+    internal procedure LookUpFileNameFromGenBuffTable(CurrFileName: Text): Text
+    var
+        GenBuffTableQry: Query DMTGenBuffTableQry;
+        FileList: List of [Text];
+        FileName: text;
+        Choices: text;
+        Choice: Integer;
+        GenBufferTableIsEmptyErr: TextConst DEU = 'Die generische Puffertabelle ist leer',
+                                            ENU = 'the generic Buffer Table is empty';
+        CancelLbl: TextConst DEU = 'Abbrechen', ENU = 'Cancel';
+    begin
+        GenBuffTableQry.Open();
+        while GenBuffTableQry.Read() do begin
+            FileList.Add(GenBuffTableQry.Import_from_Filename);
+        end;
+        if FileList.Count = 0 then
+            Error(GenBufferTableIsEmptyErr);
+        foreach FileName in FileList do
+            Choices += ',' + FileName;
+        Choices += ',' + CancelLbl;
+        Choices := Choices.TrimStart(',');
+        Choice := StrMenu(Choices);
+        if Choices.Split(',').Get(Choice) = CancelLbl then
+            exit(CurrFileName)
+        else
+            exit(Choices.Split(',').Get(Choice));
+    end;
+
     local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
     begin
         if not DMTGenBufferFieldCaptions.HasCaption(FieldNo) then

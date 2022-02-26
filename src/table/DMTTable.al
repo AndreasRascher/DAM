@@ -90,7 +90,23 @@ table 91001 "DMTTable"
             CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
             Editable = false;
         }
-        field(50; DataFilePath; Text[250])
+        field(50; ImportToBufferOption; Option)
+        {
+            OptionMembers = "Seperate Buffer Table per CSV","Generic Buffer Table for all Files";
+            OptionCaptionML = DEU = 'Eine Puffertabelle pro CSV,Generische Puffertabelle für alle Dateien',
+                              ENU = 'Seperate Buffer Table per CSV,Generic Buffer Table for all Files';
+        }
+        field(51; "Filename (Imp.into Gen.Buffer)"; Text[250])
+        {
+            CaptionML = DEU = 'Filename (Imp.into Gen.Buffer)', ENU = 'Dateiname (Importiert in Gen. Puffertab.)';
+            trigger OnLookup()
+            var
+                GenBuffTable: Record DMTGenBuffTable;
+            begin
+                "Filename (Imp.into Gen.Buffer)" := CopyStr(GenBuffTable.LookUpFileNameFromGenBuffTable("Filename (Imp.into Gen.Buffer)"), 1, MaxStrLen(Rec."Filename (Imp.into Gen.Buffer)"));
+            end;
+        }
+        field(52; DataFilePath; Text[250])
         {
             CaptionML = DEU = 'Dateipfad Exportdatei', ENU = 'Export File Path';
             trigger OnValidate()
@@ -112,14 +128,14 @@ table 91001 "DMTTable"
                 Rec.DataFilePath := DMTMgt.LookUpPath(Rec.DataFilePath, false);
             end;
         }
-        field(51; "Import XMLPort ID"; Integer)
+        field(53; "Import XMLPort ID"; Integer)
         {
             CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
             MinValue = 50000;
             MaxValue = 99999;
         }
-        field(52; "Buffer Table ID"; Integer)
+        field(54; "Buffer Table ID"; Integer)
         {
             CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
@@ -145,9 +161,7 @@ table 91001 "DMTTable"
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = User."User Name";
         }
-        field(102; LastView; Blob)
-        {
-        }
+        field(102; LastView; Blob) { }
         field(103; "Import Duration (Longest)"; Duration)
         {
             CaptionML = DEU = 'Import Dauer(Längste)', ENU = 'Import Duration (Longest)';
@@ -164,12 +178,8 @@ table 91001 "DMTTable"
     }
     fieldgroups
     {
-        fieldgroup(DropDown; "To Table ID", "To Table Caption")
-        {
-        }
-        fieldgroup(Brick; "To Table Caption", "Qty.Lines In Src. Table")
-        {
-        }
+        fieldgroup(DropDown; "To Table ID", "To Table Caption") { }
+        fieldgroup(Brick; "To Table Caption", "Qty.Lines In Src. Table") { }
     }
 
     trigger OnDelete()
