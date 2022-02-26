@@ -49,6 +49,8 @@ page 91002 "DMTTableCard"
                     ToolTip = 'Specifies the value of the Buffer Table ID field.';
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
+                    Enabled = BufferTableID_ENABLED;
+                    Visible = BufferTableID_VISIBLE;
                     trigger OnAssistEdit()
                     begin
                         Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
@@ -219,6 +221,9 @@ page 91002 "DMTTableCard"
     begin
         ImportXMLPortID_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
         ImportXMLPortID_VISIBLE := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
+        BufferTableID_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
+        BufferTableID_VISIBLE := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
+        CurrPage.Update();
     end;
 
     var
@@ -228,4 +233,5 @@ page 91002 "DMTTableCard"
         BufferTableIDStyle: Text;
         [InDataSet]
         ImportXMLPortID_ENABLED, ImportXMLPortID_VISIBLE : Boolean;
+        BufferTableID_ENABLED, BufferTableID_VISIBLE : Boolean;
 }

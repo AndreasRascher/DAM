@@ -630,7 +630,7 @@ OBJECT Dataport 50079 DMTExport
 
         _exportFieldBuffer."No." := 50001;
         _exportFieldBuffer.FieldName := 'Primary Key';
-        _exportFieldBuffer."Field Caption" := 'Prim�rschl�ssel';
+        _exportFieldBuffer."Field Caption" := 'Prim„rschlssel';
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50002;
@@ -668,4 +668,3 @@ OBJECT Dataport 50079 DMTExport
     END.
   }
 }
-
