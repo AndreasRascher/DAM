@@ -5,8 +5,8 @@ page 91002 "DMTTableCard"
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = DMTTable;
-    DelayedInsert = true;
-    DataCaptionFields = "To Table Caption";
+    //DelayedInsert = true;
+    DataCaptionExpression = GetCaption();
 
     layout
     {
@@ -15,15 +15,9 @@ page 91002 "DMTTableCard"
             group(General)
             {
                 CaptionML = ENU = 'General', DEU = 'Allgemein';
-                field("From Table Caption"; Rec."Old Version Table Caption")
-                {
-                    ToolTip = 'Specifies the value of the Code field';
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
                 field("To Table Caption"; Rec."To Table Caption")
                 {
-                    ToolTip = 'Specifies the value of the Description field';
+                    ToolTip = 'Data Migration Target Table Caption';
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
@@ -36,13 +30,21 @@ page 91002 "DMTTableCard"
                         EnableControls();
                     end;
                 }
+                field("From Table Caption"; Rec."Old Version Table Caption")
+                {
+                    ToolTip = 'Data Migration Source Table Caption';
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                    Enabled = FromTableCaption_ENABLED;
+                    //Visible = FromTableCaption_VISIBLE;
+                }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID")
                 {
                     ToolTip = 'Specifies the value of the Import XMLPort ID field';
                     ApplicationArea = All;
                     StyleExpr = ImportXMLPortIDStyle;
                     Enabled = ImportXMLPortID_ENABLED;
-                    Visible = ImportXMLPortID_VISIBLE;
+                    //Visible = ImportXMLPortID_VISIBLE;
                 }
                 field("Buffer Table ID"; Rec."Buffer Table ID")
                 {
@@ -50,7 +52,7 @@ page 91002 "DMTTableCard"
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
                     Enabled = BufferTableID_ENABLED;
-                    Visible = BufferTableID_VISIBLE;
+                    //Visible = BufferTableID_VISIBLE;
                     trigger OnAssistEdit()
                     begin
                         Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
@@ -214,16 +216,28 @@ page 91002 "DMTTableCard"
         if Rec.BufferTableExits() then
             BufferTableIDStyle := 'Favorable';
         Rec.TryFindExportDataFile();
+    end;
+
+    trigger OnAfterGetRecord()
+    begin
         EnableControls();
     end;
 
-    procedure EnableControls()
+    local procedure EnableControls()
     begin
         ImportXMLPortID_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
-        ImportXMLPortID_VISIBLE := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
         BufferTableID_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
-        BufferTableID_VISIBLE := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
-        CurrPage.Update();
+        FromTableCaption_ENABLED := (Rec.ImportToBufferOption = Rec.ImportToBufferOption::"Seperate Buffer Table per CSV");
+    end;
+
+    local procedure GetCaption(): Text
+    begin
+        case Rec.ImportToBufferOption of
+            Rec.ImportToBufferOption::"Seperate Buffer Table per CSV":
+                exit(Rec."To Table Caption");
+            Rec.ImportToBufferOption::"Generic Buffer Table for all Files":
+                exit(Rec."Filename (Imp.into Gen.Buffer)");
+        end
     end;
 
     var
@@ -232,6 +246,9 @@ page 91002 "DMTTableCard"
         [InDataSet]
         BufferTableIDStyle: Text;
         [InDataSet]
-        ImportXMLPortID_ENABLED, ImportXMLPortID_VISIBLE : Boolean;
-        BufferTableID_ENABLED, BufferTableID_VISIBLE : Boolean;
+        ImportXMLPortID_ENABLED: Boolean;
+        [InDataSet]
+        BufferTableID_ENABLED: Boolean;
+        [InDataSet]
+        FromTableCaption_ENABLED: Boolean;
 }

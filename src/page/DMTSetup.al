@@ -1,6 +1,7 @@
 page 91000 "DMT Setup"
 {
-    CaptionML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
+    CaptionML = DEU = 'Data Migration Tool Einrichtung', ENU = 'Data Migration Tool Setup';
+    AdditionalSearchTermsML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
