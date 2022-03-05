@@ -1,4 +1,4 @@
-page 90000 "DMTGenBufferList"
+page 90000 "DMTGenBufferList200"
 {
     Caption = 'GenBufferList';
     PageType = List;
@@ -486,6 +486,7 @@ page 90000 "DMTGenBufferList"
         Fld048Visible := GetVisibility(Rec.FieldNo(Fld048));
         Fld049Visible := GetVisibility(Rec.FieldNo(Fld049));
         Fld050Visible := GetVisibility(Rec.FieldNo(Fld050));
+
         Fld051Visible := GetVisibility(Rec.FieldNo(Fld051));
         Fld052Visible := GetVisibility(Rec.FieldNo(Fld052));
         Fld053Visible := GetVisibility(Rec.FieldNo(Fld053));

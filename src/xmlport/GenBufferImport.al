@@ -35,6 +35,7 @@ xmlport 90000 GenBuffImport
                     NextEntryNo += 1;
                     GenBuffTable."Entry No." := NextEntryNo;
                     GenBuffTable."Column Count" := MaxColCount;
+                    GenBuffTable.IsCaptionLine := (GenBuffTable."Entry No." = HeaderLineEntryNo);
                 end;
 
                 trigger OnAfterInitRecord()
@@ -75,25 +76,36 @@ xmlport 90000 GenBuffImport
             if GenBuffTable.FilterByFileName(CurrFileName) then begin
                 GenBuffTable.DeleteAll();
             end;
+        HeaderLineEntryNo := 1;
 
-        if GenBuffTable.FindLast() then
+        GenBuffTable.Reset();
+        if GenBuffTable.FindLast() then begin
+            HeaderLineEntryNo := GenBuffTable."Entry No." + 1;
             NextEntryNo := GenBuffTable."Entry No.";
+        end;
     end;
 
     trigger OnPostXmlPort()
     begin
         GenBuffTable.UpdateMaxColCount(CurrFileName, MaxColCount);
+        CurrDMTTable.UpdateQtyLinesInBufferTable();
     end;
 
-
-    internal procedure SetFilename(FileNameNew: Text)
+    procedure SetFilename(FileNameNew: Text)
     begin
         CurrFileName := FileNameNew;
     end;
 
+    procedure SetDMTTable(DMTTable: Record DMTTable)
+    begin
+        CurrDMTTable := DMTTable;
+    end;
+
     var
+        CurrDMTTable: Record DMTTable;
         CurrColIndex: Integer;
+        HeaderLineEntryNo: Integer;
+        MaxColCount: Integer;
         NextEntryNo: Integer;
         CurrFileName: Text;
-        MaxColCount: Integer;
 }

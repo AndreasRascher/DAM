@@ -25,6 +25,11 @@ codeunit 91010 "DMTGenBufferFieldCaptions"
         Clear(Captions);
     end;
 
+    procedure GetNoOfCaptions(): Integer
+    begin
+        exit(Captions.Keys.Count);
+    end;
+
     var
         Captions: Dictionary of [Integer, Text];
 }

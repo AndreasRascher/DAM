@@ -64,12 +64,12 @@ table 91001 "DMTTable"
         field(21; "Qty.Lines In Src. Table"; Integer)
         {
             CaptionML = DEU = 'Anz. Zeilen in Puffertabelle', ENU = 'Qty.Lines in buffer table';
-            FieldClass = FlowField;
-            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Buffer Table ID")));
-            Editable = false;
+            // FieldClass = FlowField;
+            // CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Buffer Table ID")));
+            // Editable = false;
             trigger OnLookup()
             begin
-                ShowTableContent("Buffer Table ID");
+                ShowBufferTable();
             end;
         }
         field(31; "Qty.Lines In Trgt. Table"; Integer)
@@ -80,7 +80,7 @@ table 91001 "DMTTable"
             Editable = false;
             trigger OnLookup()
             begin
-                ShowTableContent("Old Version Table ID");
+                ShowBufferTable();
             end;
         }
         field(32; "No.of Fields in Trgt. Table"; Integer)
@@ -90,7 +90,7 @@ table 91001 "DMTTable"
             CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
             Editable = false;
         }
-        field(50; ImportToBufferOption; Option)
+        field(50; BufferTableType; Option)
         {
             OptionMembers = "Seperate Buffer Table per CSV","Generic Buffer Table for all Files";
             OptionCaptionML = DEU = 'Eine Puffertabelle pro CSV,Generische Puffertabelle für alle Dateien',
@@ -170,10 +170,7 @@ table 91001 "DMTTable"
 
     keys
     {
-        key(PK; "To Table ID")
-        {
-            Clustered = true;
-        }
+        key(PK; "To Table ID") { Clustered = true; }
         key(Sorted; "Sort Order") { }
     }
     fieldgroups
@@ -200,7 +197,7 @@ table 91001 "DMTTable"
         file.Open(DataFilePath, TextEncoding::MSDos);
         file.CreateInStream(InStr);
         Xmlport.Import(Rec."Import XMLPort ID", InStr);
-        rec.CalcFields("Qty.Lines In Src. Table");
+        UpdateQtyLinesInBufferTable();
     end;
 
     procedure DownloadALBufferTableFile()
@@ -219,10 +216,22 @@ table 91001 "DMTTable"
         DMTObjectGenerator.DownloadFile(DMTObjectGenerator.CreateALXMLPort(Rec), Rec.GetALXMLPortName());
     end;
 
-    internal procedure ShowTableContent(TableID: Integer)
+    internal procedure ShowBufferTable() OK: Boolean
+    var
+        GenBuffTable: Record DMTGenBuffTable;
     begin
-        if TableID = 0 then exit;
-        Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
+
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            if not GenBuffTable.FilterByFileName(Rec."Filename (Imp.into Gen.Buffer)") then
+                exit(false);
+            GenBuffTable.ShowImportDataForFile(Rec."Filename (Imp.into Gen.Buffer)");
+        end;
+
+        if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
+            if Rec."Buffer Table ID" = 0 then exit(false);
+            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+        end;
+
     end;
 
     local procedure ProposeObjectIDs()
@@ -282,6 +291,32 @@ table 91001 "DMTTable"
         end;
 
     end;
+
+    procedure UpdateQtyLinesInBufferTable()
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        DMTTable_Old: Record DMTTable;
+        TableInformation: Record "Table Information";
+    begin
+        if Rec."To Table ID" = 0 then
+            exit;
+        DMTTable_Old := Rec;
+        case Rec.BufferTableType of
+            Rec.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    GenBuffTable.FilterByFileName(Rec."Filename (Imp.into Gen.Buffer)");
+                    Rec."Qty.Lines In Src. Table" := GenBuffTable.Count;
+                end;
+            Rec.BufferTableType::"Seperate Buffer Table per CSV":
+                begin
+                    TableInformation.get(Rec."Buffer Table ID");
+                    Rec."Qty.Lines In Src. Table" := TableInformation."No. of Records";
+                end;
+        end;
+        if Format(DMTTable_Old) <> Format(Rec) then
+            Rec.Modify();
+    end;
+
 
     procedure TryFindExportDataFile()
     var

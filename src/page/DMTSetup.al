@@ -177,7 +177,25 @@ page 91000 "DMT Setup"
 
                     if DMTGenBuffTable.FindFirst() then begin
                         DMTGenBuffTable.InitFirstLineAsCaptions(DMTGenBuffTable."Import from Filename");
-                        Page.Run(Page::DMTGenBufferList);
+                        Page.Run(Page::"DMTGenBufferList200");
+                    end;
+                end;
+            }
+            action(OpenGenBufferPage)
+            {
+                CaptionML = DEU = 'OpenGenBufferPage', ENU = 'OpenGenBufferPage';
+                ApplicationArea = All;
+                Image = ListPage;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                trigger OnAction()
+                var
+                    DMTGenBuffTable: Record DMTGenBuffTable;
+                begin
+                    if DMTGenBuffTable.FindFirst() then begin
+                        DMTGenBuffTable.ShowImportDataForFile(DMTGenBuffTable."Import from Filename");
                     end;
                 end;
             }

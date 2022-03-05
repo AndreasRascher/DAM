@@ -7,6 +7,7 @@ table 91008 "DMTGenBuffTable"
         field(1; "Entry No."; Integer) { }
         field(10; "Import from Filename"; Text[250]) { }
         field(11; "Column Count"; Integer) { }
+        field(12; IsCaptionLine; Boolean) { }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
         field(1002; Fld002; Text[250]) { CaptionClass = GetFieldCaption(1002); }
         field(1003; Fld003; Text[250]) { CaptionClass = GetFieldCaption(1003); }
@@ -212,10 +213,7 @@ table 91008 "DMTGenBuffTable"
 
     keys
     {
-        key(Key1; "Entry No.")
-        {
-            Clustered = true;
-        }
+        key(Key1; "Entry No.") { Clustered = true; }
     }
 
     internal procedure UpdateMaxColCount(FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
@@ -228,7 +226,7 @@ table 91008 "DMTGenBuffTable"
             GenBuffTable.ModifyAll("Column Count", MaxColCount);
     end;
 
-    procedure InitFirstLineAsCaptions(FileName: Text)
+    procedure InitFirstLineAsCaptions(FileName: Text) NoOfCols: Integer
     var
         GenBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
@@ -241,6 +239,7 @@ table 91008 "DMTGenBuffTable"
         for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin
             DMTGenBufferFieldCaptions.AddCaption(FieldIndex, RecRef.Field(FieldIndex).Value);
         end;
+        NoOfCols := DMTGenBufferFieldCaptions.GetNoOfCaptions();
     end;
 
     internal procedure FilterByFileName(FileName: Text) HasLinesInFilter: Boolean
@@ -288,6 +287,30 @@ table 91008 "DMTGenBuffTable"
         if not DMTGenBufferFieldCaptions.HasCaption(FieldNo) then
             FieldCaption := Format(FieldNo);
         FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
+    end;
+
+    procedure ShowImportDataForFile(FileName: Text[250])
+    var
+        DMTGenBuffTable: Record DMTGenBuffTable;
+        NoOfCols: Integer;
+    begin
+        DMTGenBufferFieldCaptions.Dispose();
+        NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(FileName);
+
+        DMTGenBuffTable.reset();
+        DMTGenBuffTable.SetRange("Import from Filename", FileName);
+        DMTGenBuffTable.SetRange(IsCaptionLine, false);
+        // less Columns is faster
+        case NoOfCols of
+            0 .. 50:
+                Page.Run(Page::DMTGenBufferList50, DMTGenBuffTable);
+            51 .. 100:
+                Page.Run(Page::DMTGenBufferList100, DMTGenBuffTable);
+            101 .. 150:
+                Page.Run(Page::DMTGenBufferList150, DMTGenBuffTable);
+            else
+                Page.Run(Page::"DMTGenBufferList200", DMTGenBuffTable);
+        end;
     end;
 
     var
