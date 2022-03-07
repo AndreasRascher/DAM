@@ -16,7 +16,6 @@ table 91001 "DMTTable"
         {
             CaptionML = DEU = 'Von Tab.-ID', ENU = 'From Tab.-ID';
             DataClassification = SystemMetadata;
-
         }
         field(3; "Old Version Table Caption"; Text[250])
         {
@@ -98,7 +97,7 @@ table 91001 "DMTTable"
         }
         field(51; "Filename (Imp.into Gen.Buffer)"; Text[250])
         {
-            CaptionML = DEU = 'Filename (Imp.into Gen.Buffer)', ENU = 'Dateiname (Importiert in Gen. Puffertab.)';
+            CaptionML = DEU = 'Dateiname (Importiert in Gen. Puffertab.)', ENU = 'Filename (Imp.into Gen.Buffer)';
             trigger OnLookup()
             var
                 GenBuffTable: Record DMTGenBuffTable;

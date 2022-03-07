@@ -263,7 +263,6 @@ table 91008 "DMTGenBuffTable"
         Choice: Integer;
         GenBufferTableIsEmptyErr: TextConst DEU = 'Die generische Puffertabelle ist leer',
                                             ENU = 'the generic Buffer Table is empty';
-        CancelLbl: TextConst DEU = 'Abbrechen', ENU = 'Cancel';
     begin
         GenBuffTableQry.Open();
         while GenBuffTableQry.Read() do begin
@@ -273,10 +272,9 @@ table 91008 "DMTGenBuffTable"
             Error(GenBufferTableIsEmptyErr);
         foreach FileName in FileList do
             Choices += ',' + FileName;
-        Choices += ',' + CancelLbl;
         Choices := Choices.TrimStart(',');
         Choice := StrMenu(Choices);
-        if Choices.Split(',').Get(Choice) = CancelLbl then
+        if Choice = 0 then
             exit(CurrFileName)
         else
             exit(Choices.Split(',').Get(Choice));

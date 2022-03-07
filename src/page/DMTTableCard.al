@@ -35,9 +35,12 @@ page 91002 "DMTTableCard"
                     ToolTip = 'Data Migration Source Table Caption';
                     ApplicationArea = All;
                     ShowMandatory = true;
-                    Enabled = FromTableCaption_ENABLED;
-                    //Visible = FromTableCaption_VISIBLE;
                 }
+            }
+            group(ObjectInfo)
+            {
+                Caption = 'XMLPort, Buffertable Import Options';
+                Visible = UseXMLPortAndBufferTable;
                 grid(dummy)
                 {
                     GridLayout = Rows;
@@ -52,33 +55,32 @@ page 91002 "DMTTableCard"
                         }
                     }
                 }
-            }
-            group(ObjectInfo)
-            {
-                Caption = 'Objects';
-                Visible = ImportXMLPortID_ENABLED;
-
                 field("Import XMLPort ID"; Rec."Import XMLPort ID")
                 {
                     ToolTip = 'Specifies the value of the Import XMLPort ID field';
                     ApplicationArea = All;
                     StyleExpr = ImportXMLPortIDStyle;
-                    Enabled = ImportXMLPortID_ENABLED;
-                    //Visible = ImportXMLPortID_VISIBLE;
                 }
                 field("Buffer Table ID"; Rec."Buffer Table ID")
                 {
                     ToolTip = 'Specifies the value of the Buffer Table ID field.';
                     ApplicationArea = All;
                     StyleExpr = BufferTableIDStyle;
-                    Enabled = BufferTableID_ENABLED;
-                    //Visible = BufferTableID_VISIBLE;
                     trigger OnAssistEdit()
                     begin
                         Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
                     end;
                 }
-
+            }
+            group(GenBuffTableImportSettings)
+            {
+                Caption = 'Generic Import Options';
+                Visible = not UseXMLPortAndBufferTable;
+                field("Filename (Imp.into Gen.Buffer)"; Rec."Filename (Imp.into Gen.Buffer)")
+                {
+                    ToolTip = 'Specifies the value of the Filename (Imp.into Gen.Buffer) field.';
+                    ApplicationArea = All;
+                }
             }
             group(TableMigration)
             {
@@ -232,9 +234,7 @@ page 91002 "DMTTableCard"
 
     local procedure EnableControls()
     begin
-        ImportXMLPortID_ENABLED := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
-        BufferTableID_ENABLED := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
-        FromTableCaption_ENABLED := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
+        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
     end;
 
     local procedure GetCaption(): Text
@@ -247,49 +247,11 @@ page 91002 "DMTTableCard"
         end
     end;
 
-    procedure EncodeBarcode128b(pText: Text[250]) RetVal: Text[250];
-    var
-        Checksum: Integer;
-        i: Integer;
-        StartChar: Char;
-        StopChar: Char;
-        ChecksumChar: Char;
-        CharNo: Integer;
-    begin
-        //
-        // Data Characters  a   b   c   d   e   f
-        // Multiply each of the characters (the Code 128 value) with increasing weight.
-        // Code 128 Value   65  66  67  68  69  70
-        // Weight           *1  *2  *3  *4  *5  *6
-        // Sum :            (65*1) + (66*2) + (67*3) + (68*4) + (69*5) + (70*6) = 1435
-        // For Code 128B, add an additional 104 to the sum above
-        // Total    1435 + 104 = 1539
-        // Modulo 103 Check Character:  1539 % 103 = 97
-        StartChar := 'š';
-        StopChar := 'œ';
-        Checksum := 104;  // Code 128A -> 103, Code 128B -> 104, Code 128C -> 105, add an additional 10x to the sum above 
-        for i := 1 to STRLEN(pText) do begin
-            CharNo := pText[i];
-            Checksum := Checksum + (i * (CharNo - 32));
-        end;
-        ChecksumChar := Checksum MOD 103;
-        ChecksumChar := ChecksumChar + 32;
-        // convert SPACE to ALT+0128
-        pText := CONVERTSTR(pText, ' ', '°');
-        RetVal := STRSUBSTNO('%1%2%3%4', StartChar, pText, ChecksumChar, StopChar);
-        exit(RetVal);
-    end;
-
-
     var
         [InDataSet]
         ImportXMLPortIDStyle: Text;
         [InDataSet]
         BufferTableIDStyle: Text;
         [InDataSet]
-        ImportXMLPortID_ENABLED: Boolean;
-        [InDataSet]
-        BufferTableID_ENABLED: Boolean;
-        [InDataSet]
-        FromTableCaption_ENABLED: Boolean;
+        UseXMLPortAndBufferTable: Boolean;
 }
