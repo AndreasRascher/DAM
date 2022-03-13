@@ -22,6 +22,14 @@ page 91003 "DMTTableCardPart"
                 }
                 field("From Field Caption"; Rec."From Field Caption")
                 {
+                    Visible = not ShowGenBufferTableColumns;
+                    HideValue = HideFromFieldInfo;
+                    ApplicationArea = All;
+                }
+                field("From Field Caption (GenBufferTable)"; "From Field Caption (GenBufferTable)")
+                {
+                    Visible = ShowGenBufferTableColumns;
+                    Caption = 'test';
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
@@ -101,6 +109,8 @@ page 91003 "DMTTableCardPart"
         [InDataSet]
         HideFromFieldInfo: Boolean;
         [InDataSet]
+        ShowGenBufferTableColumns: Boolean;
+        [InDataSet]
         LineStyleExpr: text;
 
     trigger OnAfterGetRecord()
@@ -121,5 +131,13 @@ page 91003 "DMTTableCardPart"
         LineStyleExpr := '';
         if DMTErrorLog.ErrorsExistFor(Rec, true) then
             LineStyleExpr := 'Attention';
+    end;
+
+    internal procedure SetBufferTableType(BufferTableType: Option)
+    var
+        DMTTable: Record DMTTable;
+    begin
+        ShowGenBufferTableColumns := BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files";
+        CurrPage.Update();
     end;
 }

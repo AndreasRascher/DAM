@@ -91,14 +91,12 @@ xmlport 90000 GenBuffImport
         CurrDMTTable.UpdateQtyLinesInBufferTable();
     end;
 
-    procedure SetFilename(FileNameNew: Text)
-    begin
-        CurrFileName := FileNameNew;
-    end;
-
     procedure SetDMTTable(DMTTable: Record DMTTable)
+    var
+        FileMgt: Codeunit "File Management";
     begin
         CurrDMTTable := DMTTable;
+        CurrFileName := FileMgt.GetFileName(CurrDMTTable.DataFilePath);
     end;
 
     var

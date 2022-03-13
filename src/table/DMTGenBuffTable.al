@@ -208,6 +208,56 @@ table 91008 "DMTGenBuffTable"
         field(1198; Fld198; Text[250]) { CaptionClass = GetFieldCaption(1198); }
         field(1199; Fld199; Text[250]) { CaptionClass = GetFieldCaption(1199); }
         field(1200; Fld200; Text[250]) { CaptionClass = GetFieldCaption(1200); }
+        field(1201; Fld201; Text[250]) { CaptionClass = GetFieldCaption(1201); }
+        field(1202; Fld202; Text[250]) { CaptionClass = GetFieldCaption(1202); }
+        field(1203; Fld203; Text[250]) { CaptionClass = GetFieldCaption(1203); }
+        field(1204; Fld204; Text[250]) { CaptionClass = GetFieldCaption(1204); }
+        field(1205; Fld205; Text[250]) { CaptionClass = GetFieldCaption(1205); }
+        field(1206; Fld206; Text[250]) { CaptionClass = GetFieldCaption(1206); }
+        field(1207; Fld207; Text[250]) { CaptionClass = GetFieldCaption(1207); }
+        field(1208; Fld208; Text[250]) { CaptionClass = GetFieldCaption(1208); }
+        field(1209; Fld209; Text[250]) { CaptionClass = GetFieldCaption(1209); }
+        field(1210; Fld210; Text[250]) { CaptionClass = GetFieldCaption(1210); }
+        field(1211; Fld211; Text[250]) { CaptionClass = GetFieldCaption(1211); }
+        field(1212; Fld212; Text[250]) { CaptionClass = GetFieldCaption(1212); }
+        field(1213; Fld213; Text[250]) { CaptionClass = GetFieldCaption(1213); }
+        field(1214; Fld214; Text[250]) { CaptionClass = GetFieldCaption(1214); }
+        field(1215; Fld215; Text[250]) { CaptionClass = GetFieldCaption(1215); }
+        field(1216; Fld216; Text[250]) { CaptionClass = GetFieldCaption(1216); }
+        field(1217; Fld217; Text[250]) { CaptionClass = GetFieldCaption(1217); }
+        field(1218; Fld218; Text[250]) { CaptionClass = GetFieldCaption(1218); }
+        field(1219; Fld219; Text[250]) { CaptionClass = GetFieldCaption(1219); }
+        field(1220; Fld220; Text[250]) { CaptionClass = GetFieldCaption(1220); }
+        field(1221; Fld221; Text[250]) { CaptionClass = GetFieldCaption(1221); }
+        field(1222; Fld222; Text[250]) { CaptionClass = GetFieldCaption(1222); }
+        field(1223; Fld223; Text[250]) { CaptionClass = GetFieldCaption(1223); }
+        field(1224; Fld224; Text[250]) { CaptionClass = GetFieldCaption(1224); }
+        field(1225; Fld225; Text[250]) { CaptionClass = GetFieldCaption(1225); }
+        field(1226; Fld226; Text[250]) { CaptionClass = GetFieldCaption(1226); }
+        field(1227; Fld227; Text[250]) { CaptionClass = GetFieldCaption(1227); }
+        field(1228; Fld228; Text[250]) { CaptionClass = GetFieldCaption(1228); }
+        field(1229; Fld229; Text[250]) { CaptionClass = GetFieldCaption(1229); }
+        field(1230; Fld230; Text[250]) { CaptionClass = GetFieldCaption(1230); }
+        field(1231; Fld231; Text[250]) { CaptionClass = GetFieldCaption(1231); }
+        field(1232; Fld232; Text[250]) { CaptionClass = GetFieldCaption(1232); }
+        field(1233; Fld233; Text[250]) { CaptionClass = GetFieldCaption(1233); }
+        field(1234; Fld234; Text[250]) { CaptionClass = GetFieldCaption(1234); }
+        field(1235; Fld235; Text[250]) { CaptionClass = GetFieldCaption(1235); }
+        field(1236; Fld236; Text[250]) { CaptionClass = GetFieldCaption(1236); }
+        field(1237; Fld237; Text[250]) { CaptionClass = GetFieldCaption(1237); }
+        field(1238; Fld238; Text[250]) { CaptionClass = GetFieldCaption(1238); }
+        field(1239; Fld239; Text[250]) { CaptionClass = GetFieldCaption(1239); }
+        field(1240; Fld240; Text[250]) { CaptionClass = GetFieldCaption(1240); }
+        field(1241; Fld241; Text[250]) { CaptionClass = GetFieldCaption(1241); }
+        field(1242; Fld242; Text[250]) { CaptionClass = GetFieldCaption(1242); }
+        field(1243; Fld243; Text[250]) { CaptionClass = GetFieldCaption(1243); }
+        field(1244; Fld244; Text[250]) { CaptionClass = GetFieldCaption(1244); }
+        field(1245; Fld245; Text[250]) { CaptionClass = GetFieldCaption(1245); }
+        field(1246; Fld246; Text[250]) { CaptionClass = GetFieldCaption(1246); }
+        field(1247; Fld247; Text[250]) { CaptionClass = GetFieldCaption(1247); }
+        field(1248; Fld248; Text[250]) { CaptionClass = GetFieldCaption(1248); }
+        field(1249; Fld249; Text[250]) { CaptionClass = GetFieldCaption(1249); }
+        field(1250; Fld250; Text[250]) { CaptionClass = GetFieldCaption(1250); }
     }
 
 
@@ -243,7 +293,10 @@ table 91008 "DMTGenBuffTable"
     end;
 
     internal procedure FilterByFileName(FileName: Text) HasLinesInFilter: Boolean
+    var
+        FileMgt: Codeunit "File Management";
     begin
+        FileName := FileMgt.GetFileName(FileName);  // Get Filename from path
         Rec.SetRange("Import from Filename", CopyStr(FileName, 1, Maxstrlen(Rec."Import from Filename")));
         HasLinesInFilter := not Rec.IsEmpty;
     end;
@@ -280,6 +333,28 @@ table 91008 "DMTGenBuffTable"
             exit(Choices.Split(',').Get(Choice));
     end;
 
+    internal procedure GetColCaptionForImportedFile(DMTTable: Record DMTTable; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
+        FieldIndex: Integer;
+    begin
+        OK := true;
+        if not GenBuffTable.FilterByFileName(DMTTable.DataFilePath) then begin
+            Message('Keine Zeilen in der Puffertabelle gefunden für %1', DMTTable.DataFilePath);
+            exit(false);
+        end;
+        GenBuffTable.SetRange(IsCaptionLine, true);
+        if not GenBuffTable.FindFirst() then begin
+            Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', DMTTable.DataFilePath);
+            exit(false);
+        end;
+        RecRef.GetTable(GenBuffTable);
+        for FieldIndex := 1 to GenBuffTable."Column Count" do begin
+            BuffTableCaptions.Add(FieldIndex, Format(RecRef.Field(1000 + FieldIndex).Value));
+        end;
+    end;
+
     local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
     begin
         if not DMTGenBufferFieldCaptions.HasCaption(FieldNo) then
@@ -307,7 +382,7 @@ table 91008 "DMTGenBuffTable"
             101 .. 150:
                 Page.Run(Page::DMTGenBufferList150, DMTGenBuffTable);
             else
-                Page.Run(Page::"DMTGenBufferList200", DMTGenBuffTable);
+                Page.Run(Page::"DMTGenBufferList250", DMTGenBuffTable);
         end;
     end;
 

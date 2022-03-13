@@ -36,7 +36,7 @@ table 91002 "DMTField"
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
-        field(25; "To Field Name"; Text[80])
+        field(25; "To Field Name (NAV)"; Text[80])
         {
             CaptionML = DEU = 'Zielfeld Name', ENU = 'Target Field Name';
             FieldClass = FlowField;
@@ -53,7 +53,16 @@ table 91002 "DMTField"
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
             end;
         }
-        field(32; "From Field Caption"; Text[80])
+        field(32; "From Field Caption (GenBufferTable)"; Text[80])
+        {
+            CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
+            Editable = false;
+            trigger OnLookup()
+            begin
+                Message('ToDo: Feldauswahl aus GenBufferTable');
+            end;
+        }
+        field(33; "From Field Caption"; Text[80])
         {
             CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
             FieldClass = FlowField;
@@ -61,7 +70,7 @@ table 91002 "DMTField"
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
         }
-        field(33; "From Field Type"; Text[30])
+        field(34; "From Field Type"; Text[30])
         {
             CaptionML = DEU = 'Herkunftsfeld Typ', ENU = 'Source Field Type';
             FieldClass = FlowField;
@@ -70,7 +79,7 @@ table 91002 "DMTField"
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
         }
 
-        field(34; "Fixed Value"; Text[250])
+        field(35; "Fixed Value"; Text[250])
         {
             CaptionML = DEU = 'Fester Wert', ENU = 'Fixed Value';
             trigger OnValidate()
@@ -152,38 +161,68 @@ table 91002 "DMTField"
 
     internal procedure ProposeMatchingTargetFields(DMTTable: Record DMTTable): Boolean
     var
-        SourceField: Record Field;
-        TargetField: Record Field;
         DMTFields: Record "DMTField";
         DMTFields2: Record "DMTField";
-        OldFieldName: text;
+        GenBuffTable: Record DMTGenBuffTable;
+        SourceField: Record Field;
+        TargetField: Record Field;
         Found: Boolean;
+        BuffTableCaptions: Dictionary of [Integer, Text];
+        FoundAtIndex: Integer;
+        OldFieldName: text;
     begin
-        if not DMTTable.BufferTableExits() then begin
-            Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
-            exit;
-        end;
-        DMTFields.FilterBy(DMTTable);
-        DMTFields.setrange("From Field No.", 0);
-        if DMTFields.FindSet(false, false) then
-            repeat
-                TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
-                SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
-                SourceField.SetRange(Enabled, true);
-                SourceField.SetRange(Class, SourceField.Class::Normal);
-                SourceField.SetRange(FieldName, TargetField.FieldName);
-                Found := SourceField.FindFirst();
-                if not Found then
-                    if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then begin
-                        SourceField.SetRange(FieldName, OldFieldName);
-                        Found := SourceField.FindFirst();
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV") then begin
+            DMTTable.TestField("Buffer Table ID");
+            if not DMTTable.BufferTableExits() then begin
+                Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
+                exit;
+            end;
+
+            DMTFields.FilterBy(DMTTable);
+            DMTFields.setrange("From Field No.", 0);
+            if DMTFields.FindSet(false, false) then
+                repeat
+                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
+                    SourceField.SetRange(Enabled, true);
+                    SourceField.SetRange(Class, SourceField.Class::Normal);
+                    SourceField.SetRange(FieldName, TargetField.FieldName);
+                    Found := SourceField.FindFirst();
+                    if not Found then
+                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then begin
+                            SourceField.SetRange(FieldName, OldFieldName);
+                            Found := SourceField.FindFirst();
+                        end;
+                    if Found then begin
+                        DMTFields2 := DMTFields;
+                        DMTFields2.Validate("From Field No.", SourceField."No.");
+                        DMTFields2.Modify();
                     end;
-                if Found then begin
-                    DMTFields2 := DMTFields;
-                    DMTFields2.Validate("From Field No.", SourceField."No.");
-                    DMTFields2.Modify();
-                end;
-            until DMTFields.Next() = 0;
+                until DMTFields.Next() = 0;
+        end;
+
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files") then begin
+            GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+            // Loop Target Fields
+            DMTFields.FilterBy(DMTTable);
+            DMTFields.setrange("From Field No.", 0);
+            if DMTFields.FindSet(false, false) then
+                repeat
+                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    // 1.Try - Match by Name
+                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."FieldName");
+                    // 2.Try - Match by known Name Changes
+                    if FoundAtIndex = 0 then
+                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then
+                            FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
+                    if FoundAtIndex <> 0 then begin
+                        DMTFields2 := DMTFields;
+                        DMTFields2."From Field No." := BuffTableCaptions.Keys.Get(FoundAtIndex);
+                        DMTFields2."From Field Caption (GenBufferTable)" := BuffTableCaptions.Get(DMTFields2."From Field No.");
+                        DMTFields2.Modify();
+                    end;
+                until DMTFields.Next() = 0;
+        end;
     end;
 
     internal procedure ProposeValidationRules(DMTTable: Record DMTTable): Boolean
@@ -251,7 +290,6 @@ table 91002 "DMTField"
                             RoutingHeader.Status := RoutingHeader.Status::"Under Development";
                             DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
                         end;
-
                 end;
 
                 if format(DMTFields2) <> Format(DMTFields) then

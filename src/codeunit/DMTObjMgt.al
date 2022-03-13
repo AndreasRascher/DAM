@@ -23,8 +23,8 @@ codeunit 91004 "DMTObjMgt"
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
-            DMTTable."Old Version Table ID" := TempAllObjWithCaption."Object ID";
-            DMTTable."Old Version Table Caption" := TempAllObjWithCaption."Object Caption";
+            DMTTable."NAV Src.Table No." := TempAllObjWithCaption."Object ID";
+            DMTTable."NAV Src.Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
@@ -40,7 +40,7 @@ codeunit 91004 "DMTObjMgt"
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
             DMTTable."To Table ID" := TempAllObjWithCaption."Object ID";
-            DMTTable."To Table Caption" := TempAllObjWithCaption."Object Caption";
+            DMTTable."Dest.Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
@@ -60,7 +60,7 @@ codeunit 91004 "DMTObjMgt"
                 repeat
                     if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
                         Clear(DMTTable);
-                        DMTTable.Validate("Old Version Table Caption", Format(TempAllObjWithCaption."Object ID"));
+                        DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
                     end;
                 until TempAllObjWithCaption.Next() = 0;
@@ -83,16 +83,16 @@ codeunit 91004 "DMTObjMgt"
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
     begin
-        if rec."Old Version Table Caption" = xRec."Old Version Table Caption" then
+        if rec."NAV Src.Table Caption" = xRec."NAV Src.Table Caption" then
             exit;
-        if rec."Old Version Table Caption" = '' then
+        if rec."NAV Src.Table Caption" = '' then
             exit;
         // IsNumber
-        if Delchr(rec."Old Version Table Caption", '=', '0123456789') = '' then begin
-            DMTFieldBuffer.SetFilter(TableNo, rec."Old Version Table Caption");
+        if Delchr(rec."NAV Src.Table Caption", '=', '0123456789') = '' then begin
+            DMTFieldBuffer.SetFilter(TableNo, rec."NAV Src.Table Caption");
             if DMTFieldBuffer.FindFirst() then begin
-                Rec."Old Version Table ID" := DMTFieldBuffer.TableNo;
-                Rec."Old Version Table Caption" := DMTFieldBuffer."Table Caption";
+                Rec."NAV Src.Table No." := DMTFieldBuffer.TableNo;
+                Rec."NAV Src.Table Caption" := DMTFieldBuffer."Table Caption";
             end;
         end;
     end;
@@ -101,15 +101,15 @@ codeunit 91004 "DMTObjMgt"
     var
         allObjWithCaption: Record AllObjWithCaption;
     begin
-        if rec."To Table Caption" = xRec."To Table Caption" then
+        if rec."Dest.Table Caption" = xRec."Dest.Table Caption" then
             exit;
-        if rec."To Table Caption" = '' then
+        if rec."Dest.Table Caption" = '' then
             exit;
         // IsNumber
-        if Delchr(rec."To Table Caption", '=', '0123456789') = '' then begin
-            if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."To Table Caption") then begin
+        if Delchr(rec."Dest.Table Caption", '=', '0123456789') = '' then begin
+            if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."Dest.Table Caption") then begin
                 Rec."To Table ID" := allObjWithCaption."Object ID";
-                Rec."To Table Caption" := allObjWithCaption."Object Caption";
+                Rec."Dest.Table Caption" := allObjWithCaption."Object Caption";
             end;
         end;
     end;
@@ -136,7 +136,6 @@ codeunit 91004 "DMTObjMgt"
                 exit;
             end;
         end;
-
         FieldImport.SetSource(InStr);
         FieldImport.Import();
         Message('Import abgeschlossen');

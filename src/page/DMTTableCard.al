@@ -1,11 +1,11 @@
 page 91002 "DMTTableCard"
 {
-    CaptionML = DEU = 'DMT Tabellenkarte', ENU = 'DMT Table Card';
+    CaptionML = DEU = 'DMT Tabellenkarte (Data Migration Tool)', ENU = 'DMT Table Card (Data Migration Tool)';
     PageType = Document;
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = DMTTable;
-    //DelayedInsert = true;
+
     DataCaptionExpression = GetCaption();
 
     layout
@@ -15,94 +15,49 @@ page 91002 "DMTTableCard"
             group(General)
             {
                 CaptionML = ENU = 'General', DEU = 'Allgemein';
-                field("To Table Caption"; Rec."To Table Caption")
+                field("Dest. Table Caption"; Rec."Dest.Table Caption")
                 {
-                    ToolTip = 'Data Migration Target Table Caption';
+                    ApplicationArea = All;
+                    Importance = Promoted;
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
+                field(DataFilePath; Rec.DataFilePath)
+                {
+                    CaptionML = DEU = 'Datendatei Pfad', ENU = 'Data File Path';
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
-                field(ImportToBufferOption; Rec.BufferTableType)
+                field("Data Source Type"; Rec."Data Source Type")
                 {
-                    ToolTip = 'Specifies the value of the ImportToBufferOption field.';
                     ApplicationArea = All;
                     trigger OnValidate()
                     begin
                         EnableControls();
                     end;
                 }
-                field("From Table Caption"; Rec."Old Version Table Caption")
-                {
-                    ToolTip = 'Data Migration Source Table Caption';
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
             }
-            group(ObjectInfo)
+            group(NAVDataSourceProperties)
             {
-                Caption = 'XMLPort, Buffertable Import Options';
-                Visible = UseXMLPortAndBufferTable;
-                grid(dummy)
+                CaptionML = DEU = 'Datenquelle NAV', ENU = 'Data Source NAV';
+                Visible = NAVDataSourcePropertiesVisible;
+                field(BufferTableType; Rec.BufferTableType)
                 {
-                    GridLayout = Rows;
-                    group(dummy2)
-                    {
-                        CaptionML = DEU = 'Datendatei Pfad', ENU = 'Data File Path';
-                        field(ExportFilePath; Rec.DataFilePath)
-                        {
-                            ShowCaption = false;
-                            ApplicationArea = All;
-                            Importance = Promoted;
-                        }
-                    }
-                }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID")
-                {
-                    ToolTip = 'Specifies the value of the Import XMLPort ID field';
                     ApplicationArea = All;
-                    StyleExpr = ImportXMLPortIDStyle;
-                }
-                field("Buffer Table ID"; Rec."Buffer Table ID")
-                {
-                    ToolTip = 'Specifies the value of the Buffer Table ID field.';
-                    ApplicationArea = All;
-                    StyleExpr = BufferTableIDStyle;
-                    trigger OnAssistEdit()
+                    trigger OnValidate()
                     begin
-                        Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+                        EnableControls();
                     end;
                 }
-            }
-            group(GenBuffTableImportSettings)
-            {
-                Caption = 'Generic Import Options';
-                Visible = not UseXMLPortAndBufferTable;
-                field("Filename (Imp.into Gen.Buffer)"; Rec."Filename (Imp.into Gen.Buffer)")
-                {
-                    ToolTip = 'Specifies the value of the Filename (Imp.into Gen.Buffer) field.';
-                    ApplicationArea = All;
-                }
-            }
-            group(TableMigration)
-            {
-                CaptionML = DEU = 'Tabellen', ENU = 'Tables';
-                field("Src.Table ID"; Rec."Old Version Table ID") { ApplicationArea = All; ShowMandatory = true; }
-                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; Importance = Promoted; }
-                field("Trgt.Table ID"; Rec."To Table ID")
-                {
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                }
-                field("Qty.Lines In Trgt. Table"; Rec."Qty.Lines In Trgt. Table") { ApplicationArea = All; }
-                field("No.of Fields in Trgt. Table"; "No.of Fields in Trgt. Table") { ApplicationArea = All; }
+                field("NAV Schema File Status"; Rec."NAV Schema File Status") { ApplicationArea = All; }
+                field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
 
             }
-            group(DataMigration)
+            part(Lines; DMTTableCardPart)
             {
-                CaptionML = DEU = 'Datenmigration', ENU = 'Data Migration';
-                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
-            }
-            part(FieldsPart; DMTTableCardPart)
-            {
+                Visible = LinesVisible;
                 ApplicationArea = all;
                 CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
                 SubPageLink = "To Table No." = field("To Table ID");
@@ -110,13 +65,14 @@ page 91002 "DMTTableCard"
         }
     }
 
+
     actions
     {
         area(Processing)
         {
             action(ImportBufferDataFromFile)
             {
-                CaptionML = DEU = 'Datendatei in Puffertabelle importieren';
+                CaptionML = DEU = 'Import in Puffertabelle';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -131,7 +87,7 @@ page 91002 "DMTTableCard"
             }
             action(TransferToTargetTable)
             {
-                CaptionML = DEU = 'Daten in Zieltabelle übertragen';
+                CaptionML = DEU = 'In Zieltabelle übertragen';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -235,15 +191,20 @@ page 91002 "DMTTableCard"
     local procedure EnableControls()
     begin
         UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
+        LinesVisible := (Rec."To Table ID" <> 0) and
+                        ("Qty.Lines In Src. Table" > 0) and
+                        (Rec."Data Source Type" <> Rec."Data Source Type"::" ");
+        NAVDataSourcePropertiesVisible := Rec."Data Source Type" = Rec."Data Source Type"::"NAV CSV Export";
+        CurrPage.Lines.Page.SetBufferTableType(Rec.BufferTableType);
     end;
 
     local procedure GetCaption(): Text
     begin
         case Rec.BufferTableType of
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
-                exit(Rec."To Table Caption");
+                exit(Rec."Dest.Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
-                exit(Rec."Filename (Imp.into Gen.Buffer)");
+                exit(Rec.DataFilePath);
         end
     end;
 
@@ -254,4 +215,8 @@ page 91002 "DMTTableCard"
         BufferTableIDStyle: Text;
         [InDataSet]
         UseXMLPortAndBufferTable: Boolean;
+        [InDataSet]
+        LinesVisible: Boolean;
+        [InDataSet]
+        NAVDataSourcePropertiesVisible: boolean;
 }

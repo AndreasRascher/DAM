@@ -171,13 +171,13 @@ page 91000 "DMT Setup"
                     end;
                     Start := CurrentDateTime;
                     GenBuffImport.SetSource(InStr);
-                    GenBuffImport.SetFilename(FileName);
+                    // GenBuffImport.SetFilename(FileName);
                     GenBuffImport.Import();
                     Message('Import abgeschlossen\Dauer %1', CurrentDateTime - Start);
 
                     if DMTGenBuffTable.FindFirst() then begin
                         DMTGenBuffTable.InitFirstLineAsCaptions(DMTGenBuffTable."Import from Filename");
-                        Page.Run(Page::"DMTGenBufferList200");
+                        Page.Run(Page::"DMTGenBufferList250");
                     end;
                 end;
             }

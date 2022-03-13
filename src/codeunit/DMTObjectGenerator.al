@@ -44,11 +44,11 @@ codeunit 91003 "DMTObjectGenerator"
         DMTFieldBuffer: Record DMTFieldBuffer;
     begin
         DMTTable.Testfield("Import XMLPort ID");
-        DMTTable.Testfield("Old Version Table ID");
+        DMTTable.Testfield("NAV Src.Table No.");
 
-        C.AppendLine('xmlport ' + format(DMTTable."Import XMLPort ID") + ' T' + format(DMTTable."Old Version Table ID") + 'Import');
+        C.AppendLine('xmlport ' + format(DMTTable."Import XMLPort ID") + ' T' + format(DMTTable."NAV Src.Table No.") + 'Import');
         C.AppendLine('{');
-        C.AppendLine('    Caption = ''' + DMTTable."Old Version Table Caption" + ''';');
+        C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -61,8 +61,8 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE) THEN BEGIN
-            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ')');
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE) THEN BEGIN
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
             DMTFieldBuffer.FINDSET();
@@ -106,17 +106,17 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'';');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID") + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -179,13 +179,13 @@ codeunit 91003 "DMTObjectGenerator"
         _FieldTypeText: Text;
     begin
         DMTTable.testfield("Buffer Table ID");
-        DMTTable.TestField("Old Version Table ID");
-        FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE);
-        C.AppendLine('table ' + FORMAT(DMTTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DMTTable."Old Version Table ID"));
+        DMTTable.TestField("NAV Src.Table No.");
+        FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE);
+        C.AppendLine('table ' + FORMAT(DMTTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No."));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DMTTable."Old Version Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + DMTTable."NAV Src.Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DMTFieldBuffer, DMTTable."Old Version Table ID", FALSE, true, FALSE) THEN
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE) THEN
             REPEAT
                 CASE DMTFieldBuffer.Type OF
                     DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
@@ -209,7 +209,7 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DMTTable."Old Version Table ID") + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DMTTable."NAV Src.Table No.") + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');

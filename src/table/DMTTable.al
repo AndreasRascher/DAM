@@ -12,40 +12,9 @@ table 91001 "DMTTable"
             DataClassification = SystemMetadata;
             NotBlank = true;
         }
-        field(2; "Old Version Table ID"; Integer)
+        field(4; "Dest.Table Caption"; Text[250])
         {
-            CaptionML = DEU = 'Von Tab.-ID', ENU = 'From Tab.-ID';
-            DataClassification = SystemMetadata;
-        }
-        field(3; "Old Version Table Caption"; Text[250])
-        {
-            CaptionML = DEU = 'Von Tabelle', ENU = 'From Table';
-            trigger OnLookup()
-            var
-                ObjectMgt: Codeunit DMTObjMgt;
-            begin
-                ObjectMgt.LookUpOldVersionTable(Rec);
-                if "To Table ID" = 0 then begin
-                    Rec.Validate("To Table Caption", Format("Old Version Table ID"));
-                    ProposeObjectIDs();
-                    InitTableFieldMapping();
-                end;
-            end;
-
-            trigger OnValidate()
-            var
-                ObjectMgt: Codeunit DMTObjMgt;
-            begin
-                ObjectMgt.ValidateFromTableCaption(Rec, xRec);
-                if ("To Table ID" = 0) and ("Old Version Table ID" <> 0) then begin
-                    Rec.Validate("To Table Caption", Format("Old Version Table ID"));
-                    ProposeObjectIDs();
-                end;
-            end;
-        }
-        field(4; "To Table Caption"; Text[250])
-        {
-            CaptionML = DEU = 'In Tabelle', ENU = 'To Table';
+            CaptionML = DEU = 'Ziel Tabelle', ENU = 'Destination Table';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit DMTObjMgt;
@@ -63,9 +32,6 @@ table 91001 "DMTTable"
         field(21; "Qty.Lines In Src. Table"; Integer)
         {
             CaptionML = DEU = 'Anz. Zeilen in Puffertabelle', ENU = 'Qty.Lines in buffer table';
-            // FieldClass = FlowField;
-            // CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Buffer Table ID")));
-            // Editable = false;
             trigger OnLookup()
             begin
                 ShowBufferTable();
@@ -91,19 +57,10 @@ table 91001 "DMTTable"
         }
         field(50; BufferTableType; Option)
         {
-            OptionMembers = "Seperate Buffer Table per CSV","Generic Buffer Table for all Files";
-            OptionCaptionML = DEU = 'Eine Puffertabelle pro CSV,Generische Puffertabelle für alle Dateien',
-                              ENU = 'Seperate Buffer Table per CSV,Generic Buffer Table for all Files';
-        }
-        field(51; "Filename (Imp.into Gen.Buffer)"; Text[250])
-        {
-            CaptionML = DEU = 'Dateiname (Importiert in Gen. Puffertab.)', ENU = 'Filename (Imp.into Gen.Buffer)';
-            trigger OnLookup()
-            var
-                GenBuffTable: Record DMTGenBuffTable;
-            begin
-                "Filename (Imp.into Gen.Buffer)" := CopyStr(GenBuffTable.LookUpFileNameFromGenBuffTable("Filename (Imp.into Gen.Buffer)"), 1, MaxStrLen(Rec."Filename (Imp.into Gen.Buffer)"));
-            end;
+            CaptionML = DEU = 'Puffertabellenart', ENU = 'Buffer Table Type';
+            OptionMembers = "Generic Buffer Table for all Files","Seperate Buffer Table per CSV";
+            OptionCaptionML = DEU = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV',
+                              ENU = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV';
         }
         field(52; DataFilePath; Text[250])
         {
@@ -165,6 +122,47 @@ table 91001 "DMTTable"
         {
             CaptionML = DEU = 'Import Dauer(Längste)', ENU = 'Import Duration (Longest)';
         }
+        #region NAVDataSourceFields
+        field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
+        field(41; "NAV Schema File Status"; Option)
+        {
+            CaptionML = DEU = 'NAV Schema Datei Status', ENU = 'NAV Schema File Status';
+            Editable = false;
+            OptionMembers = "Import required",Imported;
+            OptionCaptionML = ENU = '"Import required",Imported', DEU = '"Import erforderlich",Importiert';
+        }
+        field(42; "NAV Src.Table No."; Integer)
+        {
+            CaptionML = DEU = 'NAV Tabellennr.', ENU = 'NAV Src.Table No.';
+        }
+        field(43; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; }
+        field(44; "NAV Src.Table Caption"; Text[250])
+        {
+            Caption = 'NAV Source Table Caption';
+            trigger OnLookup()
+            var
+                ObjectMgt: Codeunit DMTObjMgt;
+            begin
+                ObjectMgt.LookUpOldVersionTable(Rec);
+                if "To Table ID" = 0 then begin
+                    Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
+                    ProposeObjectIDs();
+                    InitTableFieldMapping();
+                end;
+            end;
+
+            trigger OnValidate()
+            var
+                ObjectMgt: Codeunit DMTObjMgt;
+            begin
+                ObjectMgt.ValidateFromTableCaption(Rec, xRec);
+                if ("To Table ID" = 0) and ("NAV Src.Table No." <> 0) then begin
+                    Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
+                    ProposeObjectIDs();
+                end;
+            end;
+        }
+        #endregion NAVDataSourceFields
     }
 
     keys
@@ -174,8 +172,8 @@ table 91001 "DMTTable"
     }
     fieldgroups
     {
-        fieldgroup(DropDown; "To Table ID", "To Table Caption") { }
-        fieldgroup(Brick; "To Table Caption", "Qty.Lines In Src. Table") { }
+        fieldgroup(DropDown; "To Table ID", "Dest.Table Caption") { }
+        fieldgroup(Brick; "Dest.Table Caption", "Qty.Lines In Src. Table") { }
     }
 
     trigger OnDelete()
@@ -188,15 +186,34 @@ table 91001 "DMTTable"
 
     internal procedure ImportToBufferTable()
     var
+        GenBuffImport: XmlPort GenBuffImport;
         File: File;
         InStr: InStream;
+        Progress: Dialog;
     begin
-        rec.TestField("Import XMLPort ID");
+        // case Rec.BufferTableType of
+        //     Rec.BufferTableType::"Seperate Buffer Table per CSV":
+        //         begin
+        //             rec.TestField("Import XMLPort ID");
+        //             rec.Testfield(DataFilePath);
+        //             file.Open(DataFilePath, TextEncoding::MSDos);
+        //             file.CreateInStream(InStr);
+        //             Xmlport.Import(Rec."Import XMLPort ID", InStr);
+        //             UpdateQtyLinesInBufferTable();
+        //         end;
+        //     Rec.BufferTableType::"Generic Buffer Table for all Files":
+        //         begin
         rec.Testfield(DataFilePath);
         file.Open(DataFilePath, TextEncoding::MSDos);
         file.CreateInStream(InStr);
-        Xmlport.Import(Rec."Import XMLPort ID", InStr);
+        GenBuffImport.SetSource(InStr);
+        GenBuffImport.SetDMTTable(Rec);
+        Progress.Open(StrSubstNo('Importing %1', ConvertStr(Rec.DataFilePath, '\', '/')));
+        GenBuffImport.Import();
+        Progress.Close();
         UpdateQtyLinesInBufferTable();
+        // end;
+        // end
     end;
 
     procedure DownloadALBufferTableFile()
@@ -221,9 +238,9 @@ table 91001 "DMTTable"
     begin
 
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if not GenBuffTable.FilterByFileName(Rec."Filename (Imp.into Gen.Buffer)") then
+            if not GenBuffTable.FilterByFileName(Rec.DataFilePath) then
                 exit(false);
-            GenBuffTable.ShowImportDataForFile(Rec."Filename (Imp.into Gen.Buffer)");
+            GenBuffTable.ShowImportDataForFile(Rec.DataFilePath);
         end;
 
         if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
@@ -291,29 +308,30 @@ table 91001 "DMTTable"
 
     end;
 
-    procedure UpdateQtyLinesInBufferTable()
+    procedure UpdateQtyLinesInBufferTable() QtyLines: Decimal;
     var
         GenBuffTable: Record DMTGenBuffTable;
-        DMTTable_Old: Record DMTTable;
-        TableInformation: Record "Table Information";
     begin
-        if Rec."To Table ID" = 0 then
-            exit;
-        DMTTable_Old := Rec;
-        case Rec.BufferTableType of
-            Rec.BufferTableType::"Generic Buffer Table for all Files":
-                begin
-                    GenBuffTable.FilterByFileName(Rec."Filename (Imp.into Gen.Buffer)");
-                    Rec."Qty.Lines In Src. Table" := GenBuffTable.Count;
-                end;
-            Rec.BufferTableType::"Seperate Buffer Table per CSV":
-                begin
-                    TableInformation.get(Rec."Buffer Table ID");
-                    Rec."Qty.Lines In Src. Table" := TableInformation."No. of Records";
-                end;
-        end;
-        if Format(DMTTable_Old) <> Format(Rec) then
+        // if Rec."To Table ID" = 0 then
+        //     exit;
+        // DMTTable_Old := Rec;
+        // case Rec.BufferTableType of
+        //     Rec.BufferTableType::"Generic Buffer Table for all Files":
+        //         begin
+        GenBuffTable.FilterByFileName(Rec.DataFilePath);
+        QtyLines := GenBuffTable.Count;
+        //         end;
+        //     Rec.BufferTableType::"Seperate Buffer Table per CSV":
+        //         begin
+        //             TableInformation.get(Rec."Buffer Table ID");
+        //             Rec."Qty.Lines In Src. Table" := TableInformation."No. of Records";
+        //         end;
+        // end;
+        if Rec."Qty.Lines In Src. Table" <> QtyLines then begin
+            Rec.Get(Rec.RecordId);
+            Rec."Qty.Lines In Src. Table" := QtyLines;
             Rec.Modify();
+        end;
     end;
 
 
@@ -326,7 +344,7 @@ table 91001 "DMTTable"
         DMTSetup.Get();
         if DMTSetup."Default Export Folder Path" = '' then exit;
         if Rec.DataFilePath <> '' then exit;
-        FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."Old Version Table Caption", '<>*\/|"', '_______')));
+        FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
@@ -338,7 +356,7 @@ table 91001 "DMTTable"
         TableMeta: Record "Table Metadata";
     begin
         TableMeta.SetRange(ID, 50000, 99999);
-        TableMeta.SetRange(Name, StrSubstNo('T%1Buffer', Rec."Old Version Table ID"));
+        TableMeta.SetRange(Name, StrSubstNo('T%1Buffer', Rec."NAV Src.Table No."));
         if TableMeta.FindFirst() then begin
             Rec."Buffer Table ID" := TableMeta.ID;
             if DoModify then
@@ -351,7 +369,7 @@ table 91001 "DMTTable"
         AllObjWithCaption: Record AllObjWithCaption;
     begin
         AllObjWithCaption.SetRange("Object ID", 50000, 99999);
-        AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Import', Rec."Old Version Table ID"));
+        AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Import', Rec."NAV Src.Table No."));
         if AllObjWithCaption.FindFirst() then begin
             Rec."Import XMLPort ID" := AllObjWithCaption."Object ID";
             if DoModify then
@@ -361,12 +379,12 @@ table 91001 "DMTTable"
 
     procedure GetALBufferTableName() Name: Text;
     begin
-        Name := StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."Old Version Table ID");
+        Name := StrSubstNo('TABLE %1 - T%2Buffer.al', Rec."Buffer Table ID", Rec."NAV Src.Table No.");
     end;
 
     procedure GetALXMLPortName() Name: Text;
     begin
-        Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "Old Version Table ID");
+        Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "NAV Src.Table No.");
     end;
 
     procedure DownloadAllALBufferTableFiles(var DMTTable: Record DMTTable)

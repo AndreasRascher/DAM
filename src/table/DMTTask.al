@@ -40,7 +40,7 @@ table 91006 "DMTTask"
                         begin
                             DMTTable.Get(Rec.ID);
                             DMTTable.testfield("Buffer Table ID");
-                            Rec."Context Description" := DMTTable."To Table Caption";
+                            Rec."Context Description" := DMTTable."Dest.Table Caption";
                         end;
                     Type::RunCodeunit:
                         begin
