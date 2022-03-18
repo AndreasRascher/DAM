@@ -53,7 +53,7 @@ table 91002 "DMTField"
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
             end;
         }
-        field(32; "From Field Caption (GenBufferTable)"; Text[80])
+        field(32; "From Field Caption (GenBuff)"; Text[80])
         {
             CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
             Editable = false;
@@ -171,9 +171,9 @@ table 91002 "DMTField"
         FoundAtIndex: Integer;
         OldFieldName: text;
     begin
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV") then begin
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Custom Buffer Table per file") then begin
             DMTTable.TestField("Buffer Table ID");
-            if not DMTTable.BufferTableExits() then begin
+            if not DMTTable.CustomBufferTableExits() then begin
                 Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
                 exit;
             end;
@@ -218,7 +218,7 @@ table 91002 "DMTField"
                     if FoundAtIndex <> 0 then begin
                         DMTFields2 := DMTFields;
                         DMTFields2."From Field No." := BuffTableCaptions.Keys.Get(FoundAtIndex);
-                        DMTFields2."From Field Caption (GenBufferTable)" := BuffTableCaptions.Get(DMTFields2."From Field No.");
+                        DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(DMTFields2."From Field No."), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
                         DMTFields2.Modify();
                     end;
                 until DMTFields.Next() = 0;

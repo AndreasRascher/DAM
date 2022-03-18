@@ -99,7 +99,7 @@ page 91002 "DMTTableCard"
                 var
                     DMTImport: Codeunit DMTImport;
                 begin
-                    DMTImport.ProcessDMTTable(Rec, false);
+                    DMTImport.StartImport(Rec, false);
                 end;
             }
             action(RetryBufferRecordsWithError)
@@ -123,8 +123,7 @@ page 91002 "DMTTableCard"
                     while DMTErrorLogQry.Read() do begin
                         RecIdList.Add(DMTErrorLogQry.FromID);
                     end;
-                    DMTImport.SetDMTTableToProcess(Rec);
-                    DMTImport.ProcessFullBuffer(RecIdList);
+                    DMTImport.ProcessFullBuffer(RecIdList, Rec);
                     Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
                     Rec.LastImportToTargetAt := CurrentDateTime;
@@ -178,7 +177,7 @@ page 91002 "DMTTableCard"
         BufferTableIDStyle := 'Unfavorable';
         if Rec.ImportXMLPortExits() then
             ImportXMLPortIDStyle := 'Favorable';
-        if Rec.BufferTableExits() then
+        if Rec.CustomBufferTableExits() then
             BufferTableIDStyle := 'Favorable';
         Rec.TryFindExportDataFile();
     end;
@@ -190,7 +189,7 @@ page 91002 "DMTTableCard"
 
     local procedure EnableControls()
     begin
-        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
+        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Custom Buffer Table per file");
         LinesVisible := (Rec."To Table ID" <> 0) and
                         ("Qty.Lines In Src. Table" > 0) and
                         (Rec."Data Source Type" <> Rec."Data Source Type"::" ");
@@ -201,7 +200,7 @@ page 91002 "DMTTableCard"
     local procedure GetCaption(): Text
     begin
         case Rec.BufferTableType of
-            Rec.BufferTableType::"Seperate Buffer Table per CSV":
+            Rec.BufferTableType::"Custom Buffer Table per file":
                 exit(Rec."Dest.Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 exit(Rec.DataFilePath);

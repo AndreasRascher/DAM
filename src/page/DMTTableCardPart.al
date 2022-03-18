@@ -7,7 +7,7 @@ page 91003 "DMTTableCardPart"
     {
         area(Content)
         {
-            repeater(GroupName)
+            repeater(Lines)
             {
                 field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
                 field("To Field No."; Rec."To Field No.")
@@ -26,12 +26,15 @@ page 91003 "DMTTableCardPart"
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
-                field("From Field Caption (GenBufferTable)"; "From Field Caption (GenBufferTable)")
+                field("From Field Caption (GenBufferTable)"; Rec."From Field Caption (GenBuff)")
                 {
                     Visible = ShowGenBufferTableColumns;
-                    Caption = 'test';
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
+                    trigger OnAssistEdit()
+                    begin
+                        RunSelectSourceFieldDialog();
+                    end;
                 }
                 field("From Field No."; Rec."From Field No.")
                 {
@@ -139,5 +142,29 @@ page 91003 "DMTTableCardPart"
     begin
         ShowGenBufferTableColumns := BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files";
         CurrPage.Update();
+    end;
+
+    procedure RunSelectSourceFieldDialog()
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        DMTTable: Record DMTTable;
+        DMTField2: Record DMTField;
+        BuffTableCaptions: Dictionary of [Integer, Text];
+        Choices: Text;
+        SelectedFieldNo: Integer;
+        FieldCaption: Text;
+    begin
+        DMTTable.Get(Rec."To Table No.");
+        GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+        foreach FieldCaption in BuffTableCaptions.Values do begin
+            Choices += FieldCaption + ',';
+        end;
+        SelectedFieldNo := StrMenu(Choices);
+        if SelectedFieldNo <> 0 then begin
+            DMTField2 := Rec;
+            DMTField2."From Field No." := SelectedFieldNo;
+            DMTField2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(SelectedFieldNo), 1, MaxStrLen(DMTField2."From Field Caption (GenBuff)"));
+            DMTField2.Modify();
+        end;
     end;
 }

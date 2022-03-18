@@ -1,32 +1,34 @@
-codeunit 91000 "DMTImport"
+codeunit 91000 DMTImport
 {
-    procedure ProcessDMTTable(DMTTable: Record DMTTable; NoUserInteraction_New: Boolean)
+    procedure StartImport(DMTTable: Record DMTTable; NoUserInteraction_New: Boolean)
     var
         start: DateTime;
     begin
-        SetDMTTableToProcess(DMTTable);
-        NoUserInteraction := NoUserInteraction_New;
         start := CurrentDateTime;
-        ProcessFullBuffer();
+        NoUserInteraction := NoUserInteraction_New;
+        CheckBufferTableIsNotEmpty(DMTTable);
 
-        DMTTable.Get(DMTTable.RecordId);
-        DMTTable.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DMTTable.LastImportBy));
-        DMTTable.LastImportToTargetAt := CurrentDateTime;
-        if DMTTable."Import Duration (Longest)" < (CurrentDateTime - start) then
-            DMTTable."Import Duration (Longest)" := (CurrentDateTime - start);
-        DMTTable.Modify();
+        StartImportForCustomBufferTable(DMTTable);
+        StartImportForGenericBufferTable(DMTTable);
+
+        UpdateProcessingTime(DMTTable, start);
     end;
 
-    procedure ProcessFullBuffer()
+    procedure ProcessFullBuffer(DMTTable: Record DMTTable)
     var
         DMTErrorLog: Record DMTErrorLog;
+        TempDMTField_COLLECTION: Record "DMTField" temporary;
         BufferRef, BufferRef2 : RecordRef;
+        KeyFieldsFilter: Text;
+        NonKeyFieldsFilter: Text;
     begin
-        InitGlobalParams(BufferRef, KeyFieldsFilter, NonKeyFieldsFilter);
+        InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTTable);
+        LoadFieldMapping(DMTTable, TempDMTField_COLLECTION);
 
-        EditView(BufferRef);
+        EditView(BufferRef, DMTTable);
 
         // Buffer loop
+        BufferRef.OPEN(DMTTable."Buffer Table ID");
         BufferRef.findset();
         DMTMgt.ProgressBar_Open(BufferRef, '_________________________' + BufferRef.CAPTION + '_________________________' +
                                            '\Filter:       ########################################1#' +
@@ -37,7 +39,7 @@ codeunit 91000 "DMTImport"
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2);
+            ProcessSingleBufferRecord(BufferRef2, DMTTable, TempDMTField_COLLECTION);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -50,28 +52,25 @@ codeunit 91000 "DMTImport"
         DMTMgt.ProgressBar_Close();
         DMTErrorLog.OpenListWithFilter(BufferRef);
         DMTMgt.GetResultQtyMessage();
-        if (CurrDMTTask."Line No." <> 0) then begin
-            CurrDMTTask.get(CurrDMTTask.RecordId);
-            CurrDMTTask."No. of Records" := DMTMgt.ProgressBar_GetTotal();
-            CurrDMTTask."No. of Records imported" := DMTMgt.GetResultQty_QtySuccess();
-            CurrDMTTask."No. of Records failed" := DMTMgt.GetResultQty_QtyFailed();
-            CurrDMTTask.Modify();
-        end;
     end;
 
-    procedure ProcessFullBuffer(var RecIdToProcessList: list of [RecordID])
+    procedure ProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DMTTable: Record DMTTable)
     var
         DMTErrorLog: Record DMTErrorLog;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
         ID: RecordId;
+        KeyFieldsFilter: Text;
+        NonKeyFieldsFilter: Text;
+        TempDMTField_COLLECTION: Record "DMTField" temporary;
     begin
         if RecIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
 
-        InitGlobalParams(BufferRef, KeyFieldsFilter, NonKeyFieldsFilter);
+        InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTTable);
 
         // Buffer loop
+        BufferRef.OPEN(DMTTable."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
         BufferRef.get(ID);
         DMTMgt.ProgressBar_Open(RecIdToProcessList.Count,
@@ -85,7 +84,7 @@ codeunit 91000 "DMTImport"
         foreach ID in RecIdToProcessList do begin
             BufferRef.get(ID);
             BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2);
+            ProcessSingleBufferRecord(BufferRef2, DMTTable, TempDMTField_COLLECTION);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -116,7 +115,7 @@ codeunit 91000 "DMTImport"
         OK := TempDMTFields_FOUND.FindFirst();
     end;
 
-    procedure ProcessSingleBufferRecord(BufferRef: RecordRef)
+    procedure ProcessSingleBufferRecord(BufferRef: RecordRef; DMTTable: Record DMTTable; TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
         DMTErrorLog: Record DMTErrorLog;
         // DMTTestRunner: Codeunit DMTTestRunner;
@@ -127,34 +126,22 @@ codeunit 91000 "DMTImport"
 
 
         // DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        TargetRef.OPEN(CurrDMTTable."To Table ID", TRUE);
+        TargetRef.OPEN(DMTTable."To Table ID", TRUE);
         // //ReplaceValuesBeforeProcessing(BufferRef);
 
         // DMTTestRunner.InitializeValidationTests(BufferRef, DMTTable);
         // DMTTestRunner.Run();
         // DMTTestRunner.GetResultRef(TargetRef);
 
-        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, KeyFieldsFilter, TempDMTField_COLLECTION);
-        ValidateNonKeyFieldsAndModify(BufferRef, TargetRef);
+        AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, TempDMTField_COLLECTION);
+        ValidateNonKeyFieldsAndModify(BufferRef, TargetRef, TempDMTField_COLLECTION);
 
         ErrorsExist := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
         if not ErrorsExist then begin
-            Success := DMTMgt.InsertRecFromTmp(BufferRef, TargetRef, CurrDMTTable."Use OnInsert Trigger");
+            Success := DMTMgt.InsertRecFromTmp(BufferRef, TargetRef, DMTTable."Use OnInsert Trigger");
         end;
 
         DMTMgt.UpdateResultQty(Success, TRUE);
-    end;
-
-    procedure SetDMTTableToProcess(DMTTable_NEW: Record DMTTable)
-    begin
-        CurrDMTTable.Copy(DMTTable_NEW);
-        DMTMgt.CheckBufferTableIsNotEmpty(CurrDMTTable."Buffer Table ID");
-        BufferTableID := CurrDMTTable."Buffer Table ID";
-    end;
-
-    procedure SetDMTTaskToProcess(DMTTask: record DMTTask)
-    begin
-        CurrDMTTask := DMTTask;
     end;
 
     procedure SetBufferTableView(bufferTableViewNEW: text)
@@ -162,8 +149,11 @@ codeunit 91000 "DMTImport"
         BufferTableView := bufferTableViewNEW;
     end;
 
-    procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; KeyFieldsFilter: text; var TmpDMTField: record "DMTField" temporary)
+    procedure AssignKeyFieldsAndInsertTmpRec(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpDMTField: record "DMTField" temporary)
+    var
+        KeyFieldsFilter: text;
     begin
+        KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, true);
         IF NOT TmpTargetRef.ISTEMPORARY then
             ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpDMTField.Reset();
@@ -175,10 +165,12 @@ codeunit 91000 "DMTImport"
         IF TmpTargetRef.INSERT(FALSE) then;
     end;
 
-    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef)
+    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
         ToFieldRef: FieldRef;
+        NonKeyFieldsFilter: Text;
     begin
+        NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
         TempDMTField_COLLECTION.Reset();
         TempDMTField_COLLECTION.SetFilter("To Field No.", NonKeyFieldsFilter);
         TempDMTField_COLLECTION.findset();
@@ -229,46 +221,83 @@ codeunit 91000 "DMTImport"
         //end;
     end;
 
-    procedure InitGlobalParams(var BufferRef: RecordRef; var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text)
+    procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text; DMTTable: Record DMTTable)
     // var
     //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
         // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        LoadFieldMapping(CurrDMTTable, TempDMTField_COLLECTION);
-        BufferRef.OPEN(BufferTableID);
-        BuffKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, true /*include*/);
-        BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(BufferRef.NUMBER, false /*exclude*/);
+        BuffKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", true /*include*/);
+        BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", false /*exclude*/);
     end;
 
-    local procedure EditView(var BufferRef: RecordRef)
+    local procedure EditView(var BufferRef: RecordRef; DMTTable: Record DMTTable)
     begin
 
         if NoUserInteraction then
             exit;
 
         if BufferTableView = '' then begin
-            if CurrDMTTable.LoadTableLastView() <> '' then
-                BufferRef.SetView(CurrDMTTable.LoadTableLastView());
+            ;
+            if DMTTable.LoadTableLastView() <> '' then
+                BufferRef.SetView(DMTTable.LoadTableLastView());
 
             if not ShowRequestPageFilterDialog(BufferRef) then
                 exit;
 
-            CurrDMTTable.SaveTableLastView(BufferRef.GetView());
+            DMTTable.SaveTableLastView(BufferRef.GetView());
         end else begin
             BufferRef.SetView(BufferTableView);
         end;
 
     end;
 
+    local procedure StartImportForCustomBufferTable(var DMTTable: Record DMTTable)
+    begin
+        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Custom Buffer Table per file" then
+            exit;
+        ProcessFullBuffer(DMTTable);
+    end;
+
+    local procedure StartImportForGenericBufferTable(var DMTTable: Record DMTTable)
+    begin
+        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Generic Buffer Table for all Files" then
+            exit;
+        ProcessFullBuffer(DMTTable);
+    end;
+
+    local procedure UpdateProcessingTime(var DMTTable: Record DMTTable; start: DateTime)
+    begin
+        DMTTable.Get(DMTTable.RecordId);
+        DMTTable.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DMTTable.LastImportBy));
+        DMTTable.LastImportToTargetAt := CurrentDateTime;
+        if DMTTable."Import Duration (Longest)" < (CurrentDateTime - start) then
+            DMTTable."Import Duration (Longest)" := (CurrentDateTime - start);
+        DMTTable.Modify();
+    end;
+
+    procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
+    begin
+        case DMTTable.BufferTableType of
+            DMTTable.BufferTableType::"Custom Buffer Table per file":
+                begin
+                    RecRef.OPEN(DMTTable."Buffer Table ID");
+                    if RecRef.IsEmpty then
+                        ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, DMTTable."Buffer Table ID");
+                end;
+            DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    if not GenBuffTable.FilterByFileName(DMTTable.DataFilePath) then
+                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.DataFilePath);
+                end;
+        end;
+    end;
+
 
     var
-        TempDMTField_COLLECTION: Record "DMTField" temporary;
-        CurrDMTTable: Record DMTTable;
-        CurrDMTTask: Record DMTTask;
         DMTMgt: Codeunit DMTMgt;
-        KeyFieldsFilter: Text;
-        NonKeyFieldsFilter: Text;
         BufferTableView: Text;
-        BufferTableID: Integer;
         NoUserInteraction: Boolean;
 }

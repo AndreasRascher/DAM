@@ -100,7 +100,7 @@ page 91004 "DMTTableList"
                     DMTTable_SELECTED.FindSet();
                     repeat
                         DMTTable := DMTTable_SELECTED;
-                        DMTImport.ProcessDMTTable(DMTTable, true);
+                        DMTImport.StartImport(DMTTable, true);
                     until DMTTable_SELECTED.Next() = 0;
                 end;
             }

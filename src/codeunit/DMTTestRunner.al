@@ -57,7 +57,7 @@ codeunit 91007 DMTTest
     var
         DMTImport: Codeunit "DMTImport";
     begin
-        DMTImport.AssignKeyFieldsAndInsertTmpRec(BufferRef, TmpTargetRef, KeyFieldsFilter, TempDMTField);
+        DMTImport.AssignKeyFieldsAndInsertTmpRec(BufferRef, TmpTargetRef, TempDMTField);
     end;
 
     [Test]

@@ -58,7 +58,7 @@ table 91001 "DMTTable"
         field(50; BufferTableType; Option)
         {
             CaptionML = DEU = 'Puffertabellenart', ENU = 'Buffer Table Type';
-            OptionMembers = "Generic Buffer Table for all Files","Seperate Buffer Table per CSV";
+            OptionMembers = "Generic Buffer Table for all Files","Custom Buffer Table per file";
             OptionCaptionML = DEU = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV',
                               ENU = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV';
         }
@@ -243,7 +243,7 @@ table 91001 "DMTTable"
             GenBuffTable.ShowImportDataForFile(Rec.DataFilePath);
         end;
 
-        if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
+        if Rec.BufferTableType = Rec.BufferTableType::"Custom Buffer Table per file" then begin
             if Rec."Buffer Table ID" = 0 then exit(false);
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
         end;
@@ -445,7 +445,7 @@ table 91001 "DMTTable"
         IStr.ReadText(TableView);
     end;
 
-    procedure BufferTableExits(): boolean
+    procedure CustomBufferTableExits(): boolean
     var
         AllObj: Record AllObjWithCaption;
     begin

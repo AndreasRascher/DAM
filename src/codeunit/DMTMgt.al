@@ -1,12 +1,5 @@
 codeunit 91001 "DMTMgt"
 {
-    procedure CheckBufferTableIsNotEmpty(TableID: Integer)
-    var
-        RecRef: RecordRef;
-    begin
-        RecRef.OPEN(TableID);
-        if RecRef.IsEmpty then ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, TableID);
-    end;
 
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
     begin
@@ -195,7 +188,11 @@ codeunit 91001 "DMTMgt"
     begin
         FromField := SourceRef.field(FromFieldNo);
         ToField := TargetRef.field(ToFieldNo);
-        ToField.VALUE := FromField.VALUE;
+        if ToField.Type = FromField.Type then
+            ToField.VALUE := FromField.VALUE
+        else
+            if not EvaluateFieldRef(ToField, Format(FromField.Value), false) then
+                Error('TODO EvaluateFieldRef');
         IF DoModify then
             TargetRef.modify();
     end;
@@ -365,6 +362,10 @@ codeunit 91001 "DMTMgt"
     begin
         FromField := SourceRecRef.field(FromFieldno);
         ToField := TargetRecRef.field(ToFieldNo);
+        if ToField.Type = FromField.Type then
+            ToField.VALUE := FromField.VALUE
+        else
+            Error('TODO: 1. Convert to Target Type - 2.Validate');
         ToField.VALIDATE(FromField.VALUE);
         TargetRecRef.modify();
     end;
