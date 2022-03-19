@@ -294,9 +294,10 @@ codeunit 91001 "DMTMgt"
             'OPTION':
                 IF EvaluateOptionValueAsNumber then begin
                     //Optionswert wird als Zahl übergeben
-                    EVALUATE(_Integer, FromText);
-                    FieldRef_TO.VALUE := _Integer;
-                    exit(TRUE);
+                    if EVALUATE(_Integer, FromText) then begin
+                        FieldRef_TO.VALUE := _Integer;
+                        exit(TRUE);
+                    end;
                 end ELSE begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
@@ -358,15 +359,22 @@ codeunit 91001 "DMTMgt"
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FromFieldno: Integer; ToFieldNo: Integer; VAR TargetRecRef: RecordRef)
     var
         FromField: FieldRef;
-        ToField: FieldRef;
+        ToField, FieldWithTypeCorrectValueToValidate : FieldRef;
     begin
         FromField := SourceRecRef.field(FromFieldno);
         ToField := TargetRecRef.field(ToFieldNo);
-        if ToField.Type = FromField.Type then
-            ToField.VALUE := FromField.VALUE
-        else
-            Error('TODO: 1. Convert to Target Type - 2.Validate');
-        ToField.VALIDATE(FromField.VALUE);
+        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(ToFieldNo);
+        case true of
+            (ToField.Type = FromField.Type):
+                FieldWithTypeCorrectValueToValidate.Value := FromField.VALUE; // Same Type -> no conversion needed
+            (FromField.Type in [FieldType::Text, FieldType::Code]):
+                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), true) then
+                    Error('TODO');
+            else
+                Error('unhandled TODO');
+        end;
+
+        ToField.VALIDATE(FieldWithTypeCorrectValueToValidate.Value);
         TargetRecRef.modify();
     end;
 

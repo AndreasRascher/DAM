@@ -143,16 +143,11 @@ table 91003 "DMTErrorLog"
         PAGE.RUN(PAGE::"DMT Error Log List");
     end;
 
-    procedure OpenListWithFilter(BufferRef: RecordRef)
-    begin
-        OpenListWithFilter(BufferRef.RECORDID.TABLENO);
-    end;
-
-    procedure OpenListWithFilter(FromTableID: Integer)
+    procedure OpenListWithFilter(DMTTable: Record DMTTable)
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
-        DMTErrorlog.Setrange("Import from Table No.", FromTableID);
+        DMTErrorlog.Setrange("Import to Table No.", DMTTable."To Table ID");
         PAGE.RUN(PAGE::"DMT Error Log List", DMTErrorlog);
     end;
 

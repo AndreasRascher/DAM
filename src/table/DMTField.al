@@ -48,6 +48,7 @@ table 91002 "DMTField"
             CaptionML = DEU = 'Herkunft Feldnr.', ENU = 'Source Field No.';
             DataClassification = SystemMetadata;
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
+            ValidateTableRelation = false;
             trigger OnValidate()
             begin
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
@@ -217,8 +218,10 @@ table 91002 "DMTField"
                             FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
                     if FoundAtIndex <> 0 then begin
                         DMTFields2 := DMTFields;
-                        DMTFields2."From Field No." := BuffTableCaptions.Keys.Get(FoundAtIndex);
-                        DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(DMTFields2."From Field No."), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
+                        // Buffer Fields Start from 1000
+                        DMTFields2.Validate("From Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
+                        DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
+
                         DMTFields2.Modify();
                     end;
                 until DMTFields.Next() = 0;

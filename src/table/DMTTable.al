@@ -88,6 +88,7 @@ table 91001 "DMTTable"
         {
             CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
+            ValidateTableRelation = false;
             MinValue = 50000;
             MaxValue = 99999;
         }
@@ -95,6 +96,7 @@ table 91001 "DMTTable"
         {
             CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
+            ValidateTableRelation = false;
             MinValue = 50000;
             MaxValue = 99999;
         }
@@ -459,6 +461,15 @@ table 91001 "DMTTable"
     begin
         if (Rec."Import XMLPort ID" = 0) then exit(false);
         exit(AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID"));
+    end;
+
+    procedure UpdateNAVSchemaFileStatus()
+    var
+        FieldBuffer: Record DMTFieldBuffer;
+    begin
+        Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::"Import required";
+        if not FieldBuffer.IsEmpty then
+            Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::Imported;
     end;
 
 }

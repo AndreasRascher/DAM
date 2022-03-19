@@ -5,7 +5,8 @@ page 91001 "DMT Error Log List"
     PageType = List;
     SourceTable = DMTErrorLog;
     UsageCategory = Lists;
-    Editable = false;
+    ModifyAllowed = false;
+    InsertAllowed = false;
 
     layout
     {
@@ -66,7 +67,7 @@ page 91001 "DMT Error Log List"
             }
             action(DeleteFilteredLines)
             {
-                CaptionML = DEU = 'Zeilen löschen', ENU = 'Delete Lines';
+                CaptionML = DEU = 'Gefilterte Zeilen löschen', ENU = 'Delete filtered lines';
                 ApplicationArea = All;
                 Image = Delete;
                 Promoted = true;
@@ -78,7 +79,6 @@ page 91001 "DMT Error Log List"
                 trigger OnAction()
                 begin
                     Rec.DeleteAll();
-
                 end;
             }
             action(AddTableFilter)

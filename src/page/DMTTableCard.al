@@ -53,6 +53,8 @@ page 91002 "DMTTableCard"
                 }
                 field("NAV Schema File Status"; Rec."NAV Schema File Status") { ApplicationArea = All; }
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
 
             }
             part(Lines; DMTTableCardPart)
@@ -82,6 +84,9 @@ page 91002 "DMTTableCard"
 
                 trigger OnAction()
                 begin
+                    Rec.TestField("To Table ID");
+                    CurrPage.SaveRecord();
+                    Commit();
                     Rec.ImportToBufferTable();
                 end;
             }
@@ -144,7 +149,7 @@ page 91002 "DMTTableCard"
                 var
                     DMTErrorLog: Record DMTErrorLog;
                 begin
-                    DMTErrorLog.OpenListWithFilter(rec."Buffer Table ID");
+                    DMTErrorLog.OpenListWithFilter(Rec);
                 end;
             }
             action(CreateXMLPort)
@@ -180,6 +185,7 @@ page 91002 "DMTTableCard"
         if Rec.CustomBufferTableExits() then
             BufferTableIDStyle := 'Favorable';
         Rec.TryFindExportDataFile();
+        Rec.UpdateNAVSchemaFileStatus();
     end;
 
     trigger OnAfterGetRecord()
