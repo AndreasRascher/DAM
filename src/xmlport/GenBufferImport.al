@@ -32,6 +32,7 @@ xmlport 90000 GenBuffImport
                 }
                 trigger OnBeforeInsertRecord()
                 begin
+                    ReceivedLinesCount += 1;
                     NextEntryNo += 1;
                     GenBuffTable."Entry No." := NextEntryNo;
                     GenBuffTable."Column Count" := MaxColCount;
@@ -86,9 +87,13 @@ xmlport 90000 GenBuffImport
     end;
 
     trigger OnPostXmlPort()
+    var
+        LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
         GenBuffTable.UpdateMaxColCount(CurrFileName, MaxColCount);
         CurrDMTTable.UpdateQtyLinesInBufferTable();
+        IF currXMLport.FILENAME <> '' then //only for manual excecution
+            MESSAGE(LinesProcessedMsg, currXMLport.FILENAME, ReceivedLinesCount);
     end;
 
     procedure SetDMTTable(DMTTable: Record DMTTable)
@@ -105,5 +110,6 @@ xmlport 90000 GenBuffImport
         HeaderLineEntryNo: Integer;
         MaxColCount: Integer;
         NextEntryNo: Integer;
+        ReceivedLinesCount: Integer;
         CurrFileName: Text;
 }

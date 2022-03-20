@@ -24,7 +24,7 @@ page 91004 "DMTTableList"
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field("Qty.Lines In Src. Table"; Rec."Qty.Lines In Src. Table") { ApplicationArea = All; }
+                field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
             }
         }

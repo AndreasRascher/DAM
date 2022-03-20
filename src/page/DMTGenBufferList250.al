@@ -1,10 +1,9 @@
 page 90000 "DMTGenBufferList250"
 {
-    Caption = 'GenBufferList';
+    Caption = 'DMT GenBufferList';
     PageType = List;
     SourceTable = DMTGenBuffTable;
-    UsageCategory = Lists;
-    ApplicationArea = All;
+    UsageCategory = None;
 
     layout
     {

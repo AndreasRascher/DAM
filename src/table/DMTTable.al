@@ -29,9 +29,9 @@ table 91001 "DMTTable"
                 ObjectMgt.ValidateToTableCaption(Rec, xRec);
             end;
         }
-        field(21; "Qty.Lines In Src. Table"; Integer)
+        field(21; "No.of Records in Buffer Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Zeilen in Puffertabelle', ENU = 'Qty.Lines in buffer table';
+            CaptionML = DEU = 'Anz. Datensätze in Puffertabelle', ENU = 'No.of Records in Buffer Table';
             trigger OnLookup()
             begin
                 ShowBufferTable();
@@ -61,6 +61,10 @@ table 91001 "DMTTable"
             OptionMembers = "Generic Buffer Table for all Files","Custom Buffer Table per file";
             OptionCaptionML = DEU = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV',
                               ENU = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV';
+            trigger OnValidate()
+            begin
+                ProposeObjectIDs();
+            end;
         }
         field(52; DataFilePath; Text[250])
         {
@@ -89,16 +93,22 @@ table 91001 "DMTTable"
             CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
-            MinValue = 50000;
-            MaxValue = 99999;
+            trigger OnValidate()
+            begin
+                if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
+                    Error(ObjectIDNotInIDRangeErr);
+            end;
         }
         field(54; "Buffer Table ID"; Integer)
         {
             CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
-            MinValue = 50000;
-            MaxValue = 99999;
+            trigger OnValidate()
+            begin
+                if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
+                    Error(ObjectIDNotInIDRangeErr);
+            end;
         }
         field(60; "Use OnInsert Trigger"; boolean)
         {
@@ -175,7 +185,7 @@ table 91001 "DMTTable"
     fieldgroups
     {
         fieldgroup(DropDown; "To Table ID", "Dest.Table Caption") { }
-        fieldgroup(Brick; "Dest.Table Caption", "Qty.Lines In Src. Table") { }
+        fieldgroup(Brick; "Dest.Table Caption", "No.of Records in Buffer Table") { }
     }
 
     trigger OnDelete()
@@ -193,29 +203,29 @@ table 91001 "DMTTable"
         InStr: InStream;
         Progress: Dialog;
     begin
-        // case Rec.BufferTableType of
-        //     Rec.BufferTableType::"Seperate Buffer Table per CSV":
-        //         begin
-        //             rec.TestField("Import XMLPort ID");
-        //             rec.Testfield(DataFilePath);
-        //             file.Open(DataFilePath, TextEncoding::MSDos);
-        //             file.CreateInStream(InStr);
-        //             Xmlport.Import(Rec."Import XMLPort ID", InStr);
-        //             UpdateQtyLinesInBufferTable();
-        //         end;
-        //     Rec.BufferTableType::"Generic Buffer Table for all Files":
-        //         begin
-        rec.Testfield(DataFilePath);
-        file.Open(DataFilePath, TextEncoding::MSDos);
-        file.CreateInStream(InStr);
-        GenBuffImport.SetSource(InStr);
-        GenBuffImport.SetDMTTable(Rec);
-        Progress.Open(StrSubstNo('Importing %1', ConvertStr(Rec.DataFilePath, '\', '/')));
-        GenBuffImport.Import();
-        Progress.Close();
-        UpdateQtyLinesInBufferTable();
-        // end;
-        // end
+        case Rec.BufferTableType of
+            Rec.BufferTableType::"Custom Buffer Table per file":
+                begin
+                    rec.TestField("Import XMLPort ID");
+                    rec.Testfield(DataFilePath);
+                    file.Open(DataFilePath, TextEncoding::MSDos);
+                    file.CreateInStream(InStr);
+                    Xmlport.Import(Rec."Import XMLPort ID", InStr);
+                    UpdateQtyLinesInBufferTable();
+                end;
+            Rec.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    rec.Testfield(DataFilePath);
+                    file.Open(DataFilePath, TextEncoding::MSDos);
+                    file.CreateInStream(InStr);
+                    GenBuffImport.SetSource(InStr);
+                    GenBuffImport.SetDMTTable(Rec);
+                    Progress.Open(StrSubstNo('Importing %1', ConvertStr(Rec.DataFilePath, '\', '/')));
+                    GenBuffImport.Import();
+                    Progress.Close();
+                    UpdateQtyLinesInBufferTable();
+                end;
+        end
     end;
 
     procedure DownloadALBufferTableFile()
@@ -254,6 +264,7 @@ table 91001 "DMTTable"
 
     local procedure ProposeObjectIDs()
     var
+        AllObjWithCaption: Record AllObjWithCaption;
         DMTSetup: Record "DMTSetup";
         DMTTable: Record DMTTable;
         Numbers: Record Integer;
@@ -278,7 +289,8 @@ table 91001 "DMTTable"
                 if Numbers.FindSet() then
                     repeat
                         if not UsedBufferTableIDs.Contains(Numbers.Number) then begin
-                            Rec."Buffer Table ID" := Numbers.Number;
+                            if not AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Numbers.Number) then
+                                Rec."Buffer Table ID" := Numbers.Number;
                         end;
                     until (Numbers.Next() = 0) or (rec."Buffer Table ID" <> 0);
             end;
@@ -288,9 +300,9 @@ table 91001 "DMTTable"
                 Numbers.SetFilter(Number, DMTSetup."Obj. ID Range XMLPorts");
                 if Numbers.FindSet() then
                     repeat
-                        if not UsedXMLPortIDs.Contains(Numbers.Number) then begin
-                            Rec."Import XMLPort ID" := Numbers.Number;
-                        end;
+                        if not UsedXMLPortIDs.Contains(Numbers.Number) then
+                            if not AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Numbers.Number) then
+                                Rec."Import XMLPort ID" := Numbers.Number;
                     until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
             end;
         TryFindBufferTableID(false);
@@ -313,25 +325,26 @@ table 91001 "DMTTable"
     procedure UpdateQtyLinesInBufferTable() QtyLines: Decimal;
     var
         GenBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
     begin
-        // if Rec."To Table ID" = 0 then
-        //     exit;
-        // DMTTable_Old := Rec;
-        // case Rec.BufferTableType of
-        //     Rec.BufferTableType::"Generic Buffer Table for all Files":
-        //         begin
-        GenBuffTable.FilterByFileName(Rec.DataFilePath);
-        QtyLines := GenBuffTable.Count;
-        //         end;
-        //     Rec.BufferTableType::"Seperate Buffer Table per CSV":
-        //         begin
-        //             TableInformation.get(Rec."Buffer Table ID");
-        //             Rec."Qty.Lines In Src. Table" := TableInformation."No. of Records";
-        //         end;
-        // end;
-        if Rec."Qty.Lines In Src. Table" <> QtyLines then begin
+        if Rec."To Table ID" = 0 then
+            exit;
+
+        case Rec.BufferTableType of
+            Rec.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    GenBuffTable.FilterByFileName(Rec.DataFilePath);
+                    QtyLines := GenBuffTable.Count;
+                end;
+            Rec.BufferTableType::"Custom Buffer Table per file":
+                begin
+                    RecRef.Open(REc."Buffer Table ID");
+                    QtyLines := RecRef.Count();
+                end;
+        end;
+        if Rec."No.of Records in Buffer Table" <> QtyLines then begin
             Rec.Get(Rec.RecordId);
-            Rec."Qty.Lines In Src. Table" := QtyLines;
+            Rec."No.of Records in Buffer Table" := QtyLines;
             Rec.Modify();
         end;
     end;
@@ -471,5 +484,9 @@ table 91001 "DMTTable"
         if not FieldBuffer.IsEmpty then
             Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::Imported;
     end;
+
+    var
+        ObjectIDNotInIDRangeErr: TextConst DEU = 'Die Objekt ID muss im Bereich 50000 bis 99999 liegen.',
+                                            ENU = 'The object ID must be in the range 50000 to 99999.';
 
 }

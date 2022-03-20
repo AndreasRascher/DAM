@@ -53,8 +53,9 @@ page 91002 "DMTTableCard"
                 }
                 field("NAV Schema File Status"; Rec."NAV Schema File Status") { ApplicationArea = All; }
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
+                field("No.of Records in Buffer Table"; "No.of Records in Buffer Table") { ApplicationArea = All; Editable = false; }
 
             }
             part(Lines; DMTTableCardPart)
@@ -88,6 +89,7 @@ page 91002 "DMTTableCard"
                     CurrPage.SaveRecord();
                     Commit();
                     Rec.ImportToBufferTable();
+                    EnableControls(); // ShowMappingLines
                 end;
             }
             action(TransferToTargetTable)
@@ -197,7 +199,7 @@ page 91002 "DMTTableCard"
     begin
         UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Custom Buffer Table per file");
         LinesVisible := (Rec."To Table ID" <> 0) and
-                        ("Qty.Lines In Src. Table" > 0) and
+                        (Rec."No.of Records in Buffer Table" > 0) and
                         (Rec."Data Source Type" <> Rec."Data Source Type"::" ");
         NAVDataSourcePropertiesVisible := Rec."Data Source Type" = Rec."Data Source Type"::"NAV CSV Export";
         CurrPage.Lines.Page.SetBufferTableType(Rec.BufferTableType);
