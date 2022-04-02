@@ -371,7 +371,7 @@ table 91008 "DMTGenBuffTable"
         NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(FileName);
 
         DMTGenBuffTable.reset();
-        DMTGenBuffTable.SetRange("Import from Filename", FileName);
+        DMTGenBuffTable.FilterByFileName(FileName);
         DMTGenBuffTable.SetRange(IsCaptionLine, false);
         // less Columns is faster
         case NoOfCols of

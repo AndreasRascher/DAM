@@ -38,6 +38,15 @@ page 91002 "DMTTableCard"
                         EnableControls();
                     end;
                 }
+                field("No.of Records in Buffer Table"; "No.of Records in Buffer Table")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    trigger OnAssistEdit()
+                    begin
+                        Rec.ShowBufferTable();
+                    end;
+                }
             }
             group(NAVDataSourceProperties)
             {
@@ -55,7 +64,6 @@ page 91002 "DMTTableCard"
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
-                field("No.of Records in Buffer Table"; "No.of Records in Buffer Table") { ApplicationArea = All; Editable = false; }
 
             }
             part(Lines; DMTTableCardPart)
@@ -139,7 +147,7 @@ page 91002 "DMTTableCard"
             }
             action(OpenErrorLog)
             {
-                Caption = 'Fehlerprotokoll öffnen';
+                CaptionML = ENU = 'Error Log', DEU = 'Fehlerprotokoll';
                 ApplicationArea = All;
                 Image = ErrorLog;
                 Promoted = true;
@@ -158,6 +166,7 @@ page 91002 "DMTTableCard"
             {
                 ApplicationArea = All;
                 Image = XMLSetup;
+                CaptionML = ENU = 'Create XMLPort', DEU = 'XMLPort erstellen';
 
                 trigger OnAction()
                 begin
@@ -168,6 +177,7 @@ page 91002 "DMTTableCard"
             {
                 ApplicationArea = All;
                 Image = Table;
+                CaptionML = ENU = 'Create Buffer Table', DEU = 'Puffertabelle erstellen';
 
                 trigger OnAction()
                 begin

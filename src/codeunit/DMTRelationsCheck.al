@@ -6,22 +6,25 @@ codeunit 91011 RelationsCheck
         RelationTableNo, RelationFieldNo : Integer;
         ErrorText: Text;
     begin
-        if GetRelationInfo(DMTField, RelationTableNo, RelationFieldNo) then
+        if FieldValue = '' then
+            exit;
+        if GetSimpleRelationInfo(DMTField, RelationTableNo, RelationFieldNo) then
             if not DataExistsInTargetTable(FieldValue, RelationTableNo, RelationFieldNo) then
                 if not DataExistsInBufferTable(FieldValue, RelationTableNo, RelationFieldNo) then
-                    ErrorText := 'EnumErrorType::TableRelation';
+                    ErrorText := 'ToDo EnumErrorType::TableRelation';
     end;
 
-    procedure GetRelationInfo(DMTField: Record DMTField; var RelationTableNo: Integer; var RelationFieldNo: Integer): Boolean
+    procedure GetSimpleRelationInfo(DMTField: Record DMTField; var RelationTableNo: Integer; var RelationFieldNo: Integer) HasRelations: Boolean
     var
         TableRelationsMetadata: Record "Table Relations Metadata";
     begin
         TableRelationsMetadata.SetRange("Table ID", DMTField."To Table No.");
         TableRelationsMetadata.SetRange("Field No.", DMTField."To Field No.");
-        if TableRelationsMetadata.FindFirst() then begin
-            RelationTableNo := TableRelationsMetadata."Related Table ID";
-            RelationFieldNo := TableRelationsMetadata."Related Field No.";
-        end;
+        if TableRelationsMetadata.FindFirst() then
+            if (TableRelationsMetadata.Next() = 0) then begin
+                RelationTableNo := TableRelationsMetadata."Related Table ID";
+                RelationFieldNo := TableRelationsMetadata."Related Field No.";
+            end;
     end;
 
     local procedure RelatedKeyFieldValue(DMTField: Record DMTField; TableID: Integer; RelatedTableID: Integer; RelatedFieldNo: Integer): Text[2048]
@@ -44,6 +47,7 @@ codeunit 91011 RelationsCheck
         RecRef: RecordRef;
     begin
         RecRef.Open(RelationTableNo);
+
         RecRef.Field(RelationFieldNo).SetFilter(FieldValue);
     end;
 
