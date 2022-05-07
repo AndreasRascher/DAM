@@ -1,5 +1,6 @@
 page 91008 NAVObjects
 {
+    CaptionML = ENU = 'NAV Data Export Objects', DEU = 'Objekte für den NAV Datenexport';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -14,7 +15,7 @@ page 91008 NAVObjects
                 ShowCaption = false;
                 group(InstructionsGroup2)
                 {
-                    CaptionML = ENU = 'Instructions', DEU = 'Anleitung';
+                    CaptionML = ENU = 'Instructions - Data Export', DEU = 'Anleitung - Datenexport';
                     label(Instructions01)
                     {
                         ApplicationArea = All;
@@ -33,7 +34,12 @@ page 91008 NAVObjects
                     label(Instructions04)
                     {
                         ApplicationArea = All;
-                        CaptionML = ENU = '4. Run the object to export your data as csv per table.', DEU = '4. Führen Sie das Objekt aus. Geben sie die Tabellen-IDs ein die sie exportieren wollen. Starten den Export';
+                        CaptionML = ENU = '4. Export the table schema of your database. This data will be used to map the fields to the target tables.', DEU = '4. Export des Tabellenschemas. Diese Daten werden für die Zuordnung der Spalten in die Zieltabellen verwendet.';
+                    }
+                    label(Instructions05)
+                    {
+                        ApplicationArea = All;
+                        CaptionML = ENU = '5. Run the object to export your data as csv per table.', DEU = '5. Führen Sie das Objekt aus. Geben sie die Tabellen-IDs ein die sie exportieren wollen. Starten Sie den Export';
                     }
 
                 }
