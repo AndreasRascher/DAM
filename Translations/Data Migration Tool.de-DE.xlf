@@ -1085,646 +1085,554 @@
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1960374245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld159</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld159</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld159 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 437990211 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld160</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld160</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld160 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1075686828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld161</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld161</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld161 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1713383445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld162</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld162</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld162 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2351080062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld163</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld163</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld163 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2182171039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld164</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld164</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld164 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2819867656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld165</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld165</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld165 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3457564273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld166</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld166</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld166 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4095260890 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld167</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld167</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld167 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1244595851 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld168</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld168</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld168 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1882292468 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld169</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld169</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld169 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3920156692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld170</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld170</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld170 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3282460075 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld171</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld171</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld171 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 900582630 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld172</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld172</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld172 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 262886013 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld173</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld173</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld173 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1369370224 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld174</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld174</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld174 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 731673607 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld175</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld175</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld175 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2644763458 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld176</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld176</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld176 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2007066841 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld177</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld177</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld177 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3113551052 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld178</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld178</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld178 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2475854435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld179</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld179</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld179 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3144940233 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld180</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld180</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld180 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3782636850 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld181</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld181</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld181 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1869546999 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld182</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld182</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld182 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2507243616 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld183</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld183</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld183 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1400759405 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld184</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld184</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld184 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2038456022 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld185</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld185</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld185 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 125366171 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld186</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld186</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld186 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 763062788 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld187</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld187</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld187 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2338334593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld188</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld188</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld188 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2976031210 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld189</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld189</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld189 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3400684154 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld190</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld190</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld190 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2762987537 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld191</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld191</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld191 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2125290920 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld192</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld192</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld192 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1487594303 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld193</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld193</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld193 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1656503326 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld194</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld194</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld194 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1018806709 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld195</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld195</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld195 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 381110092 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld196</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld196</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld196 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4038380771 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld197</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld197</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld197 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4207289794 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld198</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld198</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld198 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3569593177 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld199</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld199</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld199 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2011486984 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld200</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld200</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld200 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1373790367 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld201</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld201</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld201 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3286880218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld202</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld202</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld202 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2649183601 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld203</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld203</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld203 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 267306156 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld204</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld204</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld204 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3924576835 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld205</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld205</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld205 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1542699390 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld206</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld206</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld206 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 905002773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld207</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld207</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld207 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2818092624 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld208</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld208</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld208 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2180396007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld209</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld209</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld209 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1734954711 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld210</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld210</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld210 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2372651328 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld211</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld211</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld211 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3010347945 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld212</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld212</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld212 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3648044562 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld213</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld213</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld213 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4285741179 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld214</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld214</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld214 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 628470500 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld215</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld215</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld215 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1266167117 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld216</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld216</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld216 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1903863734 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld217</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld217</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld217 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 928349071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld218</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld218</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld218 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1566045688 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld219</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld219</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld219 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1475218442 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld220</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld220</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld220 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 837521825 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld221</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld221</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld221 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 199825208 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld222</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld222</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld222 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3857095887 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld223</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld223</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld223 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4026004910 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld224</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld224</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld224 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3388308293 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld225</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld225</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld225 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2750611676 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld226</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld226</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld226 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2112915059 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld227</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld227</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld227 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2281824082 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld228</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld228</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld228 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1644127465 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld229</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld229</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld229 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1198686169 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld230</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld230</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld230 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1836382786 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld231</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld231</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld231 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 4218260231 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld232</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld232</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld232 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 560989552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld233</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld233</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld233 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3749472637 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld234</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld234</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld234 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 92201958 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld235</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld235</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld235 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2474079403 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld236</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld236</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld236 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3111776020 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld237</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld237</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld237 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 392080529 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld238</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld238</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld238 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1029777146 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld239</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld239</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld239 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 938949900 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld240</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld240</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld240 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 301253283 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld241</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld241</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld241 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2214343134 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld242</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld242</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld242 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1576646517 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld243</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld243</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld243 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2683130728 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld244</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld244</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld244 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2045434111 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld245</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld245</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld245 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3958523962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld246</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld246</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld246 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 3320827345 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld247</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld247</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld247 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1745555540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld248</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld248</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld248 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1107858923 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld249</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld249</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld249 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 683205979 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fld250</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Feld250</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld250 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1789,15 +1697,14 @@
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 3272857444" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Duration:        ########################################3#</source>
-          <target>[NAB: REVIEW]\Dauer: ########################################3#
-</target>
+          <target>\Dauer:           ########################################3#</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Duration</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 2068676218" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Filter:       ########################################1#</source>
-          <target>[NAB: REVIEW]\Filter: ########################################1#</target>
+          <target>\Filter:       ########################################1#</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Filter</note>
@@ -1846,58 +1753,51 @@
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 4118238928 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creeate NAV Export Object</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>NAV Export Objekt erstellen</target>
           <note from="Developer" annotates="general" priority="2">NAV Export Objekt erstellen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action CreateNAVExportObject - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 1428180855 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Schema.csv</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Schema.csv importieren</target>
           <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ImportNAVSchema - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Backup erstellen</target>
           <note from="Developer" annotates="general" priority="2">Backup erstellen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action XMLExport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2090228232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Backup</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Backup importieren</target>
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action XMLImport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 1418398776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Log</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Fehlerprotokoll</target>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ErrorLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 4113627632 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Table List</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Tabellenübersicht</target>
           <note from="Developer" annotates="general" priority="2">Tabellenübersicht</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TableList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2437060273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Task List</source>
-          <target>[NAB: SUGGESTION]Aufgabenliste</target>
+          <target>Aufgabenliste</target>
           <note from="Developer" annotates="general" priority="2">Aufgabenliste</note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TaskList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 4082098809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>TestImportGenBuff</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>TestImportGenBuff</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
