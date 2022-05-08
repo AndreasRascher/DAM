@@ -235,9 +235,10 @@ table 91002 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-    // Vendor: Record Vendor;
-    // Customer: Record Customer;
-    // Contact: Record Contact;
+        // Vendor: Record Vendor;
+        // Customer: Record Customer;
+        // Contact: Record Contact;
+        GLAccount: Record "G/L Account";
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
@@ -252,7 +253,7 @@ table 91002 "DMTField"
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
-                    (TargetField.TableNo = DATabase::Item) and
+                    (TargetField.TableNo = Database::Item) and
                     (TargetField.FieldName IN ['Costing Method',
                                                'Tariff No.',
                                                'Base Unit of Measure',
@@ -285,17 +286,22 @@ table 91002 "DMTField"
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
-                    (TargetField.TableNo = DATabase::"Production BOM Header") and
+                    (TargetField.TableNo = Database::"Production BOM Header") and
                     (TargetField.FieldName IN ['Status']):
                         begin
                             ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
                             DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
                         end;
-                    (TargetField.TableNo = DATabase::"Routing Header") and
+                    (TargetField.TableNo = Database::"Routing Header") and
                     (TargetField.FieldName IN ['Status']):
                         begin
                             RoutingHeader.Status := RoutingHeader.Status::"Under Development";
                             DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
+                        end;
+                    (TargetField.TableNo = Database::"G/L Account") and
+                    (TargetField.FieldName IN ['Totaling']):
+                        begin
+                            DMTFields2."Validate Value" := false;
                         end;
                 end;
 

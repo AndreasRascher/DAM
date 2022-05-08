@@ -202,6 +202,7 @@ table 91001 "DMTTable"
         File: File;
         InStr: InStream;
         Progress: Dialog;
+        ImportFileFromPathLbl: Label 'Importing %1';
     begin
         case Rec.BufferTableType of
             Rec.BufferTableType::"Custom Buffer Table per file":
@@ -220,7 +221,7 @@ table 91001 "DMTTable"
                     file.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
                     GenBuffImport.SetDMTTable(Rec);
-                    Progress.Open(StrSubstNo('Importing %1', ConvertStr(Rec.DataFilePath, '\', '/')));
+                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(Rec.DataFilePath, '\', '/')));
                     GenBuffImport.Import();
                     Progress.Close();
                     UpdateQtyLinesInBufferTable();

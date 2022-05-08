@@ -1373,6 +1373,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Importing %1</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportToBufferTable - NamedType ImportFileFromPathLbl</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
           <note from="Developer" annotates="general" priority="2"></note>

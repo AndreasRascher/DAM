@@ -254,12 +254,19 @@ codeunit 91001 "DMTMgt"
         NoOfOptions: Integer;
         OptionElement: text;
     begin
+        if FromText = '' then
+            case UPPERCASE(FORMAT(FieldRef_TO.TYPE)) of
+                'BIGINTEGER', 'INTEGER', 'DECIMAL':
+                    FromText := '0';
+            end;
         CASE UPPERCASE(FORMAT(FieldRef_TO.TYPE)) OF
 
             'INTEGER':
-                IF EVALUATE(_Integer, FromText) then begin
-                    FieldRef_TO.VALUE := _Integer;
-                    exit(TRUE);
+                begin
+                    IF EVALUATE(_Integer, FromText) then begin
+                        FieldRef_TO.VALUE := _Integer;
+                        exit(TRUE);
+                    end;
                 end;
             'BIGINTEGER':
                 IF EVALUATE(_BigInteger, FromText) then begin

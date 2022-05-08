@@ -1647,6 +1647,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Importing %1</source>
+          <target>Importiere %1</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportToBufferTable - NamedType ImportFileFromPathLbl</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
           <target>Datenquelltyp</target>
@@ -1699,14 +1706,12 @@
           <source>\Duration:        ########################################3#</source>
           <target>\Dauer:           ########################################3#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Duration</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 2068676218" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Filter:       ########################################1#</source>
           <target>\Filter:       ########################################1#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Filter</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 139100741" size-unit="char" translate="yes" xml:space="preserve">
@@ -1791,7 +1796,6 @@
           <source>Task List</source>
           <target>Aufgabenliste</target>
           <note from="Developer" annotates="general" priority="2">Aufgabenliste</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TaskList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 4082098809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
