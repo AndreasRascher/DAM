@@ -321,4 +321,10 @@ codeunit 91000 DMTImport
         DMTMgt: Codeunit DMTMgt;
         BufferTableView: Text;
         NoUserInteraction: Boolean;
+        ProgressBarText_Title: label '_________________________%1_________________________', Locked = true;
+        ProgressBarText_Filter: label '\Filter:       ########################################1#';
+        ProgressBarText_Record: label '\Record:    ########################################2#';
+        ProgressBarText_Duration: label '\Duration:        ########################################3#';
+        ProgressBarText_Progress: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
+        ProgressBarText_TimeRemaining: label '\Time Remaining: ########################################5#';
 }

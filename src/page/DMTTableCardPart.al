@@ -39,32 +39,24 @@ page 91003 "DMTTableCardPart"
                 field("From Field No."; Rec."From Field No.")
                 {
                     HideValue = HideFromFieldInfo;
-                    ToolTip = 'Specifies the value of the Src.Field No. field';
                     ApplicationArea = All;
                 }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error")
                 {
-                    ToolTip = 'Specifies the value of the Ignore Validation Error field';
                     ApplicationArea = All;
                 }
                 field("Trgt.Field Type"; Rec."To Field Type")
                 {
                     Visible = false;
-                    ToolTip = 'Specifies the value of the Trgt.Field Type field';
                     ApplicationArea = All;
                 }
                 field("From Field Type"; Rec."From Field Type")
                 {
                     HideValue = HideFromFieldInfo;
                     Visible = false;
-                    ToolTip = 'Specifies the value of the Src.Field Type field';
                     ApplicationArea = All;
                 }
-                field("Validate Value"; Rec."Validate Value")
-                {
-                    ToolTip = 'Specifies the value of the Validate Value field';
-                    ApplicationArea = All;
-                }
+                field("Validate Value"; Rec."Validate Value") { ApplicationArea = All; }
                 field("Use Try Function"; "Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
             }

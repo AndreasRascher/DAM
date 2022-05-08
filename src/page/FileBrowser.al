@@ -27,25 +27,16 @@ page 91007 FileBrowser
             repeater(Entries)
             {
                 Editable = false;
-                field("Date"; Rec."Date")
-                {
-                    ToolTip = 'Specifies the value of the Date field.';
-                    ApplicationArea = All;
-                }
-                field("Is a file"; Rec."Is a file")
-                {
-                    ToolTip = 'Specifies the value of the Is a file field.';
-                    ApplicationArea = All;
-                }
+                field("Date"; Rec."Date") { ApplicationArea = All; }
+                field("Is a file"; Rec."Is a file") { ApplicationArea = All; }
                 field(Name; Rec.Name)
                 {
-                    ToolTip = 'Specifies the value of the Name field.';
                     ApplicationArea = All;
                     trigger OnDrillDown()
                     var
                         FileRec: Record File;
                     begin
-                        if not "Is a file" then begin
+                        if not rec."Is a file" then begin
                             CurrFolder := CurrFolder + '\' + Rec.Name;
                             CurrFolder := CurrFolder.Replace('\\', '\');
                             //CurrFolder := Rec.Path;
@@ -60,21 +51,9 @@ page 91007 FileBrowser
 
                     end;
                 }
-                field(Path; Rec.Path)
-                {
-                    ToolTip = 'Specifies the value of the Path field.';
-                    ApplicationArea = All;
-                }
-                field(Size; Rec.Size)
-                {
-                    ToolTip = 'Specifies the value of the Size field.';
-                    ApplicationArea = All;
-                }
-                field("Time"; Rec."Time")
-                {
-                    ToolTip = 'Specifies the value of the Time field.';
-                    ApplicationArea = All;
-                }
+                field(Path; Rec.Path) { ApplicationArea = All; }
+                field(Size; Rec.Size) { ApplicationArea = All; }
+                field("Time"; Rec."Time") { ApplicationArea = All; }
             }
         }
     }

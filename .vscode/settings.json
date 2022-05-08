@@ -6,6 +6,12 @@
     "al.enableCodeActions": true,
     "al.enableCodeAnalysis": true,
     "al.ruleSetPath": ".vscode\\CodeAnalyzerRules.json",
+    "[al]": {
+        "editor.wordBasedSuggestions": true,
+        "editor.suggestSelection": "first",
+        "editor.formatOnSave": true,
+        "editor.semanticHighlighting.enabled": true
+    },
     "CRS.FileNamePattern": "<ObjectNameShort>.al",
     "CRS.ObjectNamePrefix": "DMT",
     "CRS.RenameWithGit": true

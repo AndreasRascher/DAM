@@ -21,7 +21,6 @@ page 91000 "DMT Setup"
                     group(ObjectIDs)
                     {
                         CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
-                        field("Object ID Export Object"; Rec."Object ID Export Object") { ApplicationArea = All; ShowMandatory = true; }
                         field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
                         field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                     }
@@ -52,35 +51,18 @@ page 91000 "DMT Setup"
         {
             action(CreateNAVExportObject)
             {
-                CaptionML = DEU = 'NAV Export Objekt erstellen';
+                Caption = 'Creeate NAV Export Object', comment = 'NAV Export Objekt erstellen';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = New;
-
-                trigger OnAction()
-                var
-                    ObjGen: Codeunit DMTObjectGenerator;
-                    Choice: Integer;
-                    NAVVersionSelectionTok: TextConst DEU = 'Dataport (Versionen bis NAV2009R2),XMLPort (Versionen NAV2013 bis NAV2018 sowie Business Central 13 + 14),Abbrechen',
-                                                   ENU = 'Dataport (Versions up to NAV2009R2),XMLPort (Versions from NAV2013 to NAV2018 and Business Central 13 & 14),Cancel';
-                begin
-                    Choice := StrMenu(NAVVersionSelectionTok, 3);
-                    case Choice of
-                        1:
-                            ObjGen.DownloadFileUTF8(ObjGen.GetNavClassicDataport(Rec."Object ID Export Object"),
-                            'Dataport_' + format(Rec."Object ID Export Object") + '_DMTExport.txt');
-                        2:
-                            ObjGen.DownloadFileUTF8(ObjGen.GetNAVRTCXMLPort(Rec."Object ID Export Object"),
-                            'XMLPort_' + format(Rec."Object ID Export Object") + '_DMTExport.txt');
-                    end;
-                end;
+                RunObject = page NAVObjects;
             }
             action(ImportNAVSchema)
             {
-                CaptionML = DEU = 'NAV Schema.csv importieren';
+                Caption = 'Import Schema.csv', comment = 'NAV Schema.csv importieren';
                 ApplicationArea = All;
                 Image = DataEntry;
                 Promoted = true;
@@ -116,7 +98,7 @@ page 91000 "DMT Setup"
             }
             action(TableList)
             {
-                CaptionML = DEU = 'Tabellenübersicht', ENU = 'Table List';
+                Caption = 'Table List', Comment = 'Tabellenübersicht';
                 ApplicationArea = All;
                 Image = Table;
                 Promoted = true;
@@ -127,7 +109,7 @@ page 91000 "DMT Setup"
             }
             action(TaskList)
             {
-                CaptionML = DEU = 'Aufgabenliste', ENU = 'Task List';
+                Caption = 'Task List', Comment = 'Aufgabenliste';
                 ApplicationArea = All;
                 Image = TaskList;
                 Promoted = true;
@@ -138,7 +120,7 @@ page 91000 "DMT Setup"
             }
             action(ErrorLog)
             {
-                CaptionML = DEU = 'Fehlerprotokoll', ENU = 'Error Log';
+                Caption = 'Error Log', Comment = 'Fehlerprotokoll';
                 ApplicationArea = All;
                 Image = Log;
                 Promoted = true;
@@ -149,7 +131,7 @@ page 91000 "DMT Setup"
             }
             action(TestImportGenBuffer)
             {
-                CaptionML = DEU = 'TestImportGenBuff', ENU = 'TestImportGenBuff';
+                Caption = 'TestImportGenBuff';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -204,7 +186,7 @@ page 91000 "DMT Setup"
         {
             action(XMLExport)
             {
-                CaptionML = DEU = 'Backup erstellen';
+                Caption = 'Create Backup', Comment = 'Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
                 Promoted = true;
@@ -221,7 +203,7 @@ page 91000 "DMT Setup"
             }
             action(XMLImport)
             {
-                CaptionML = DEU = 'Backup importieren';
+                Caption = 'Import Backup', Comment = 'Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
                 Promoted = true;

@@ -253,12 +253,16 @@ table 91002 "DMTField"
                             DMTFields2."Use Try Function" := false;
                         end;
                     (TargetField.TableNo = DATabase::Item) and
-                    (TargetField.FieldName IN ['Costing Method', 'Tariff No.', 'Base Unit of Measure', 'Indirect Cost %']):
+                    (TargetField.FieldName IN ['Costing Method',
+                                               'Tariff No.',
+                                               'Base Unit of Measure',
+                                               'Indirect Cost %']):
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
                     (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                    (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
+                    (TargetField.FieldName IN ['Primary Contact No.',
+                                               'Contact']):
                         begin
                             DMTFields2."Validate Value" := false;
                         end;

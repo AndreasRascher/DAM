@@ -11,13 +11,6 @@ table 91000 "DMTSetup"
         { CaptionML = DEU = 'Objekt ID Bereich für Puffertabellen', ENU = 'Obj. ID Range Buffer Tables'; }
         field(11; "Obj. ID Range XMLPorts"; Text[250])
         { CaptionML = DEU = 'Objekt ID Bereich für XMLPorts (Import)', ENU = 'Obj. ID Range XMLPorts (Import)'; }
-        field(20; "Object ID Export Object"; Integer)
-        {
-            CaptionML = DEU = 'Export Objekt ID (Dataport/XMLPort)', ENU = 'Export Object ID (Dataport/XMLPort)';
-            MinValue = 50000;
-            MaxValue = 99999;
-            BlankZero = true;
-        }
         field(30; "Default Export Folder Path"; Text[250])
         {
             CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
