@@ -34,7 +34,7 @@ page 91006 "DMTTaskList"
                             exit;
                         BufferRef.Open(DMTTable."Buffer Table ID");
                         Commit();
-                        if DMTImport.ShowRequestPageFilterDialog(BufferRef) then
+                        if DMTImport.ShowRequestPageFilterDialog(BufferRef, DMTTable) then
                             Rec.SaveTableView(BufferRef.GetView());
                         CurrFilter := rec.GetStoredTableViewAsFilter();
                     end;

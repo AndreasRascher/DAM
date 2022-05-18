@@ -235,10 +235,10 @@ table 91002 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-        // Vendor: Record Vendor;
-        // Customer: Record Customer;
-        // Contact: Record Contact;
-        GLAccount: Record "G/L Account";
+    // Vendor: Record Vendor;
+    // Customer: Record Customer;
+    // Contact: Record Contact;
+    // GLAccount: Record "G/L Account";
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
