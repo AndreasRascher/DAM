@@ -1373,6 +1373,26 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <note from="Developer" annotates="general" priority="2">Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 2432660905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2">Neuer Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field New Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3205443024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Value</source>
+          <note from="Developer" annotates="general" priority="2">Alter Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Old Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3831648334 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field To Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Setup</source>
           <note from="Developer" annotates="general" priority="2">DMT Einrichtung</note>
