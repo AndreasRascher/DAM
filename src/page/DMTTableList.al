@@ -16,7 +16,7 @@ page 91004 "DMTTableList"
             {
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
-                field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
+                field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; }
                 field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; }
                 field("To Table Caption"; Rec."Dest.Table Caption") { ApplicationArea = All; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }

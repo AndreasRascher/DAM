@@ -46,6 +46,11 @@
             "id":"AA0210",
             "action":"None",
             "justification":"The table ... does not contain a key with the field ..."
+        },
+        {
+            "id":"AL0424",
+            "action":"None",
+            "justification":"CaptionML is used for buffer table"
         }
     ]
 }

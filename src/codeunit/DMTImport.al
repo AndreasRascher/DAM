@@ -41,12 +41,12 @@ codeunit 91000 DMTImport
             end;
         EditView(BufferRef, DMTTable);
         BufferRef.findset();
-        DMTMgt.ProgressBar_Open(BufferRef, '_________________________' + BufferRef.CAPTION + '_________________________' +
-                                           '\Filter:       ########################################1#' +
-                                           '\Datensatz:    ########################################2#' +
-                                           '\Dauer:        ########################################3#' +
-                                           '\Fortschritt:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@' +
-                                           '\Restlaufzeit: ########################################5#');
+        DMTMgt.ProgressBar_Open(BufferRef, StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
+                                                      ProgressBarText_FilterTok +
+                                                      ProgressBarText_RecordTok +
+                                                      ProgressBarText_DurationTok +
+                                                      ProgressBarText_ProgressTok +
+                                                      ProgressBarText_TimeRemainingTok);
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
@@ -85,12 +85,12 @@ codeunit 91000 DMTImport
         ID := RecIdToProcessList.Get(1);
         BufferRef.get(ID);
         DMTMgt.ProgressBar_Open(RecIdToProcessList.Count,
-         '_________________________' + BufferRef.CAPTION + '_________________________' +
-         '\Filter:       ########################################1#' +
-         '\Datensatz:    ########################################2#' +
-         '\Dauer:        ########################################3#' +
-         '\Fortschritt:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@' +
-         '\Restlaufzeit: ########################################5#');
+         StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
+         ProgressBarText_FilterTok +
+         ProgressBarText_RecordTok +
+         ProgressBarText_DurationTok +
+         ProgressBarText_ProgressTok +
+         ProgressBarText_TimeRemainingTok);
         DMTMgt.ProgressBar_UpdateControl(1, 'Error');
         foreach ID in RecIdToProcessList do begin
             BufferRef.get(ID);
@@ -136,7 +136,7 @@ codeunit 91000 DMTImport
     begin
 
 
-        // DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
+        DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
         TargetRef.OPEN(DMTTable."To Table ID", TRUE);
         // //ReplaceValuesBeforeProcessing(BufferRef);
 
@@ -211,25 +211,37 @@ codeunit 91000 DMTImport
         TmpTargetRef.MODIFY(false);
     end;
 
-    procedure ShowRequestPageFilterDialog(VAR BufferRef: RecordRef) Continue: Boolean;
+    procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DMTTable: Record DMTTable) Continue: Boolean;
     var
+        DMTField: Record DMTField;
+        GenBuffTable: Record DMTGenBuffTable;
         FPBuilder: FilterPageBuilder;
-        PrimaryKeyRef: KeyRef;
         Index: Integer;
+        PrimaryKeyRef: KeyRef;
+        KeyFieldsFilter: Text;
     begin
-        FPBuilder.ADDTABLE(BufferRef.CAPTION, BufferRef.NUMBER);// ADD DATAITEM
-        IF BufferRef.HASFILTER then // APPLY CURRENT FILTER SETTING 
+        FPBuilder.AddTable(BufferRef.CAPTION, BufferRef.NUMBER);// ADD DATAITEM
+        IF BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
             FPBuilder.SETVIEW(BufferRef.CAPTION, BufferRef.GETVIEW());
-        // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
-        PrimaryKeyRef := BufferRef.KEYINDEX(1);
-        for Index := 1 TO PrimaryKeyRef.FIELDCOUNT DO
-            FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FIELDINDEX(Index).NUMBER);
+
+        if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
+            KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", true);
+            if DMTField.FilterBy(DMTTable) then begin
+                DMTField.setfilter("To Field No.", KeyFieldsFilter);
+                if DMTField.FindSet() then
+                    repeat
+                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
+                    until DMTField.Next() = 0;
+            end;
+        end else begin
+            // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
+            PrimaryKeyRef := BufferRef.KEYINDEX(1);
+            for Index := 1 TO PrimaryKeyRef.FIELDCOUNT DO
+                FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FIELDINDEX(Index).NUMBER);
+        end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
         Continue := FPBuilder.RUNMODAL();
-        //IF FPBuilder.RUNMODAL then begin
         BufferRef.SETVIEW(FPBuilder.GETVIEW(BufferRef.CAPTION));
-        //FilterText := BufferRef.GETFILTERS;
-        //end;
     end;
 
     procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text; DMTTable: Record DMTTable)
@@ -252,7 +264,7 @@ codeunit 91000 DMTImport
             if DMTTable.LoadTableLastView() <> '' then
                 BufferRef.SetView(DMTTable.LoadTableLastView());
 
-            if not ShowRequestPageFilterDialog(BufferRef) then
+            if not ShowRequestPageFilterDialog(BufferRef, DMTTable) then
                 exit;
             if BufferRef.HasFilter then
                 DMTTable.SaveTableLastView(BufferRef.GetView());
@@ -321,4 +333,10 @@ codeunit 91000 DMTImport
         DMTMgt: Codeunit DMTMgt;
         BufferTableView: Text;
         NoUserInteraction: Boolean;
+        ProgressBarText_TitleTok: label '_________________________%1_________________________', Locked = true;
+        ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
+        ProgressBarText_RecordTok: label '\Record:    ########################################2#';
+        ProgressBarText_DurationTok: label '\Duration:        ########################################3#';
+        ProgressBarText_ProgressTok: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
+        ProgressBarText_TimeRemainingTok: label '\Time Remaining: ########################################5#';
 }

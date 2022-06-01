@@ -1,9 +1,9 @@
-OBJECT XMLport 50022 DMT Export
+OBJECT XMLport 50014 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=05.11.21;
-    Time=13:00:47;
+    Date=08.05.22;
+    Time=16:10:58;
     Modified=Yes;
     Version List=DMT;
   }
@@ -13,17 +13,21 @@ OBJECT XMLport 50022 DMT Export
     TextEncoding=UTF-16;
     OnInitXMLport=VAR
                     Field@55000 : Record 2000000041;
+                    ExportSchemaLbl@1000000000 : TextConst 'DEU=Tabellenschema exportieren (schema.csv);ENU=Export table schema (schema.csv)';
+                    ExportDataLbl@1000000001 : TextConst 'DEU=Tabellendaten exportieren;ENU=Export table data';
                   BEGIN
-                    Action1 := 'Tabellenschema exportieren';
-                    Action2 := 'Tabellendaten exportieren';
+                    Action1 := ExportSchemaLbl;
+                    Action2 := ExportDataLbl;
                     //CreateTextFile;
                     //Field.SETRANGE(TableNo,27);
                     //ERROR('%1',Field.COUNT);
                   END;
 
-    OnPreXMLport=BEGIN
+    OnPreXMLport=VAR
+                   NoActionSelectedErr@1000000000 : TextConst 'DEU=Keine Aktion ausgew„hlt;ENU=No action selected';
+                 BEGIN
                    IF ExportTableID = 0 THEN BEGIN
-                     ERROR('Keine Aktion ausgew�hlt');
+                     ERROR(NoActionSelectedErr);
                    END;
                  END;
 
@@ -2523,6 +2527,7 @@ OBJECT XMLport 50022 DMT Export
     PROPERTIES
     {
       SaveValues=Yes;
+      LinksAllowed=No;
     }
     CONTROLS
     {
@@ -2572,7 +2577,10 @@ OBJECT XMLport 50022 DMT Export
 
       { 55003;4  ;Field     ;
                   Name=ExportFlowFieldsCtrl;
-                  SourceExpr=ExportFlowFields }
+                  CaptionML=[DEU=Export FlowFields;
+                             ENU=FlowFields exportieren];
+                  SourceExpr=ExportFlowFields;
+                  ShowCaption=No }
 
       { 55000;2  ;Group     ;
                   CaptionML=DEU=Aktionen;
@@ -2612,8 +2620,8 @@ OBJECT XMLport 50022 DMT Export
   CODE
   {
     VAR
-      ExportToFolderPath@1000000004 : Text;
-      ExportTableIDFilter@1000000003 : Text;
+      ExportToFolderPath@1000000004 : Text INDATASET;
+      ExportTableIDFilter@1000000003 : Text INDATASET;
       ExportWithTitleLine@1000000010 : Boolean;
       ExportFlowFields@55000 : Boolean;
       FieldSeparator@1000000002 : Text[1];
@@ -2624,17 +2632,18 @@ OBJECT XMLport 50022 DMT Export
       ExportFieldBuffer@1000000007 : TEMPORARY Record 2000000041;
       LastFieldNo@1000000008 : Integer;
       MaxNoOfFields@1000000009 : Integer;
+      ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
 
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text[1024];exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text[1024]);
     VAR
       fileMgt@1000000010 : Codeunit 419;
-      dmtExport@1000000002 : XMLport 50022;
       serverFile@1000000007 : File;
       serverFilePath@1000000019 : Text;
       outStream@1000000020 : OutStream;
       start@1000000000 : DateTime;
       progress@1000000005 : Dialog;
       BigText@55000 : BigText;
+      DMTExport@1000000002 : XMLport 50014;
     BEGIN
       CLEAR(ExportDuration);
 
@@ -2645,7 +2654,7 @@ OBJECT XMLport 50022 DMT Export
 
       start := CURRENTDATETIME;
       progress.OPEN(STRSUBSTNO('Export %1',CONVERTSTR(exportToFilePath,'\','/')));
-      dmtExport.InitExport(exportTableID,TableView);
+      DMTExport.InitExport(exportTableID,TableView);
 
       serverFile.CREATETEMPFILE;
       serverFilePath := serverFile.NAME;
@@ -2653,8 +2662,8 @@ OBJECT XMLport 50022 DMT Export
 
       serverFile.CREATE(serverFilePath);
       serverFile.CREATEOUTSTREAM(outStream);
-      dmtExport.SETDESTINATION(outStream);
-      dmtExport.EXPORT;
+      DMTExport.SETDESTINATION(outStream);
+      DMTExport.EXPORT;
       serverFile.CLOSE;
 
       fileMgt.DownloadToFile(serverFilePath,exportToFilePath);
@@ -2677,7 +2686,7 @@ OBJECT XMLport 50022 DMT Export
         IF LastFieldNo <> _ExportFieldBuffer."No." THEN
           HeaderLineText += FieldSeparator;
       UNTIL _ExportFieldBuffer.NEXT = 0;
-      CRLF[1]:=13;CRLF[2]:=10;
+      CRLF[1]:=13; CRLF[2]:=10;
       HeaderLineText += CRLF;
     END;
 
@@ -2805,6 +2814,7 @@ OBJECT XMLport 50022 DMT Export
     VAR
       _fields@1000000000 : Record 2000000041;
       _exportFieldBuffer@1000000002 : TEMPORARY Record 2000000041;
+      _GLSetup@1000000004 : Record 98;
     BEGIN
       //* create a list ob columns to export
       IF _ExportTableID <> 0 THEN
@@ -2837,8 +2847,8 @@ OBJECT XMLport 50022 DMT Export
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50001;
-        _exportFieldBuffer.FieldName := 'Primary Key';
-        _exportFieldBuffer."Field Caption" := 'Prim�rschl�ssel';
+        _exportFieldBuffer.FieldName := _GLSetup.FIELDNAME("Primary Key");
+        _exportFieldBuffer."Field Caption" := _GLSetup.FIELDCAPTION("Primary Key");
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50002;
@@ -2914,6 +2924,7 @@ OBJECT XMLport 50022 DMT Export
       ExportToFilePath@1000000002 : Text;
       ExportDuration@1000000003 : Duration;
       TAB@1000000004 : Text[1];
+      ObjectNotInLicenseMsg@1000000005 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.;ENU=Warning: Table %1 - %2 is not in license.';
     BEGIN
       CheckFolderPathRTC(ExportToFolderPath);
 
@@ -2923,11 +2934,11 @@ OBJECT XMLport 50022 DMT Export
 
       REPEAT
         IF NOT IsTableInLicense(AllObjWithCaption."Object ID") THEN
-        MESSAGE('Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.',AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
+        MESSAGE(ObjectNotInLicenseMsg,AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
       UNTIL AllObjWithCaption.NEXT = 0;
 
       TAB[1] := 9; // TAB
-      ReadyMsg:='Export abgeschlossen:';
+      ReadyMsg := ExportFinished + ':';
       AllObjWithCaption.FINDSET;
       REPEAT
         ExportToFilePath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
@@ -2945,7 +2956,7 @@ OBJECT XMLport 50022 DMT Export
       AllObjWithCaption@55000 : Record 2000000058;
     BEGIN
       //* export all data needed to recreate the C/AL table in al
-      ReadyMsg:='Export finished:';
+      ReadyMsg := ExportFinished;
       ExportToPath := ExportToFolderPath + 'Schema.csv';
       ExportTable(ExportToPath,DATABASE::Field,ExportDuration,'');
       AllObjWithCaption.GET(AllObjWithCaption."Object Type"::Table,DATABASE::Field);

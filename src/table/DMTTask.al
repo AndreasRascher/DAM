@@ -82,7 +82,7 @@ table 91006 "DMTTask"
     {
         fieldgroup(Brick; "No. of Records", "No. of Records failed", "No. of Records imported")
         {
-            Caption = 'MyBrick';
+            Caption = 'MyBrick', Locked = true;
         }
     }
 

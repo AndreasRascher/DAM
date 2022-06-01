@@ -27,5 +27,6 @@
   "contextSensitiveHelpUrl": "https://DMT.com/help/",
   "showMyCode": true,
   "runtime": "6.0",
-  "target":"OnPrem"
+  "target":"OnPrem",
+  "features": ["TranslationFile"]
 }

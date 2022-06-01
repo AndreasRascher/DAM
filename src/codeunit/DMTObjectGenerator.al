@@ -1,44 +1,5 @@
 codeunit 91003 "DMTObjectGenerator"
 {
-    procedure GetNavClassicDataport(ObjectID: Integer) Content: text;
-    var
-        DMTExportObject: Record DMTExportObject;
-        DMTSetup: Record "DMTSetup";
-        BigTextContent: BigText;
-        IStr: instream;
-    begin
-        DMTExportObject.get();
-        DMTSetup.Get();
-        DMTSetup.TestField("Object ID Export Object");
-        DMTExportObject.CalcFields(ExportDataPort);
-        DMTExportObject.ExportDataPort.CreateInStream(IStr);
-        BigTextContent.Read(IStr);
-        BigTextContent.GetSubText(Content, 1);
-        Content := Content.Replace('OBJECT Dataport 50004 DMTExport',
-                                   'OBJECT Dataport ' + Format(DMTSetup."Object ID Export Object") + ' DMTExport')
-    end;
-
-    procedure GetNAVRTCXMLPort(ObjectID: Integer) Content: text;
-    var
-        DMTExportObject: Record DMTExportObject;
-        DMTSetup: Record "DMTSetup";
-        BigTextContent: BigText;
-        IStr: instream;
-    begin
-        DMTExportObject.Get();
-        DMTSetup.get();
-        DMTSetup.TestField("Object ID Export Object");
-        DMTExportObject.CalcFields(ExportXMLPort);
-        DMTExportObject.ExportDataPort.CreateInStream(IStr);
-        BigTextContent.Read(IStr);
-        BigTextContent.GetSubText(Content, 1);
-
-        Content := Content.Replace('OBJECT XMLport 50022 DMT Export',
-                                   'OBJECT XMLport ' + Format(DMTSetup."Object ID Export Object") + ' DMT Export');
-        Content := Content.Replace('dmtExport@1000000002 : XMLport 50022;',
-                                   'dmtExport@1000000002 : XMLport ' + Format(DMTSetup."Object ID Export Object") + ';')
-    end;
-
     procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
