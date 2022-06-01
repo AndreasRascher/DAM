@@ -1,7 +1,7 @@
 page 91001 "DMT Error Log List"
 {
     ApplicationArea = All;
-    CaptionML = DEU = 'DMT Fehlerprotokoll', ENU = 'DMT Error Log';
+    Caption = 'DMT Error Log', comment = 'DMT Fehlerprotokoll';
     PageType = List;
     SourceTable = DMTErrorLog;
     UsageCategory = Lists;

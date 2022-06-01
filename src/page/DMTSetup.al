@@ -1,12 +1,12 @@
 page 91000 "DMT Setup"
 {
-    CaptionML = DEU = 'Data Migration Tool Einrichtung', ENU = 'Data Migration Tool Setup';
-    AdditionalSearchTermsML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
+    Caption = 'Data Migration Tool Setup', comment = 'Data Migration Tool Einrichtung';
+    AdditionalSearchTerms = 'DMT Setup', Comment = 'DMT Einrichtung';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = "DMTSetup";
-    PromotedActionCategoriesML = DEU = 'NAV,Backup,Listen,,', ENU = 'NAV,Backup,Lists,,';
+    PromotedActionCategories = 'NAV,Backup,Lists,,', Comment = 'NAV,Backup,Listen,,';
 
     layout
     {
@@ -14,19 +14,19 @@ page 91000 "DMT Setup"
         {
             group(General)
             {
-                CaptionML = DEU = 'Allgemein', ENU = 'General';
+                Caption = 'General', Comment = 'Allgemein';
                 group(VerticalAlign)
                 {
                     ShowCaption = false;
                     group(ObjectIDs)
                     {
-                        CaptionML = DEU = 'Objekt IDs', ENU = 'Object IDs';
+                        Caption = 'Object IDs', comment = 'Objekt IDs';
                         field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
                         field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                     }
                     group(Paths)
                     {
-                        CaptionML = DEU = 'Pfade', ENU = 'Paths';
+                        Caption = 'Paths', comment = 'Pfade';
                         field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
                         field("Schema File Path"; Rec."Schema.xml File Path") { ApplicationArea = All; }
                         field("Backup.xml File Path"; Rec."Backup.xml File Path") { ApplicationArea = All; }
@@ -84,7 +84,7 @@ page 91000 "DMT Setup"
             action("Table_DMTFieldBuffer")
             {
                 ApplicationArea = All;
-                CaptionML = DEU = 'Schema anzeigen';
+                Caption = 'Show Schema Data', comment = 'Schema Daten anzeigen';
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
@@ -146,6 +146,7 @@ page 91000 "DMT Setup"
                     GenBuffImport: XmlPort GenBuffImport;
                     Start: DateTime;
                     InStr: InStream;
+                    ImportFinishedMsg: Label 'Import finished\Duration %1', comment = 'Import abgeschlossen\Dauer %1';
                     FileName: Text;
                 begin
                     TempBlob.CreateInStream(InStr);
@@ -156,7 +157,7 @@ page 91000 "DMT Setup"
                     GenBuffImport.SetSource(InStr);
                     // GenBuffImport.SetFilename(FileName);
                     GenBuffImport.Import();
-                    Message('Import abgeschlossen\Dauer %1', CurrentDateTime - Start);
+                    Message(ImportFinishedMsg, CurrentDateTime - Start);
 
                     if DMTGenBuffTable.FindFirst() then begin
                         DMTGenBuffTable.InitFirstLineAsCaptions(DMTGenBuffTable."Import from Filename");
@@ -166,7 +167,7 @@ page 91000 "DMT Setup"
             }
             action(OpenGenBufferPage)
             {
-                CaptionML = DEU = 'OpenGenBufferPage', ENU = 'OpenGenBufferPage';
+                Caption = 'OpenGenBufferPage', comment = 'OpenGenBufferPage';
                 ApplicationArea = All;
                 Image = ListPage;
                 Promoted = true;

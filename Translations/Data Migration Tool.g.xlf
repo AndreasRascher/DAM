@@ -1653,6 +1653,31 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFileUTF8 - NamedType allFilesTok</note>
         </trans-unit>
+        <trans-unit id="Page 3126398325 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Error Log</source>
+          <note from="Developer" annotates="general" priority="2">DMT Fehlerprotokoll</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Error Log List - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV,Backup,Lists,,</source>
+          <note from="Developer" annotates="general" priority="2">NAV,Backup,Listen,,</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Property PromotedActionCategories</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Migration Tool Setup</source>
+          <note from="Developer" annotates="general" priority="2">Data Migration Tool Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Property 3863440606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Setup</source>
+          <note from="Developer" annotates="general" priority="2">DMT Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Property AdditionalSearchTerms</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General</source>
+          <note from="Developer" annotates="general" priority="2">Allgemein</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control General - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Control 2293317941 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SessionID</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1662,6 +1687,16 @@
           <source>User ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Control 3424858197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Object IDs</source>
+          <note from="Developer" annotates="general" priority="2">Objekt IDs</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control ObjectIDs - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Control 229062570 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Paths</source>
+          <note from="Developer" annotates="general" priority="2">Pfade</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Paths - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 4118238928 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creeate NAV Export Object</source>
@@ -1688,10 +1723,20 @@
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ErrorLog - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Action 2237258469 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>OpenGenBufferPage</source>
+          <note from="Developer" annotates="general" priority="2">OpenGenBufferPage</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action OpenGenBufferPage - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Action 4113627632 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Table List</source>
           <note from="Developer" annotates="general" priority="2">Tabellenübersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TableList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Action 2559415762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show Schema Data</source>
+          <note from="Developer" annotates="general" priority="2">Schema Daten anzeigen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action Table_DMTFieldBuffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2437060273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Task List</source>
@@ -1702,6 +1747,11 @@
           <source>TestImportGenBuff</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Action 4082098809 - Method 1377591017 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished\Duration %1</source>
+          <note from="Developer" annotates="general" priority="2">Import abgeschlossen\Dauer %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Method OnAction - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
@@ -1727,6 +1777,11 @@
           <source>DMT Replacement Rules</source>
           <note from="Developer" annotates="general" priority="2">DMT Ersetzungsregeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRules - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2794004004 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Tables</source>
+          <note from="Developer" annotates="general" priority="2">Tabellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectTables - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Table List</source>
