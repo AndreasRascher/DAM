@@ -5,7 +5,7 @@ table 91004 "DMTExportObject"
 
     fields
     {
-        field(1; "Primary Key"; Code[10]) { CaptionML = ENU = 'Primary Key', DEU = 'Primärschlüssel'; }
+        field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'Primärschlüssel'; }
         field(50; ExportDataPort; Blob) { }
         field(51; ExportXMLPort; Blob) { }
     }

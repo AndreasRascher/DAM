@@ -6,24 +6,24 @@ table 91003 "DMTErrorLog"
     {
         field(1; "Entry No."; Integer)
         {
-            CaptionML = DEU = 'Lfd.Nr.', ENU = 'Entry No.';
+            Caption = 'Entry No.', comment = 'Lfd.Nr.';
             AutoIncrement = true;
         }
         field(10; "From ID"; RecordId)
         {
-            CaptionML = DEU = 'Import von Record ID', ENU = 'Import from Record ID';
+            Caption = 'Import from Record ID', comment = 'Import von Record ID';
         }
         field(11; "To ID"; RecordId)
         {
-            CaptionML = DEU = 'Import nach Record ID', ENU = 'Import to Record ID';
+            Caption = 'Import to Record ID', comment = 'Import nach Record ID';
         }
         field(12; "From ID (Text)"; Text[250])
         {
-            CaptionML = DEU = 'Import von Record ID', ENU = 'Import from Record ID';
+            Caption = 'Import from Record ID (Text)', comment = 'Import von Record ID (Text)';
         }
         field(13; "To ID (Text)"; Text[250])
         {
-            CaptionML = DEU = 'Import nach Record ID', ENU = 'Import to Record ID';
+            Caption = 'Import to Record ID (Text)', comment = 'Import nach Record ID (Text)';
         }
         field(20; "Import from Table No."; Integer) { }
         field(21; "Import from Field No."; Integer) { }
@@ -41,11 +41,11 @@ table 91003 "DMTErrorLog"
             Editable = false;
             CalcFormula = Lookup(Field."Field Caption" WHERE(TableNo = FIELD("Import from Table No."), "No." = FIELD("Import from Field No.")));
         }
-        field(40; Errortext; Text[2048]) { CaptionML = DEU = 'Fehlertext'; }
-        field(41; ErrorCode; Text[250]) { CaptionML = DEU = 'Fehler Code'; }
-        field(42; "Ignore Error"; Boolean) { CaptionML = DEU = 'Fehler ignorieren'; }
-        field(60; "DMT User"; Text[250]) { CaptionML = DEU = 'DMT Benutzer', ENU = 'DMT User'; Editable = false; }
-        field(70; "DMT Errorlog Created At"; DateTime) { CaptionML = DEU = 'DMT Datum der Protokollierung', ENU = 'DMT Date of Errorlog'; }
+        field(40; Errortext; Text[2048]) { Caption = 'Error Text', Comment = 'Fehlertext'; }
+        field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
+        field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
+        field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
+        field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
     }
 
     keys
@@ -93,7 +93,7 @@ table 91003 "DMTErrorLog"
         _DMTErrorlog.ErrorCode := CopyStr(GETLASTERRORCODE, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
         _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
-        _DMTErrorlog.MODIFY(TRUE);
+        _DMTErrorlog.modify(true);
     end;
 
     procedure AddEntryWithUserDefinedMessage(DMTFields: Record "DMTField"; ErrorMessage: text)
@@ -110,7 +110,7 @@ table 91003 "DMTErrorLog"
         _DMTErrorlog.ErrorCode := '';
         _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
-        _DMTErrorlog.MODIFY(TRUE);
+        _DMTErrorlog.Modify(true);
     end;
 
     procedure DeleteExistingLogForBufferRec(BufferRef: RecordRef)
@@ -118,7 +118,7 @@ table 91003 "DMTErrorLog"
         DMTErrorlog: Record DMTErrorLog;
     begin
         DMTErrorlog.SETRANGE("From ID", BufferRef.RECORDID);
-        DMTErrorlog.DELETEALL();
+        DMTErrorlog.DeleteAll();
     end;
 
     procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean
