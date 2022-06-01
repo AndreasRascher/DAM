@@ -8,13 +8,13 @@ table 91010 "DMTReplacementRule"
         {
             Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
             DataClassification = SystemMetadata;
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+            TableRelation = DMTTable."To Table ID";
         }
         field(2; "To Field No."; Integer)
         {
-            CaptionML = DEU = 'Ziel Feldnr.', ENU = 'Target Field No.';
+            Caption = 'Target Field No.', Comment = 'Ziel Feldnr.';
             DataClassification = SystemMetadata;
-            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
+            TableRelation = DMTField."To Field No." WHERE("To Table No." = field("To Table No."));
         }
         field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'Zeilennr.'; }
         field(10; "Old Value"; Text[250]) { Caption = 'Old Value', Comment = 'Alter Wert'; }
@@ -25,11 +25,10 @@ table 91010 "DMTReplacementRule"
     {
         key(PK; "To Table No.", "To Field No.", "Line No.") { Clustered = true; }
     }
-
-    internal procedure FindRulesFor(var BufferRef: RecordRef) OK: Boolean
+    internal procedure FindRulesFor(DMTTable: record DMTTable) OK: Boolean
     begin
         Rec.Reset();
-        Rec.SetRange("To Table No.", BufferRef.Number);
+        Rec.SetRange("To Table No.", DMTTable."To Table ID");
         OK := Rec.FindSet(false, false);
     end;
 }

@@ -129,6 +129,10 @@ table 91002 "DMTField"
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "To Table No.", "To Field Caption", "To Field Name (NAV)") { }
+    }
     internal procedure FilterBy(DMTTable: Record DMTTable) NotIsEmpty: Boolean
     begin
         Rec.SetRange("To Table No.", DMTTable."To Table ID");

@@ -1,7 +1,7 @@
 table 91006 "DMTTask"
 {
     DataClassification = SystemMetadata;
-    CaptionML = DEU = 'DMT Aufgabe', ENU = 'DMT Tast';
+    Caption = 'DMT Task', comment = 'DMT Aufgabe';
     LookupPageId = DMTTaskList;
     DrillDownPageId = DMTTaskList;
 
@@ -50,27 +50,12 @@ table 91006 "DMTTask"
                 end;
             end;
         }
-        field(12; "Context Description"; text[250])
-        {
-            CaptionML = DEU = 'Kontext Beschreibung', ENU = 'Context Description';
-        }
+        field(12; "Context Description"; text[250]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }
         field(50; TableView; Blob) { }
-        field(100; "Processing Time"; Duration)
-        {
-            CaptionML = DEU = 'Bearbeitungzeit', ENU = 'Processing Time';
-        }
-        field(101; "No. of Records"; Integer)
-        {
-            CaptionML = DEU = 'Anz. Datensätze', ENU = 'No. of Records';
-        }
-        field(102; "No. of Records failed"; Integer)
-        {
-            CaptionML = DEU = 'Anz. fehlgeschlagen', ENU = 'No. of Records failed';
-        }
-        field(103; "No. of Records imported"; Integer)
-        {
-            CaptionML = DEU = 'Anz. importiert', ENU = 'No. of Records imported';
-        }
+        field(100; "Processing Time"; Duration) { Caption = 'Processing Time', comment = 'Bearbeitungzeit'; }
+        field(101; "No. of Records"; Integer) { Caption = 'No. of Records', comment = 'Anz. Datensätze'; }
+        field(102; "No. of Records failed"; Integer) { Caption = 'No. of Records failed', comment = 'Anz. fehlgeschlagen'; }
+        field(103; "No. of Records imported"; Integer) { Caption = 'No. of Records imported', comment = 'Anz. importiert'; }
     }
 
     keys

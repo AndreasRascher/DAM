@@ -1,11 +1,9 @@
 page 91002 "DMTTableCard"
 {
-    CaptionML = DEU = 'DMT Tabellenkarte (Data Migration Tool)', ENU = 'DMT Table Card (Data Migration Tool)';
+    Caption = 'DMT Table Card (Data Migration Tool)', Comment = 'DMT Tabellenkarte (Data Migration Tool)';
     PageType = Document;
-    ApplicationArea = All;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = DMTTable;
-
     DataCaptionExpression = GetCaption();
 
     layout
@@ -14,7 +12,7 @@ page 91002 "DMTTableCard"
         {
             group(General)
             {
-                CaptionML = ENU = 'General', DEU = 'Allgemein';
+                Caption = 'General', comment = 'Allgemein';
                 field("Dest. Table Caption"; Rec."Dest.Table Caption")
                 {
                     ApplicationArea = All;
@@ -38,7 +36,7 @@ page 91002 "DMTTableCard"
                         EnableControls();
                     end;
                 }
-                field("No.of Records in Buffer Table"; "No.of Records in Buffer Table")
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -47,10 +45,12 @@ page 91002 "DMTTableCard"
                         Rec.ShowBufferTable();
                     end;
                 }
+                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
+                field("Import Only New Records"; "Import Only New Records") { ApplicationArea = All; }
             }
             group(NAVDataSourceProperties)
             {
-                CaptionML = DEU = 'Datenquelle NAV', ENU = 'Data Source NAV';
+                Caption = 'Data Source NAV', comment = 'Datenquelle NAV';
                 Visible = NAVDataSourcePropertiesVisible;
                 field(BufferTableType; Rec.BufferTableType)
                 {
@@ -70,12 +70,11 @@ page 91002 "DMTTableCard"
             {
                 Visible = LinesVisible;
                 ApplicationArea = all;
-                CaptionML = ENU = 'Fields Setup', DEU = 'Feldeinrichtung';
+                Caption = 'Fields Setup', Comment = 'Feldeinrichtung';
                 SubPageLink = "To Table No." = field("To Table ID");
             }
         }
     }
-
 
     actions
     {
@@ -83,7 +82,7 @@ page 91002 "DMTTableCard"
         {
             action(ImportBufferDataFromFile)
             {
-                CaptionML = DEU = 'Import in Puffertabelle';
+                Caption = 'Import to Buffer Table', Comment = 'Import in Puffertabelle';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -102,7 +101,7 @@ page 91002 "DMTTableCard"
             }
             action(TransferToTargetTable)
             {
-                CaptionML = DEU = 'In Zieltabelle übertragen';
+                Caption = 'Import to Target Table', Comment = 'In Zieltabelle übertragen';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -147,7 +146,7 @@ page 91002 "DMTTableCard"
             }
             action(OpenErrorLog)
             {
-                CaptionML = ENU = 'Error Log', DEU = 'Fehlerprotokoll';
+                Caption = 'Error Log', Comment = 'Fehlerprotokoll';
                 ApplicationArea = All;
                 Image = ErrorLog;
                 Promoted = true;
@@ -166,7 +165,7 @@ page 91002 "DMTTableCard"
             {
                 ApplicationArea = All;
                 Image = XMLSetup;
-                CaptionML = ENU = 'Create XMLPort', DEU = 'XMLPort erstellen';
+                Caption = 'Create XMLPort', comment = 'XMLPort erstellen';
 
                 trigger OnAction()
                 begin
@@ -177,7 +176,7 @@ page 91002 "DMTTableCard"
             {
                 ApplicationArea = All;
                 Image = Table;
-                CaptionML = ENU = 'Create Buffer Table', DEU = 'Puffertabelle erstellen';
+                Caption = 'Create Buffer Table', comment = 'Puffertabelle erstellen';
 
                 trigger OnAction()
                 begin

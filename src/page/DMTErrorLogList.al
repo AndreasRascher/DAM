@@ -33,7 +33,7 @@ page 91001 "DMT Error Log List"
         {
             action(HideIgnored)
             {
-                CaptionML = DEU = 'Ignorierte Fehler ausblenden', ENU = 'Hide ignored Errors';
+                Caption = 'Hide ignored Errors', comment = 'Ignorierte Fehler ausblenden';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -50,7 +50,7 @@ page 91001 "DMT Error Log List"
             }
             action(ShowIgnored)
             {
-                CaptionML = DEU = 'Ignorierte Fehler anzeigen', ENU = 'Show ignored Errors';
+                Caption = 'Show ignored Errors', comment = 'Ignorierte Fehler anzeigen';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -67,7 +67,7 @@ page 91001 "DMT Error Log List"
             }
             action(DeleteFilteredLines)
             {
-                CaptionML = DEU = 'Gefilterte Zeilen löschen', ENU = 'Delete filtered lines';
+                Caption = 'Delete filtered lines', Comment = 'Gefilterte Zeilen löschen';
                 ApplicationArea = All;
                 Image = Delete;
                 Promoted = true;
@@ -101,13 +101,14 @@ page 91001 "DMT Error Log List"
                     NAVAppInstalledApp.FindFirst();
                     allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
                     allObjWithCaption.Setrange("Object Type", allObjWithCaption."Object Type"::Table);
-                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6',
-                        Database::"DMTSetup",
+                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6&<>%7',
+                        Database::DMTSetup,
                         Database::DMTErrorLog,
-                        Database::"DMTField",
+                        Database::DMTField,
                         Database::DMTFieldBuffer,
                         Database::DMTTable,
-                        Database::DMTGenBuffTable);
+                        Database::DMTGenBuffTable,
+                        Database::DMTReplacementRule);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
