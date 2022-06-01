@@ -1647,6 +1647,34 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target>Zeilennr.</target>
+          <note from="Developer" annotates="general" priority="2">Zeilennr.</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 2432660905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <target>Neuer Wert</target>
+          <note from="Developer" annotates="general" priority="2">Neuer Wert</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field New Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3205443024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Value</source>
+          <target>Alter Wert</target>
+          <note from="Developer" annotates="general" priority="2">Alter Wert</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Old Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3831648334 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <target>Zieltabellen-ID</target>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabellen ID</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field To Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <target>Importiere %1</target>
@@ -1705,35 +1733,30 @@
           <source>\Duration:        ########################################3#</source>
           <target>\Dauer:           ########################################3#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_DurationTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 677652026" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Filter:       ########################################1#</source>
           <target>\Filter:       ########################################1#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_FilterTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 3540513133" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</source>
           <target>\Fortschritt:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_ProgressTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 1472015365" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Record:    ########################################2#</source>
           <target>\Datensatz: ########################################2#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_RecordTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 3772374561" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Time Remaining: ########################################5#</source>
           <target>\Restlaufzeit: ########################################5#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2483073149 - Method 2787516006 - NamedType 1342847624" size-unit="char" translate="yes" xml:space="preserve">
@@ -1832,11 +1855,17 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Replacement Rules</source>
+          <target>DMT Ersetzungsregeln</target>
+          <note from="Developer" annotates="general" priority="2">DMT Ersetzungsregeln</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRules - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Table List</source>
           <target>DMT Tabellenübersicht</target>
           <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
