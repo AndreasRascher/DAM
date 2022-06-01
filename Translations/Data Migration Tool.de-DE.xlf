@@ -1647,11 +1647,64 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Setup</source>
+          <target>DMT Einrichtung</target>
+          <note from="Developer" annotates="general" priority="2">DMT Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 3166256172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allow Usage of Try Function</source>
+          <target>Verwendung von Try Funktion zulassen</target>
+          <note from="Developer" annotates="general" priority="2"> Verwendung von Try Funktion zulassen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Allow Usage of Try Function - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2843815182 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Backup.xml File Path</source>
+          <target>Pfad Backup.xml</target>
+          <note from="Developer" annotates="general" priority="2">Pfad Backup.xml</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Backup.xml File Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 3332974040 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Export Folder</source>
+          <target>Standard Export Ordnerpfad</target>
+          <note from="Developer" annotates="general" priority="2">Standard Export Ordnerpfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Default Export Folder Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import with Flowfields</source>
+          <target>Import mit Flowfields</target>
+          <note from="Developer" annotates="general" priority="2">Import mit Flowfields</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Import with FlowFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Obj. ID Range Buffer Tables</source>
+          <target>Objekt ID Bereich für Puffertabellen</target>
+          <note from="Developer" annotates="general" priority="2">Objekt ID Bereich für Puffertabellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range Buffer Tables - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1138059172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Obj. ID Range XMLPorts (Import)</source>
+          <target>Objekt ID Bereich für XMLPorts (Import)</target>
+          <note from="Developer" annotates="general" priority="2">Objekt ID Bereich für XMLPorts (Import)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range XMLPorts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <target>Primärschlüssel</target>
+          <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1131415063 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Schema File Path</source>
+          <target>Pfad Schemadatei</target>
+          <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.xml File Path - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <target>Importiere %1</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportToBufferTable - NamedType ImportFileFromPathLbl</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1702,35 +1755,35 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTask - Field Type - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2250631420 - NamedType 3272857444" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2250631420 - NamedType 2070409300" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Duration:        ########################################3#</source>
           <target>\Dauer:           ########################################3#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Duration</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_DurationTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2250631420 - NamedType 2068676218" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2250631420 - NamedType 677652026" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Filter:       ########################################1#</source>
           <target>\Filter:       ########################################1#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_FilterTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2250631420 - NamedType 139100741" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2250631420 - NamedType 3540513133" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</source>
           <target>\Fortschritt:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Progress</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_ProgressTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2250631420 - NamedType 3526639069" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2250631420 - NamedType 1472015365" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Record:    ########################################2#</source>
           <target>\Datensatz: ########################################2#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_Record</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_RecordTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2250631420 - NamedType 989858905" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2250631420 - NamedType 3772374561" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Time Remaining: ########################################5#</source>
           <target>\Restlaufzeit: ########################################5#</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_TimeRemaining</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2483073149 - Method 2787516006 - NamedType 1342847624" size-unit="char" translate="yes" xml:space="preserve">
           <source>All Files (*.*)|*.*</source>
@@ -1881,6 +1934,30 @@
           <target>%1 Puffer\%2 Zeilen importiert</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort GenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control DatabaseName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

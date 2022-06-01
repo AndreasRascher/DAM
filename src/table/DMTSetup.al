@@ -1,19 +1,19 @@
 table 91000 "DMTSetup"
 {
-    CaptionML = DEU = 'DMT Einrichtung', ENU = 'DMT Setup';
+    Caption = 'DMT Setup', comment = 'DMT Einrichtung';
     DataClassification = ToBeClassified;
     DataPerCompany = false;
 
     fields
     {
-        field(1; "Primary Key"; Code[10]) { CaptionML = ENU = 'Primary Key', DEU = 'Primärschlüssel'; }
+        field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'Primärschlüssel'; }
         field(10; "Obj. ID Range Buffer Tables"; Text[250])
-        { CaptionML = DEU = 'Objekt ID Bereich für Puffertabellen', ENU = 'Obj. ID Range Buffer Tables'; }
+        { Caption = 'Obj. ID Range Buffer Tables', comment = 'Objekt ID Bereich für Puffertabellen'; }
         field(11; "Obj. ID Range XMLPorts"; Text[250])
-        { CaptionML = DEU = 'Objekt ID Bereich für XMLPorts (Import)', ENU = 'Obj. ID Range XMLPorts (Import)'; }
+        { Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'Objekt ID Bereich für XMLPorts (Import)'; }
         field(30; "Default Export Folder Path"; Text[250])
         {
-            CaptionML = DEU = 'Standard Export Ordnerpfad', ENU = 'Default Export Folder';
+            Caption = 'Default Export Folder', Comment = 'Standard Export Ordnerpfad';
             DataClassification = ToBeClassified;
             trigger OnValidate()
             begin
@@ -29,7 +29,7 @@ table 91000 "DMTSetup"
         }
         field(31; "Schema.xml File Path"; Text[250])
         {
-            CaptionML = DEU = 'Pfad Schemadatei', ENU = 'Schema File Path';
+            Caption = 'Schema File Path', Comment = 'Pfad Schemadatei';
             trigger OnValidate()
             begin
                 Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
@@ -44,7 +44,7 @@ table 91000 "DMTSetup"
         }
         field(32; "Backup.xml File Path"; Text[250])
         {
-            CaptionML = DEU = 'Pfad Backup.xml', ENU = 'Backup.xml File Path';
+            Caption = 'Backup.xml File Path', Comment = 'Pfad Backup.xml';
             trigger OnValidate()
             begin
                 Rec."Backup.xml File Path" := DelChr(Rec."Backup.xml File Path", '<>', '"');
@@ -59,8 +59,12 @@ table 91000 "DMTSetup"
         }
         field(40; "Allow Usage of Try Function"; Boolean)
         {
-            CaptionML = DEU = ' Verwendung von Try Funktion zulassen', ENU = 'Allow Usage of Try Function';
+            Caption = 'Allow Usage of Try Function', Comment = ' Verwendung von Try Funktion zulassen';
             InitValue = true;
+        }
+        field(41; "Import with FlowFields"; Boolean)
+        {
+            Caption = 'Import with Flowfields', Comment = 'Import mit Flowfields';
         }
     }
     keys
