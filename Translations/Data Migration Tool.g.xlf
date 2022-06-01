@@ -1523,6 +1523,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Table List</source>
+          <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Dataport (until NAV2009)</source>
           <note from="Developer" annotates="general" priority="2"></note>

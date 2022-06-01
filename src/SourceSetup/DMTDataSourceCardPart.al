@@ -1,6 +1,6 @@
-page 90004 DataSourceCardPart
+page 91015 DataSourceCardPart
 {
-    Caption = 'DataSourceCardPart',Locked=true;
+    Caption = 'DataSourceCardPart', Locked = true;
     PageType = ListPart;
     SourceTable = DMTDataSourceLine;
     AutoSplitKey = true;

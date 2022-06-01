@@ -138,12 +138,11 @@ codeunit 91000 DMTImport
 
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
         TargetRef.OPEN(DMTTable."To Table ID", TRUE);
-        // //ReplaceValuesBeforeProcessing(BufferRef);
+        ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
 
         // DMTTestRunner.InitializeValidationTests(BufferRef, DMTTable);
         // DMTTestRunner.Run();
         // DMTTestRunner.GetResultRef(TargetRef);
-
         AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, TempDMTField_COLLECTION);
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef, TempDMTField_COLLECTION);
 
@@ -296,6 +295,24 @@ codeunit 91000 DMTImport
         if DMTTable."Import Duration (Longest)" < (CurrentDateTime - start) then
             DMTTable."Import Duration (Longest)" := (CurrentDateTime - start);
         DMTTable.Modify();
+    end;
+
+    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; var TempDMTField_COLLECTION: Record "DMTField" temporary)
+    var
+        ReplacementRule: Record DMTReplacementRule;
+        ToFieldRef: FieldRef;
+    begin
+        if not ReplacementRule.FindRulesFor(BufferRef) then exit;
+        repeat
+            TempDMTField_COLLECTION.SetRange("To Field No.", ReplacementRule."To Field No.");
+            if TempDMTField_COLLECTION.FindSet() then
+                repeat
+                    ToFieldRef := BufferRef.Field(TempDMTField_COLLECTION."From Field No.");
+                    if Format(ToFieldRef.Value) = ReplacementRule."Old Value" then
+                        if not DMTMgt.EvaluateFieldRef(ToFieldRef, ReplacementRule."New Value", false) then
+                            Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', ReplacementRule."New Value");
+                until TempDMTField_COLLECTION.Next() = 0;
+        until ReplacementRule.Next() = 0;
     end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)
