@@ -1,6 +1,6 @@
 page 91004 "DMTTableList"
 {
-    CaptionML = DEU = 'DMT Tabellenübersicht', ENU = 'DMT Table List';
+    Caption = 'DMT Table List', comment = 'DMT Tabellenübersicht';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

@@ -1881,6 +1881,19 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Replacement Rules</source>
+          <target>DMT Ersetzungsregeln</target>
+          <note from="Developer" annotates="general" priority="2">DMT Ersetzungsregeln</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRules - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Table List</source>
+          <target>DMT Tabellenübersicht</target>
+          <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Dataport (until NAV2009)</source>
           <target>Dataport (NAV Versionen bis NAV2009)</target>

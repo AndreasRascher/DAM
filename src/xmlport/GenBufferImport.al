@@ -1,4 +1,4 @@
-xmlport 90000 GenBuffImport
+xmlport 91001 GenBuffImport
 {
     Caption = 'GenBufferImport';
     Direction = Import;
