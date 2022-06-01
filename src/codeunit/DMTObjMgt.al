@@ -89,10 +89,14 @@ codeunit 91004 "DMTObjMgt"
             exit;
         // IsNumber
         if Delchr(rec."NAV Src.Table Caption", '=', '0123456789') = '' then begin
-            DMTFieldBuffer.SetFilter(TableNo, rec."NAV Src.Table Caption");
-            if DMTFieldBuffer.FindFirst() then begin
-                Rec."NAV Src.Table No." := DMTFieldBuffer.TableNo;
-                Rec."NAV Src.Table Caption" := DMTFieldBuffer."Table Caption";
+            if DMTFieldBuffer.IsEmpty then begin
+                evaluate(rec."To Table ID", rec."NAV Src.Table Caption");
+            end else begin
+                DMTFieldBuffer.SetFilter(TableNo, rec."NAV Src.Table Caption");
+                if DMTFieldBuffer.FindFirst() then begin
+                    Rec."NAV Src.Table No." := DMTFieldBuffer.TableNo;
+                    Rec."NAV Src.Table Caption" := DMTFieldBuffer."Table Caption";
+                end;
             end;
         end;
     end;

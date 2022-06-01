@@ -1,9 +1,9 @@
-OBJECT Dataport 50079 DMTExport
+OBJECT Dataport 50005 DMTExport
 {
   OBJECT-PROPERTIES
   {
-    Date=05.11.21;
-    Time=12:49:01;
+    Date=01.06.22;
+    Time=12:01:09;
     Modified=Yes;
     Version List=DMT;
   }
@@ -451,8 +451,9 @@ OBJECT Dataport 50079 DMTExport
       ExportToPath@1000000001 : Text[1024];
       ExportDuration@1000000002 : Duration;
       Progress@1000000003 : Dialog;
-      ReadyMsg@1000000004 : Text[1024];
+      ReadyMsgArray@1000000006 : ARRAY [100] OF Text[1024];
       TAB@1000000005 : Text[1];
+      Index@1000000007 : Integer;
     BEGIN
       CheckFolderPath_CC(ExportToFolderPath);
 
@@ -466,14 +467,37 @@ OBJECT Dataport 50079 DMTExport
       UNTIL AllObjWithCaption.NEXT = 0;
 
       TAB[1] := 9; // TAB
-      ReadyMsg:='Export abgeschlossen:';
       AllObjWithCaption.FINDSET;
+      Index := 0;
       REPEAT
         ExportToPath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
         ExportTable(ExportToPath,AllObjWithCaption."Object ID",ExportDuration,'');
-        ReadyMsg += STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
+        Index += 1;
+        ReadyMsgArray[Index] := STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
       UNTIL AllObjWithCaption.NEXT = 0;
-      MESSAGE(ReadyMsg)
+
+      MESSAGE('Export abgeschlossen:'+
+               ReadyMsgArray[ 1] + ReadyMsgArray[ 2] + ReadyMsgArray[ 3] + ReadyMsgArray[ 4] + ReadyMsgArray[ 5] +
+               ReadyMsgArray[ 6] + ReadyMsgArray[ 7] + ReadyMsgArray[ 8] + ReadyMsgArray[ 9] +
+               ReadyMsgArray[10] + ReadyMsgArray[11] + ReadyMsgArray[12] + ReadyMsgArray[13] + ReadyMsgArray[14] +
+               ReadyMsgArray[15] + ReadyMsgArray[16] + ReadyMsgArray[17] + ReadyMsgArray[18] + ReadyMsgArray[19] +
+               ReadyMsgArray[20] + ReadyMsgArray[21] + ReadyMsgArray[22] + ReadyMsgArray[23] + ReadyMsgArray[24] +
+               ReadyMsgArray[25] + ReadyMsgArray[26] + ReadyMsgArray[27] + ReadyMsgArray[28] + ReadyMsgArray[29] +
+               ReadyMsgArray[30] + ReadyMsgArray[31] + ReadyMsgArray[32] + ReadyMsgArray[33] + ReadyMsgArray[34] +
+               ReadyMsgArray[35] + ReadyMsgArray[36] + ReadyMsgArray[37] + ReadyMsgArray[38] + ReadyMsgArray[39] +
+               ReadyMsgArray[40] + ReadyMsgArray[41] + ReadyMsgArray[42] + ReadyMsgArray[43] + ReadyMsgArray[44] +
+               ReadyMsgArray[45] + ReadyMsgArray[46] + ReadyMsgArray[47] + ReadyMsgArray[48] + ReadyMsgArray[49] +
+               ReadyMsgArray[50] + ReadyMsgArray[51] + ReadyMsgArray[52] + ReadyMsgArray[53] + ReadyMsgArray[54] +
+               ReadyMsgArray[55] + ReadyMsgArray[56] + ReadyMsgArray[57] + ReadyMsgArray[58] + ReadyMsgArray[59] +
+               ReadyMsgArray[60] + ReadyMsgArray[61] + ReadyMsgArray[62] + ReadyMsgArray[63] + ReadyMsgArray[64] +
+               ReadyMsgArray[65] + ReadyMsgArray[66] + ReadyMsgArray[67] + ReadyMsgArray[68] + ReadyMsgArray[69] +
+               ReadyMsgArray[70] + ReadyMsgArray[71] + ReadyMsgArray[72] + ReadyMsgArray[73] + ReadyMsgArray[74] +
+               ReadyMsgArray[75] + ReadyMsgArray[76] + ReadyMsgArray[77] + ReadyMsgArray[78] + ReadyMsgArray[79] +
+               ReadyMsgArray[80] + ReadyMsgArray[81] + ReadyMsgArray[82] + ReadyMsgArray[83] + ReadyMsgArray[84] +
+               ReadyMsgArray[85] + ReadyMsgArray[86] + ReadyMsgArray[87] + ReadyMsgArray[88] + ReadyMsgArray[89] +
+               ReadyMsgArray[90] + ReadyMsgArray[91] + ReadyMsgArray[92] + ReadyMsgArray[93] + ReadyMsgArray[94] +
+               ReadyMsgArray[95] + ReadyMsgArray[96] + ReadyMsgArray[97] + ReadyMsgArray[98] + ReadyMsgArray[99]
+               );
     END;
 
     PROCEDURE StartSchemaDefinitionExport@1000000016();
@@ -484,6 +508,8 @@ OBJECT Dataport 50079 DMTExport
       AllObjWithCaption@1109900001 : Record 2000000058;
     BEGIN
       //* export all data needed to recreate the C/AL table in al
+      CheckFolderPath_CC(ExportToFolderPath);
+
       ReadyMsg:='Export finished:';
       ExportToPath := ExportToFolderPath + 'Schema.csv';
 
@@ -527,6 +553,8 @@ OBJECT Dataport 50079 DMTExport
     BEGIN
       //* returns values in xmlformat, handles problems with field.type optionstring bug
       fieldRef := recRef.FIELD(fieldNo);
+      IF LOWERCASE(FORMAT(fieldRef.CLASS)) = 'flowfield' THEN
+        fieldRef.CALCFIELD();
       fieldRef.VALUE := fieldRef.VALUE;
       CASE UPPERCASE(FORMAT(fieldRef.TYPE)) OF
         'BOOLEAN': BEGIN; _Boolean := fieldRef.VALUE; _Result  := '0';   IF _Boolean THEN      _Result := '1'; END;
@@ -608,7 +636,10 @@ OBJECT Dataport 50079 DMTExport
       IF _ExportTableID <> 0 THEN
         _fields.SETRANGE(TableNo,_ExportTableID);
       _fields.SETFILTER(Type,'<>%1',_fields.Type::BLOB);
-      _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField);
+      IF ExportFlowFields THEN
+        _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField)
+      ELSE
+        _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
       _fields.SETRANGE(Enabled,TRUE);
       //SetObsoleteFieldFilter(_fields);
       _fields.FINDSET;
@@ -668,3 +699,4 @@ OBJECT Dataport 50079 DMTExport
     END.
   }
 }
+

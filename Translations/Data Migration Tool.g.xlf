@@ -1508,6 +1508,71 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <note from="Developer" annotates="general" priority="2">Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 2432660905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2">Neuer Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field New Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3205443024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Value</source>
+          <note from="Developer" annotates="general" priority="2">Alter Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field Old Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2367234167 - Field 3831648334 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field To Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Setup</source>
+          <note from="Developer" annotates="general" priority="2">DMT Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 3166256172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allow Usage of Try Function</source>
+          <note from="Developer" annotates="general" priority="2"> Verwendung von Try Funktion zulassen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Allow Usage of Try Function - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2843815182 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Backup.xml File Path</source>
+          <note from="Developer" annotates="general" priority="2">Pfad Backup.xml</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Backup.xml File Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 3332974040 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Export Folder</source>
+          <note from="Developer" annotates="general" priority="2">Standard Export Ordnerpfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Default Export Folder Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import with Flowfields</source>
+          <note from="Developer" annotates="general" priority="2">Import mit Flowfields</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Import with FlowFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Obj. ID Range Buffer Tables</source>
+          <note from="Developer" annotates="general" priority="2">Objekt ID Bereich für Puffertabellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range Buffer Tables - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1138059172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Obj. ID Range XMLPorts (Import)</source>
+          <note from="Developer" annotates="general" priority="2">Objekt ID Bereich für XMLPorts (Import)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range XMLPorts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 1131415063 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Schema File Path</source>
+          <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.xml File Path - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1658,6 +1723,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Replacement Rules</source>
+          <note from="Developer" annotates="general" priority="2">DMT Ersetzungsregeln</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRules - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Table List</source>
+          <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Dataport (until NAV2009)</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1702,6 +1777,26 @@
           <source>%1 Buffer\%2 lines imported</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort GenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control DatabaseName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>
