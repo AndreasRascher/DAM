@@ -1,11 +1,12 @@
 page 91016 "DMTReplacementRules"
 {
     Caption = 'DMT Replacement Rules', Comment = 'DMT Ersetzungsregeln';
-    PageType = Worksheet;
+    PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = DMTReplacementRule;
-    AutoSplitKey = true;
+    SourceTable = DMTReplacementsHeader;
+    DelayedInsert = true;
+    CardPageId = "DMTReplacementsCard";
 
     layout
     {
@@ -13,10 +14,8 @@ page 91016 "DMTReplacementRules"
         {
             repeater(Repeater)
             {
-                field("To Table No."; Rec."To Table No.") { ApplicationArea = All; }
-                field("To Field No."; Rec."To Field No.") { ApplicationArea = All; }
-                field("Old Value"; Rec."Old Value") { ApplicationArea = All; }
-                field("New Value"; Rec."New Value") { ApplicationArea = All; }
+                field("To Table No."; Rec.Code) { ApplicationArea = All; }
+                field("To Field No."; Rec.Description) { ApplicationArea = All; }
             }
         }
     }

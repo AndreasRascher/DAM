@@ -1,7 +1,6 @@
 table 91002 "DMTField"
 {
     DataClassification = SystemMetadata;
-
     fields
     {
         field(20; "To Table No."; Integer)
@@ -120,14 +119,16 @@ table 91002 "DMTField"
             OptionMembers = Ignore,Transfer,FixedValue;
             OptionCaption = 'Ignore,Transfer,Fixed Value', comment = 'Ignorieren,Übertragen,Fester Wert';
         }
+        field(101; "Replacements Code"; Code[50])
+        {
+            Caption = 'Replacements Code', comment = 'Ersetzungen Code';
+            TableRelation = DMTReplacementsHeader.Code;
+        }
     }
 
     keys
     {
-        key(PK; "To Table No.", "To Field No.")
-        {
-            Clustered = true;
-        }
+        key(PK; "To Table No.", "To Field No.") { Clustered = true; }
     }
     fieldgroups
     {

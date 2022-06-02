@@ -301,20 +301,24 @@ codeunit 91000 DMTImport
 
     local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; DMTTable: record DMTTable; var TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
-        ReplacementRule: Record DMTReplacementRule;
+        TempFieldWithReplacementCode: Record "DMTField" temporary;
+        ReplacementsHeader: Record DMTReplacementsHeader;
         ToFieldRef: FieldRef;
+        ReplaceValueDictionary: Dictionary of [Text, Text];
+        NewValue: Text;
     begin
-        if not ReplacementRule.FindRulesFor(DMTTable) then exit;
+        TempFieldWithReplacementCode.Copy(TempDMTField_COLLECTION, true);
+        TempFieldWithReplacementCode.Reset();
+        TempFieldWithReplacementCode.SetFilter("Replacements Code", '<>''''');
+        if not TempFieldWithReplacementCode.FindSet() then exit;
         repeat
-            TempDMTField_COLLECTION.SetRange("To Field No.", ReplacementRule."To Field No.");
-            if TempDMTField_COLLECTION.FindSet() then
-                repeat
-                    ToFieldRef := BufferRef.Field(TempDMTField_COLLECTION."From Field No.");
-                    if Format(ToFieldRef.Value) = ReplacementRule."Old Value" then
-                        if not DMTMgt.EvaluateFieldRef(ToFieldRef, ReplacementRule."New Value", false) then
-                            Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', ReplacementRule."New Value");
-                until TempDMTField_COLLECTION.Next() = 0;
-        until ReplacementRule.Next() = 0;
+            ReplacementsHeader.Get(TempFieldWithReplacementCode."Replacements Code");
+            ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
+            ToFieldRef := BufferRef.Field(TempDMTField_COLLECTION."From Field No.");
+            if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
+                if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false) then
+                    Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
+        until TempFieldWithReplacementCode.Next() = 0;
     end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)

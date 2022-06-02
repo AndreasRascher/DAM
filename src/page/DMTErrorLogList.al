@@ -108,7 +108,8 @@ page 91001 "DMT Error Log List"
                         Database::DMTFieldBuffer,
                         Database::DMTTable,
                         Database::DMTGenBuffTable,
-                        Database::DMTReplacementRule);
+                        Database::DMTReplacementsHeader,
+                        Database::DMTReplacementsLine);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';

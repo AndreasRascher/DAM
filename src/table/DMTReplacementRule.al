@@ -1,34 +1,52 @@
-table 91010 "DMTReplacementRule"
+table 91010 "DMTReplacementsHeader"
 {
+    Caption = 'Replacements Header', Comment = 'Ersetzungungen Kopf';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; "To Table No."; Integer)
+        field(1; Code; Code[50])
         {
-            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
+            Caption = 'Code', comment = 'Code';
             DataClassification = SystemMetadata;
-            TableRelation = DMTTable."To Table ID";
         }
-        field(2; "To Field No."; Integer)
+        field(2; Description; Text[100])
         {
-            Caption = 'Target Field No.', Comment = 'Ziel Feldnr.';
+            Caption = 'Description', Comment = 'Beschreibung';
             DataClassification = SystemMetadata;
-            TableRelation = DMTField."To Field No." WHERE("To Table No." = field("To Table No."));
         }
-        field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'Zeilennr.'; }
-        field(10; "Old Value"; Text[250]) { Caption = 'Old Value', Comment = 'Alter Wert'; }
-        field(11; "New Value"; Text[250]) { Caption = 'New Value', Comment = 'Neuer Wert'; }
     }
 
     keys
     {
-        key(PK; "To Table No.", "To Field No.", "Line No.") { Clustered = true; }
+        key(PK; Code) { Clustered = true; }
     }
-    internal procedure FindRulesFor(DMTTable: record DMTTable) OK: Boolean
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; Code, Description) { }
+    }
+
+    trigger OnDelete()
+    var
+        ReplacementsLine: Record "DMTReplacementsLine";
     begin
-        Rec.Reset();
-        Rec.SetRange("To Table No.", DMTTable."To Table ID");
-        OK := Rec.FindSet(false, false);
+        if ReplacementsLine.filterFor(Rec) then
+            ReplacementsLine.DeleteAll(true);
+    end;
+
+    internal procedure loadDictionary(var ReplaceValueDictionary: Dictionary of [Text, Text]) NoOfEntries: Integer
+    var
+        ReplacementsLine: Record DMTReplacementsLine;
+    begin
+        Clear(ReplaceValueDictionary);
+        if not ReplacementsLine.filterFor(Rec) then
+            exit;
+        ReplacementsLine.FindSet(false, false);
+        repeat
+            if not ReplaceValueDictionary.ContainsKey(ReplacementsLine."Old Value") then
+                ReplaceValueDictionary.Add(ReplacementsLine."Old Value", ReplacementsLine."New Value");
+        until ReplacementsLine.Next() = 0;
+        NoOfEntries := ReplaceValueDictionary.Count;
     end;
 }
