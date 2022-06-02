@@ -2711,7 +2711,7 @@ OBJECT XMLport 50014 DMT Export
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result += STRSUBSTNO('%1,',_OptionElement);
-        END ELSE BEGIN
+        end else begin
           _Result += STRSUBSTNO('"%1",',_OptionElement);
         END;
       END;
@@ -2830,7 +2830,7 @@ OBJECT XMLport 50014 DMT Export
             _exportFieldBuffer := _fields;
             _exportFieldBuffer.INSERT;
           END;
-       END ELSE BEGIN
+       end else begin
           _exportFieldBuffer := _fields;
           _exportFieldBuffer.INSERT;
         END;
@@ -2978,7 +2978,7 @@ OBJECT XMLport 50014 DMT Export
 
       IF fieldIndex = 1 THEN BEGIN
         ExportFieldBuffer.FINDFIRST;
-      END ELSE BEGIN
+      end else begin
         ExportFieldBuffer.NEXT;
       END;
 
@@ -3013,7 +3013,7 @@ OBJECT XMLport 50014 DMT Export
             //mask leading "
             IF (STRLEN(currFldRef.OPTIONCAPTION)>1) AND (COPYSTR(currFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
               valueAsText := '" "'+COPYSTR(currFldRef.OPTIONCAPTION,2);
-            END ELSE BEGIN
+            end else begin
               valueAsText := currFldRef.OPTIONCAPTION;
             END;
           END;

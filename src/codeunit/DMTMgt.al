@@ -162,7 +162,7 @@ codeunit 91001 "DMTMgt"
 
         IF TargetRef2.GET(TargetRef.RECORDID) then begin
             InsertOK := TargetRef.MODIFY(InsertTrue);
-        end ELSE begin
+        end else begin
             InsertOK := TargetRef.INSERT(InsertTrue);
         end;
 
@@ -206,13 +206,13 @@ codeunit 91001 "DMTMgt"
         DMTSetup.GetRecordOnce();
         IF DMTFields."Use Try Function" and DMTSetup."Allow Usage of Try Function" then begin
             IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
-        end ELSE begin
+        end else begin
             IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
         end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
             DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTFields);
-        end ELSE begin
+        end else begin
             // Save Successful changes
             IF TargetRef.modify() then;
         end;
@@ -233,7 +233,7 @@ codeunit 91001 "DMTMgt"
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
             DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
-        end ELSE begin
+        end else begin
             // Save Successful changes
             IF TargetRef.modify() then;
         end;
@@ -305,7 +305,7 @@ codeunit 91001 "DMTMgt"
                         FieldRef_TO.VALUE := _Integer;
                         exit(TRUE);
                     end;
-                end ELSE begin
+                end else begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
                     FOR OptionIndex := 0 TO NoOfOptions DO BEGIN

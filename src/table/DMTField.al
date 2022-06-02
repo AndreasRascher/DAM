@@ -185,14 +185,19 @@ table 91002 "DMTField"
                 Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
                 exit;
             end;
-
             DMTFields.FilterBy(DMTTable);
-            DMTSetup.Get();
-            DMTFields.setrange("From Field No.", 0);
+            DMTFields.SetRange("From Field No.", 0);
+            DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
+
             // Optional Overwrite
-            if DMTFields.IsEmpty then
-                if Confirm(CfmReplaceExistingMatches) then
-                    DMTFields.setrange("From Field No.");
+            DMTFields2.FilterBy(DMTTable);
+            DMTFields2.SetFilter("From Field No.", '<>%1', 0);
+            DMTFields2.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
+            if DMTFields2.FindFirst() then
+                if Confirm(CfmReplaceExistingMatches) then begin
+                    DMTFields.SetRange("From Field No.");
+                end;
+            Clear(DMTFields2);
             if DMTFields.FindSet(false, false) then
                 repeat
                     TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");

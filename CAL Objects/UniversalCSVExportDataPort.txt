@@ -149,7 +149,7 @@ OBJECT Dataport 50005 DMTExport
         IF UseBigText THEN BEGIN
           // Required for extra columns
           EXPORT_ExportSingleTableRecBT(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
-        END ELSE BEGIN
+        end else begin
           // Faster without BigText (BT)
           EXPORT_ExportSingleTableRec(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
         END;
@@ -191,7 +191,7 @@ OBJECT Dataport 50005 DMTExport
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result += STRSUBSTNO('%1,',_OptionElement);
-        END ELSE BEGIN
+        end else begin
           _Result += STRSUBSTNO('"%1",',_OptionElement);
         END;
       END;
@@ -219,7 +219,7 @@ OBJECT Dataport 50005 DMTExport
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result.ADDTEXT(STRSUBSTNO('%1,',_OptionElement));
-        END ELSE BEGIN
+        end else begin
           _Result.ADDTEXT(STRSUBSTNO('"%1",',_OptionElement));
         END;
       END;
@@ -316,7 +316,7 @@ OBJECT Dataport 50005 DMTExport
                 //mask leading "
                 IF (STRLEN(_CurrFldRef.OPTIONCAPTION) > 1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
                   _ValueAsText := '" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2);
-                END ELSE BEGIN
+                end else begin
                   _ValueAsText := _CurrFldRef.OPTIONCAPTION;
                 END;
               END;
@@ -383,7 +383,7 @@ OBJECT Dataport 50005 DMTExport
                 //mask leading "
                 IF (STRLEN(_CurrFldRef.OPTIONCAPTION)>1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
                   _ValueAsText.ADDTEXT('" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2));
-                END ELSE BEGIN
+                end else begin
                   _ValueAsText.ADDTEXT(_CurrFldRef.OPTIONCAPTION);
                 END;
               END;
