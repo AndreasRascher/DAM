@@ -30,7 +30,7 @@
             "serverInstance": "TEST_MC",
             "authentication": "UserPassword",
             "startupObjectType": "Page",
-            "startupObjectId": 91004,
+            "startupObjectId": 91016,
             "breakOnError": true,
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,

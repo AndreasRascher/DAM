@@ -66,8 +66,8 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('');
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'';');
         C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
+        C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'';');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
         C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.TABLECAPTION, ReceivedLinesCount);');
