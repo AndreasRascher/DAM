@@ -189,6 +189,13 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field Primary Key - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Method 3956241681 - NamedType 1063806814" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All fields are already assigned. Overwrite existing assignment?</source>
+          <target>Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
+          <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType CfmReplaceExistingMatches</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <target>Fester Wert</target>
@@ -2229,12 +2236,6 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen\Dauer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Method OnAction - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Page 229854824 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Lines</source>
-          <target>Zeilen</target>
-          <note from="Developer" annotates="general" priority="2">Zeilen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTAssignedReplacementsSub - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
           <target>DMT Generischer Puffer Übersicht</target>
@@ -2265,11 +2266,12 @@
           <note from="Developer" annotates="general" priority="2">DMT Ersetzungsregeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRules - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1782388035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Line</source>
-          <target>Zeile</target>
+        <trans-unit id="Page 1659557512 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <target>Zeilen</target>
           <note from="Developer" annotates="general" priority="2">Zeilen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRuleSub - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsAssignedSub - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3437680944 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacements Card</source>
@@ -2300,6 +2302,13 @@
           <target>Zuordnung vorschlagen</target>
           <note from="Developer" annotates="general" priority="2">Zuordnung vorschlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsCard - Action ProposeAssignments - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3618955800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line</source>
+          <target>Zeile</target>
+          <note from="Developer" annotates="general" priority="2">Zeilen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsSub - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2794004004 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Tables</source>

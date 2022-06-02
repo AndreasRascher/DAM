@@ -158,6 +158,11 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field Primary Key - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Method 3956241681 - NamedType 1063806814" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All fields are already assigned. Overwrite existing assignment?</source>
+          <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType CfmReplaceExistingMatches</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <note from="Developer" annotates="general" priority="2">Fester Wert</note>

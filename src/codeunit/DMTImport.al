@@ -267,8 +267,10 @@ codeunit 91000 DMTImport
 
             if not ShowRequestPageFilterDialog(BufferRef, DMTTable) then
                 exit;
-            if BufferRef.HasFilter then
+            if BufferRef.HasFilter then begin
                 DMTTable.SaveTableLastView(BufferRef.GetView());
+                Commit();
+            end;
         end else begin
             BufferRef.SetView(BufferTableView);
         end;

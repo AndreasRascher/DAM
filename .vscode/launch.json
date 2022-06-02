@@ -39,24 +39,24 @@
             "tenant": "default",
             "schemaUpdateMode": "Synchronize",
             "port": 7049
-        },
-        {
-            "name": "Attach: Graef TEST_MC",
-            "type": "al",
-            "request": "attach",
-            "environmentType": "OnPrem",
-            "server": "https://bcdev.graef.de",
-            "serverInstance": "TEST_MC",
-            "authentication": "UserPassword",
-            "breakOnError": true,
-            "breakOnRecordWrite": false,
-            "enableSqlInformationDebugger": true,
-            "enableLongRunningSqlStatements": true,
-            "longRunningSqlStatementsThreshold": 500,
-            "numberOfSqlStatements": 10,
-            "breakOnNext": "WebServiceClient",
-            "tenant": "default"
         }
+        // {
+        //     "name": "Attach: Graef TEST_MC",
+        //     "type": "al",
+        //     "request": "attach",
+        //     "environmentType": "OnPrem",
+        //     "server": "https://bcdev.graef.de",
+        //     "serverInstance": "TEST_MC",
+        //     "authentication": "UserPassword",
+        //     "breakOnError": true,
+        //     "breakOnRecordWrite": false,
+        //     "enableSqlInformationDebugger": true,
+        //     "enableLongRunningSqlStatements": true,
+        //     "longRunningSqlStatementsThreshold": 500,
+        //     "numberOfSqlStatements": 10,
+        //     "breakOnNext": "WebServiceClient",
+        //     "tenant": "default"
+        // }
 
     ]
 }
