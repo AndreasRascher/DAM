@@ -38,7 +38,7 @@ page 91004 "DMTTableList"
         {
             action(SelectTablesToAdd)
             {
-                CaptionML = DEU = 'Tab. hinzufügen';
+                Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
                 Image = Add;
                 ApplicationArea = all;
                 trigger OnAction()
@@ -51,23 +51,25 @@ page 91004 "DMTTableList"
             action(ImportBufferTables)
             {
                 Image = ImportDatabase;
-                CaptionML = DEU = 'Alle Dateien in Puffertabellen einlesen';
+                Caption = 'Read all files into buffer tables', Comment = 'Alle Dateien in Puffertabellen einlesen';
                 ApplicationArea = all;
                 trigger OnAction()
                 var
                     DMTTable: Record DMTTable;
                     Progress: Dialog;
                     Start: DateTime;
+                    ImportFilesProgressMsg: Label 'Reading files into buffer tables\ Table: ############1#', Comment = 'Dateien werden eingelesen\ Tabelle: ############1#';
+                    FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
                 begin
                     if DMTTable.FindSet() then begin
                         Start := CurrentDateTime;
-                        Progress.Open('Puffertabellen werden eingelesen\ Tabelle: ############1#');
+                        Progress.Open(ImportFilesProgressMsg);
                         repeat
                             Progress.Update(1, DMTTable."Dest.Table Caption");
                             DMTTable.ImportToBufferTable();
                         until DMTTable.Next() = 0;
                         Progress.Close();
-                        Message('Vorgang abgeschlossen\Dauer %1', CurrentDateTime - Start);
+                        Message(FinishedMsg, CurrentDateTime - Start);
                     end;
                 end;
             }
@@ -75,7 +77,7 @@ page 91004 "DMTTableList"
             {
                 Image = ExportFile;
                 ApplicationArea = all;
-                CaptionML = DEU = 'Puffertabellen Objekte runterladen';
+                Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
                 var
                     DMTTable: Record DMTTable;
@@ -90,7 +92,7 @@ page 91004 "DMTTableList"
             {
                 Image = TransferToLines;
                 ApplicationArea = all;
-                CaptionML = DEU = 'In Zieltabellen übernehmen (Markierte Zeilen)';
+                Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()
                 var
                     DMTTable: Record DMTTable;

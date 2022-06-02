@@ -215,9 +215,15 @@ page 91000 "DMT Setup"
 
                 trigger OnAction()
                 var
+                    DMTTable: Record DMTTable;
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
+                    // Update imported DMTTable."Qty.Lines In Trgt. Table" with actual values
+                    if DMTTable.FindSet() then
+                        repeat
+                            DMTTable.UpdateQtyLinesInBufferTable();
+                        until DMTTable.Next() = 0;
                 end;
             }
         }

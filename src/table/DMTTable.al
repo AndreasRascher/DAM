@@ -350,19 +350,20 @@ table 91001 "DMTTable"
     end;
 
 
-    procedure TryFindExportDataFile()
+    procedure TryFindExportDataFile() Success: Boolean
     var
         DMTSetup: Record "DMTSetup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
         DMTSetup.Get();
-        if DMTSetup."Default Export Folder Path" = '' then exit;
-        if Rec.DataFilePath <> '' then exit;
+        if DMTSetup."Default Export Folder Path" = '' then exit(false);
+        if Rec.DataFilePath <> '' then exit(false);
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
+            Success := true;
         end;
     end;
 

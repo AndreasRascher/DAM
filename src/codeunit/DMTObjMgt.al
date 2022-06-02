@@ -48,6 +48,7 @@ codeunit 91004 "DMTObjMgt"
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         DMTTable: Record DMTTable;
+        DMTField: Record DMTField;
         DMTSelectTables: Page DMTSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
@@ -62,6 +63,13 @@ codeunit 91004 "DMTObjMgt"
                         Clear(DMTTable);
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
+                        if DMTTable.TryFindExportDataFile() then begin
+                            // Assumption: If the filename pattern matches the default export -> Custom Buffertable
+                            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+                            DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Custom Buffer Table per file");
+                            DMTTable.Modify();
+                        end;
+                        DMTField.InitForTargetTable(DMTTable);
                     end;
                 until TempAllObjWithCaption.Next() = 0;
         end;
