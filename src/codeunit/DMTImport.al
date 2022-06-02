@@ -130,24 +130,26 @@ codeunit 91000 DMTImport
     var
         DMTErrorLog: Record DMTErrorLog;
         // DMTTestRunner: Codeunit DMTTestRunner;
-        TargetRef: RecordRef;
-        ErrorsExist: Boolean;
+        TargetRef, TargetRef2 : RecordRef;
+        ErrorsExists: Boolean;
         Success: Boolean;
     begin
 
-
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
         TargetRef.OPEN(DMTTable."To Table ID", TRUE);
-        ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
+        ReplaceBufferValuesBeforeProcessing(BufferRef, DMTTable, TempDMTField_COLLECTION);
 
-        // DMTTestRunner.InitializeValidationTests(BufferRef, DMTTable);
-        // DMTTestRunner.Run();
-        // DMTTestRunner.GetResultRef(TargetRef);
         AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, TempDMTField_COLLECTION);
+        if DMTTable."Import Only New Records" then
+            if TargetRef2.Get(TargetRef.RecordId) then begin
+                DMTMgt.UpdateResultQty(true, false);
+                exit;
+            end;
+
         ValidateNonKeyFieldsAndModify(BufferRef, TargetRef, TempDMTField_COLLECTION);
 
-        ErrorsExist := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
-        if not ErrorsExist then begin
+        ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
+        if not ErrorsExists then begin
             Success := DMTMgt.InsertRecFromTmp(BufferRef, TargetRef, DMTTable."Use OnInsert Trigger");
         end;
 
@@ -297,12 +299,12 @@ codeunit 91000 DMTImport
         DMTTable.Modify();
     end;
 
-    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; var TempDMTField_COLLECTION: Record "DMTField" temporary)
+    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; DMTTable: record DMTTable; var TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
         ReplacementRule: Record DMTReplacementRule;
         ToFieldRef: FieldRef;
     begin
-        if not ReplacementRule.FindRulesFor(BufferRef) then exit;
+        if not ReplacementRule.FindRulesFor(DMTTable) then exit;
         repeat
             TempDMTField_COLLECTION.SetRange("To Field No.", ReplacementRule."To Field No.");
             if TempDMTField_COLLECTION.FindSet() then

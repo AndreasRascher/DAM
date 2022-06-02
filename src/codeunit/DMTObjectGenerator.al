@@ -3,13 +3,18 @@ codeunit 91003 "DMTObjectGenerator"
     procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
+        DMTSetup: Record DMTSetup;
     begin
         DMTTable.Testfield("Import XMLPort ID");
         DMTTable.Testfield("NAV Src.Table No.");
 
         C.AppendLine('xmlport ' + format(DMTTable."Import XMLPort ID") + ' T' + format(DMTTable."NAV Src.Table No.") + 'Import');
         C.AppendLine('{');
-        C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''';');
+        DMTSetup.Get();
+        if DMTSetup."Import with FlowFields" then
+            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ' FlowField' + ''';')
+        else
+            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -22,7 +27,7 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE) THEN BEGIN
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) THEN BEGIN
             C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
@@ -136,9 +141,11 @@ codeunit 91003 "DMTObjectGenerator"
 
     procedure CreateALTable(DMTTable: Record DMTTable) C: TextBuilder
     var
+        DMTSetup: Record DMTSetup;
         DMTFieldBuffer: Record DMTFieldBuffer;
         _FieldTypeText: Text;
     begin
+        DMTSetup.Get();
         DMTTable.testfield("Buffer Table ID");
         DMTTable.TestField("NAV Src.Table No.");
         FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE);
@@ -146,7 +153,7 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + DMTTable."NAV Src.Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE) THEN
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) THEN
             REPEAT
                 CASE DMTFieldBuffer.Type OF
                     DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
@@ -213,6 +220,10 @@ codeunit 91003 "DMTObjectGenerator"
     local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := DelChr(Field.FieldName, '=', '&-%/\(),. ');
+        // XMLPort Fieldelements cannot start with numbers
+        if CleanFieldName <> '' then
+            if CopyStr(CleanFieldName, 1, 1) IN ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
+                CleanFieldName := '_' + CleanFieldName;
     end;
 
     local procedure GetCleanTableName(Field: Record DMTFieldBuffer) CleanFieldName: Text

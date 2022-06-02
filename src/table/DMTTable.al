@@ -8,7 +8,7 @@ table 91001 "DMTTable"
     {
         field(1; "To Table ID"; Integer)
         {
-            CaptionML = DEU = 'Nach Tabellen ID', ENU = 'To Table ID';
+            Caption = 'To Table ID', comment = 'Nach Tabellen ID';
             DataClassification = SystemMetadata;
             NotBlank = true;
         }
@@ -31,7 +31,7 @@ table 91001 "DMTTable"
         }
         field(21; "No.of Records in Buffer Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Datensätze in Puffertabelle', ENU = 'No.of Records in Buffer Table';
+            Caption = 'No.of Records in Buffer Table', comment = 'Anz. Datensätze in Puffertabelle';
             trigger OnLookup()
             begin
                 ShowBufferTable();
@@ -39,7 +39,7 @@ table 91001 "DMTTable"
         }
         field(31; "Qty.Lines In Trgt. Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Zeilen in Zieltabelle', ENU = 'Qty. lines in target table';
+            Caption = 'Qty. lines in target table', Comment = 'Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
             CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("To Table ID")));
             Editable = false;
@@ -130,10 +130,9 @@ table 91001 "DMTTable"
             TableRelation = User."User Name";
         }
         field(102; LastView; Blob) { }
-        field(103; "Import Duration (Longest)"; Duration)
-        {
-            CaptionML = DEU = 'Import Dauer(Längste)', ENU = 'Import Duration (Longest)';
-        }
+        field(103; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
+        field(104; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)

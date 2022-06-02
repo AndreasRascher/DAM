@@ -1,6 +1,6 @@
 page 91005 "DMTSelectTables"
 {
-    CaptionML = DEU = 'Tabellen', ENU = 'Tables';
+    Caption = 'Tables', Comment = 'Tabellen';
     PageType = List;
     SourceTable = AllObjWithCaption;
     SourceTableTemporary = true;

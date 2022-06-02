@@ -6,46 +6,46 @@ table 91002 "DMTField"
     {
         field(20; "To Table No."; Integer)
         {
-            CaptionML = DEU = 'Ziel Tabellen ID', ENU = 'Target Table ID';
+            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
         field(21; "To Field No."; Integer)
         {
-            CaptionML = DEU = 'Ziel Feldnr.', ENU = 'Target Field No.';
+            Caption = 'Target Field No.', comment = 'Ziel Feldnr.';
             DataClassification = SystemMetadata;
             TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
         }
         field(22; "To Field Caption"; Text[80])
         {
-            CaptionML = DEU = 'Zielfeld Bezeichnung', ENU = 'Target Field Caption';
+            Caption = 'Target Field Caption', comment = 'Zielfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
         }
         field(23; "To Field Type"; Text[30])
         {
-            CaptionML = DEU = 'Zielfeld Typ', ENU = 'Target Field Type';
+            Caption = 'Target Field Type', comment = 'Zielfeld Typ';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
         }
         field(24; "From Table ID"; Integer)
         {
-            CaptionML = DEU = 'Herkunft Tabellen ID', ENU = 'Source Table ID';
+            Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
         field(25; "To Field Name (NAV)"; Text[80])
         {
-            CaptionML = DEU = 'Zielfeld Name', ENU = 'Target Field Name';
+            Caption = 'Target Field Name', comment = 'Zielfeld Name';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field.FieldName where(TableNo = field("To Table No."), "No." = field("To Field No.")));
         }
         field(31; "From Field No."; Integer)
         {
-            CaptionML = DEU = 'Herkunft Feldnr.', ENU = 'Source Field No.';
+            Caption = 'Source Field No.', comment = 'Herkunft Feldnr.';
             DataClassification = SystemMetadata;
             TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
             ValidateTableRelation = false;
@@ -56,7 +56,7 @@ table 91002 "DMTField"
         }
         field(32; "From Field Caption (GenBuff)"; Text[80])
         {
-            CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
+            Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
             Editable = false;
             trigger OnLookup()
             begin
@@ -65,7 +65,7 @@ table 91002 "DMTField"
         }
         field(33; "From Field Caption"; Text[80])
         {
-            CaptionML = DEU = 'Herkunftsfeld Bezeichnung', ENU = 'Source Field Caption';
+            Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
@@ -73,7 +73,7 @@ table 91002 "DMTField"
         }
         field(34; "From Field Type"; Text[30])
         {
-            CaptionML = DEU = 'Herkunftsfeld Typ', ENU = 'Source Field Type';
+            Caption = 'Source Field Type', comment = 'Herkunftsfeld Typ';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Type Name" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
@@ -82,7 +82,7 @@ table 91002 "DMTField"
 
         field(35; "Fixed Value"; Text[250])
         {
-            CaptionML = DEU = 'Fester Wert', ENU = 'Fixed Value';
+            Caption = 'Fixed Value', comment = 'Fester Wert';
             trigger OnValidate()
             var
                 ConfigValidateMgt: Codeunit "Config. Validate Management";
@@ -102,23 +102,23 @@ table 91002 "DMTField"
         }
         field(50; "Validate Value"; Boolean)
         {
-            CaptionML = DEU = 'Validieren', ENU = 'Validate';
+            Caption = 'Validate', comment = 'Validieren';
             InitValue = true;
         }
         field(51; "Use Try Function"; Boolean)
         {
-            CaptionML = DEU = 'Try Function verwenden', ENU = 'Use Try Function';
+            Caption = 'Use Try Function', comment = 'Try Function verwenden';
             InitValue = true;
         }
         field(52; "Ignore Validation Error"; Boolean)
         {
-            CaptionML = DEU = 'Fehler ignorieren ', ENU = 'Ignore Errors';
+            Caption = 'Ignore Errors', comment = 'Fehler ignorieren ';
         }
         field(100; "Processing Action"; Option)
         {
-            CaptionML = DEU = 'Aktion', ENU = 'Action';
+            Caption = 'Action', comment = 'Aktion';
             OptionMembers = Ignore,Transfer,FixedValue;
-            OptionCaptionML = DEU = 'Ignorieren,Übertragen,Fester Wert', ENU = 'Ignore,Transfer,Fixed Value';
+            OptionCaption = 'Ignore,Transfer,Fixed Value', comment = 'Ignorieren,Übertragen,Fester Wert';
         }
     }
 
@@ -131,7 +131,11 @@ table 91002 "DMTField"
     }
     fieldgroups
     {
+<<<<<<< HEAD
         fieldgroup(DropDown; "To Table No.", "From Field Caption", "To Field Caption") { }
+=======
+        fieldgroup(DropDown; "To Table No.", "To Field Caption", "To Field Name (NAV)") { }
+>>>>>>> 3ac459e5c460a88c7ee451ff2ad73d5494e21919
     }
     internal procedure FilterBy(DMTTable: Record DMTTable) NotIsEmpty: Boolean
     begin

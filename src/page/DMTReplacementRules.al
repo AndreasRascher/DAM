@@ -15,8 +15,8 @@ page 91016 "DMTReplacementRules"
             {
                 field("To Table No."; Rec."To Table No.") { ApplicationArea = All; }
                 field("To Field No."; Rec."To Field No.") { ApplicationArea = All; }
-                field("New Value"; Rec."New Value") { ApplicationArea = All; }
                 field("Old Value"; Rec."Old Value") { ApplicationArea = All; }
+                field("New Value"; Rec."New Value") { ApplicationArea = All; }
             }
         }
     }
