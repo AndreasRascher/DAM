@@ -12,9 +12,9 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('{');
         DMTSetup.Get();
         if DMTSetup."Import with FlowFields" then
-            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ' FlowField' + ''';')
+            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ' FlowField' + ''',locked=true;')
         else
-            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''';');
+            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''',locked=true;');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -61,9 +61,9 @@ codeunit 91003 "DMTObjectGenerator"
         C.AppendLine('            {');
         C.AppendLine('                group(Umgebung)');
         C.AppendLine('                {');
-        C.AppendLine('                    Caption = ''Environment'';');
-        C.AppendLine('                    field(DatabaseName; GetDatabaseName()) { Caption = ''Database''; ApplicationArea = all; }');
-        C.AppendLine('                    field(COMPANYNAME; COMPANYNAME) { Caption = ''Company''; ApplicationArea = all; }');
+        C.AppendLine('                    Caption = ''Environment'',locked=true;');
+        C.AppendLine('                    field(DatabaseName; GetDatabaseName()) { Caption = ''Database'',locked=true; ApplicationArea = all; }');
+        C.AppendLine('                    field(COMPANYNAME; COMPANYNAME) { Caption = ''Company'',locked=true; ApplicationArea = all; }');
         C.AppendLine('                }');
         C.AppendLine('            }');
         C.AppendLine('        }');
