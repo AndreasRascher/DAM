@@ -1,4 +1,4 @@
-page 91019 "DMTReplacementRuleSub"
+page 91019 "DMTReplacementsSub"
 {
     Caption = 'Line', Comment = 'Zeilen';
     PageType = ListPart;

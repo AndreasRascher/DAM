@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         // {
         //     "name": "BC:Publish & Synchronize",
         //     "type": "al",
@@ -19,7 +20,7 @@
         //     "longRunningSqlStatementsThreshold": 500,
         //     "numberOfSqlStatements": 10,
         //     "tenant": "default",
-        //     "schemaUpdateMode": "Recreate"            
+        //     "schemaUpdateMode": "ForceSync"            
         // }
         {
             "name": "Graef TEST_MC - Synchronize",
@@ -36,8 +37,26 @@
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
             "tenant": "default",
-            "schemaUpdateMode": "ForceSync",
+            "schemaUpdateMode": "Synchronize",
             "port": 7049
+        },
+        {
+            "name": "Attach: Graef TEST_MC",
+            "type": "al",
+            "request": "attach",
+            "environmentType": "OnPrem",
+            "server": "https://bcdev.graef.de",
+            "serverInstance": "TEST_MC",
+            "authentication": "UserPassword",
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "breakOnNext": "WebServiceClient",
+            "tenant": "default"
         }
+
     ]
 }

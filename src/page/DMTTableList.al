@@ -7,6 +7,7 @@ page 91004 "DMTTableList"
     SourceTable = DMTTable;
     CardPageId = DMTTableCard;
     SourceTableView = sorting("Sort Order");
+    // Editable = false;
 
     layout
     {
@@ -22,6 +23,8 @@ page 91004 "DMTTableList"
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
+                field(BufferTableType; BufferTableType) { ApplicationArea = All; Visible = false; }
+                field("Data Source Type"; "Data Source Type") { ApplicationArea = All; Visible = false; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }

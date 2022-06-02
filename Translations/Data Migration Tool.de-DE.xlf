@@ -1833,6 +1833,18 @@
           <note from="Developer" annotates="general" priority="2">Beschreibung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementsHeader - Field Description - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4252255481 - Field 3793209967 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table Caption</source>
+          <target>Herkunftstabelle</target>
+          <note from="Developer" annotates="general" priority="2">Herkunftstabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementsHeader - Field Source Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4252255481 - Field 90601618 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table ID</source>
+          <target>Herkunftstabellennr.</target>
+          <note from="Developer" annotates="general" priority="2">Herkunftstabellennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementsHeader - Field Source Table ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 689434770 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Replacements Line</source>
           <target>Ersetzungen Zeile</target>
@@ -2217,6 +2229,12 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen\Dauer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Method OnAction - NamedType ImportFinishedMsg</note>
         </trans-unit>
+        <trans-unit id="Page 229854824 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <target>Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTAssignedReplacementsSub - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
           <target>DMT Generischer Puffer Übersicht</target>
@@ -2259,6 +2277,12 @@
           <note from="Developer" annotates="general" priority="2">DMT Ersetzungen Karte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsCard - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3437680944 - Control 367253847 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assigned Lines</source>
+          <target>Zugeordnete Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">Zugeordnete Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsCard - Control AssignedLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3437680944 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General</source>
           <target>Allgemein</target>
@@ -2270,6 +2294,12 @@
           <target>Zeilen</target>
           <note from="Developer" annotates="general" priority="2">Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsCard - Control Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3437680944 - Action 896305376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Propose Assignments</source>
+          <target>Zuordnung vorschlagen</target>
+          <note from="Developer" annotates="general" priority="2">Zuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsCard - Action ProposeAssignments - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2794004004 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Tables</source>
