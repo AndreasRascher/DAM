@@ -131,11 +131,7 @@ table 91002 "DMTField"
     }
     fieldgroups
     {
-<<<<<<< HEAD
         fieldgroup(DropDown; "To Table No.", "From Field Caption", "To Field Caption") { }
-=======
-        fieldgroup(DropDown; "To Table No.", "To Field Caption", "To Field Name (NAV)") { }
->>>>>>> 3ac459e5c460a88c7ee451ff2ad73d5494e21919
     }
     internal procedure FilterBy(DMTTable: Record DMTTable) NotIsEmpty: Boolean
     begin

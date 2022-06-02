@@ -1831,7 +1831,6 @@
           <source>Target Field No.</source>
           <target>Ziel Feldnr.</target>
           <note from="Developer" annotates="general" priority="2">Ziel Feldnr.</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementRule - Field To Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2367234167 - Field 3831648334 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2234,7 +2233,6 @@
           <source>DMT Table Card (Data Migration Tool)</source>
           <target>DMT Tabellenkarte (Data Migration Tool)</target>
           <note from="Developer" annotates="general" priority="2">DMT Tabellenkarte (Data Migration Tool)</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2247,49 +2245,42 @@
           <source>Fields Setup</source>
           <target>Feldeinrichtung</target>
           <note from="Developer" annotates="general" priority="2">Feldeinrichtung</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control Lines - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Control 1187396503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source NAV</source>
           <target>Datenquelle NAV</target>
           <note from="Developer" annotates="general" priority="2">Datenquelle NAV</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control NAVDataSourceProperties - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Buffer Table</source>
           <target>Puffertabelle erstellen</target>
           <note from="Developer" annotates="general" priority="2">Puffertabelle erstellen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CreateBufferTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 2778232640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create XMLPort</source>
           <target>XMLPort erstellen</target>
           <note from="Developer" annotates="general" priority="2">XMLPort erstellen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CreateXMLPort - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
           <target>Import in Puffertabelle</target>
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action ImportBufferDataFromFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 2840808828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Log</source>
           <target>Fehlerprotokoll</target>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action OpenErrorLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 4138182889 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Target Table</source>
           <target>In Zieltabelle übertragen</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabelle übertragen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action TransferToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2352,6 +2343,153 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort GenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
         </trans-unit>
+        <trans-unit id="XmlPort 374392276 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lieferbedingung</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T10Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 374392276 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T10Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 374392276 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T10Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 374392276 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T10Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 374392276 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T10Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2994318701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verk�ufer/Eink�ufer</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T13Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2994318701 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T13Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2994318701 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T13Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2994318701 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T13Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2994318701 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T13Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1909341808 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lagerort</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T14Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1909341808 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T14Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1909341808 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T14Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1909341808 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T14Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1909341808 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T14Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3719506039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sachkonto</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T15Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3719506039 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T15Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3719506039 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T15Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3719506039 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T15Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3719506039 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T15Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 334734172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Debitor</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Property Caption</note>
+        </trans-unit>
         <trans-unit id="XmlPort 334734172 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 Buffer\%2 lines imported</source>
           <target>%1 Puffer\%2 Zeilen importiert</target>
@@ -2375,6 +2513,1371 @@
           <target>Datenbank</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3778287785 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Einheit</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T204Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3778287785 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T204Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3778287785 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T204Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3778287785 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T204Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3778287785 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T204Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2033420669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lief. an Adresse</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T222Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2033420669 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T222Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2033420669 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T222Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2033420669 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T222Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2033420669 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T222Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3995556252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Kreditor</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T23Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3995556252 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T23Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3995556252 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T23Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3995556252 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T23Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3995556252 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T23Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3432471623 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Textbausteinkopf</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T279Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3432471623 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T279Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3432471623 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T279Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3432471623 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T279Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3432471623 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T279Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2293921080 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Artikel</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T27Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2293921080 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T27Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2293921080 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T27Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2293921080 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T27Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2293921080 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T27Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2718572485 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Textbausteinzeile</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T280Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2718572485 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T280Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2718572485 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T280Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2718572485 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T280Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2718572485 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T280Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 838947158 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zahlungsform</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T289Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 838947158 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T289Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 838947158 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T289Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 838947158 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T289Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 838947158 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T289Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 127397485 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zusteller</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T291Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 127397485 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T291Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 127397485 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T291Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 127397485 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T291Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 127397485 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T291Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1802438356 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mahnmethode</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T292Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1802438356 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T292Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1802438356 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T292Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1802438356 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T292Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1802438356 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T292Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4229421019 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mahnstufe</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T293Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4229421019 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T293Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4229421019 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T293Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4229421019 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T293Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4229421019 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T293Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3691248310 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Artikel�bersetzung</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T30Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3691248310 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T30Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3691248310 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T30Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3691248310 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T30Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3691248310 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T30Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1965712598 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zahlungsbedingung</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T3Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1965712598 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T3Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1965712598 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T3Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1965712598 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T3Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1965712598 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T3Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1872284118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lieferanmahnungsmethode</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5005276Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1872284118 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5005276Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1872284118 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5005276Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1872284118 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5005276Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1872284118 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5005276Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4138705203 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Kontakt</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5050Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4138705203 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5050Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4138705203 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5050Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4138705203 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5050Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4138705203 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5050Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1474920080 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Artikeleinheit</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5404Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1474920080 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5404Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1474920080 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5404Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1474920080 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5404Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1474920080 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5404Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1314769149 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lagerhaltungsdaten</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5700Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1314769149 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5700Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1314769149 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5700Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1314769149 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5700Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1314769149 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5700Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 138621135 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Artikelreferenz</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5717Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 138621135 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5717Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 138621135 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5717Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 138621135 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5717Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 138621135 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5717Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 640528237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Artikelkategorie</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5722Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 640528237 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5722Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 640528237 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5722Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 640528237 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5722Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 640528237 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5722Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3415783830 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zusteller Transportart</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5790Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3415783830 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5790Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3415783830 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5790Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3415783830 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5790Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3415783830 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T5790Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4214489145 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Debitorenpreisgruppe</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T6Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4214489145 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T6Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4214489145 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T6Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4214489145 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T6Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 4214489145 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T6Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 86970848 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verkaufspreis</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7002Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 86970848 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7002Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 86970848 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7002Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 86970848 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7002Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 86970848 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7002Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1948029439 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Einkaufspreis</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7012Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1948029439 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7012Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1948029439 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7012Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1948029439 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7012Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1948029439 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7012Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3203355024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lagermitarbeiter</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7301Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3203355024 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7301Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3203355024 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7301Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3203355024 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7301Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3203355024 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7301Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 64269153 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Firmendaten</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T79Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 64269153 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T79Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 64269153 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T79Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 64269153 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T79Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 64269153 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T79Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3894822642 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Standardtext</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3894822642 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3894822642 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3894822642 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3894822642 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T7Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2805042929 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bemerkungszeile</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T97Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2805042929 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T97Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2805042929 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T97Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2805042929 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T97Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2805042929 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T97Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 197630814 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Betriebskalender</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000751Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 197630814 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000751Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 197630814 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000751Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 197630814 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000751Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 197630814 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000751Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 385906099 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Betriebskalenderarbeitstage</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000752Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 385906099 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000752Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 385906099 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000752Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 385906099 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000752Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 385906099 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000752Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1539767500 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Betriebskalenderfeiertage</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000753Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1539767500 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000753Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1539767500 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000753Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1539767500 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000753Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1539767500 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000753Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2833575393 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Arbeitsplatzgruppe</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000754Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2833575393 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000754Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2833575393 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000754Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2833575393 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000754Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2833575393 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000754Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1099773263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Abteilung</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000756Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1099773263 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000756Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1099773263 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000756Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1099773263 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000756Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1099773263 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000756Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 656917021 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Arbeitsplatz</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000758Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 656917021 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000758Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 656917021 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000758Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 656917021 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000758Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 656917021 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000758Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3267041757 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Arbeitsplankopf</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000763Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3267041757 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000763Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3267041757 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000763Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3267041757 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000763Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3267041757 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000763Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 823695392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Arbeitsgang</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000764Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 823695392 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000764Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 823695392 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000764Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 823695392 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000764Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 823695392 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000764Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1618058876 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fert.-St�cklistenkopf</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000771Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1618058876 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000771Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1618058876 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000771Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1618058876 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000771Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1618058876 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000771Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3750051253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fert.-St�cklistenzeile</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000772Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3750051253 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000772Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3750051253 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000772Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3750051253 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000772Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 3750051253 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000772Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 346002602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Verbindungscode</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000777Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 346002602 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000777Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 346002602 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000777Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 346002602 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000777Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 346002602 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000777Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 501420650 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Kapazit�tseinheit</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000780Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 501420650 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000780Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 501420650 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000780Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 501420650 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000780Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 501420650 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T99000780Import - Control DatabaseName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1192250060 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Land/Region</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T9Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1192250060 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target>%1 Puffer\%2 Zeilen importiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T9Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1192250060 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target>Umgebung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T9Import - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1192250060 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target>Mandant</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T9Import - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1192250060 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target>Datenbank</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T9Import - Control DatabaseName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

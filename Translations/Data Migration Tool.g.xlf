@@ -1953,26 +1953,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort GenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
         </trans-unit>
-        <trans-unit id="XmlPort 334734172 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 Buffer\%2 lines imported</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 334734172 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Environment</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control Umgebung - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 334734172 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Company</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control COMPANYNAME - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 334734172 - Control 2763223622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Database</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort T18Import - Control DatabaseName - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>
           <note from="Developer" annotates="general" priority="2"></note>
