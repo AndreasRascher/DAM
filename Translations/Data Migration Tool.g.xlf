@@ -158,10 +158,10 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field Primary Key - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1670326073 - Method 3956241681 - NamedType 1063806814" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 1670326073 - Method 3956241681 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType CfmReplaceExistingMatches</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType ReplaceExistingMatchesQst</note>
         </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
@@ -1747,6 +1747,41 @@
           <source>All Files (*.*)|*.*</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFileUTF8 - NamedType allFilesTok</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy Report Helper</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 1300577764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add SetData GetData CustomCode</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control addSetDataGetDataCustomCodeOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 2069234263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove al whitespace</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control RemoveALReportWhiteSpaceOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase</source>
+          <note from="Developer" annotates="general" priority="2">Verkauf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Purchase - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - View 1406942772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales</source>
+          <note from="Developer" annotates="general" priority="2">Einkauf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Sales - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3126398325 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Error Log</source>

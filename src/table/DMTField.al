@@ -172,12 +172,11 @@ table 91002 "DMTField"
         GenBuffTable: Record DMTGenBuffTable;
         SourceField: Record Field;
         TargetField: Record Field;
-        DMTSetup: Record DMTSetup;
         Found: Boolean;
         BuffTableCaptions: Dictionary of [Integer, Text];
         FoundAtIndex: Integer;
         OldFieldName: text;
-        CfmReplaceExistingMatches: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
         if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Custom Buffer Table per file") then begin
             DMTTable.TestField("Buffer Table ID");
@@ -194,7 +193,7 @@ table 91002 "DMTField"
             DMTFields2.SetFilter("From Field No.", '<>%1', 0);
             DMTFields2.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
             if DMTFields2.FindFirst() then
-                if Confirm(CfmReplaceExistingMatches) then begin
+                if Confirm(ReplaceExistingMatchesQst) then begin
                     DMTFields.SetRange("From Field No.");
                 end;
             Clear(DMTFields2);

@@ -2377,42 +2377,36 @@
           <source>Download buffer table objects</source>
           <target>Puffertabellen Objekte runterladen</target>
           <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ExportALObjects - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Read all files into buffer tables</source>
           <target>Alle Dateien in Puffertabellen einlesen</target>
           <note from="Developer" annotates="general" priority="2">Alle Dateien in Puffertabellen einlesen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3863332268 - Method 1377591017 - NamedType 1757551544" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reading files into buffer tables\ Table: ############1#</source>
           <target>Dateien werden eingelesen\ Tabelle: ############1#</target>
           <note from="Developer" annotates="general" priority="2">Dateien werden eingelesen\ Tabelle: ############1#</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Method OnAction - NamedType ImportFilesProgressMsg</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3863332268 - Method 1377591017 - NamedType 563229157" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing finished\Duration %1</source>
           <target>[Vorgang abgeschlossen\Dauer %1</target>
           <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Method OnAction - NamedType FinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Tables</source>
           <target>Tab. hinzufügen</target>
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action SelectTablesToAdd - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3691651546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to target tables (marked lines)</source>
           <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action TransferSelectedToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2426,6 +2420,34 @@
           <target>XMLPort (NAV2013 - BC14)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control XMLPort - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 274850035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reports</source>
+          <target>Berichte</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page User AL Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 274850035 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User AL Code is not available for the %1 %2</source>
+          <target>AL Code ist nicht verfügbar für %1 %2</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page User AL Code - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
+        </trans-unit>
+        <trans-unit id="Page 274850035 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase</source>
+          <target>Einkauf</target>
+          <note from="Developer" annotates="general" priority="2">Verkauf</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page User AL Code - View Purchase - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 274850035 - View 1406942772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales</source>
+          <target>Verkauf</target>
+          <note from="Developer" annotates="general" priority="2">Einkauf</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page User AL Code - View Sales - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2327466593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

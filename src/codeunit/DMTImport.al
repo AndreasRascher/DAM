@@ -137,7 +137,7 @@ codeunit 91000 DMTImport
 
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
         TargetRef.OPEN(DMTTable."To Table ID", TRUE);
-        ReplaceBufferValuesBeforeProcessing(BufferRef, DMTTable, TempDMTField_COLLECTION);
+        ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
 
         AssignKeyFieldsAndInsertTmpRec(BufferRef, TargetRef, TempDMTField_COLLECTION);
         if DMTTable."Import Only New Records" then
@@ -301,7 +301,7 @@ codeunit 91000 DMTImport
         DMTTable.Modify();
     end;
 
-    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; DMTTable: record DMTTable; var TempDMTField_COLLECTION: Record "DMTField" temporary)
+    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; var TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
         TempFieldWithReplacementCode: Record "DMTField" temporary;
         ReplacementsHeader: Record DMTReplacementsHeader;
