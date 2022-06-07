@@ -153,12 +153,17 @@ codeunit 81126 "DMTObjMgt"
         Message('Import abgeschlossen');
     end;
 
-    procedure CreateListOfAvailableObjectIDs(ObjectType: Enum DMTObjTypes; var FreeObjectIDs: List of [Integer]) NoOfObjects: Integer
+    procedure CreateListOfAvailableObjectIDsInLicense(ObjectType: Enum DMTObjTypes; var ObjectIDsAvailable: List of [Integer]) NoOfObjects: Integer
     var
-        PermissionRange: Record "Permission Range";
         AllObjWithCaption: Record AllObjWithCaption;
+        DMTSetup: Record DMTSetup;
+        Numbers: Record Integer;
+        PermissionRange: Record "Permission Range";
         index: Integer;
+        ObjectIDsInLicense: List of [Integer];
     begin
+        Clear(ObjectIDsAvailable);
+        // Collect Object IDs in License
         case ObjectType of
             ObjectType::Table:
                 begin
@@ -176,12 +181,25 @@ codeunit 81126 "DMTObjMgt"
                 for index := PermissionRange.From to PermissionRange."To" do begin
                     if AllObjWithCaption.Get(PermissionRange."Object Type", index) then begin
                         if IsGeneratedAppObject(AllObjWithCaption) then
-                            FreeObjectIDs.Add(index);
+                            ObjectIDsInLicense.Add(index);
                     end else begin
-                        FreeObjectIDs.Add(index);
+                        ObjectIDsInLicense.Add(index);
                     end;
                 end
             until PermissionRange.Next() = 0;
+        // Collect Object IDs in Range
+        DMTSetup.GetRecordOnce();
+        if (ObjectType = ObjectType::Table) and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
+            Numbers.SetFilter(Number, DMTSetup."Obj. ID Range Buffer Tables");
+        if (ObjectType = ObjectType::XMLPort) and (DMTSetup."Obj. ID Range XMLPorts" <> '') then
+            Numbers.SetFilter(Number, DMTSetup."Obj. ID Range XMLPorts");
+        if not Numbers.HasFilter then
+            Numbers.SetFilter(Number, '50000..99999');
+        if Numbers.FindSet() then
+            repeat
+                if ObjectIDsInLicense.Contains(Numbers.Number) then
+                    ObjectIDsAvailable.Add(Numbers.Number);
+            until Numbers.Next() = 0
     end;
 
     local procedure IsCoreAppObject(AllObjWithCaption: Record AllObjWithCaption) IsCoreAppObj: Boolean

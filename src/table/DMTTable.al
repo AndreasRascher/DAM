@@ -264,47 +264,42 @@ table 81128 "DMTTable"
 
     local procedure ProposeObjectIDs()
     var
-        AllObjWithCaption: Record AllObjWithCaption;
         DMTSetup: Record "DMTSetup";
         DMTTable: Record DMTTable;
-        Numbers: Record Integer;
-        UsedBufferTableIDs: List of [Integer];
-        UsedXMLPortIDs: List of [Integer];
+        ObjectMgt: Codeunit DMTObjMgt;
+        AvailableTables: List of [Integer];
+        AvailableXMLPorts: List of [Integer];
     begin
         if not DMTSetup.Get() then
             DMTSetup.InsertWhenEmpty();
         DMTSetup.Get();
+
+        ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables);
+        ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts);
+
         // Collect used numbers
         if DMTTable.FindSet() then
             repeat
                 if DMTTable."Import XMLPort ID" <> 0 then
-                    UsedXMLPortIDs.Add(DMTTable."Import XMLPort ID");
+                    if AvailableXMLPorts.Contains(DMTTable."Import XMLPort ID") then
+                        AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
                 if DMTTable."Buffer Table ID" <> 0 then
-                    UsedBufferTableIDs.Add(DMTTable."Buffer Table ID");
+                    if AvailableTables.Contains(DMTTable."Buffer Table ID") then
+                        AvailableTables.Remove(DMTTable."Buffer Table ID");
             until DMTTable.Next() = 0;
+
         // Buffer Table ID - Assign Next Number in Filter
-        if DMTSetup."Obj. ID Range Buffer Tables" <> '' then
-            if rec."Buffer Table ID" = 0 then begin
-                Numbers.SetFilter(Number, DMTSetup."Obj. ID Range Buffer Tables");
-                if Numbers.FindSet() then
-                    repeat
-                        if not UsedBufferTableIDs.Contains(Numbers.Number) then begin
-                            if not AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Numbers.Number) then
-                                Rec."Buffer Table ID" := Numbers.Number;
-                        end;
-                    until (Numbers.Next() = 0) or (rec."Buffer Table ID" <> 0);
-            end;
+        // if DMTSetup."Obj. ID Range Buffer Tables" <> '' then
+        if rec."Buffer Table ID" = 0 then begin
+            Rec."Buffer Table ID" := AvailableTables.Get(1);
+            AvailableTables.Remove(Rec."Buffer Table ID");
+        end;
         // Import XMLPort ID - Assign Next Number in Filter
-        if DMTSetup."Obj. ID Range XMLPorts" <> '' then
-            if rec."Import XMLPort ID" = 0 then begin
-                Numbers.SetFilter(Number, DMTSetup."Obj. ID Range XMLPorts");
-                if Numbers.FindSet() then
-                    repeat
-                        if not UsedXMLPortIDs.Contains(Numbers.Number) then
-                            if not AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Numbers.Number) then
-                                Rec."Import XMLPort ID" := Numbers.Number;
-                    until (Numbers.Next() = 0) or (rec."Import XMLPort ID" <> 0);
-            end;
+        // if DMTSetup."Obj. ID Range XMLPorts" <> '' then
+        if rec."Import XMLPort ID" = 0 then begin
+            rec."Import XMLPort ID" := AvailableXMLPorts.get(1);
+            AvailableXMLPorts.Remove(Rec."Import XMLPort ID");
+        end;
         TryFindBufferTableID(false);
         TryFindXMLPortID(false);
     end;
