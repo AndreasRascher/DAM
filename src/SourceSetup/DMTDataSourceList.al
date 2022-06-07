@@ -1,7 +1,7 @@
-page 91009 DataSourceList
+page 81140 DataSourceList
 {
     ApplicationArea = All;
-    CaptionML = ENU = 'Data Source List', DEU = 'Datenquellen Übersicht';
+    Caption = 'Data Source List', Comment = 'Datenquellen Übersicht';
     PageType = List;
     SourceTable = DMTDataSourceHeader;
     UsageCategory = Lists;
@@ -14,7 +14,7 @@ page 91009 DataSourceList
         {
             repeater(General)
             {
-                CaptionML = ENU = 'General', DEU = 'Allgemein';
+                Caption = 'General', Comment = 'Allgemein';
                 field("No."; Rec.Code) { ApplicationArea = All; }
                 field(Description; Rec.Description) { ApplicationArea = All; }
                 field("Data Source Type"; Rec."Data Source Type") { ApplicationArea = All; }

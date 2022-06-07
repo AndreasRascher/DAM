@@ -4,14 +4,14 @@
 	Column Type (Text, Decimal, Integer, Option,..) 
 	Column Width
 */
-table 91007 "DMTDataSourceHeader"
+table 81130 "DMTDataSourceHeader"
 {
     fields
     {
-        field(1; Code; Code[100]) { Caption='Code'; }
+        field(1; Code; Code[100]) { Caption = 'Code'; }
         field(10; Description; Text[150]) { Caption = 'Description'; }
-        field(11; FilePath; Text[250]) { Caption = 'File Path',comment='Dateipfad'; }
-        field(12; FileName; Text[250]) { Caption = 'File Name',comment = 'Dateiname'; }
+        field(11; FilePath; Text[250]) { Caption = 'File Path', comment = 'Dateipfad'; }
+        field(12; FileName; Text[250]) { Caption = 'File Name', comment = 'Dateiname'; }
         field(13; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(20; "NAV Schema File Status"; Option)
         {

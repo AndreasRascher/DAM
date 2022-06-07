@@ -1,4 +1,4 @@
-codeunit 91004 "DMTObjMgt"
+codeunit 81126 "DMTObjMgt"
 {
     procedure LookUpOldVersionTable(var DMTTable: Record DMTTable) OK: Boolean;
     var
@@ -130,7 +130,7 @@ codeunit 91004 "DMTObjMgt"
     var
         DMTSetup: Record "DMTSetup";
         TempBlob: Codeunit "Temp Blob";
-        FieldImport: XmlPort FieldBufferImport;
+        FieldImport: XmlPort DMTFieldBufferImport;
         ServerFile: File;
         InStr: InStream;
         FileName: Text;
@@ -152,4 +152,76 @@ codeunit 91004 "DMTObjMgt"
         FieldImport.Import();
         Message('Import abgeschlossen');
     end;
+
+    procedure CreateListOfAvailableObjectIDs(ObjectType: Enum DMTObjTypes; var FreeObjectIDs: List of [Integer]) NoOfObjects: Integer
+    var
+        PermissionRange: Record "Permission Range";
+        AllObjWithCaption: Record AllObjWithCaption;
+        index: Integer;
+    begin
+        case ObjectType of
+            ObjectType::Table:
+                begin
+                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::Table);
+                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+                end;
+            ObjectType::XMLPort:
+                begin
+                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::XMLport);
+                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+                end;
+        end;
+        if PermissionRange.FindSet() then
+            repeat
+                for index := PermissionRange.From to PermissionRange."To" do begin
+                    if AllObjWithCaption.Get(PermissionRange."Object Type", index) then begin
+                        if IsGeneratedAppObject(AllObjWithCaption) then
+                            FreeObjectIDs.Add(index);
+                    end else begin
+                        FreeObjectIDs.Add(index);
+                    end;
+                end
+            until PermissionRange.Next() = 0;
+    end;
+
+    local procedure IsCoreAppObject(AllObjWithCaption: Record AllObjWithCaption) IsCoreAppObj: Boolean
+    begin
+        case AllObjWithCaption."Object Type" of
+            allObjWithCaption."Object Type"::Table:
+                begin
+                    IsCoreAppObj := allObjWithCaption."Object ID" in [Database::DMTSetup,
+                                                                      Database::DMTTable,
+                                                                      Database::DMTField,
+                                                                      Database::DMTErrorLog,
+                                                                      Database::DMTExportObject,
+                                                                      Database::DMTFieldBuffer,
+                                                                      Database::DMTTask,
+                                                                      Database::DMTDataSourceHeader,
+                                                                      Database::DMTGenBuffTable,
+                                                                      Database::DMTDataSourceLine,
+                                                                      Database::DMTReplacementsHeader,
+                                                                      Database::DMTReplacementsLine];
+                end;
+            allObjWithCaption."Object Type"::XMLport:
+                begin
+                    IsCoreAppObj := allObjWithCaption."Object ID" in [Xmlport::DMTFieldBufferImport,
+                                                                      Xmlport::DMTGenBuffImport];
+                end;
+        end;
+    end;
+
+    local procedure IsGeneratedAppObject(AllObjWithCaption: Record AllObjWithCaption) Result: Boolean
+    var
+        NAVAppInstalledApp: Record "NAV App Installed App";
+        mI: ModuleInfo;
+    begin
+        if IsCoreAppObject(AllObjWithCaption) then exit(false);
+
+        NavApp.GetCurrentModuleInfo(mI);
+        NAVAppInstalledApp.SetRange("App ID", mI.Id);
+        NAVAppInstalledApp.FindFirst();
+        Result := (NAVAppInstalledApp."Package ID" = AllObjWithCaption."App Package ID");
+    end;
+
+
 }

@@ -1,4 +1,4 @@
-codeunit 91011 RelationsCheck
+codeunit 81127 RelationsCheck
 {
 
     procedure ValidateTableRelation(DMTField: Record DMTField; FieldValue: Text)

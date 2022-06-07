@@ -1,4 +1,4 @@
-xmlport 91001 GenBuffImport
+xmlport 81121 DMTGenBuffImport
 {
     Caption = 'GenBufferImport';
     Direction = Import;

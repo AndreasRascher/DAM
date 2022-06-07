@@ -1,4 +1,4 @@
-page 91000 "DMT Setup"
+page 81130 "DMT Setup"
 {
     Caption = 'Data Migration Tool Setup', comment = 'Data Migration Tool Einrichtung';
     AdditionalSearchTerms = 'DMT Setup', Comment = 'DMT Einrichtung';
@@ -143,7 +143,7 @@ page 91000 "DMT Setup"
                 var
                     DMTGenBuffTable: Record DMTGenBuffTable;
                     TempBlob: Codeunit "Temp Blob";
-                    GenBuffImport: XmlPort GenBuffImport;
+                    GenBuffImport: XmlPort DMTGenBuffImport;
                     Start: DateTime;
                     InStr: InStream;
                     ImportFinishedMsg: Label 'Import finished\Duration %1', comment = 'Import abgeschlossen\Dauer %1';

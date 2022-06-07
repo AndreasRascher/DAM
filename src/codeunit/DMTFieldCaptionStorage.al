@@ -1,4 +1,4 @@
-codeunit 91010 "DMTGenBufferFieldCaptions"
+codeunit 81122 "DMTGenBufferFieldCaptions"
 {
     SingleInstance = true;
     procedure AddCaption(FieldNo: Integer; CaptionNew: text)

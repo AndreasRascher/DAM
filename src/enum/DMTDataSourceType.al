@@ -1,4 +1,4 @@
-enum 91000 DMTDataSourceType
+enum 81120 DMTDataSourceType
 {
     Extensible = true;
 

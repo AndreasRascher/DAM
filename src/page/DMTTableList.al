@@ -1,4 +1,4 @@
-page 91004 "DMTTableList"
+page 81133 "DMTTableList"
 {
     Caption = 'DMT Table List', comment = 'DMT Tabellenübersicht';
     PageType = List;

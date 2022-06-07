@@ -1,4 +1,4 @@
-table 91001 "DMTTable"
+table 81128 "DMTTable"
 {
     DataClassification = SystemMetadata;
     LookupPageId = DMTTableList;
@@ -197,7 +197,7 @@ table 91001 "DMTTable"
 
     internal procedure ImportToBufferTable()
     var
-        GenBuffImport: XmlPort GenBuffImport;
+        GenBuffImport: XmlPort DMTGenBuffImport;
         File: File;
         InStr: InStream;
         Progress: Dialog;
