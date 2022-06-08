@@ -136,8 +136,8 @@ codeunit 81126 "DMTObjMgt"
         FileName: Text;
         FileFound: Boolean;
     begin
-        if DMTSetup.Get() and (DMTSetup."Schema.xml File Path" <> '') then
-            if ServerFile.Open(DMTSetup."Schema.xml File Path") then begin
+        if DMTSetup.Get() and (DMTSetup."Schema.csv File Path" <> '') then
+            if ServerFile.Open(DMTSetup."Schema.csv File Path") then begin
                 ServerFile.CreateInStream(InStr);
                 FileFound := true;
             end;
@@ -199,7 +199,28 @@ codeunit 81126 "DMTObjMgt"
             repeat
                 if ObjectIDsInLicense.Contains(Numbers.Number) then
                     ObjectIDsAvailable.Add(Numbers.Number);
-            until Numbers.Next() = 0
+            until Numbers.Next() = 0;
+        NoOfObjects := ObjectIDsAvailable.Count;
+    end;
+
+    procedure GetAvailableObjectIDsInLicenseFilter(ObjectType: Enum DMTObjTypes) ObjIDFilter: Text
+    var
+        TempInteger: Record Integer temporary;
+        SelectionFilterManagement: Codeunit SelectionFilterManagement;
+        RecRef: RecordRef;
+        Number: Integer;
+        ObjectIDsAvailable: List of [Integer];
+    begin
+        if CreateListOfAvailableObjectIDsInLicense(ObjectType, ObjectIDsAvailable) = 0 then
+            exit('');
+        foreach Number in ObjectIDsAvailable do begin
+            TempInteger.Number := Number;
+            TempInteger.Insert();
+        end;
+        Number := TempInteger.Count;
+        // Integer.MarkedOnly(true);
+        RecRef.GetTable(TempInteger);
+        ObjIDFilter := SelectionFilterManagement.GetSelectionFilter(RecRef, TempInteger.FieldNo(Number));
     end;
 
     local procedure IsCoreAppObject(AllObjWithCaption: Record AllObjWithCaption) IsCoreAppObj: Boolean

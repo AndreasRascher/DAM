@@ -1608,15 +1608,20 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 521254526 - Field 1131415063 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 521254526 - Field 4219784878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Schema File Path</source>
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.xml File Path - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportToBufferTable - NamedType ImportFileFromPathLbl</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Method 4293292305 - NamedType 2167175506" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>
+          <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
@@ -1743,11 +1748,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFile - NamedType allFilesTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2483073149 - Method 1538742391 - NamedType 1342847624" size-unit="char" translate="yes" xml:space="preserve">
-          <source>All Files (*.*)|*.*</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFileUTF8 - NamedType allFilesTok</note>
-        </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1858,6 +1858,11 @@
           <note from="Developer" annotates="general" priority="2">NAV Export Objekt erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action CreateNAVExportObject - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Action 434455383 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Find available Object ID ranges</source>
+          <note from="Developer" annotates="general" priority="2">Verfügbare Objekt-ID Bereiche ermitteln</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FindValidObjIDRanges - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Action 1428180855 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Schema.csv</source>
           <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
@@ -1897,16 +1902,6 @@
           <source>Task List</source>
           <note from="Developer" annotates="general" priority="2">Aufgabenliste</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TaskList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4082098809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>TestImportGenBuff</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4082098809 - Method 1377591017 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished\Duration %1</source>
-          <note from="Developer" annotates="general" priority="2">Import abgeschlossen\Dauer %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Method OnAction - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
@@ -2062,6 +2057,56 @@
           <source>XMLPort (NAV2013 - BC14)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control XMLPort - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 3735914638 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Delete Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Delete Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 480834248 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Execute Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Execute Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 1958180954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the From field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control From - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 171145402 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Index field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Index - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 3088155792 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Insert Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Insert Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 3767204390 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Limited Usage Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Limited Usage Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 1682833869 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Modify Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Modify Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 1085746399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Object Type field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Object Type - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 3135917451 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the Read Permission field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Read Permission - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2054706408 - Control 3483619077 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the To field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control To - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

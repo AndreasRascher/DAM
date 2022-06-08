@@ -87,7 +87,7 @@ page 81136 NAVObjects
         IStr: InStream;
     begin
         rec.CALCFIELDS(ExportDataPort);
-        IF NOT Rec."ExportDataPort".HasValue THEN
+        IF NOT Rec."ExportDataPort".HasValue then
             EXIT('');
         Rec."ExportDataPort".CreateInStream(IStr);
         BigTextContent.Read(IStr);
@@ -100,7 +100,7 @@ page 81136 NAVObjects
         IStr: InStream;
     begin
         rec.CALCFIELDS(ExportXMLPort);
-        IF NOT Rec."ExportXMLPort".HasValue THEN
+        IF NOT Rec."ExportXMLPort".HasValue then
             EXIT('');
         Rec."ExportXMLPort".CreateInStream(IStr);
         BigTextContent.Read(IStr);
@@ -112,7 +112,7 @@ page 81136 NAVObjects
         OStr: OutStream;
     begin
         CLEAR(Rec."ExportDataPort");
-        IF BlobText = '' THEN BEGIN
+        IF BlobText = '' then begin
             rec.Modify();
             exit;
         end;
@@ -126,7 +126,7 @@ page 81136 NAVObjects
         OStr: OutStream;
     begin
         CLEAR(Rec.ExportXMLPort);
-        IF BlobText = '' THEN BEGIN
+        IF BlobText = '' then begin
             rec.Modify();
             exit;
         end;

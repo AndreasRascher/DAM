@@ -95,7 +95,7 @@ page 81132 "DMTTableCardPart"
                     DMTTable: Record DMTTable;
                 begin
                     DMTTable.Get(Rec.GetRangeMin(rec."To Table No."));
-                    DMTFields.ProposeMatchingTargetFields(DMTTable);
+                                      
                     DMTFields.ProposeValidationRules(DMTTable);
                 end;
             }

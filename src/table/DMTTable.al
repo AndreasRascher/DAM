@@ -269,13 +269,17 @@ table 81128 "DMTTable"
         ObjectMgt: Codeunit DMTObjMgt;
         AvailableTables: List of [Integer];
         AvailableXMLPorts: List of [Integer];
+        NoAvailableObjectIDsErr: Label 'No free object IDs of type %1 could be found. Defined ID range in setup: %2',
+                                comment = 'Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
     begin
         if not DMTSetup.Get() then
             DMTSetup.InsertWhenEmpty();
         DMTSetup.Get();
 
-        ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables);
-        ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts);
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables) = 0 then
+            Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts) = 0 then
+            Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
 
         // Collect used numbers
         if DMTTable.FindSet() then
@@ -290,13 +294,13 @@ table 81128 "DMTTable"
 
         // Buffer Table ID - Assign Next Number in Filter
         // if DMTSetup."Obj. ID Range Buffer Tables" <> '' then
-        if rec."Buffer Table ID" = 0 then begin
+        if (rec."Buffer Table ID" = 0) and (AvailableTables.Count > 0) then begin
             Rec."Buffer Table ID" := AvailableTables.Get(1);
             AvailableTables.Remove(Rec."Buffer Table ID");
         end;
         // Import XMLPort ID - Assign Next Number in Filter
         // if DMTSetup."Obj. ID Range XMLPorts" <> '' then
-        if rec."Import XMLPort ID" = 0 then begin
+        if (rec."Import XMLPort ID" = 0) and (AvailableXMLPorts.Count > 0) then begin
             rec."Import XMLPort ID" := AvailableXMLPorts.get(1);
             AvailableXMLPorts.Remove(Rec."Import XMLPort ID");
         end;
@@ -404,33 +408,40 @@ table 81128 "DMTTable"
         ObjGen: Codeunit DMTObjectGenerator;
         DataCompression: Codeunit "Data Compression";
         FileBlob: Codeunit "Temp Blob";
+        DefaultTextEncoding: TextEncoding;
         IStr: InStream;
         OStr: OutStream;
         toFileName: text;
         ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
+        FileMgt: Codeunit "File Management";
     begin
+        DefaultTextEncoding := TextEncoding::UTF8;
+        // DefaultTextEncoding := TextEncoding::MSDos;
+        // DefaultTextEncoding := TextEncoding::UTF16;
+        // DefaultTextEncoding := TextEncoding::Windows;
         DMTTable2.Copy(DMTTable);
         if DMTTable2.FindSet() then begin
             DataCompression.CreateZipArchive();
             repeat
                 //Table
                 Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr);
-                OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
-                FileBlob.CreateInStream(IStr);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                // OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
+                FileMgt.Ansi2SystemEncodingTxt(OStr, ObjGen.CreateALTable(DMTTable2).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
                 DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
                 //XMLPort
                 Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
                 OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
-                FileBlob.CreateInStream(IStr);
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
                 DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
             until DMTTable2.Next() = 0;
         end;
         Clear(FileBlob);
-        FileBlob.CreateOutStream(OStr);
+        FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
         DataCompression.SaveZipArchive(OStr);
-        FileBlob.CreateInStream(IStr);
+        FileBlob.CreateInStream(IStr, DefaultTextEncoding);
         toFileName := 'BufferTablesAndXMLPorts.zip';
         DownloadFromStream(iStr, 'Download', 'ToFolder', ZIPFileTypeTok, toFileName);
     end;

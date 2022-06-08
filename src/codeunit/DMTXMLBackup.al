@@ -81,14 +81,16 @@ codeunit 81128 "DMTXMLBackup"
     end;
 
     local procedure ExportXML();
-    VAR
+    var
         allObj: Record AllObj;
+        Company: record Company;
         tempTenantMedia: Record "Tenant Media" temporary;
         tableID: Integer;
         oStr: OutStream;
+        exportFileName: Text;
+        fieldDefinitionNode: XmlNode;
         rootNode: XMLNode;
         tableNode: XMLNode;
-        fieldDefinitionNode: XmlNode;
     begin
         // DOKUMENT
         Clear(XDoc);
@@ -115,8 +117,17 @@ codeunit 81128 "DMTXMLBackup"
 
         tempTenantMedia.Content.CreateOutStream(oStr);
         XDoc.WriteTo(oStr);
-
-        DownloadBlobContent(tempTenantMedia, FORMAT(CURRENTDATETIME, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>') + '_Backup.xml', TextEncoding::UTF8);
+        // Compose Export Filename
+        exportFileName := 'Backup_';
+        Company.Get(CompanyName);
+        if Company."Display Name" <> '' then
+            exportFileName += Company."Display Name"
+        else
+            exportFileName += Company.Name;
+        exportFileName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
+        exportFileName += '.xml';
+        exportFileName := ConvertStr(exportFileName, '<>*\/|"', '_______');
+        DownloadBlobContent(tempTenantMedia, exportFileName, TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);

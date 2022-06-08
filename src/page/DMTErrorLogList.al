@@ -124,37 +124,37 @@ page 81120 "DMT Error Log List"
                     CurrPage.Update(false);
 
 
-                    //                     IF Object.FIND('-') THEN
+                    //                     IF Object.FIND('-') then
                     //                         REPEAT
                     //                             Object.CALCFIELDS(Caption);
                     //                             Choices += CONVERTSTR(Object.Caption, ',', '_') + ',';
                     //                         UNTIL Object.NEXT = 0;
-                    //                     IF Choices <> '' THEN
+                    //                     IF Choices <> '' then
                     //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
                     //                     Selection := STRMENU(Choices);
-                    //                     IF Selection = 0 THEN
+                    //                     IF Selection = 0 then
                     //                         EXIT;
                     //                     Object.FIND('-');
-                    //                     IF Selection > 1 THEN
+                    //                     IF Selection > 1 then
                     //                         Object.NEXT(Selection - 1);
                     //                     SETRANGE("Import from Buffertable No.", Object.ID);
                     //                     CurrPage.UPDATE(FALSE);
 
                     //                     AddContextFilter - OnAction()
                     // DMTErrorLog.OPEN;
-                    //                     WHILE DMTErrorLog.READ DO BEGIN
+                    //                     WHILE DMTErrorLog.READ DO begin
                     //                         ResultTextArr[COMPRESSARRAY(ResultTextArr) + 1] := DMTErrorLog.DMT_Context_Descr;
-                    //                     END;
-                    //                     FOR Index := 1 TO ARRAYLEN(ResultTextArr) DO BEGIN
+                    //                     end;
+                    //                     FOR Index := 1 TO ARRAYLEN(ResultTextArr) DO begin
                     //                         Choices += CONVERTSTR(ResultTextArr[Index], ',', '_') + ',';
-                    //                     END;
-                    //                     IF Choices <> '' THEN
+                    //                     end;
+                    //                     IF Choices <> '' then
                     //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
                     //                     Selection := STRMENU(Choices);
-                    //                     IF Selection = 0 THEN
+                    //                     IF Selection = 0 then
                     //                         EXIT;
 
-                    //                     IF Selection > 1 THEN
+                    //                     IF Selection > 1 then
                     //                         SETRANGE("DMT Context Descr.", ResultTextArr[Selection]);
                     //                     CurrPage.UPDATE(FALSE);
 

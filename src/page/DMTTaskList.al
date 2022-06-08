@@ -2,10 +2,10 @@ page 81134 "DMTTaskList"
 {
     CaptionML = DEU = 'DMT Aufgabenliste', ENU = 'DMT Task List';
     PageType = List;
-    ApplicationArea = All;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = DMTTask;
     AutoSplitKey = true;
+    DelayedInsert = true;
 
     layout
     {

@@ -20,7 +20,7 @@
         {
             "id": "AA0005",
             "action": "None",
-            "justification": "Only use BEGIN..END to enclose compound statements."
+            "justification": "Only use begin..END to enclose compound statements."
         },
         {
             "id": "AA0072",

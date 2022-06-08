@@ -27,15 +27,15 @@ codeunit 81125 "DMTObjectGenerator"
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) THEN BEGIN
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) then begin
             C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
             DMTFieldBuffer.FINDSET();
-            REPEAT
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+            repeat
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName) + '") { FieldValidate = No; MinOccurs = Zero; }');
             UNTIL DMTFieldBuffer.NEXT() = 0;
-        END;
+        end;
 
         C.AppendLine('                trigger OnBeforeInsertRecord()');
         C.AppendLine('                begin');
@@ -72,7 +72,7 @@ codeunit 81125 "DMTObjectGenerator"
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
         C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
-        C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'';');
+        C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
         C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.TABLECAPTION, ReceivedLinesCount);');
@@ -153,23 +153,23 @@ codeunit 81125 "DMTObjectGenerator"
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + DMTTable."NAV Src.Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) THEN
-            REPEAT
+        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) then
+            repeat
                 CASE DMTFieldBuffer.Type OF
                     DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
                         _FieldTypeText := STRSUBSTNO('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
                     ELSE
                         _FieldTypeText := FORMAT(DMTFieldBuffer.Type);
-                END;
-                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
+                end;
+                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName), _FieldTypeText));
                 // field(1; "No."; Code[20])
                 C.AppendLine('        {');
-                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
+                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName), ReplaceNonUTF8Chars(DMTFieldBuffer."Field Caption")));
 
-                IF DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option THEN BEGIN
-                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OPTIONSTRING + ';');
-                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OPTIONSTRING, '=', '"'), DelChr(DMTFieldBuffer.OPTIONCAPTION, '=', '"')));
-                END;
+                IF DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option then begin
+                    C.AppendLine('            OptionMembers = ' + ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONSTRING) + ';');
+                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONSTRING), '=', '"'), DelChr(ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONCAPTION), '=', '"')));
+                end;
 
                 C.AppendLine('        }');
 
@@ -202,21 +202,6 @@ codeunit 81125 "DMTObjectGenerator"
         DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
     end;
 
-    procedure DownloadFileUTF8(Content: Text; toFileName: text)
-    var
-        tempBlob: Codeunit "Temp Blob";
-        iStr: InStream;
-        allFilesTok: Label 'All Files (*.*)|*.*';
-        oStr: OutStream;
-        DefaultEncoding: TextEncoding;
-    begin
-        DefaultEncoding := TextEncoding::Windows;
-        tempBlob.CreateOutStream(oStr, DefaultEncoding);
-        oStr.WriteText(Content);
-        tempBlob.CreateInStream(iStr, DefaultEncoding);
-        DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
-    end;
-
     local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := DelChr(Field.FieldName, '=', '&-%/\(),. ');
@@ -239,13 +224,13 @@ codeunit 81125 "DMTObjectGenerator"
         CLEAR(DMTFieldBuffer_FOUND);
         DMTFieldBuffer_FOUND.SETRANGE(TableNo, TableNo);
         Debug := DMTFieldBuffer_FOUND.Count;
-        IF NOT IncludeDisabled THEN
+        IF NOT IncludeDisabled then
             DMTFieldBuffer_FOUND.SETRANGE(Enabled, TRUE);
         Debug := DMTFieldBuffer_FOUND.Count;
         DMTFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DMTFieldBuffer_FOUND.Class::Normal, DMTFieldBuffer_FOUND.Class::FlowField);
-        IF NOT IncludeFlowFields THEN
+        IF NOT IncludeFlowFields then
             DMTFieldBuffer_FOUND.SETRANGE(Class, DMTFieldBuffer_FOUND.Class::Normal);
-        IF NOT IncludeBlob THEN
+        IF NOT IncludeBlob then
             DMTFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.Setrange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
@@ -276,5 +261,19 @@ codeunit 81125 "DMTObjectGenerator"
         LettersTok: Label 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', Locked = true;
     begin
         EXIT(DELCHR(String, '=', LettersTok) = '');
+    end;
+
+    local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text
+    begin
+        if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
+            exit(FieldCaption);
+        result := FieldCaption;
+        result := result.Replace('ä', 'ae');
+        result := result.Replace('Ä', 'AE');
+        result := result.Replace('Ö', 'OE');
+        result := result.Replace('ö', 'oe');
+        result := result.Replace('Ü', 'UE');
+        result := result.Replace('ü', 'ue');
+        result := result.Replace('ß', 'ss');
     end;
 }

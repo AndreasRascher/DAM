@@ -186,7 +186,7 @@ table 81122 "DMTField"
             end;
             DMTFields.FilterBy(DMTTable);
             DMTFields.SetRange("From Field No.", 0);
-            DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
+            // DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
 
             // Optional Overwrite
             DMTFields2.FilterBy(DMTTable);

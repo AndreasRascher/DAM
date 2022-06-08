@@ -308,13 +308,13 @@ codeunit 81124 "DMTMgt"
                 end else begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
-                    FOR OptionIndex := 0 TO NoOfOptions DO BEGIN
+                    FOR OptionIndex := 0 TO NoOfOptions DO begin
                         OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
-                        IF OptionElement = FromText THEN BEGIN
+                        IF OptionElement = FromText then begin
                             FieldRef_TO.VALUE := OptionIndex;
                             EXIT(TRUE);
-                        END;
-                    END;
+                        end;
+                    end;
                 end;
             'DATE':
                 begin

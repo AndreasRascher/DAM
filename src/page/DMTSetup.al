@@ -28,7 +28,7 @@ page 81130 "DMT Setup"
                     {
                         Caption = 'Paths', comment = 'Pfade';
                         field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
-                        field("Schema File Path"; Rec."Schema.xml File Path") { ApplicationArea = All; }
+                        field("Schema File Path"; Rec."Schema.csv File Path") { ApplicationArea = All; }
                         field("Backup.xml File Path"; Rec."Backup.xml File Path") { ApplicationArea = All; }
                     }
                     group(Performance)
@@ -76,6 +76,21 @@ page 81130 "DMT Setup"
                     ObjMgt: Codeunit DMTObjMgt;
                 begin
                     ObjMgt.ImportNAVSchemaFile();
+                end;
+            }
+            action(FindValidObjIDRanges)
+            {
+                Caption = 'Find available Object ID ranges', comment = 'Verfügbare Objekt-ID Bereiche ermitteln';
+                ApplicationArea = All;
+                Image = DataEntry;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = New;
+
+                trigger OnAction()
+                begin
+                    Rec.ProposeObjectRanges();
                 end;
             }
         }
@@ -129,41 +144,6 @@ page 81130 "DMT Setup"
                 PromotedIsBig = true;
                 PromotedCategory = Report;
                 RunObject = page "DMT Error Log List";
-            }
-            action(TestImportGenBuffer)
-            {
-                Caption = 'TestImportGenBuff';
-                ApplicationArea = All;
-                Image = Import;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
-                trigger OnAction()
-                var
-                    DMTGenBuffTable: Record DMTGenBuffTable;
-                    TempBlob: Codeunit "Temp Blob";
-                    GenBuffImport: XmlPort DMTGenBuffImport;
-                    Start: DateTime;
-                    InStr: InStream;
-                    ImportFinishedMsg: Label 'Import finished\Duration %1', comment = 'Import abgeschlossen\Dauer %1';
-                    FileName: Text;
-                begin
-                    TempBlob.CreateInStream(InStr);
-                    if not UploadIntoStream('Select a *.csv file', '', 'CSV Files|*.csv', FileName, InStr) then begin
-                        exit;
-                    end;
-                    Start := CurrentDateTime;
-                    GenBuffImport.SetSource(InStr);
-                    // GenBuffImport.SetFilename(FileName);
-                    GenBuffImport.Import();
-                    Message(ImportFinishedMsg, CurrentDateTime - Start);
-
-                    if DMTGenBuffTable.FindFirst() then begin
-                        DMTGenBuffTable.InitFirstLineAsCaptions(DMTGenBuffTable."Import from Filename");
-                        Page.Run(Page::"DMTGenBufferList250");
-                    end;
-                end;
             }
             action(OpenGenBufferPage)
             {

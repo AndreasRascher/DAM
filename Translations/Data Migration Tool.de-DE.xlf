@@ -193,7 +193,6 @@
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <target>Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType ReplaceExistingMatchesQst</note>
         </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1930,17 +1929,25 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 521254526 - Field 1131415063 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 521254526 - Field 4219784878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Schema File Path</source>
           <target>Pfad Schemadatei</target>
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.xml File Path - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <target>Importiere %1</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportToBufferTable - NamedType ImportFileFromPathLbl</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Method 4293292305 - NamedType 2167175506" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>
+          <target>Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</target>
+          <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
@@ -2102,63 +2109,54 @@
           <source>Copy Report Helper</source>
           <target>Copy Report Helper</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
           <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
           <target>"User AL Code" ist nicht verfügbar für %1 %2. Zum Freischalten folgendes Powershell Kommando ausführen:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Options</source>
           <target>Optionen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control Options - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Control 1300577764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add SetData GetData CustomCode</source>
           <target>Add SetData GetData CustomCode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control addSetDataGetDataCustomCodeOption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Control 2069234263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Remove al whitespace</source>
           <target>Remove al whitespace</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control RemoveALReportWhiteSpaceOption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Purchase</source>
           <target>Einkauf</target>
           <note from="Developer" annotates="general" priority="2">Verkauf</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Purchase - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - View 1406942772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales</source>
           <target>Verkauf</target>
           <note from="Developer" annotates="general" priority="2">Einkauf</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Sales - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 450434193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source List</source>
           <target>Datenquellen Übersicht</target>
           <note from="Developer" annotates="general" priority="2">Datenquellen Übersicht</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DataSourceList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 450434193 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General</source>
           <target>Allgemein</target>
           <note from="Developer" annotates="general" priority="2">Allgemein</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DataSourceList - Control General - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3126398325 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2239,6 +2237,13 @@
           <note from="Developer" annotates="general" priority="2">NAV Export Objekt erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action CreateNAVExportObject - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Action 434455383 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Find available Object ID ranges</source>
+          <target>Verfügbare Objekt-ID Bereiche ermitteln</target>
+          <note from="Developer" annotates="general" priority="2">Verfügbare Objekt-ID Bereiche ermitteln</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FindValidObjIDRanges - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Action 1428180855 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Schema.csv</source>
           <target>Schema.csv importieren</target>
@@ -2286,18 +2291,6 @@
           <target>Aufgabenliste</target>
           <note from="Developer" annotates="general" priority="2">Aufgabenliste</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TaskList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4082098809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>TestImportGenBuff</source>
-          <target>TestImportGenBuff</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4082098809 - Method 1377591017 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished\Duration %1</source>
-          <target>Import abgeschlossen\Dauer %1</target>
-          <note from="Developer" annotates="general" priority="2">Import abgeschlossen\Dauer %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TestImportGenBuffer - Method OnAction - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
@@ -2489,49 +2482,42 @@
           <source>Field</source>
           <target>Feld</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 Buffer\%2 lines imported</source>
           <target>%1 Puffer\%2 Zeilen importiert</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Environment</source>
           <target>Umgebung</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Company</source>
           <target>Mandant</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Control 520131415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Database</source>
           <target>Datenbank</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2013711061 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
           <target>Import in generische Puffertabelle</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTGenBuffImport - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2013711061 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 Buffer\%2 lines imported</source>
           <target>%1 Puffer\%2 Zeilen importiert</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTGenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

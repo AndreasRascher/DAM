@@ -1,27 +1,43 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-        {
-            "name": "BC:Publish & Synchronize",
-            "type": "al",
-            "request": "launch",
-            "environmentType": "OnPrem",
-            "server": "http://bc20/",
-            "serverInstance": "BC",
-            "authentication": "UserPassword",
-            "startupObjectType": "Page",
-            "startupObjectId": 90000,
-            "breakOnError": true,
-            "breakOnRecordWrite": false,
-            "launchBrowser": true,
-            "enableSqlInformationDebugger": true,
-            "enableLongRunningSqlStatements": true,
-            "longRunningSqlStatementsThreshold": 500,
-            "numberOfSqlStatements": 10,
-            "tenant": "default",
-            "schemaUpdateMode": "ForceSync"            
-        }
+    {
+        "name": "TEST_MC",
+        "request": "launch",
+        "type": "al",
+        "environmentType": "OnPrem",
+        "server": "https://businesscentraltest.sag-schlagbaum.com/TEST_MC/",
+        "serverInstance": "TEST_MC",
+        "authentication": "UserPassword",
+        "startupObjectType": "Page",
+        "startupObjectId": 81130,
+        "breakOnError": true,
+        "launchBrowser": true,
+        "enableLongRunningSqlStatements": true,
+        "enableSqlInformationDebugger": true,
+        "tenant": "default",
+        "schemaUpdateMode": "ForceSync"
+    }
+        // {
+        //     "name": "BC:Publish & Synchronize",
+        //     "type": "al",
+        //     "request": "launch",
+        //     "environmentType": "OnPrem",
+        //     "server": "http://bc20/",
+        //     "serverInstance": "BC",
+        //     "authentication": "UserPassword",
+        //     "startupObjectType": "Page",
+        //     "startupObjectId": 90000,
+        //     "breakOnError": true,
+        //     "breakOnRecordWrite": false,
+        //     "launchBrowser": true,
+        //     "enableSqlInformationDebugger": true,
+        //     "enableLongRunningSqlStatements": true,
+        //     "longRunningSqlStatementsThreshold": 500,
+        //     "numberOfSqlStatements": 10,
+        //     "tenant": "default",
+        //     "schemaUpdateMode": "ForceSync"            
+        // }
         // {
         //     "name": "Graef TEST_MC - Synchronize",
         //     "request": "launch",

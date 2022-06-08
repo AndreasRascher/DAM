@@ -16,8 +16,21 @@ table 81127 "DMTSetup"
             Caption = 'Default Export Folder', Comment = 'Standard Export Ordnerpfad';
             DataClassification = ToBeClassified;
             trigger OnValidate()
+            var
+                ServerFilePath: Text;
             begin
-                Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+
+                if Rec."Default Export Folder Path" <> '' then begin
+                    Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
+                    if not "Default Export Folder Path".EndsWith('\') then
+                        REc."Default Export Folder Path" += '\'
+                end;
+                // Try Find Schema.csv
+                if (Rec."Default Export Folder Path" <> '') and (Rec."Schema.csv File Path" = '') then begin
+                    ServerFilePath := Rec."Default Export Folder Path" + 'Schema.csv';
+                    if Exists(ServerFilePath) then
+                        Rec."Schema.csv File Path" := ServerFilePath;
+                end;
             end;
 
             trigger OnLookup()
@@ -27,19 +40,19 @@ table 81127 "DMTSetup"
                 Rec."Default Export Folder Path" := DMTMgt.LookUpPath(Rec."Default Export Folder Path", true);
             end;
         }
-        field(31; "Schema.xml File Path"; Text[250])
+        field(31; "Schema.csv File Path"; Text[250])
         {
             Caption = 'Schema File Path', Comment = 'Pfad Schemadatei';
             trigger OnValidate()
             begin
-                Rec."Schema.xml File Path" := DelChr(Rec."Schema.xml File Path", '<>', '"');
+                Rec."Schema.csv File Path" := DelChr(Rec."Schema.csv File Path", '<>', '"');
             end;
 
             trigger OnLookup()
             var
                 DMTMgt: Codeunit DMTMgt;
             begin
-                Rec."Schema.xml File Path" := DMTMgt.LookUpPath(Rec."Schema.xml File Path", false);
+                Rec."Schema.csv File Path" := DMTMgt.LookUpPath(Rec."Schema.csv File Path", false);
             end;
         }
         field(32; "Backup.xml File Path"; Text[250])
@@ -84,6 +97,14 @@ table 81127 "DMTSetup"
                 Rec."Default Export Folder Path" := 'C:\RUN\MY';
             Rec.Insert();
         end;
+    end;
+
+    internal procedure ProposeObjectRanges()
+    var
+        ObjMgt: Codeunit DMTObjMgt;
+    begin
+        Rec."Obj. ID Range Buffer Tables" := ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table);
+        Rec."Obj. ID Range XMLPorts" := ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort);
     end;
 
     procedure CheckSchemaInfoHasBeenImporterd()
