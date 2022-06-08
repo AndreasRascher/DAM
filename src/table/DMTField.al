@@ -159,6 +159,7 @@ table 81122 "DMTField"
                         DMTFields_NEW."From Table ID" := DMTTable."Buffer Table ID";
                         DMTFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
                         DMTFields_NEW."To Table No." := DMTTable."To Table ID";
+                        DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Transfer;
                         DMTFields_NEW.Insert(true);
                     end;
                 end;
@@ -251,10 +252,11 @@ table 81122 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-    // Vendor: Record Vendor;
-    // Customer: Record Customer;
-    // Contact: Record Contact;
-    // GLAccount: Record "G/L Account";
+        // Vendor: Record Vendor;
+        // Customer: Record Customer;
+        // Contact: Record Contact;
+        // GLAccount: Record "G/L Account";
+        CustomerPostingGroup: Record "Customer Posting Group";
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
@@ -318,6 +320,11 @@ table 81122 "DMTField"
                     (TargetField.FieldName IN ['Totaling']):
                         begin
                             DMTFields2."Validate Value" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Customer Posting Group") and
+                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                        begin
+                            DMTFields2."Use Try Function" := false;
                         end;
                 end;
 
