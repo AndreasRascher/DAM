@@ -249,15 +249,19 @@ codeunit 81124 "DMTMgt"
         _DateTime: DateTime;
         _Decimal: Decimal;
         _Integer: Integer;
-        OptionIndex: Integer;
         _OutStream: OutStream;
+        _DateFormula: DateFormula;
+        OptionIndex: Integer;
         NoOfOptions: Integer;
         OptionElement: text;
     begin
         if FromText = '' then
             case UPPERCASE(FORMAT(FieldRef_TO.TYPE)) of
                 'BIGINTEGER', 'INTEGER', 'DECIMAL':
-                    FromText := '0';
+                    begin
+                        FromText := '0';
+                        exit(true);
+                    end;
             end;
         CASE UPPERCASE(FORMAT(FieldRef_TO.TYPE)) OF
 
@@ -312,7 +316,7 @@ codeunit 81124 "DMTMgt"
                         OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
                         IF OptionElement = FromText then begin
                             FieldRef_TO.VALUE := OptionIndex;
-                            EXIT(TRUE);
+                            exit(TRUE);
                         end;
                     end;
                 end;
@@ -341,6 +345,13 @@ codeunit 81124 "DMTMgt"
                     TempBlob.insert();
                     FieldRef_TO.VALUE(TempBlob.Content);
                     exit(TRUE);
+                end;
+            'DATEFORMULA':
+                begin
+                    IF EVALUATE(_DateFormula, FromText) then begin
+                        FieldRef_TO.VALUE := _DateFormula;
+                        exit(TRUE);
+                    end;
                 end;
             ELSE
                 MESSAGE('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', FORMAT(FieldRef_TO.TYPE));
@@ -378,7 +389,7 @@ codeunit 81124 "DMTMgt"
                 if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), true) then
                     Error('TODO');
             else
-                Error('unhandled TODO');
+                Error('unhandled TODO %1', FromField.Type);
         end;
 
         ToField.VALIDATE(FieldWithTypeCorrectValueToValidate.Value);

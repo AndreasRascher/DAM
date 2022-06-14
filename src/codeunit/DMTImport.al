@@ -110,18 +110,20 @@ codeunit 81123 DMTImport
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure LoadFieldMapping(DMTTable: Record DMTTable; var TempDMTFields_FOUND: record "DMTField" temporary) OK: Boolean
+    procedure LoadFieldMapping(table: Record DMTTable; var TempDMTFields_FOUND: record "DMTField" temporary) OK: Boolean
     var
-        dAMField: Record "DMTField";
+        field: Record "DMTField";
         tempDMTFields: record "DMTField" temporary;
     begin
-        dAMField.FilterBy(DMTTable);
-        dAMField.SetFilter("Processing Action", '<>%1', dAMField."Processing Action"::Ignore);
-        dAMField.FindSet(false, false);  // raise error if empty
+        field.FilterBy(table);
+        field.SetFilter("Processing Action", '<>%1', field."Processing Action"::Ignore);
+        if table.BufferTableType = table.BufferTableType::"Custom Buffer Table per file" then
+            field.SetFilter("From Field No.", '<>0');
+        field.FindSet(false, false);  // raise error if empty
         repeat
-            tempDMTFields := dAMField;
+            tempDMTFields := field;
             tempDMTFields.Insert(false);
-        until dAMField.Next() = 0;
+        until field.Next() = 0;
         TempDMTFields_FOUND.Copy(tempDMTFields, true);
         OK := TempDMTFields_FOUND.FindFirst();
     end;

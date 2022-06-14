@@ -260,7 +260,7 @@ codeunit 81125 "DMTObjectGenerator"
     var
         LettersTok: Label 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', Locked = true;
     begin
-        EXIT(DELCHR(String, '=', LettersTok) = '');
+        exit(DELCHR(String, '=', LettersTok) = '');
     end;
 
     local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text

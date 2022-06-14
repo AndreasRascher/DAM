@@ -93,6 +93,7 @@ table 81128 "DMTTable"
             CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
+            BlankZero = true;
             trigger OnValidate()
             begin
                 if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
@@ -104,6 +105,7 @@ table 81128 "DMTTable"
             CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
+            BlankZero = true;
             trigger OnValidate()
             begin
                 if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then

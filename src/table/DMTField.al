@@ -228,7 +228,15 @@ table 81122 "DMTField"
                 repeat
                     TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
                     // 1.Try - Match by Name
-                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."FieldName");
+                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
+                    if FoundAtIndex = 0 then begin
+                        if DMTTable."To Table ID" = Database::"Payment Terms" then
+                            case TargetField."Field Caption" of
+                                //'Rabatt in %' -> 'Skonto %'
+                                'Skonto %':
+                                    FoundAtIndex := BuffTableCaptions.Values.IndexOf('Rabatt in %');
+                            end;
+                    end;
                     // 2.Try - Match by known Name Changes
                     if FoundAtIndex = 0 then
                         if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then
@@ -252,11 +260,11 @@ table 81122 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-        // Vendor: Record Vendor;
-        // Customer: Record Customer;
-        // Contact: Record Contact;
-        // GLAccount: Record "G/L Account";
-        CustomerPostingGroup: Record "Customer Posting Group";
+    // Vendor: Record Vendor;
+    // Customer: Record Customer;
+    // Contact: Record Contact;
+    // GLAccount: Record "G/L Account";
+    // CustomerPostingGroup: Record "Customer Posting Group";
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
@@ -291,7 +299,7 @@ table 81122 "DMTField"
                             DMTFields2."Validate Value" := false;
                         end;
                     (TargetField.TableNo IN [Database::Customer]) and
-                    (TargetField.FieldName IN ['Block Payment Tolerance']):
+                    (TargetField.FieldName IN ['Block Payment Tolerance', 'VAT Registration No.']):
                         begin
                             DMTFields2."Validate Value" := false;
                         end;
@@ -322,6 +330,11 @@ table 81122 "DMTField"
                             DMTFields2."Validate Value" := false;
                         end;
                     (TargetField.TableNo = Database::"Customer Posting Group") and
+                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Vendor Posting Group") and
                     (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
                         begin
                             DMTFields2."Use Try Function" := false;

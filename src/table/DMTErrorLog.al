@@ -54,6 +54,7 @@ table 81120 "DMTErrorLog"
         {
             Clustered = true;
         }
+        key(Key2; "From ID") { }
     }
 
     procedure AddEntryForLastError(FromRecRef: recordref; ToRecRef: RecordRef; DMTFields: Record "DMTField");
@@ -117,8 +118,9 @@ table 81120 "DMTErrorLog"
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
-        DMTErrorlog.SETRANGE("From ID", BufferRef.RECORDID);
-        DMTErrorlog.DeleteAll();
+        DMTErrorlog.SetRange("From ID", BufferRef.RECORDID);
+        if not DMTErrorlog.IsEmpty then
+            DMTErrorlog.DeleteAll();
     end;
 
     procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean
@@ -155,7 +157,7 @@ table 81120 "DMTErrorLog"
     // var
     //     DMTErrorlog: Record DMTErrorlog;
     // begin
-    //     DMTErrorlog.SETRANGE("DMT Context Descr.", COPYSTR(DMTSessionInfo.GetDMTContext, 1, MAXSTRLEN("DMT Context Descr.")));
+    //     DMTErrorlog.SetRange("DMT Context Descr.", COPYSTR(DMTSessionInfo.GetDMTContext, 1, MAXSTRLEN("DMT Context Descr.")));
     //     OpenListOnRec(DMTErrorlog);
     // end;
 }
