@@ -73,7 +73,6 @@ table 81125 "DMTReplacementsHeader"
     var
         DMTTable: Record DMTTable;
         DMTField: Record DMTField;
-        Field: Record Field;
         TableRelationsMetadata: Record "Table Relations Metadata";
         TableNoFilter: Text;
     begin

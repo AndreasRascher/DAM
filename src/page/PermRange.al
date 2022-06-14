@@ -1,4 +1,4 @@
-page 110000 PermissionRange
+page 81141 PermissionRange
 {
     PageType = List;
     ApplicationArea = All;
@@ -66,23 +66,4 @@ page 110000 PermissionRange
             }
         }
     }
-
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
-                ApplicationArea = All;
-
-                trigger OnAction()
-                begin
-
-                end;
-            }
-        }
-    }
-
-    var
-        myInt: Integer;
 }

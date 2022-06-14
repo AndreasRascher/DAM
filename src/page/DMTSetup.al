@@ -206,6 +206,42 @@ page 81130 "DMT Setup"
                         until DMTTable.Next() = 0;
                 end;
             }
+            action(FileExport)
+            {
+                Caption = 'Export File', Comment = 'Datei exportieren';
+                ApplicationArea = All;
+                Image = ImportCodes;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    tenantMedia: Record "Tenant Media" temporary;
+                    byte: Byte;
+                    cR: Byte;
+                    lF: Byte;
+                    iStr: InStream;
+                    i: Integer;
+                    allFilesTok: Label 'All Files (*.*)|*.*';
+                    oStr: OutStream;
+                    toFileName: Text;
+                begin
+                    cR := 13;
+                    lF := 10;
+                    tenantMedia.calcfields(Content);
+                    tenantMedia.Content.CreateOutStream(oStr, TextEncoding::MSDos);
+                    for i := 1 to 255 do begin
+                        byte := 1;
+                        oStr.WriteText(byte);
+                        oStr.WriteText(cR);
+                        oStr.WriteText(lF);
+                    end;
+                    tenantMedia.Content.CreateInStream(iStr, TextEncoding::MSDos);
+                    DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
+                end;
+            }
         }
 
     }
