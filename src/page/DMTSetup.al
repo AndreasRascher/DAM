@@ -38,7 +38,31 @@ page 81130 "DMT Setup"
                     }
                     group(Debugging)
                     {
-                        field(SessionID; SessionId()) { ApplicationArea = all; Caption = 'SessionID'; }
+                        field(SessionID; SessionId())
+                        {
+                            ApplicationArea = all;
+                            Caption = 'SessionID';
+                            trigger OnAssistEdit()
+                            var
+                                activeSession: Record "Active Session";
+                                Choice: Integer;
+                                NoOfChoices: Integer;
+                                SessionList: List of [Integer];
+                                Choices: Text;
+                            begin
+                                if activeSession.FindSet() then
+                                    repeat
+                                        Choices += StrSubstNo('%1 - %2 - %3,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type");
+                                        NoOfChoices += 1;
+                                        SessionList.Add(activeSession."Session ID");
+                                    until activeSession.Next() = 0;
+                                Choices += 'Cancel';
+                                Choice := StrMenu(Choices, NoOfChoices + 1);
+                                if Choice <= NoOfChoices then begin
+                                    Message('%1', StopSession(SessionList.Get(Choice)));
+                                end;
+                            end;
+                        }
                         field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }
                     }
                 }

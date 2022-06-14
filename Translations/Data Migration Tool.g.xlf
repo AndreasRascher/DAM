@@ -2018,6 +2018,11 @@
           <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2386859515 - Control 447400343 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty.Lines In Trgt. Table</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Control Qty.Lines In Trgt. Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download buffer table objects</source>
           <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
@@ -2057,56 +2062,6 @@
           <source>XMLPort (NAV2013 - BC14)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control XMLPort - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 3735914638 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Delete Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Delete Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 480834248 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Execute Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Execute Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 1958180954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the From field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control From - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 171145402 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Index field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Index - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 3088155792 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Insert Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Insert Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 3767204390 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Limited Usage Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Limited Usage Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 1682833869 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Modify Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Modify Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 1085746399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Object Type field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Object Type - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 3135917451 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the Read Permission field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control Read Permission - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2054706408 - Control 3483619077 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the value of the To field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page PermissionRange - Control To - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

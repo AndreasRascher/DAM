@@ -28,6 +28,7 @@ page 81133 "DMTTableList"
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
+                field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec)) { ApplicationArea = All; Caption = 'Qty.Lines In Trgt. Table'; }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
             }
         }
@@ -119,12 +120,25 @@ page 81133 "DMTTableList"
         HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
+    local procedure GetNoOfRecordsInTrgtTable(Rec: Record DMTTable): Integer
+    var
+        TableInformation: Record "Table Information";
+    begin
+        if TableInformation.Get(CompanyName, Rec."To Table ID") then;
+        // TableInformation.Calcfields("No. of Records");
+        exit(TableInformation."No. of Records");
+    end;
+
     trigger OnAfterGetRecord()
     var
         AllObj: Record AllObjWithCaption;
     begin
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            clear(ImportXMLPortIDStyle);
+            clear(BufferTableIDStyle);
+        end;
         if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
             ImportXMLPortIDStyle := 'Favorable';
         if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then

@@ -1933,7 +1933,6 @@
           <source>Schema File Path</source>
           <target>Pfad Schemadatei</target>
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
@@ -1946,7 +1945,6 @@
           <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>
           <target>Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</target>
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2099,12 +2097,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFile - NamedType allFilesTok</note>
         </trans-unit>
-        <trans-unit id="Codeunit 2483073149 - Method 1538742391 - NamedType 1342847624" size-unit="char" translate="yes" xml:space="preserve">
-          <source>All Files (*.*)|*.*</source>
-          <target>Alle Dateien (*.*)|*.*</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFileUTF8 - NamedType allFilesTok</note>
-        </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
           <target>Copy Report Helper</target>
@@ -2241,7 +2233,6 @@
           <source>Find available Object ID ranges</source>
           <target>Verfügbare Objekt-ID Bereiche ermitteln</target>
           <note from="Developer" annotates="general" priority="2">Verfügbare Objekt-ID Bereiche ermitteln</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FindValidObjIDRanges - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 1428180855 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2429,6 +2420,13 @@
           <target>DMT Tabellenübersicht</target>
           <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Control 447400343 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty.Lines In Trgt. Table</source>
+          <target>Anz. Datensätze in Zieltabelle</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Control Qty.Lines In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download buffer table objects</source>
