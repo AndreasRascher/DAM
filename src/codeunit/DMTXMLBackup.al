@@ -10,12 +10,14 @@ codeunit 81128 "DMTXMLBackup"
     procedure Import();
     var
         DMTSetup: Record "DMTSetup";
+        allObj: Record AllObj;
         TargetRef: RecordRef;
         FldRef: FieldRef;
         serverFile: file;
         InStr: InStream;
         FieldNodeID: Integer;
         TableNodeID: Integer;
+        TableNodeName: Text;
         FileName: Text;
         XFieldNode: XmlNode;
         XRecordNode: XmlNode;
@@ -44,8 +46,17 @@ codeunit 81128 "DMTXMLBackup"
         XDoc.SelectNodes('//DMT/child::*', XTableList);
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
+            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
             XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
             foreach XRecordNode in XRecordList do begin
+                // Check for renumbering
+                if not allObj.GET(allObj."Object Type"::Table, TableNodeID) then
+                    if TableNodeName <> '' then begin
+                        allObj.SetRange("Object Type", allObj."Object Type"::Table);
+                        allObj.SetFilter("Object Name", Convertstr(TableNodeName, '_', '?'));
+                        if allObj.FindFirst() then
+                            TableNodeID := allObj."Object ID";
+                    end;
                 Clear(TargetRef);
                 TargetRef.Open(TableNodeID, false);
                 //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
@@ -110,6 +121,7 @@ codeunit 81128 "DMTXMLBackup"
                 rootNode.AsXmlElement().Add(tableNode);
 
                 AddAttribute(tableNode, 'ID', Format(tableID));
+                AddAttribute(tableNode, 'NAME', ConvertStr(allObj."Object Name", '"', '_'));
                 fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
                 tableNode.AsXmlElement().Add(fieldDefinitionNode);
                 AddTable(tableNode, allObj."Object ID");
