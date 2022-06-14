@@ -1770,7 +1770,7 @@
         </trans-unit>
         <trans-unit id="Page 2669947503 - Control 2069234263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Remove al whitespace</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">Nicht benötigte Leerzeichen entfernen.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control RemoveALReportWhiteSpaceOption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1867,6 +1867,11 @@
           <source>Import Schema.csv</source>
           <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ImportNAVSchema - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Action 2321352414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export File</source>
+          <note from="Developer" annotates="general" priority="2">Datei exportieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FileExport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>

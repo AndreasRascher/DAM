@@ -2124,7 +2124,7 @@
         <trans-unit id="Page 2669947503 - Control 2069234263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Remove al whitespace</source>
           <target>Remove al whitespace</target>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">Nicht benötigte Leerzeichen entfernen.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control RemoveALReportWhiteSpaceOption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2240,6 +2240,13 @@
           <target>Schema.csv importieren</target>
           <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ImportNAVSchema - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Action 2321352414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export File</source>
+          <target>[NAB: SUGGESTION]Datei exportieren</target>
+          <note from="Developer" annotates="general" priority="2">Datei exportieren</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FileExport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
@@ -2425,7 +2432,6 @@
           <source>Qty.Lines In Trgt. Table</source>
           <target>Anz. Datensätze in Zieltabelle</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Control Qty.Lines In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
