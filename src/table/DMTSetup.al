@@ -29,7 +29,7 @@ table 81127 "DMTSetup"
                 if (Rec."Default Export Folder Path" <> '') and (Rec."Schema.csv File Path" = '') then begin
                     ServerFilePath := Rec."Default Export Folder Path" + 'Schema.csv';
                     if Exists(ServerFilePath) then
-                        Rec."Schema.csv File Path" := ServerFilePath;
+                        Rec."Schema.csv File Path" := CopyStr(ServerFilePath, 1, MaxStrLen(Rec."Schema.csv File Path"));
                 end;
             end;
 
@@ -103,8 +103,8 @@ table 81127 "DMTSetup"
     var
         ObjMgt: Codeunit DMTObjMgt;
     begin
-        Rec."Obj. ID Range Buffer Tables" := ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table);
-        Rec."Obj. ID Range XMLPorts" := ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort);
+        Rec."Obj. ID Range Buffer Tables" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table), 1, MaxStrLen(Rec."Obj. ID Range Buffer Tables"));
+        Rec."Obj. ID Range XMLPorts" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort), 1, MaxStrLen(Rec."Obj. ID Range XMLPorts"));
     end;
 
     procedure CheckSchemaInfoHasBeenImporterd()

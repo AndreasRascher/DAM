@@ -1,4 +1,4 @@
-page 81137 "Copy Report Helper"
+page 81141 "Copy Report Helper"
 {
     Caption = 'Copy Report Helper';
     PageType = List;
@@ -105,10 +105,10 @@ page 81137 "Copy Report Helper"
         AppObjectMetadata.SetRange("Object ID", ReportID);
         AppObjectMetadata.FindFirst();
         AppObjectMetadata.CalcFields("User AL Code");
-        if not AppObjectMetadata."User AL Code".HasValue then
-            Error(ALCodeNotAvailableErr, AppObjectMetadata."Object Type", AppObjectMetadata."Object ID");
         AppObjectMetadata."User AL Code".CreateInStream(IStr);
         BText.Read(IStr);
+        if BText.Length = 0 then
+            Error(ALCodeNotAvailableErr, AppObjectMetadata."Object Type", AppObjectMetadata."Object ID");
         ReportALCode := Format(BText);
     end;
 

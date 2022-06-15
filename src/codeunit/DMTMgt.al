@@ -242,6 +242,7 @@ codeunit 81124 "DMTMgt"
     procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: text; EvaluateOptionValueAsNumber: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
+        _DateFormula: DateFormula;
         _RecordID: RecordId;
         _BigInteger: BigInteger;
         _Boolean: Boolean;
@@ -249,10 +250,9 @@ codeunit 81124 "DMTMgt"
         _DateTime: DateTime;
         _Decimal: Decimal;
         _Integer: Integer;
-        _OutStream: OutStream;
-        _DateFormula: DateFormula;
-        OptionIndex: Integer;
         NoOfOptions: Integer;
+        OptionIndex: Integer;
+        _OutStream: OutStream;
         OptionElement: text;
     begin
         if FromText = '' then

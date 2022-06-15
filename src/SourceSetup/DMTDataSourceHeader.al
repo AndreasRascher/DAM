@@ -4,7 +4,7 @@
 	Column Type (Text, Decimal, Integer, Option,..) 
 	Column Width
 */
-table 81130 "DMTDataSourceHeader"
+table 81131 "DMTDataSourceHeader"
 {
     fields
     {

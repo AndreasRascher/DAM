@@ -4,7 +4,6 @@ page 81127 "DMTReplacementsCard"
     PageType = Document;
     UsageCategory = None;
     SourceTable = DMTReplacementsHeader;
-    AutoSplitKey = true;
 
     layout
     {
@@ -43,6 +42,7 @@ page 81127 "DMTReplacementsCard"
                 Image = Suggest;
                 Promoted = true;
                 PromotedCategory = Process;
+                PromotedOnly = true;
                 Caption = 'Propose Assignments', Comment = 'Zuordnung vorschlagen';
                 trigger OnAction()
                 begin
