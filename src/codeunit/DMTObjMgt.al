@@ -153,57 +153,58 @@ codeunit 81126 "DMTObjMgt"
         Message('Import abgeschlossen');
     end;
 
-    procedure CreateListOfAvailableObjectIDsInLicense(ObjectType: Enum DMTObjTypes; var ObjectIDsAvailable: List of [Integer]) NoOfObjects: Integer
+    procedure CreateListOfAvailableObjectIDsInLicense(ObjectType: Enum DMTObjTypes; var ObjectIDsAvailable: List of [Integer]; IgnoreFilters: Boolean) NoOfObjects: Integer
     var
         AllObjWithCaption: Record AllObjWithCaption;
         DMTSetup: Record DMTSetup;
         Numbers: Record Integer;
-        PermissionRange: Record "Permission Range";
-        index: Integer;
-        ObjectIDsInLicense: List of [Integer];
+        LicensePermission: Record "License Permission";
+        SessionStorage: Codeunit DMTSessionStorage;
     begin
+
         Clear(ObjectIDsAvailable);
+        DMTSetup.GetRecordOnce();
+
         // Collect Object IDs in License
         case ObjectType of
             ObjectType::Table:
                 begin
-                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::Table);
-                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+                    LicensePermission.SetRange("Object Type", LicensePermission."Object Type"::Table);
+                    LicensePermission.SetRange("Insert Permission", LicensePermission."Insert Permission"::Yes);
+                    if not IgnoreFilters then
+                        if (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
+                            LicensePermission.SetFilter("Object Number", DMTSetup."Obj. ID Range Buffer Tables")
+                        else
+                            LicensePermission.SetFilter("Object Number", '50000..99999|130000..149999');
                 end;
             ObjectType::XMLPort:
                 begin
-                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::XMLport);
-                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+                    LicensePermission.SetRange("Object Type", LicensePermission."Object Type"::XMLport);
+                    LicensePermission.SetRange("Insert Permission", LicensePermission."Insert Permission"::Yes);
+                    LicensePermission.SetRange("Execute Permission", LicensePermission."Execute Permission"::Yes);
+                    if not IgnoreFilters then
+                        if (DMTSetup."Obj. ID Range XMLPorts" <> '') then
+                            LicensePermission.SetFilter("Object Number", DMTSetup."Obj. ID Range XMLPorts")
+                        else
+                            LicensePermission.SetFilter("Object Number", '50000..99999|130000..149999');
                 end;
         end;
-        if PermissionRange.FindSet() then
-            repeat
-                for index := PermissionRange.From to PermissionRange."To" do begin
-                    if AllObjWithCaption.Get(PermissionRange."Object Type", index) then begin
+        if not SessionStorage.GetLicenseInfo(ObjectIDsAvailable, ObjectType) then begin
+            if LicensePermission.FindSet() then
+                repeat
+                    if AllObjWithCaption.Get(LicensePermission."Object Type", LicensePermission."Object Number") then begin
                         if IsGeneratedAppObject(AllObjWithCaption) then
-                            ObjectIDsInLicense.Add(index);
+                            ObjectIDsAvailable.Add(LicensePermission."Object Number");
                     end else begin
-                        ObjectIDsInLicense.Add(index);
+                        ObjectIDsAvailable.Add(LicensePermission."Object Number");
                     end;
-                end
-            until PermissionRange.Next() = 0;
-        // Collect Object IDs in Range
-        DMTSetup.GetRecordOnce();
-        if (ObjectType = ObjectType::Table) and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
-            Numbers.SetFilter(Number, DMTSetup."Obj. ID Range Buffer Tables");
-        if (ObjectType = ObjectType::XMLPort) and (DMTSetup."Obj. ID Range XMLPorts" <> '') then
-            Numbers.SetFilter(Number, DMTSetup."Obj. ID Range XMLPorts");
-        if not Numbers.HasFilter then
-            Numbers.SetFilter(Number, '50000..99999');
-        if Numbers.FindSet() then
-            repeat
-                if ObjectIDsInLicense.Contains(Numbers.Number) then
-                    ObjectIDsAvailable.Add(Numbers.Number);
-            until Numbers.Next() = 0;
+                until LicensePermission.Next() = 0;
+            SessionStorage.SetLicenseInfo(ObjectType, ObjectIDsAvailable);
+        end;
         NoOfObjects := ObjectIDsAvailable.Count;
     end;
 
-    procedure GetAvailableObjectIDsInLicenseFilter(ObjectType: Enum DMTObjTypes) ObjIDFilter: Text
+    procedure GetAvailableObjectIDsInLicenseFilter(ObjectType: Enum DMTObjTypes; IgnoreFilters: Boolean) ObjIDFilter: Text
     var
         TempInteger: Record Integer temporary;
         SelectionFilterManagement: Codeunit SelectionFilterManagement;
@@ -211,7 +212,7 @@ codeunit 81126 "DMTObjMgt"
         Number: Integer;
         ObjectIDsAvailable: List of [Integer];
     begin
-        if CreateListOfAvailableObjectIDsInLicense(ObjectType, ObjectIDsAvailable) = 0 then
+        if CreateListOfAvailableObjectIDsInLicense(ObjectType, ObjectIDsAvailable, IgnoreFilters) = 0 then
             exit('');
         foreach Number in ObjectIDsAvailable do begin
             TempInteger.Number := Number;

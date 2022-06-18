@@ -14,5 +14,6 @@
     },
     "CRS.FileNamePattern": "<ObjectNameShort>.al",
     "CRS.ObjectNamePrefix": "DMT",
-    "CRS.RenameWithGit": true
+    "CRS.RenameWithGit": true,
+    "alObjectDesigner.disableFileWatcherOnChange": true
  }

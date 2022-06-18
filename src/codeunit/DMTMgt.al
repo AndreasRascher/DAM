@@ -414,6 +414,9 @@ codeunit 81124 "DMTMgt"
     var
         FileBrowser: Page FileBrowser;
     begin
+        DMTSetup.GetRecordOnce();
+        if CurrentPath = '' then
+            CurrentPath := DMTSetup."Default Export Folder Path";
         FileBrowser.SetupFileBrowser(CurrentPath, LookUpFolder);
         FileBrowser.LookupMode(true);
         if not (FileBrowser.RunModal() = Action::LookupOK) then

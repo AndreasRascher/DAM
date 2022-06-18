@@ -391,13 +391,13 @@ codeunit 81127 "DMTXMLBackup"
         end;
     end;
 
-    procedure CreateTableIDList(TablesList: List of [Integer]);
+    procedure CreateTableIDList(TablesFoundList: List of [Integer]);
     var
         ID: RecordId;
     begin
         foreach ID in RecordIDList do
-            if not TablesList.Contains(ID.TableNo) then
-                TablesList.Add(ID.TableNo);
+            if not TablesFoundList.Contains(ID.TableNo) then
+                TablesFoundList.Add(ID.TableNo);
     end;
 
     procedure CreateTagName(_Name: Text) _TagName: Text;

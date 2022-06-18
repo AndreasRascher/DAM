@@ -97,30 +97,19 @@ table 81120 "DMTErrorLog"
         _DMTErrorlog.modify(true);
     end;
 
-    procedure AddEntryWithUserDefinedMessage(DMTFields: Record "DMTField"; ErrorMessage: text)
-    var
-        _DMTErrorlog: Record DMTErrorLog;
-    begin
-        _DMTErrorlog.INSERT(TRUE);
-        _DMTErrorlog."Import from Table No." := DMTFields."From Table ID";
-        _DMTErrorlog."Import from Field No." := DMTFields."From Field No.";
-        _DMTErrorlog."Import to Table No." := DMTFields."To Table No.";
-        _DMTErrorlog."Import to Field No." := DMTFields."To Field No.";
-
-        _DMTErrorlog.Errortext := COPYSTR(ErrorMessage, 1, MAXSTRLEN(_DMTErrorlog.Errortext));
-        _DMTErrorlog.ErrorCode := '';
-        _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
-        _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
-        _DMTErrorlog.Modify(true);
-    end;
-
     procedure DeleteExistingLogForBufferRec(BufferRef: RecordRef)
     var
         DMTErrorlog: Record DMTErrorLog;
+        DMTErrorlog2: Record DMTErrorLog;
     begin
-        DMTErrorlog.SetRange("From ID", BufferRef.RECORDID);
-        if not DMTErrorlog.IsEmpty then
-            DMTErrorlog.DeleteAll();
+        DMTErrorlog.SetRange("From ID", BufferRef.RecordId);
+        // DMTErrorlog.DeleteAll(); // Results in Tablelocks
+        if DMTErrorlog.FindSet() then begin
+            repeat
+                DMTErrorlog2 := DMTErrorlog;
+                DMTErrorlog2.Delete(true);
+            until DMTErrorlog.Next() = 0;
+        end;
     end;
 
     procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean
@@ -138,11 +127,6 @@ table 81120 "DMTErrorLog"
         IF ExcludeIgnoreErrorRecords then
             SETRANGE("Ignore Error", FALSE);
         exit(not Rec.IsEmpty);
-    end;
-
-    procedure OpenList()
-    begin
-        PAGE.RUN(PAGE::"DMT Error Log List");
     end;
 
     procedure OpenListWithFilter(DMTTable: Record DMTTable)

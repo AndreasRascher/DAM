@@ -18,9 +18,9 @@ page 81141 "Copy Report Helper"
             }
             repeater(Repeater)
             {
-                field(ReportID; Rec.ID) { ApplicationArea = All; }
-                field(ReportName; Rec.Name) { ApplicationArea = All; }
-                field(ReportCaption; Rec.Caption) { ApplicationArea = All; }
+                field(ReportIDCtrl; Rec.ID) { ApplicationArea = All; }
+                field(ReportNameCtrl; Rec.Name) { ApplicationArea = All; }
+                field(ReportCaptionCtrl; Rec.Caption) { ApplicationArea = All; }
             }
         }
     }

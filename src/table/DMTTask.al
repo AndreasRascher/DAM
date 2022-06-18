@@ -19,7 +19,7 @@ table 81129 "DMTTask"
                 if Type <> xRec.Type then begin
                     Clear(Rec."Context Description");
                     Clear(Rec.ID);
-                    Clear(Rec.TableView);
+                    Clear(Rec.StoredTableView);
                 end;
             end;
         }
@@ -51,7 +51,7 @@ table 81129 "DMTTask"
             end;
         }
         field(12; "Context Description"; text[250]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }
-        field(50; TableView; Blob) { }
+        field(50; StoredTableView; Blob) { }
         field(100; "Processing Time"; Duration) { Caption = 'Processing Time', comment = 'Bearbeitungzeit'; }
         field(101; "No. of Records"; Integer) { Caption = 'No. of Records', comment = 'Anz. Datensätze'; }
         field(102; "No. of Records failed"; Integer) { Caption = 'No. of Records failed', comment = 'Anz. fehlgeschlagen'; }
@@ -75,9 +75,9 @@ table 81129 "DMTTask"
     var
         OStr: OutStream;
     begin
-        Clear(Rec.TableView);
+        Clear(Rec.StoredTableView);
         Rec.Modify();
-        rec.TableView.CreateOutStream(Ostr);
+        rec.StoredTableView.CreateOutStream(Ostr);
         OStr.WriteText(TableView);
         Rec.Modify();
     end;
@@ -86,9 +86,9 @@ table 81129 "DMTTask"
     var
         IStr: InStream;
     begin
-        rec.calcfields(TableView);
-        if not rec.TableView.HasValue then exit('');
-        rec.TableView.CreateInStream(IStr);
+        rec.calcfields(StoredTableView);
+        if not rec.StoredTableView.HasValue then exit('');
+        rec.StoredTableView.CreateInStream(IStr);
         IStr.ReadText(TableView);
     end;
 

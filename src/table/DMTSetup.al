@@ -8,9 +8,25 @@ table 81127 "DMTSetup"
     {
         field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'Primärschlüssel'; }
         field(10; "Obj. ID Range Buffer Tables"; Text[250])
-        { Caption = 'Obj. ID Range Buffer Tables', comment = 'Objekt ID Bereich für Puffertabellen'; }
+        {
+            Caption = 'Obj. ID Range Buffer Tables', comment = 'Objekt ID Bereich für Puffertabellen';
+            trigger OnValidate()
+            var
+                SessionStorage: Codeunit DMTSessionStorage;
+            begin
+                SessionStorage.DisposeLicenseInfo();
+            end;
+        }
         field(11; "Obj. ID Range XMLPorts"; Text[250])
-        { Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'Objekt ID Bereich für XMLPorts (Import)'; }
+        {
+            Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'Objekt ID Bereich für XMLPorts (Import)';
+            trigger OnValidate()
+            var
+                SessionStorage: Codeunit DMTSessionStorage;
+            begin
+                SessionStorage.DisposeLicenseInfo();
+            end;
+        }
         field(30; "Default Export Folder Path"; Text[250])
         {
             Caption = 'Default Export Folder', Comment = 'Standard Export Ordnerpfad';
@@ -102,9 +118,11 @@ table 81127 "DMTSetup"
     internal procedure ProposeObjectRanges()
     var
         ObjMgt: Codeunit DMTObjMgt;
+        SessionStorage: Codeunit DMTSessionStorage;
     begin
-        Rec."Obj. ID Range Buffer Tables" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table), 1, MaxStrLen(Rec."Obj. ID Range Buffer Tables"));
-        Rec."Obj. ID Range XMLPorts" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort), 1, MaxStrLen(Rec."Obj. ID Range XMLPorts"));
+        SessionStorage.DisposeLicenseInfo();
+        Rec."Obj. ID Range Buffer Tables" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table, true), 1, MaxStrLen(Rec."Obj. ID Range Buffer Tables"));
+        Rec."Obj. ID Range XMLPorts" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort, true), 1, MaxStrLen(Rec."Obj. ID Range XMLPorts"));
     end;
 
     procedure CheckSchemaInfoHasBeenImporterd()

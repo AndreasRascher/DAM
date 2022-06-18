@@ -501,7 +501,7 @@ page 81123 "DMTGenBufferList150"
     end;
 
     var
-        DMTGenBufferFieldCaptions: Codeunit DMTGenBufferFieldCaptions;
+        DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;
         [InDataSet]
         Fld001Editable, Fld002Editable, Fld003Editable, Fld004Editable, Fld005Editable, Fld006Editable, Fld007Editable, Fld008Editable, Fld009Editable, Fld010Editable,
         Fld011Editable, Fld012Editable, Fld013Editable, Fld014Editable, Fld015Editable, Fld016Editable, Fld017Editable, Fld018Editable, Fld019Editable, Fld020Editable,

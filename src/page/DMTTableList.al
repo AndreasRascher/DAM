@@ -7,6 +7,7 @@ page 81133 "DMTTableList"
     SourceTable = DMTTable;
     CardPageId = DMTTableCard;
     SourceTableView = sorting("Sort Order");
+    DelayedInsert = true;
     // Editable = false;
 
     layout
@@ -30,6 +31,14 @@ page 81133 "DMTTableList"
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec)) { ApplicationArea = All; Caption = 'Qty.Lines In Trgt. Table'; }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
+            }
+        }
+        area(FactBoxes)
+        {
+            part(DMTTableFactBox; DMTTableFactBox)
+            {
+                SubPageLink = "To Table ID" = field("To Table ID");
+                Visible = false;
             }
         }
     }
@@ -120,11 +129,11 @@ page 81133 "DMTTableList"
         HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
-    local procedure GetNoOfRecordsInTrgtTable(Rec: Record DMTTable): Integer
+    local procedure GetNoOfRecordsInTrgtTable(DMTTable: Record DMTTable): Integer
     var
         TableInformation: Record "Table Information";
     begin
-        if TableInformation.Get(CompanyName, Rec."To Table ID") then;
+        if TableInformation.Get(CompanyName, DMTTable."To Table ID") then;
         // TableInformation.Calcfields("No. of Records");
         exit(TableInformation."No. of Records");
     end;

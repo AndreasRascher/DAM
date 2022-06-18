@@ -49,18 +49,20 @@ page 81130 "DMT Setup"
                                 NoOfChoices: Integer;
                                 SessionList: List of [Integer];
                                 Choices: Text;
+                                StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
                             begin
                                 if activeSession.FindSet() then
                                     repeat
-                                        Choices += StrSubstNo('%1 - %2 - %3,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type");
+                                        Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
                                         NoOfChoices += 1;
                                         SessionList.Add(activeSession."Session ID");
                                     until activeSession.Next() = 0;
                                 Choices += 'Cancel';
-                                Choice := StrMenu(Choices, NoOfChoices + 1);
-                                if Choice <= NoOfChoices then begin
-                                    Message('%1', StopSession(SessionList.Get(Choice)));
-                                end;
+                                Choice := StrMenu(Choices, NoOfChoices + 1, StopSessionInstructionLbl);
+                                if Choice <> 0 then
+                                    if Choice <= NoOfChoices then begin
+                                        Message('%1', StopSession(SessionList.Get(Choice)));
+                                    end;
                             end;
                         }
                         field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }

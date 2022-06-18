@@ -284,7 +284,7 @@ table 81124 "DMTGenBuffTable"
     begin
         if not GenBuffTable.FindSetLinesByFileName(FileName) then
             Error('No lines found for %1', FileName);
-        DMTGenBufferFieldCaptions.Dispose();
+        DMTGenBufferFieldCaptions.DisposeCaptions();
         RecRef.GetTable(GenBuffTable);
         for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin
             DMTGenBufferFieldCaptions.AddCaption(FieldIndex, RecRef.Field(FieldIndex).Value);
@@ -367,7 +367,7 @@ table 81124 "DMTGenBuffTable"
         DMTGenBuffTable: Record DMTGenBuffTable;
         NoOfCols: Integer;
     begin
-        DMTGenBufferFieldCaptions.Dispose();
+        DMTGenBufferFieldCaptions.DisposeCaptions();
         NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(FileName);
 
         DMTGenBuffTable.reset();
@@ -387,5 +387,5 @@ table 81124 "DMTGenBuffTable"
     end;
 
     var
-        DMTGenBufferFieldCaptions: Codeunit DMTGenBufferFieldCaptions;
+        DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;
 }

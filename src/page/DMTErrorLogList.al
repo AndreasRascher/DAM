@@ -1,10 +1,9 @@
 page 81120 "DMT Error Log List"
 {
-    ApplicationArea = All;
     Caption = 'DMT Error Log', comment = 'DMT Fehlerprotokoll';
     PageType = List;
     SourceTable = DMTErrorLog;
-    UsageCategory = Lists;
+    UsageCategory = None;
     ModifyAllowed = false;
     InsertAllowed = false;
 

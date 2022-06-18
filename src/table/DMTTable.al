@@ -278,9 +278,9 @@ table 81128 "DMTTable"
             DMTSetup.InsertWhenEmpty();
         DMTSetup.Get();
 
-        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables) = 0 then
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
             Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
-        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts) = 0 then
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
             Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
 
         // Collect used numbers
@@ -407,15 +407,15 @@ table 81128 "DMTTable"
     procedure DownloadAllALBufferTableFiles(var DMTTable: Record DMTTable)
     var
         DMTTable2: Record DMTTable;
-        ObjGen: Codeunit DMTObjectGenerator;
         DataCompression: Codeunit "Data Compression";
+        ObjGen: Codeunit DMTObjectGenerator;
+        FileMgt: Codeunit "File Management";
         FileBlob: Codeunit "Temp Blob";
-        DefaultTextEncoding: TextEncoding;
         IStr: InStream;
         OStr: OutStream;
         toFileName: text;
         ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
-        FileMgt: Codeunit "File Management";
+        DefaultTextEncoding: TextEncoding;
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
         // DefaultTextEncoding := TextEncoding::MSDos;
