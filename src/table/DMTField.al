@@ -46,7 +46,7 @@ table 81122 "DMTField"
         {
             Caption = 'Source Field No.', comment = 'Herkunft Feldnr.';
             DataClassification = SystemMetadata;
-            TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
+            TableRelation = DMTFieldBuffer."No." where(TableNo = field("From Field No."));
             ValidateTableRelation = false;
             trigger OnValidate()
             begin

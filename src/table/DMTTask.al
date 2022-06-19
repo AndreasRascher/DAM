@@ -97,17 +97,17 @@ table 81129 "DMTTask"
         DMTTable: Record DMTTable;
         TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
-        StoredTableView: text;
+        StoredTableViewText: text;
     begin
-        StoredTableView := GetStoredTableView();
-        if StoredTableView = '' then exit('');
+        StoredTableViewText := GetStoredTableView();
+        if StoredTableViewText = '' then exit('');
         if not Rec.FindRelated(DMTTable) then exit;
         if DMTTable."Buffer Table ID" = 0 then
             exit;
         if not TableMetadata.Get(DMTTable."Buffer Table ID") then
             exit;
         RecRef.Open(DMTTable."Buffer Table ID");
-        RecRef.SetView(StoredTableView);
+        RecRef.SetView(StoredTableViewText);
         FilterExpr := RecRef.GetFilters();
     end;
 

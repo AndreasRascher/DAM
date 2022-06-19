@@ -157,9 +157,10 @@ codeunit 81126 "DMTObjMgt"
     var
         AllObjWithCaption: Record AllObjWithCaption;
         DMTSetup: Record DMTSetup;
-        Numbers: Record Integer;
         LicensePermission: Record "License Permission";
+        PermissionRange: Record "Permission Range";
         SessionStorage: Codeunit DMTSessionStorage;
+        PermRangeIDFilter: Text;
     begin
 
         Clear(ObjectIDsAvailable);
@@ -169,6 +170,10 @@ codeunit 81126 "DMTObjMgt"
         case ObjectType of
             ObjectType::Table:
                 begin
+                    PermissionRange.SetFilter("To", '50000..99999|130000..149999');
+                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::Table);
+                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+
                     LicensePermission.SetRange("Object Type", LicensePermission."Object Type"::Table);
                     LicensePermission.SetRange("Insert Permission", LicensePermission."Insert Permission"::Yes);
                     if not IgnoreFilters then
@@ -179,6 +184,12 @@ codeunit 81126 "DMTObjMgt"
                 end;
             ObjectType::XMLPort:
                 begin
+                    PermissionRange.SetFilter("To", '50000..99999|130000..149999');
+                    PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::Table);
+                    PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
+                    PermissionRange.SetRange("Execute Permission", PermissionRange."Execute Permission"::Yes);
+
+
                     LicensePermission.SetRange("Object Type", LicensePermission."Object Type"::XMLport);
                     LicensePermission.SetRange("Insert Permission", LicensePermission."Insert Permission"::Yes);
                     LicensePermission.SetRange("Execute Permission", LicensePermission."Execute Permission"::Yes);
@@ -190,7 +201,19 @@ codeunit 81126 "DMTObjMgt"
                 end;
         end;
         if not SessionStorage.GetLicenseInfo(ObjectIDsAvailable, ObjectType) then begin
-            if LicensePermission.FindSet() then
+
+            if PermissionRange.FindSet(false, false) then
+                repeat
+                    PermRangeIDFilter += StrSubstNo('%1..%2|', PermissionRange.From, PermissionRange."To");
+                until PermissionRange.Next() = 0;
+            PermRangeIDFilter := PermRangeIDFilter.TrimEnd('|');
+            if PermRangeIDFilter <> '' then begin
+                LicensePermission.FilterGroup(2);
+                LicensePermission.SetFilter("Object Number", PermRangeIDFilter);
+                LicensePermission.FilterGroup(0);
+            end;
+
+            if LicensePermission.FindSet() then begin
                 repeat
                     if AllObjWithCaption.Get(LicensePermission."Object Type", LicensePermission."Object Number") then begin
                         if IsGeneratedAppObject(AllObjWithCaption) then
@@ -199,6 +222,7 @@ codeunit 81126 "DMTObjMgt"
                         ObjectIDsAvailable.Add(LicensePermission."Object Number");
                     end;
                 until LicensePermission.Next() = 0;
+            end;
             SessionStorage.SetLicenseInfo(ObjectType, ObjectIDsAvailable);
         end;
         NoOfObjects := ObjectIDsAvailable.Count;
@@ -219,7 +243,6 @@ codeunit 81126 "DMTObjMgt"
             TempInteger.Insert();
         end;
         Number := TempInteger.Count;
-        // Integer.MarkedOnly(true);
         RecRef.GetTable(TempInteger);
         ObjIDFilter := SelectionFilterManagement.GetSelectionFilter(RecRef, TempInteger.FieldNo(Number));
     end;
