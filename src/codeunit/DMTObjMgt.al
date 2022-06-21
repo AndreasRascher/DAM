@@ -135,6 +135,7 @@ codeunit 81126 "DMTObjMgt"
         InStr: InStream;
         FileName: Text;
         FileFound: Boolean;
+        ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
     begin
         if DMTSetup.Get() and (DMTSetup."Schema.csv File Path" <> '') then
             if ServerFile.Open(DMTSetup."Schema.csv File Path") then begin
@@ -150,7 +151,7 @@ codeunit 81126 "DMTObjMgt"
         end;
         FieldImport.SetSource(InStr);
         FieldImport.Import();
-        Message('Import abgeschlossen');
+        Message(ImportFinishedMsg);
     end;
 
     procedure CreateListOfAvailableObjectIDsInLicense(ObjectType: Enum DMTObjTypes; var ObjectIDsAvailable: List of [Integer]; IgnoreFilters: Boolean) NoOfObjects: Integer
@@ -188,7 +189,6 @@ codeunit 81126 "DMTObjMgt"
                     PermissionRange.SetRange("Object Type", PermissionRange."Object Type"::Table);
                     PermissionRange.SetRange("Insert Permission", PermissionRange."Insert Permission"::Yes);
                     PermissionRange.SetRange("Execute Permission", PermissionRange."Execute Permission"::Yes);
-
 
                     LicensePermission.SetRange("Object Type", LicensePermission."Object Type"::XMLport);
                     LicensePermission.SetRange("Insert Permission", LicensePermission."Insert Permission"::Yes);

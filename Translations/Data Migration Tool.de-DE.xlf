@@ -2049,11 +2049,12 @@
           <note from="Developer" annotates="general" priority="2">Bearbeitungzeit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTask - Field Processing Time - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1472721356 - Field 4113082709 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>TableView</source>
-          <target>Tabellenfilter</target>
+        <trans-unit id="Table 1472721356 - Field 2143680916 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>StoredTableView</source>
+          <target>Gespeicherter Tabellenfilter</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTask - Field TableView - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTask - Field StoredTableView - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1472721356 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Type</source>
@@ -2096,6 +2097,13 @@
           <target>Alle Dateien (*.*)|*.*</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFile - NamedType allFilesTok</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2885896688 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <target>Import abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
@@ -2205,6 +2213,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 573966488" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select which session to stop:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt;- &lt;Login Datetime&gt;</source>
+          <target>Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</target>
+          <note from="Developer" annotates="general" priority="2">Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopSessionInstructionLbl</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Control 2138558048 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>User ID</source>
           <target>Benutzer ID</target>
@@ -2240,13 +2255,6 @@
           <target>Schema.csv importieren</target>
           <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ImportNAVSchema - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 2321352414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Export File</source>
-          <target>[NAB: SUGGESTION]Datei exportieren</target>
-          <note from="Developer" annotates="general" priority="2">Datei exportieren</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action FileExport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
@@ -2313,6 +2321,13 @@
           <target>DMT Generischer Puffer Übersicht</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3320583891 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Version Fields</source>
+          <target>Felder alte Version</target>
+          <note from="Developer" annotates="general" priority="2">Felder alte Version</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTOldVersionFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Rules</source>
@@ -2421,6 +2436,13 @@
           <target>In Zieltabelle übertragen</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabelle übertragen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action TransferToTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3244585722 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Table FactBox</source>
+          <target>DMT Tabellen FactBox</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableFactBox - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Table List</source>
