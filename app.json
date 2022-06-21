@@ -13,7 +13,7 @@
   "dependencies": [],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "19.0.0.0",
+  "application": "18.0.0.0",
   "idRanges": [
     {
       "from": 81120,
@@ -25,12 +25,8 @@
     }
   ],
   "contextSensitiveHelpUrl": "https://DMT.com/help/",
-  "resourceExposurePolicy": {
-    "allowDebugging": true,
-    "allowDownloadingSource": true,
-    "includeSourceInSymbolFile": true
-  },
-  "runtime": "8.0",
+  "showMyCode": true,
+  "runtime": "7.0",
   "target":"OnPrem",
   "features": ["TranslationFile"]
 }
