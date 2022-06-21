@@ -2,15 +2,15 @@ OBJECT XMLport 50014 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=08.05.22;
-    Time=16:10:58;
+    Date=20.06.22;
+    Time=13:08:41;
     Modified=Yes;
     Version List=DMT;
   }
   PROPERTIES
   {
     Direction=Export;
-    TextEncoding=UTF-16;
+    TextEncoding=UTF-8;
     OnInitXMLport=VAR
                     Field@55000 : Record 2000000041;
                     ExportSchemaLbl@1000000000 : TextConst 'DEU=Tabellenschema exportieren (schema.csv);ENU=Export table schema (schema.csv)';
@@ -2711,7 +2711,7 @@ OBJECT XMLport 50014 DMT Export
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result += STRSUBSTNO('%1,',_OptionElement);
-        end else begin
+        END ELSE BEGIN
           _Result += STRSUBSTNO('"%1",',_OptionElement);
         END;
       END;
@@ -2830,7 +2830,7 @@ OBJECT XMLport 50014 DMT Export
             _exportFieldBuffer := _fields;
             _exportFieldBuffer.INSERT;
           END;
-       end else begin
+       END ELSE BEGIN
           _exportFieldBuffer := _fields;
           _exportFieldBuffer.INSERT;
         END;
@@ -2978,7 +2978,7 @@ OBJECT XMLport 50014 DMT Export
 
       IF fieldIndex = 1 THEN BEGIN
         ExportFieldBuffer.FINDFIRST;
-      end else begin
+      END ELSE BEGIN
         ExportFieldBuffer.NEXT;
       END;
 
@@ -3013,7 +3013,7 @@ OBJECT XMLport 50014 DMT Export
             //mask leading "
             IF (STRLEN(currFldRef.OPTIONCAPTION)>1) AND (COPYSTR(currFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
               valueAsText := '" "'+COPYSTR(currFldRef.OPTIONCAPTION,2);
-            end else begin
+            END ELSE BEGIN
               valueAsText := currFldRef.OPTIONCAPTION;
             END;
           END;

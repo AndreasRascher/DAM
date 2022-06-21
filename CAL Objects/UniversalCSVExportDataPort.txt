@@ -2,8 +2,8 @@ OBJECT Dataport 50005 DMTExport
 {
   OBJECT-PROPERTIES
   {
-    Date=01.06.22;
-    Time=12:01:09;
+    Date=20.06.22;
+    Time=12:38:33;
     Modified=Yes;
     Version List=DMT;
   }
@@ -149,7 +149,7 @@ OBJECT Dataport 50005 DMTExport
         IF UseBigText THEN BEGIN
           // Required for extra columns
           EXPORT_ExportSingleTableRecBT(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
-        end else begin
+        END ELSE BEGIN
           // Faster without BigText (BT)
           EXPORT_ExportSingleTableRec(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
         END;
@@ -191,7 +191,7 @@ OBJECT Dataport 50005 DMTExport
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result += STRSUBSTNO('%1,',_OptionElement);
-        end else begin
+        END ELSE BEGIN
           _Result += STRSUBSTNO('"%1",',_OptionElement);
         END;
       END;
@@ -219,7 +219,7 @@ OBJECT Dataport 50005 DMTExport
         _OptionElement := SELECTSTR(i,_OptionString);
         IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
           _Result.ADDTEXT(STRSUBSTNO('%1,',_OptionElement));
-        end else begin
+        END ELSE BEGIN
           _Result.ADDTEXT(STRSUBSTNO('"%1",',_OptionElement));
         END;
       END;
@@ -316,7 +316,7 @@ OBJECT Dataport 50005 DMTExport
                 //mask leading "
                 IF (STRLEN(_CurrFldRef.OPTIONCAPTION) > 1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
                   _ValueAsText := '" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2);
-                end else begin
+                END ELSE BEGIN
                   _ValueAsText := _CurrFldRef.OPTIONCAPTION;
                 END;
               END;
@@ -383,7 +383,7 @@ OBJECT Dataport 50005 DMTExport
                 //mask leading "
                 IF (STRLEN(_CurrFldRef.OPTIONCAPTION)>1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
                   _ValueAsText.ADDTEXT('" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2));
-                end else begin
+                END ELSE BEGIN
                   _ValueAsText.ADDTEXT(_CurrFldRef.OPTIONCAPTION);
                 END;
               END;
@@ -415,7 +415,7 @@ OBJECT Dataport 50005 DMTExport
 
       ADOStream.Open;
       //ADOStream.Charset('iso-8859-1'); //UTF-8, default is unicode
-
+      ADOStream.Charset('utf-8');
       FieldSeparator[1] := 9; // TAB
       ExportWithTitleLine := TRUE;
     END;

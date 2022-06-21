@@ -18,7 +18,7 @@ codeunit 81125 "DMTObjectGenerator"
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
-        C.AppendLine('    TextEncoding = UTF16;');
+        C.AppendLine('    TextEncoding = UTF8;');
         C.AppendLine('    Format = VariableText;');
         C.AppendLine('    FormatEvaluate = Xml;');
         C.AppendLine('');
@@ -265,6 +265,7 @@ codeunit 81125 "DMTObjectGenerator"
 
     local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text
     begin
+        exit(FieldCaption);
         if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
             exit(FieldCaption);
         result := FieldCaption;
