@@ -1,4 +1,4 @@
-codeunit 81125 "DMTObjectGenerator"
+codeunit 110005 "DMTObjectGenerator"
 {
     procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
     var
@@ -196,7 +196,7 @@ codeunit 81125 "DMTObjectGenerator"
         allFilesTok: Label 'All Files (*.*)|*.*';
         oStr: OutStream;
     begin
-        tempBlob.CreateOutStream(oStr);
+        tempBlob.CreateOutStream(oStr, TextEncoding::UTF8);  // Import / Export as UTF-8
         oStr.WriteText(Content.ToText());
         tempBlob.CreateInStream(iStr);
         DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
