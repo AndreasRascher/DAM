@@ -96,8 +96,8 @@ table 81128 "DMTTable"
             BlankZero = true;
             trigger OnValidate()
             begin
-                if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
-                    Error(ObjectIDNotInIDRangeErr);
+                // if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
+                //     Error(ObjectIDNotInIDRangeErr);
             end;
         }
         field(54; "Buffer Table ID"; Integer)
@@ -108,8 +108,8 @@ table 81128 "DMTTable"
             BlankZero = true;
             trigger OnValidate()
             begin
-                if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
-                    Error(ObjectIDNotInIDRangeErr);
+                // if not ("Import XMLPort ID" in [50000 .. 99999, 0]) then
+                //     Error(ObjectIDNotInIDRangeErr);
             end;
         }
         field(60; "Use OnInsert Trigger"; boolean)
@@ -403,12 +403,11 @@ table 81128 "DMTTable"
         Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "NAV Src.Table No.");
     end;
 
-    procedure DownloadAllALBufferTableFiles(var DMTTable: Record DMTTable)
+    procedure DownloadAllALDataMigrationObjects(var DMTTable: Record DMTTable)
     var
         DMTTable2: Record DMTTable;
         DataCompression: Codeunit "Data Compression";
         ObjGen: Codeunit DMTObjectGenerator;
-        FileMgt: Codeunit "File Management";
         FileBlob: Codeunit "Temp Blob";
         IStr: InStream;
         OStr: OutStream;
@@ -426,8 +425,7 @@ table 81128 "DMTTable"
                 //Table
                 Clear(FileBlob);
                 FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                // OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
-                FileMgt.Ansi2SystemEncodingTxt(OStr, ObjGen.CreateALTable(DMTTable2).ToText());
+                OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
                 FileBlob.CreateInStream(IStr, DefaultTextEncoding);
                 DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
                 //XMLPort
