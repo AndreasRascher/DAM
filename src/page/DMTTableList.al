@@ -94,7 +94,7 @@ page 81133 "DMTTableList"
                 begin
                     if DMTTable.FindSet() then
                         repeat
-                            DMTTable.DownloadAllALBufferTableFiles(Rec);
+                            DMTTable.DownloadAllALDataMigrationObjects(Rec);
                         until DMTTable.Next() = 0;
                 end;
             }
