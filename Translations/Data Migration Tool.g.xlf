@@ -2128,6 +2128,41 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTDataSourceType - EnumValue NAV CSV Export - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 3703598467 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All Files (*.*)|*.*</source>
+          <note from="Developer" annotates="general" priority="2">Alle Dateien (*.*)|*.*</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue All - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 487643378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CSV Files|*.csv</source>
+          <note from="Developer" annotates="general" priority="2">CSV Dateien|*.csv</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue CSV - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 1819335129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Excel Files (*.xlsx)|*.xlsx</source>
+          <note from="Developer" annotates="general" priority="2">Excel-Dateien (*.xlsx)|*.xlsx</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Excel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2768277382 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</source>
+          <note from="Developer" annotates="general" priority="2">SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue RDL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 3766960612 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Text Files (*.txt)|*.txt</source>
+          <note from="Developer" annotates="general" priority="2">Textdateien (*.txt)|*.txt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Txt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 429697219 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>XML Fxiles (*.xml)|*.xml</source>
+          <note from="Developer" annotates="general" priority="2">XML-Dateien (*.xml)|*.xml</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Xml - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2814408493 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ZIP-Dateien (*.zip)|*.zip</source>
+          <note from="Developer" annotates="general" priority="2">ZIP Files (*.zip)|*.zip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
+        </trans-unit>
       </group>
     </body>
   </file>

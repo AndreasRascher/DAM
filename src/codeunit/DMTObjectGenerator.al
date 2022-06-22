@@ -193,13 +193,12 @@ codeunit 81125 "DMTObjectGenerator"
     var
         tempBlob: Codeunit "Temp Blob";
         iStr: InStream;
-        allFilesTok: Label 'All Files (*.*)|*.*';
         oStr: OutStream;
     begin
         tempBlob.CreateOutStream(oStr);
         oStr.WriteText(Content.ToText());
         tempBlob.CreateInStream(iStr);
-        DownloadFromStream(iStr, 'Download', 'ToFolder', allFilesTok, toFileName);
+        DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
     local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
@@ -266,15 +265,15 @@ codeunit 81125 "DMTObjectGenerator"
     local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text
     begin
         exit(FieldCaption);
-        if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
-            exit(FieldCaption);
-        result := FieldCaption;
-        result := result.Replace('ä', 'ae');
-        result := result.Replace('Ä', 'AE');
-        result := result.Replace('Ö', 'OE');
-        result := result.Replace('ö', 'oe');
-        result := result.Replace('Ü', 'UE');
-        result := result.Replace('ü', 'ue');
-        result := result.Replace('ß', 'ss');
+        // if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
+        //     exit(FieldCaption);
+        // result := FieldCaption;
+        // result := result.Replace('ä', 'ae');
+        // result := result.Replace('Ä', 'AE');
+        // result := result.Replace('Ö', 'OE');
+        // result := result.Replace('ö', 'oe');
+        // result := result.Replace('Ü', 'UE');
+        // result := result.Replace('ü', 'ue');
+        // result := result.Replace('ß', 'ss');
     end;
 }

@@ -2053,7 +2053,6 @@
           <source>StoredTableView</source>
           <target>Gespeicherter Tabellenfilter</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTask - Field StoredTableView - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1472721356 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2102,7 +2101,6 @@
           <source>Import finished</source>
           <target>Import abgeschlossen</target>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2217,7 +2215,6 @@
           <source>Select which session to stop:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt;- &lt;Login Datetime&gt;</source>
           <target>Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</target>
           <note from="Developer" annotates="general" priority="2">Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopSessionInstructionLbl</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 2138558048 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2326,7 +2323,6 @@
           <source>Old Version Fields</source>
           <target>Felder alte Version</target>
           <note from="Developer" annotates="general" priority="2">Felder alte Version</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTOldVersionFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2441,7 +2437,6 @@
           <source>DMT Table FactBox</source>
           <target>DMT Tabellen FactBox</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableFactBox - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2558,6 +2553,48 @@
 </target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTDataSourceType - EnumValue NAV CSV Export - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 1972928440 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All Files (*.*)|*.*</source>
+          <target>Alle Dateien (*.*)|*.*</target>
+          <note from="Developer" annotates="general" priority="2">Alle Dateien (*.*)|*.*</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue AllFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2734481158 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Excel Files (*.xlsx)|*.xlsx</source>
+          <target>Excel-Dateien (*.xlsx)|*.xlsx</target>
+          <note from="Developer" annotates="general" priority="2">Excel-Dateien (*.xlsx)|*.xlsx</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ExcelFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2997419313 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</source>
+          <target>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</target>
+          <note from="Developer" annotates="general" priority="2">SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue RDLFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 3165677311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Text Files (*.txt)|*.txt</source>
+          <target>Textdateien (*.txt)|*.txt</target>
+          <note from="Developer" annotates="general" priority="2">Textdateien (*.txt)|*.txt</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue TxtFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 3644727160 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>XML Files (*.xml)|*.xml</source>
+          <target>[XML-Dateien (*.xml)|*.xml</target>
+          <note from="Developer" annotates="general" priority="2">XML-Dateien (*.xml)|*.xml</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue XmlFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 154964242 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ZIP-Dateien (*.zip)|*.zip</source>
+          <target>ZIP Files (*.zip)|*.zip</target>
+          <note from="Developer" annotates="general" priority="2">ZIP Files (*.zip)|*.zip</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIPFiles - Property Caption</note>
         </trans-unit>
       </group>
     </body>

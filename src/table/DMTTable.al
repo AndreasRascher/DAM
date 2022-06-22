@@ -350,7 +350,6 @@ table 81128 "DMTTable"
         end;
     end;
 
-
     procedure TryFindExportDataFile() Success: Boolean
     var
         DMTSetup: Record "DMTSetup";
@@ -414,7 +413,6 @@ table 81128 "DMTTable"
         IStr: InStream;
         OStr: OutStream;
         toFileName: text;
-        ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
         DefaultTextEncoding: TextEncoding;
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
@@ -445,7 +443,7 @@ table 81128 "DMTTable"
         DataCompression.SaveZipArchive(OStr);
         FileBlob.CreateInStream(IStr, DefaultTextEncoding);
         toFileName := 'BufferTablesAndXMLPorts.zip';
-        DownloadFromStream(iStr, 'Download', 'ToFolder', ZIPFileTypeTok, toFileName);
+        DownloadFromStream(iStr, 'Download', 'ToFolder', format(Enum::DMTFileFilter::ZIP), toFileName);
     end;
 
     procedure SaveTableLastView(TableView: Text)
