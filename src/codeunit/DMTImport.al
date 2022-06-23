@@ -1,6 +1,6 @@
 codeunit 81123 DMTImport
 {
-    procedure StartImport(var DMTTable: Record DMTTable; NoUserInteraction_New: Boolean)
+    procedure StartImport(var DMTTable: Record DMTTable; NoUserInteraction_New: Boolean; UseToFieldFilter: Boolean)
     var
         start: DateTime;
     begin
@@ -9,13 +9,13 @@ codeunit 81123 DMTImport
         CheckBufferTableIsNotEmpty(DMTTable);
         CheckMappedFieldsExist(DMTTable);
 
-        StartImportForCustomBufferTable(DMTTable);
-        StartImportForGenericBufferTable(DMTTable);
+        StartImportForCustomBufferTable(DMTTable, UseToFieldFilter);
+        StartImportForGenericBufferTable(DMTTable, UseToFieldFilter);
 
         UpdateProcessingTime(DMTTable, start);
     end;
 
-    procedure ProcessFullBuffer(var DMTTable: Record DMTTable)
+    procedure ProcessFullBuffer(var DMTTable: Record DMTTable; UseToFieldFilter: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
         TempDMTField_COLLECTION: Record "DMTField" temporary;
@@ -25,7 +25,7 @@ codeunit 81123 DMTImport
         NonKeyFieldsFilter: Text;
     begin
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTTable);
-        LoadFieldMapping(DMTTable, TempDMTField_COLLECTION);
+        LoadFieldMapping(DMTTable, UseToFieldFilter, TempDMTField_COLLECTION);
 
         // Buffer loop
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
@@ -110,7 +110,7 @@ codeunit 81123 DMTImport
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure LoadFieldMapping(table: Record DMTTable; var TempDMTFields_FOUND: record "DMTField" temporary) OK: Boolean
+    procedure LoadFieldMapping(table: Record DMTTable; UseToFieldFilter: Boolean; var TempDMTFields_FOUND: record "DMTField" temporary) OK: Boolean
     var
         field: Record "DMTField";
         tempDMTFields: record "DMTField" temporary;
@@ -119,6 +119,8 @@ codeunit 81123 DMTImport
         field.SetFilter("Processing Action", '<>%1', field."Processing Action"::Ignore);
         if table.BufferTableType = table.BufferTableType::"Custom Buffer Table per file" then
             field.SetFilter("From Field No.", '<>0');
+        if UseToFieldFilter then
+            field.Setfilter("To Field No.", table.ReadLastFieldUpdateSelection());
         field.FindSet(false, false);  // raise error if empty
         repeat
             tempDMTFields := field;
@@ -264,13 +266,13 @@ codeunit 81123 DMTImport
 
         if BufferTableView = '' then begin
             ;
-            if DMTTable.LoadTableLastView() <> '' then
-                BufferRef.SetView(DMTTable.LoadTableLastView());
+            if DMTTable.ReadTableLastView() <> '' then
+                BufferRef.SetView(DMTTable.ReadTableLastView());
 
             if not ShowRequestPageFilterDialog(BufferRef, DMTTable) then
                 exit;
             if BufferRef.HasFilter then begin
-                DMTTable.SaveTableLastView(BufferRef.GetView());
+                DMTTable.WriteTableLastView(BufferRef.GetView());
                 Commit();
             end;
         end else begin
@@ -279,18 +281,18 @@ codeunit 81123 DMTImport
         DMTTable.Find('=');
     end;
 
-    local procedure StartImportForCustomBufferTable(var DMTTable: Record DMTTable)
+    local procedure StartImportForCustomBufferTable(var DMTTable: Record DMTTable; UseToFieldFilter_New: Boolean)
     begin
         if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Custom Buffer Table per file" then
             exit;
-        ProcessFullBuffer(DMTTable);
+        ProcessFullBuffer(DMTTable, UseToFieldFilter_New);
     end;
 
-    local procedure StartImportForGenericBufferTable(var DMTTable: Record DMTTable)
+    local procedure StartImportForGenericBufferTable(var DMTTable: Record DMTTable; UseToFieldFilter_New: Boolean)
     begin
         if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Generic Buffer Table for all Files" then
             exit;
-        ProcessFullBuffer(DMTTable);
+        ProcessFullBuffer(DMTTable, UseToFieldFilter_New);
     end;
 
     local procedure UpdateProcessingTime(var DMTTable: Record DMTTable; start: DateTime)

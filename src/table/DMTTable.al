@@ -134,6 +134,7 @@ table 81128 "DMTTable"
         field(102; LastView; Blob) { }
         field(103; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
         field(104; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+        field(105; LastFieldUpdateSelection; Blob) { }
 
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
@@ -444,7 +445,7 @@ table 81128 "DMTTable"
         DownloadFromStream(iStr, 'Download', 'ToFolder', format(Enum::DMTFileFilter::ZIP), toFileName);
     end;
 
-    procedure SaveTableLastView(TableView: Text)
+    procedure WriteTableLastView(TableView: Text)
     var
         OStr: OutStream;
     begin
@@ -455,7 +456,7 @@ table 81128 "DMTTable"
         Rec.Modify();
     end;
 
-    procedure LoadTableLastView() TableView: Text
+    procedure ReadTableLastView() TableView: Text
     var
         IStr: InStream;
     begin
@@ -463,6 +464,27 @@ table 81128 "DMTTable"
         if not rec.LastView.HasValue then exit('');
         rec.LastView.CreateInStream(IStr);
         IStr.ReadText(TableView);
+    end;
+
+    procedure WriteLastFieldUpdateSelection(LastFieldUpdateSelectionAsText: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec.LastFieldUpdateSelection);
+        Rec.Modify();
+        rec.LastFieldUpdateSelection.CreateOutStream(Ostr);
+        OStr.WriteText(LastFieldUpdateSelectionAsText);
+        Rec.Modify();
+    end;
+
+    procedure ReadLastFieldUpdateSelection() LastFieldUpdateSelectionAsText: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields(LastFieldUpdateSelection);
+        if not rec.LastFieldUpdateSelection.HasValue then exit('');
+        rec.LastFieldUpdateSelection.CreateInStream(IStr);
+        IStr.ReadText(LastFieldUpdateSelectionAsText);
     end;
 
     procedure CustomBufferTableExits(): boolean

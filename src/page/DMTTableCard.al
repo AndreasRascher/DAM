@@ -113,7 +113,31 @@ page 81131 "DMTTableCard"
                 var
                     DMTImport: Codeunit DMTImport;
                 begin
-                    DMTImport.StartImport(Rec, false);
+                    DMTImport.StartImport(Rec, false, false);
+                end;
+            }
+            action(UpdateFields)
+            {
+                Caption = 'Update Fields', Comment = 'Felder aktualisieren';
+                ApplicationArea = All;
+                Image = TransferOrder;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    Field: Record DMTField;
+                    Import: Codeunit DMTImport;
+                    UpdateTask: Page DMTUpdateTask;
+                begin
+                    Field.SetRange("To Table No.", Rec."To Table ID");
+                    UpdateTask.SetTableView(Field);
+                    UpdateTask.SetToFieldNoFilter(Rec.ReadLastFieldUpdateSelection());
+                    if UpdateTask.RunModal() = Action::LookupOK then begin
+                        Import.StartImport(Rec, false, true);
+                    end;
                 end;
             }
             action(RetryBufferRecordsWithError)

@@ -1638,6 +1638,11 @@
           <note from="Developer" annotates="general" priority="2">Nur neue Datensätze importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Import Only New Records - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LastFieldUpdateSelection</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastFieldUpdateSelection - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3480591641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LastView</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1742,11 +1747,6 @@
           <source>\Time Remaining: ########################################5#</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_TimeRemainingTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2483073149 - Method 2787516006 - NamedType 1342847624" size-unit="char" translate="yes" xml:space="preserve">
-          <source>All Files (*.*)|*.*</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjectGenerator - Method DownloadFile - NamedType allFilesTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 2885896688 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
@@ -2028,6 +2028,11 @@
           <note from="Developer" annotates="general" priority="2">In Zieltabelle übertragen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action TransferToTargetTable - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 544469732 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Fields</source>
+          <note from="Developer" annotates="general" priority="2">Felder aktualisieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action UpdateFields - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3244585722 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Table FactBox</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2072,6 +2077,11 @@
           <source>Import to target tables (marked lines)</source>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action TransferSelectedToTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1136506379 - Control 90423963 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTUpdateTask - Control Selected - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Dataport (until NAV2009)</source>

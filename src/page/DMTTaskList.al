@@ -113,7 +113,7 @@ page 81134 "DMTTaskList"
                     If not Rec.FindRelated(DMTTable) then exit;
                     Start := CurrentDateTime;
                     DMTImport.SetBufferTableView(Rec.GetStoredTableView());
-                    DMTImport.ProcessFullBuffer(DMTTable);
+                    DMTImport.ProcessFullBuffer(DMTTable, false);
                     DMTTask.get(DMTTask.RecordId);
                     DMTTask."Processing Time" := CurrentDateTime - Start;
                     DMTTask.Modify();
