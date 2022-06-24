@@ -236,8 +236,8 @@ table 81128 "DMTTable"
         DMTObjectGenerator: Codeunit DMTObjectGenerator;
     begin
         DMTObjectGenerator.DownloadFile(
-            DMTObjectGenerator.CreateALTable(Rec),
-            Rec.GetALBufferTableName());
+        DMTObjectGenerator.CreateALTable(Rec),
+        Rec.GetALBufferTableName());
     end;
 
     procedure DownloadALXMLPort()
@@ -287,9 +287,9 @@ table 81128 "DMTTable"
         // Collect used numbers
         if DMTTable.FindSet() then
             repeat
-                if DMTTable."Import XMLPort ID" <> 0 then
-                    if AvailableXMLPorts.Contains(DMTTable."Import XMLPort ID") then
-                        AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
+                    if DMTTable."Import XMLPort ID" <> 0 then
+                        if AvailableXMLPorts.Contains(DMTTable."Import XMLPort ID") then
+                            AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
                 if DMTTable."Buffer Table ID" <> 0 then
                     if AvailableTables.Contains(DMTTable."Buffer Table ID") then
                         AvailableTables.Remove(DMTTable."Buffer Table ID");
@@ -422,20 +422,20 @@ table 81128 "DMTTable"
         DMTTable2.Copy(DMTTable);
         if DMTTable2.FindSet() then begin
             DataCompression.CreateZipArchive();
-            repeat
-                //Table
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
-                //XMLPort
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
-            until DMTTable2.Next() = 0;
+                                        repeat
+                                            //Table
+                                            Clear(FileBlob);
+                                            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                                            OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
+                                            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                                            DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
+                                            //XMLPort
+                                            Clear(FileBlob);
+                                            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                                            OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
+                                            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                                            DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
+                                        until DMTTable2.Next() = 0;
         end;
         Clear(FileBlob);
         FileBlob.CreateOutStream(OStr, DefaultTextEncoding);

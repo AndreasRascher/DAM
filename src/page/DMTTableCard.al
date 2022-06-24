@@ -128,15 +128,18 @@ page 81131 "DMTTableCard"
 
                 trigger OnAction()
                 var
-                    Field: Record DMTField;
                     Import: Codeunit DMTImport;
                     UpdateTask: Page DMTUpdateTask;
                 begin
-                    Field.SetRange("To Table No.", Rec."To Table ID");
-                    UpdateTask.SetTableView(Field);
-                    UpdateTask.SetToFieldNoFilter(Rec.ReadLastFieldUpdateSelection());
+                    // Show only Non-Key Fields for selection
+                    UpdateTask.LookupMode(true);
+                    UpdateTask.Editable := true;
+                    if not UpdateTask.InitFieldSelection(Rec) then
+                        exit;
                     if UpdateTask.RunModal() = Action::LookupOK then begin
+                        Rec.WriteLastFieldUpdateSelection(UpdateTask.GetToFieldNoFilter());
                         Import.StartImport(Rec, false, true);
+
                     end;
                 end;
             }

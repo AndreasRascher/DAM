@@ -5,3 +5,4 @@
 *.app
 src/GEN/*.al
 .snapshots/*
+.vscode/launch.json

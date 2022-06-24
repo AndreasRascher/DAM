@@ -235,7 +235,7 @@ codeunit 81123 DMTImport
                 DMTField.setfilter("To Field No.", KeyFieldsFilter);
                 if DMTField.FindSet() then
                     repeat
-                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
+                            FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
                     until DMTField.Next() = 0;
             end;
         end else begin
@@ -250,10 +250,10 @@ codeunit 81123 DMTImport
     end;
 
     procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text; DMTTable: Record DMTTable)
-    // var
-    //     APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
+    var
+        APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
-        // APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
+        APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
         BuffKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", true /*include*/);
         BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", false /*exclude*/);
     end;
