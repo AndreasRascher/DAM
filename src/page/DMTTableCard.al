@@ -164,7 +164,7 @@ page 81131 "DMTTableCard"
                     while DMTErrorLogQry.Read() do begin
                         RecIdList.Add(DMTErrorLogQry.FromID);
                     end;
-                    DMTImport.ProcessFullBuffer(RecIdList, Rec);
+                    DMTImport.ProcessFullBuffer(RecIdList, Rec, false);
                     Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
                     Rec.LastImportToTargetAt := CurrentDateTime;
