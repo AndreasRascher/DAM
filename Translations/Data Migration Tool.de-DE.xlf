@@ -301,7 +301,6 @@
           <source>Validation Order</source>
           <target>Reihenfolge Validierung</target>
           <note from="Developer" annotates="general" priority="2">Reihenfolge Validierung</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Validation Order - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1997,9 +1996,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Import Only New Records - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>LastFieldUpdateSelection</source>
+          <source>Last Field Update Selection</source>
           <target>Letzte Feldupdate Feldauswahl</target>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">Auswahl letzes Feldupdate</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastFieldUpdateSelection - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3480591641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2493,6 +2493,20 @@
           <target>Felder aktualisieren</target>
           <note from="Developer" annotates="general" priority="2">Felder aktualisieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action UpdateFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 2625649774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Init Target Fields</source>
+          <target>Feldliste initialisieren</target>
+          <note from="Developer" annotates="general" priority="2">Feldliste initialisieren</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action InitTargetFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Popose Matching Fields</source>
+          <target>Feldzuordnung vorschlagen</target>
+          <note from="Developer" annotates="general" priority="2">Feldzuordnung vorschlagen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3244585722 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Table FactBox</source>

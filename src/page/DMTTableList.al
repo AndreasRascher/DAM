@@ -29,7 +29,15 @@ page 81133 "DMTTableList"
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
-                field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec)) { ApplicationArea = All; Caption = 'Qty.Lines In Trgt. Table'; }
+                field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))
+                {
+                    ApplicationArea = All;
+                    Caption = 'Qty.Lines In Trgt. Table';
+                    trigger OnLookup(var Text: Text): Boolean
+                    begin
+                        Rec.ShowTableContent(Rec."To Table ID");
+                    end;
+                }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
             }
         }
@@ -74,10 +82,10 @@ page 81133 "DMTTableList"
                     if DMTTable.FindSet() then begin
                         Start := CurrentDateTime;
                         Progress.Open(ImportFilesProgressMsg);
-                        repeat
-                            Progress.Update(1, DMTTable."Dest.Table Caption");
-                            DMTTable.ImportToBufferTable();
-                        until DMTTable.Next() = 0;
+                                                   repeat
+                                                       Progress.Update(1, DMTTable."Dest.Table Caption");
+                                                       DMTTable.ImportToBufferTable();
+                                                   until DMTTable.Next() = 0;
                         Progress.Close();
                         Message(FinishedMsg, CurrentDateTime - Start);
                     end;
@@ -93,9 +101,9 @@ page 81133 "DMTTableList"
                     DMTTable: Record DMTTable;
                 begin
                     if DMTTable.FindSet() then
-                        repeat
-                            DMTTable.DownloadAllALDataMigrationObjects(Rec);
-                        until DMTTable.Next() = 0;
+                            repeat
+                                DMTTable.DownloadAllALDataMigrationObjects(Rec);
+                            until DMTTable.Next() = 0;
                 end;
             }
             action(TransferSelectedToTargetTable)

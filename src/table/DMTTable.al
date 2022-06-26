@@ -261,9 +261,17 @@ table 81128 "DMTTable"
 
         if Rec.BufferTableType = Rec.BufferTableType::"One Buffer Table per file" then begin
             if Rec."Buffer Table ID" = 0 then exit(false);
-            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
+            ShowTableContent(Rec."Buffer Table ID");
         end;
+    end;
 
+    internal procedure ShowTableContent(TableID: Integer) OK: Boolean
+    var
+        TableMeta: record "Table Metadata";
+    begin
+        OK := TableMeta.Get(TableID);
+        if ok then
+            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
 
     local procedure ProposeObjectIDs()

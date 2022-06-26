@@ -264,7 +264,7 @@ codeunit 110005 "DMTObjectGenerator"
 
     local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text
     begin
-        exit(FieldCaption);
+        result := FieldCaption;
         // if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
         //     exit(FieldCaption);
         // result := FieldCaption;
