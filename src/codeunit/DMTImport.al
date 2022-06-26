@@ -36,7 +36,7 @@ codeunit 81123 DMTImport
             GenBuffTable.FilterGroup(0);
             BufferRef.GetTable(GenBuffTable);
         end else
-            if DMTTable.BufferTableType = DMTTable.BufferTableType::"Custom Buffer Table per file" then begin
+            if DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file" then begin
                 BufferRef.Open(DMTTable."Buffer Table ID");
             end;
         EditView(BufferRef, DMTTable);
@@ -117,7 +117,7 @@ codeunit 81123 DMTImport
     begin
         field.FilterBy(table);
         field.SetFilter("Processing Action", '<>%1', field."Processing Action"::Ignore);
-        if table.BufferTableType = table.BufferTableType::"Custom Buffer Table per file" then
+        if table.BufferTableType = table.BufferTableType::"One Buffer Table per file" then
             field.SetFilter("From Field No.", '<>0');
         if UseToFieldFilter then
             field.Setfilter("To Field No.", table.ReadLastFieldUpdateSelection());
@@ -287,7 +287,7 @@ codeunit 81123 DMTImport
 
     local procedure StartImportForCustomBufferTable(var DMTTable: Record DMTTable; UseToFieldFilter_New: Boolean)
     begin
-        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Custom Buffer Table per file" then
+        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"One Buffer Table per file" then
             exit;
         ProcessFullBuffer(DMTTable, UseToFieldFilter_New);
     end;
@@ -337,7 +337,7 @@ codeunit 81123 DMTImport
         RecRef: RecordRef;
     begin
         case DMTTable.BufferTableType of
-            DMTTable.BufferTableType::"Custom Buffer Table per file":
+            DMTTable.BufferTableType::"One Buffer Table per file":
                 begin
                     RecRef.OPEN(DMTTable."Buffer Table ID");
                     if RecRef.IsEmpty then

@@ -179,7 +179,7 @@ table 81122 "DMTField"
         OldFieldName: text;
         ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Custom Buffer Table per file") then begin
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file") then begin
             DMTTable.TestField("Buffer Table ID");
             if not DMTTable.CustomBufferTableExits() then begin
                 Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
@@ -200,7 +200,7 @@ table 81122 "DMTField"
             Clear(DMTFields2);
             if DMTFields.FindSet(false, false) then
                 repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                        TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
                     SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
                     SourceField.SetRange(Enabled, true);
                     SourceField.SetRange(Class, SourceField.Class::Normal);
@@ -226,7 +226,7 @@ table 81122 "DMTField"
             DMTFields.setrange("From Field No.", 0);
             if DMTFields.FindSet(false, false) then
                 repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                        TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
                     // 1.Try - Match by Name
                     FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
                     if FoundAtIndex = 0 then begin
@@ -270,7 +270,7 @@ table 81122 "DMTField"
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
         if DMTFields.FindSet(false, false) then
             repeat
-                TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
                 DMTFields2 := DMTFields;
                 case true of
                     TargetField.FieldName IN ['Global Dimension 1 Code',

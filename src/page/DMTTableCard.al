@@ -24,7 +24,7 @@ page 81131 "DMTTableCard"
                 }
                 field(DataFilePath; Rec.DataFilePath)
                 {
-                    CaptionML = DEU = 'Datendatei Pfad', ENU = 'Data File Path';
+                    Caption = 'Data File Path', Comment = 'Datendatei Pfad';
                     ApplicationArea = All;
                     Importance = Promoted;
                 }
@@ -145,7 +145,7 @@ page 81131 "DMTTableCard"
             }
             action(RetryBufferRecordsWithError)
             {
-                CaptionML = DEU = 'Fehler erneut verarbeiten';
+                Caption = 'Retry Records With Error', Comment = 'Fehler erneut verarbeiten';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -233,7 +233,7 @@ page 81131 "DMTTableCard"
 
     local procedure EnableControls()
     begin
-        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Custom Buffer Table per file");
+        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"One Buffer Table per file");
         LinesVisible := true;
         // LinesVisible := (Rec."To Table ID" <> 0) and
         //                 (Rec."No.of Records in Buffer Table" > 0) and
@@ -245,7 +245,7 @@ page 81131 "DMTTableCard"
     local procedure GetCaption(): Text
     begin
         case Rec.BufferTableType of
-            Rec.BufferTableType::"Custom Buffer Table per file":
+            Rec.BufferTableType::"One Buffer Table per file":
                 exit(Rec."Dest.Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 exit(Rec.DataFilePath);
