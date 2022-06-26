@@ -133,33 +133,34 @@ codeunit 81123 DMTImport
     procedure ProcessSingleBufferRecord(BufferRef: RecordRef; DMTTable: Record DMTTable; IsUpdateTask: Boolean; var TempDMTField_COLLECTION: Record "DMTField" temporary)
     var
         DMTErrorLog: Record DMTErrorLog;
-        TargetRef, TargetRef2 : RecordRef;
+        TmpTargetRef, TargetRef2 : RecordRef;
         ErrorsExists: Boolean;
         Success: Boolean;
     begin
-
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        TargetRef.OPEN(DMTTable."To Table ID", TRUE);
+        TmpTargetRef.OPEN(DMTTable."To Table ID", TRUE);
+
         ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
 
-        AssignKeyFields(BufferRef, TargetRef, TempDMTField_COLLECTION);
-        IF TargetRef.Insert(false) then;
+        AssignKeyFields(BufferRef, TmpTargetRef, TempDMTField_COLLECTION);
+        if TmpTargetRef.Insert(false) then;
+
         if DMTTable."Import Only New Records" then
-            if TargetRef2.Get(TargetRef.RecordId) then begin
+            if TargetRef2.Get(TmpTargetRef.RecordId) then begin
                 DMTMgt.UpdateResultQty(true, false);
                 exit;
             end;
         // When Update: Copy Fields from existing record to temp RecRef
         if IsUpdateTask then begin
-            if TargetRef2.Get(TargetRef.RecordId) then
-                DMTMgt.CopyRecordRef(TargetRef2, TargetRef);
+            if TargetRef2.Get(TmpTargetRef.RecordId) then
+                DMTMgt.CopyRecordRef(TargetRef2, TmpTargetRef);
         end;
 
-        ValidateNonKeyFieldsAndModify(BufferRef, TargetRef, TempDMTField_COLLECTION);
+        ValidateNonKeyFieldsAndModify(BufferRef, TmpTargetRef, TempDMTField_COLLECTION);
 
         ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
         if not ErrorsExists then begin
-            Success := DMTMgt.InsertRecFromTmp(BufferRef, TargetRef, DMTTable."Use OnInsert Trigger");
+            Success := DMTMgt.InsertRecFromTmp(BufferRef, TmpTargetRef, DMTTable."Use OnInsert Trigger");
         end;
 
         DMTMgt.UpdateResultQty(Success, TRUE);
@@ -246,11 +247,11 @@ codeunit 81123 DMTImport
             // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
             PrimaryKeyRef := BufferRef.KEYINDEX(1);
             for Index := 1 TO PrimaryKeyRef.FIELDCOUNT DO
-                FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FIELDINDEX(Index).NUMBER);
+                FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FieldIndex(Index).NUMBER);
         end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
         Continue := FPBuilder.RUNMODAL();
-        BufferRef.SETVIEW(FPBuilder.GETVIEW(BufferRef.CAPTION));
+        BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
     end;
 
     procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text; DMTTable: Record DMTTable)

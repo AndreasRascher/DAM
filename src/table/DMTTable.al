@@ -512,6 +512,34 @@ table 81128 "DMTTable"
             Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::Imported;
     end;
 
+    internal procedure InitOrRefreshFieldSortOrder(): Boolean
+    var
+        DMTField: Record DMTField;
+        RecID: RecordId;
+        NewSortingValues: Dictionary of [RecordId, Integer];
+        i: Integer;
+    begin
+        if Rec."To Table ID" = 0 then
+            exit(false);
+        if not DMTField.FilterBy(Rec) then
+            exit(false);
+        DMTField.SetCurrentKey("Validation Order");
+        if not DMTField.FindSet() then exit(false);
+        repeat
+            i += 1;
+            if DMTField."Validation Order" <> i * 10000 then begin
+                NewSortingValues.Add(DMTField.RecordId, i * 10000);
+            end;
+        until DMTField.Next() = 0;
+
+        foreach RecID in NewSortingValues.Keys do begin
+            DMTField.Get(RecID);
+            DMTField."Validation Order" := NewSortingValues.Get(RecID);
+            DMTField.Modify();
+        end;
+    end;
+
+
     var
         ObjectIDNotInIDRangeErr: TextConst DEU = 'Die Objekt ID muss im Bereich 50000 bis 99999 liegen.',
                                             ENU = 'The object ID must be in the range 50000 to 99999.';

@@ -214,6 +214,11 @@ page 81131 "DMTTableCard"
         }
     }
 
+    trigger OnOpenPage()
+    begin
+        Rec.InitOrRefreshFieldSortOrder();
+    end;
+
     trigger OnAfterGetCurrRecord()
     begin
         ImportXMLPortIDStyle := 'Unfavorable';

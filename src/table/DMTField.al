@@ -124,11 +124,16 @@ table 81122 "DMTField"
             Caption = 'Replacements Code', comment = 'Ersetzungen Code';
             TableRelation = DMTReplacementsHeader.Code;
         }
+        field(102; "Validation Order"; Integer)
+        {
+            Caption = 'Validation Order', comment = 'Reihenfolge Validierung';
+        }
     }
 
     keys
     {
         key(PK; "To Table No.", "To Field No.") { Clustered = true; }
+        key(ValidationOrder; "Validation Order") { }
     }
     fieldgroups
     {
@@ -160,6 +165,7 @@ table 81122 "DMTField"
                         DMTFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
                         DMTFields_NEW."To Table No." := DMTTable."To Table ID";
                         DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Transfer;
+                        DMTFields_NEW."Validation Order" := i * 10000;
                         DMTFields_NEW.Insert(true);
                     end;
                 end;
@@ -199,24 +205,24 @@ table 81122 "DMTField"
                 end;
             Clear(DMTFields2);
             if DMTFields.FindSet(false, false) then
-                repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
-                    SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
-                    SourceField.SetRange(Enabled, true);
-                    SourceField.SetRange(Class, SourceField.Class::Normal);
-                    SourceField.SetRange(FieldName, TargetField.FieldName);
-                    Found := SourceField.FindFirst();
-                    if not Found then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then begin
-                            SourceField.SetRange(FieldName, OldFieldName);
-                            Found := SourceField.FindFirst();
+                    repeat
+                        TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                        SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
+                        SourceField.SetRange(Enabled, true);
+                        SourceField.SetRange(Class, SourceField.Class::Normal);
+                        SourceField.SetRange(FieldName, TargetField.FieldName);
+                        Found := SourceField.FindFirst();
+                        if not Found then
+                            if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then begin
+                                SourceField.SetRange(FieldName, OldFieldName);
+                                Found := SourceField.FindFirst();
+                            end;
+                        if Found then begin
+                            DMTFields2 := DMTFields;
+                            DMTFields2.Validate("From Field No.", SourceField."No.");
+                            DMTFields2.Modify();
                         end;
-                    if Found then begin
-                        DMTFields2 := DMTFields;
-                        DMTFields2.Validate("From Field No.", SourceField."No.");
-                        DMTFields2.Modify();
-                    end;
-                until DMTFields.Next() = 0;
+                    until DMTFields.Next() = 0;
         end;
 
         if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files") then begin
@@ -225,31 +231,31 @@ table 81122 "DMTField"
             DMTFields.FilterBy(DMTTable);
             DMTFields.setrange("From Field No.", 0);
             if DMTFields.FindSet(false, false) then
-                repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
-                    // 1.Try - Match by Name
-                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
-                    if FoundAtIndex = 0 then begin
-                        if DMTTable."To Table ID" = Database::"Payment Terms" then
-                            case TargetField."Field Caption" of
-                                //'Rabatt in %' -> 'Skonto %'
-                                'Skonto %':
-                                    FoundAtIndex := BuffTableCaptions.Values.IndexOf('Rabatt in %');
-                            end;
-                    end;
-                    // 2.Try - Match by known Name Changes
-                    if FoundAtIndex = 0 then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then
-                            FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
-                    if FoundAtIndex <> 0 then begin
-                        DMTFields2 := DMTFields;
-                        // Buffer Fields Start from 1000
-                        DMTFields2.Validate("From Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
-                        DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
+                    repeat
+                        TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                        // 1.Try - Match by Name
+                        FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
+                        if FoundAtIndex = 0 then begin
+                            if DMTTable."To Table ID" = Database::"Payment Terms" then
+                                case TargetField."Field Caption" of
+                                    //'Rabatt in %' -> 'Skonto %'
+                                    'Skonto %':
+                                        FoundAtIndex := BuffTableCaptions.Values.IndexOf('Rabatt in %');
+                                end;
+                        end;
+                        // 2.Try - Match by known Name Changes
+                        if FoundAtIndex = 0 then
+                            if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then
+                                FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
+                        if FoundAtIndex <> 0 then begin
+                            DMTFields2 := DMTFields;
+                            // Buffer Fields Start from 1000
+                            DMTFields2.Validate("From Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
+                            DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
 
-                        DMTFields2.Modify();
-                    end;
-                until DMTFields.Next() = 0;
+                            DMTFields2.Modify();
+                        end;
+                    until DMTFields.Next() = 0;
         end;
     end;
 
@@ -269,81 +275,81 @@ table 81122 "DMTField"
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
         if DMTFields.FindSet(false, false) then
-            repeat
-                TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
-                DMTFields2 := DMTFields;
-                case true of
-                    TargetField.FieldName IN ['Global Dimension 1 Code',
-                                              'Global Dimension 2 Code',
-                                              'VAT Registration No.']:
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::Item) and
-                    (TargetField.FieldName IN ['Costing Method',
-                                               'Tariff No.',
-                                               'Base Unit of Measure',
-                                               'Indirect Cost %']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                    (TargetField.FieldName IN ['Primary Contact No.',
-                                               'Contact']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Vendor]) and
-                    (TargetField.FieldName IN ['Prices Including VAT']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Customer]) and
-                    (TargetField.FieldName IN ['Block Payment Tolerance', 'VAT Registration No.']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Contact]) and
-                    (TargetField.FieldName IN ['Company No.']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.FieldName IN ['E-Mail']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Production BOM Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
-                        end;
-                    (TargetField.TableNo = Database::"Routing Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            RoutingHeader.Status := RoutingHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
-                        end;
-                    (TargetField.TableNo = Database::"G/L Account") and
-                    (TargetField.FieldName IN ['Totaling']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Customer Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Vendor Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                end;
+                repeat
+                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    DMTFields2 := DMTFields;
+                    case true of
+                        TargetField.FieldName IN ['Global Dimension 1 Code',
+                                                  'Global Dimension 2 Code',
+                                                  'VAT Registration No.']:
+                            begin
+                                DMTFields2."Use Try Function" := false;
+                            end;
+                        (TargetField.TableNo = Database::Item) and
+                        (TargetField.FieldName IN ['Costing Method',
+                                                   'Tariff No.',
+                                                   'Base Unit of Measure',
+                                                   'Indirect Cost %']):
+                            begin
+                                DMTFields2."Use Try Function" := false;
+                            end;
+                        (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
+                        (TargetField.FieldName IN ['Primary Contact No.',
+                                                   'Contact']):
+                            begin
+                                DMTFields2."Validate Value" := false;
+                            end;
+                        (TargetField.TableNo IN [Database::Vendor]) and
+                        (TargetField.FieldName IN ['Prices Including VAT']):
+                            begin
+                                DMTFields2."Validate Value" := false;
+                            end;
+                        (TargetField.TableNo IN [Database::Customer]) and
+                        (TargetField.FieldName IN ['Block Payment Tolerance', 'VAT Registration No.']):
+                            begin
+                                DMTFields2."Validate Value" := false;
+                            end;
+                        (TargetField.TableNo IN [Database::Contact]) and
+                        (TargetField.FieldName IN ['Company No.']):
+                            begin
+                                DMTFields2."Validate Value" := false;
+                            end;
+                        (TargetField.FieldName IN ['E-Mail']):
+                            begin
+                                DMTFields2."Use Try Function" := false;
+                            end;
+                        (TargetField.TableNo = Database::"Production BOM Header") and
+                        (TargetField.FieldName IN ['Status']):
+                            begin
+                                ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
+                                DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
+                            end;
+                        (TargetField.TableNo = Database::"Routing Header") and
+                        (TargetField.FieldName IN ['Status']):
+                            begin
+                                RoutingHeader.Status := RoutingHeader.Status::"Under Development";
+                                DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
+                            end;
+                        (TargetField.TableNo = Database::"G/L Account") and
+                        (TargetField.FieldName IN ['Totaling']):
+                            begin
+                                DMTFields2."Validate Value" := false;
+                            end;
+                        (TargetField.TableNo = Database::"Customer Posting Group") and
+                        (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                            begin
+                                DMTFields2."Use Try Function" := false;
+                            end;
+                        (TargetField.TableNo = Database::"Vendor Posting Group") and
+                        (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                            begin
+                                DMTFields2."Use Try Function" := false;
+                            end;
+                    end;
 
-                if format(DMTFields2) <> Format(DMTFields) then
-                    DMTFields2.Modify()
-            until DMTFields.Next() = 0;
+                    if format(DMTFields2) <> Format(DMTFields) then
+                        DMTFields2.Modify()
+                until DMTFields.Next() = 0;
     end;
 
     procedure FindFieldNameInOldVersion(TargetField: Record Field; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean

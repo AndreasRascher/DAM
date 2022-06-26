@@ -59,7 +59,8 @@ page 81132 "DMTTableCardPart"
                 field("Validate Value"; Rec."Validate Value") { ApplicationArea = All; }
                 field("Use Try Function"; Rec."Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
-                field("Replacements Code"; Rec."Replacements Code") { ApplicationArea = All; }
+                field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; }
+                field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; }
             }
         }
     }

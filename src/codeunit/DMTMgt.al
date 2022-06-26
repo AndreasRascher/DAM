@@ -140,7 +140,7 @@ codeunit 81124 "DMTMgt"
         RecRef.OPEN(TableNo, TRUE);
         KeyRef := RecRef.KEYINDEX(1); // Primary Key
         for KeyCountIndex := 1 TO KeyRef.FIELDCOUNT do begin
-            KeyField := KeyRef.FIELDINDEX(KeyCountIndex);
+            KeyField := KeyRef.FieldIndex(KeyCountIndex);
             IF Include then
                 KeyFieldNoFilter += STRSUBSTNO('|%1', KeyField.NUMBER)
             ELSE
@@ -175,9 +175,9 @@ codeunit 81124 "DMTMgt"
         i: Integer;
     begin
         for i := 1 TO RecRefSource.FIELDCOUNT do begin
-            FieldRefTarget := RecRefTarget.FIELDINDEX(i);
-            FieldRefSource := RecRefSource.FIELDINDEX(i);
-            FieldRefTarget.VALUE := FieldRefSource.VALUE;
+            FieldRefTarget := RecRefTarget.FieldIndex(i);
+            FieldRefSource := RecRefSource.FieldIndex(i);
+            FieldRefTarget.Value := FieldRefSource.Value;
         end;
     end;
 
@@ -189,7 +189,7 @@ codeunit 81124 "DMTMgt"
         FromField := SourceRef.field(FromFieldNo);
         ToField := TargetRef.field(ToFieldNo);
         if ToField.Type = FromField.Type then
-            ToField.VALUE := FromField.VALUE
+            ToField.Value := FromField.Value
         else
             if not EvaluateFieldRef(ToField, Format(FromField.Value), false) then
                 Error('TODO EvaluateFieldRef');
@@ -231,7 +231,7 @@ codeunit 81124 "DMTMgt"
         IsValidateSuccessful := DMTErrorWrapper.RUN();
         DMTErrorWrapper.GetRecRefTo(TargetRef);
         // HANDLE VALIDATE RESULT
-        IF NOT IsValidateSuccessful then begin
+        if not IsValidateSuccessful then begin
             DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
         end else begin
             // Save Successful changes
@@ -256,57 +256,57 @@ codeunit 81124 "DMTMgt"
         OptionElement: text;
     begin
         if FromText = '' then
-            case UPPERCASE(FORMAT(FieldRef_TO.TYPE)) of
+            case UpperCase(Format(FieldRef_TO.TYPE)) of
                 'BIGINTEGER', 'INTEGER', 'DECIMAL':
                     begin
                         FromText := '0';
                         exit(true);
                     end;
             end;
-        CASE UPPERCASE(FORMAT(FieldRef_TO.TYPE)) OF
+        case UpperCase(Format(FieldRef_TO.TYPE)) OF
 
             'INTEGER':
                 begin
                     IF EVALUATE(_Integer, FromText) then begin
-                        FieldRef_TO.VALUE := _Integer;
+                        FieldRef_TO.Value := _Integer;
                         exit(TRUE);
                     end;
                 end;
             'BIGINTEGER':
                 IF EVALUATE(_BigInteger, FromText) then begin
-                    FieldRef_TO.VALUE := _BigInteger;
+                    FieldRef_TO.Value := _BigInteger;
                     exit(TRUE);
                 end;
             'TEXT', 'TABLEFILTER':
                 begin
-                    FieldRef_TO.VALUE := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
+                    FieldRef_TO.Value := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
                     exit(TRUE);
                 end;
             'CODE':
                 begin
-                    FieldRef_TO.VALUE := UPPERCASE(COPYSTR(FromText, 1, FieldRef_TO.LENGTH));
+                    FieldRef_TO.Value := UPPERCASE(COPYSTR(FromText, 1, FieldRef_TO.LENGTH));
                     exit(TRUE);
                 end;
             'DECIMAL':
                 IF EVALUATE(_Decimal, FromText) then begin
-                    FieldRef_TO.VALUE := _Decimal;
+                    FieldRef_TO.Value := _Decimal;
                     exit(TRUE);
                 end;
             'BOOLEAN':
                 IF EVALUATE(_Boolean, FromText) then begin
-                    FieldRef_TO.VALUE := _Boolean;
+                    FieldRef_TO.Value := _Boolean;
                     exit(TRUE);
                 end;
             'RECORDID':
                 IF EVALUATE(_RecordID, FromText) then begin
-                    FieldRef_TO.VALUE := _RecordID;
+                    FieldRef_TO.Value := _RecordID;
                     exit(TRUE);
                 end;
             'OPTION':
                 IF EvaluateOptionValueAsNumber then begin
                     //Optionswert wird als Zahl übergeben
                     if EVALUATE(_Integer, FromText) then begin
-                        FieldRef_TO.VALUE := _Integer;
+                        FieldRef_TO.Value := _Integer;
                         exit(TRUE);
                     end;
                 end else begin
@@ -315,7 +315,7 @@ codeunit 81124 "DMTMgt"
                     FOR OptionIndex := 0 TO NoOfOptions DO begin
                         OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
                         IF OptionElement = FromText then begin
-                            FieldRef_TO.VALUE := OptionIndex;
+                            FieldRef_TO.Value := OptionIndex;
                             exit(TRUE);
                         end;
                     end;
@@ -324,7 +324,7 @@ codeunit 81124 "DMTMgt"
                 begin
                     //ApplicationMgt.MakeDateText(FromText);
                     IF EVALUATE(_Date, FromText) then begin
-                        FieldRef_TO.VALUE := _Date;
+                        FieldRef_TO.Value := _Date;
                         exit(TRUE);
                     end;
                 end;
@@ -333,7 +333,7 @@ codeunit 81124 "DMTMgt"
                 begin
                     //ApplicationMgt.MakeDateTimeText(FromText);
                     IF EVALUATE(_DateTime, FromText) then begin
-                        FieldRef_TO.VALUE := _DateTime;
+                        FieldRef_TO.Value := _DateTime;
                         exit(TRUE);
                     end;
                 end;
@@ -349,7 +349,7 @@ codeunit 81124 "DMTMgt"
             'DATEFORMULA':
                 begin
                     IF EVALUATE(_DateFormula, FromText) then begin
-                        FieldRef_TO.VALUE := _DateFormula;
+                        FieldRef_TO.Value := _DateFormula;
                         exit(TRUE);
                     end;
                 end;

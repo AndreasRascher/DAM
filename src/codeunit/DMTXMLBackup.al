@@ -181,7 +181,7 @@ codeunit 81127 "DMTXMLBackup"
                 end;
                 // Add Fields with Value
                 for i := 1 TO recRef.FIELDCOUNT do begin
-                    fldRef := recRef.FIELDINDEX(i);
+                    fldRef := recRef.FieldIndex(i);
                     if not FldRefIsEmpty(fldRef) then begin
                         fieldNode := XmlElement.Create('FIELD').AsXmlNode();
                         recordNode.AsXmlElement().Add(fieldNode);
@@ -415,7 +415,7 @@ codeunit 81127 "DMTXMLBackup"
         Clear(KeyFieldIDsList);
         _KeyRef := _RecRef.KEYINDEX(1);
         for _KeyIndex := 1 TO _KeyRef.FIELDCOUNT do begin
-            _FieldRef := _KeyRef.FIELDINDEX(_KeyIndex);
+            _FieldRef := _KeyRef.FieldIndex(_KeyIndex);
             KeyFieldIDsList.Add(_FieldRef.Number);
         end;
     end;
@@ -435,10 +435,10 @@ codeunit 81127 "DMTXMLBackup"
         foreach TableID in TablesToExport do begin
             _RecRef.OPEN(TableID);
             if _RecRef.FINDSET(false, false) then
-                repeat
-                    if not RecordIDList.Contains(_RecRef.RecordId) then
-                        RecordIDList.Add(_RecRef.RecordId);
-                until _RecRef.Next() = 0;
+                    repeat
+                        if not RecordIDList.Contains(_RecRef.RecordId) then
+                            RecordIDList.Add(_RecRef.RecordId);
+                    until _RecRef.Next() = 0;
             _RecRef.close();
 
         end;

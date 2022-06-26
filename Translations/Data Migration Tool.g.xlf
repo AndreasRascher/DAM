@@ -248,6 +248,11 @@
           <note from="Developer" annotates="general" priority="2">Validieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Validate Value - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 3305167575 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validation Order</source>
+          <note from="Developer" annotates="general" priority="2">Reihenfolge Validierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Validation Order - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Column Count</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2164,13 +2169,13 @@
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Txt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 429697219 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>XML Fxiles (*.xml)|*.xml</source>
+          <source>XML Files (*.xml)|*.xml</source>
           <note from="Developer" annotates="general" priority="2">XML-Dateien (*.xml)|*.xml</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Xml - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 2814408493 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ZIP-Dateien (*.zip)|*.zip</source>
-          <note from="Developer" annotates="general" priority="2">ZIP Files (*.zip)|*.zip</note>
+          <source>ZIP Files (*.zip)|*.zip</source>
+          <note from="Developer" annotates="general" priority="2">ZIP-Dateien (*.zip)|*.zip</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
         </trans-unit>
       </group>
