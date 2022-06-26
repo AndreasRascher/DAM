@@ -73,7 +73,7 @@ table 81128 "DMTTable"
             trigger OnValidate()
             var
                 FileMgt: Codeunit "File Management";
-                FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', ENU = 'The path "%1" is not accessibly for the service tier';
+                FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', Comment = 'The path "%1" is not accessibly for the service tier';
             begin
                 if rec.DataFilePath <> '' then begin
                     rec.DataFilePath := CopyStr(rec.DataFilePath.TrimEnd('"').TrimStart('"'), 1, MaxStrLen(rec.DataFilePath));
@@ -91,7 +91,7 @@ table 81128 "DMTTable"
         }
         field(53; "Import XMLPort ID"; Integer)
         {
-            CaptionML = DEU = 'XMLPort ID für Import', ENU = 'Import XMLPortID';
+            Caption = 'Import XMLPortID', Comment = 'XMLPort ID für Import';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -103,7 +103,7 @@ table 81128 "DMTTable"
         }
         field(54; "Buffer Table ID"; Integer)
         {
-            CaptionML = DEU = 'Puffertabelle ID', ENU = 'Buffertable ID';
+            Caption = 'Buffertable ID', Comment = 'Puffertabelle ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -115,20 +115,14 @@ table 81128 "DMTTable"
         }
         field(60; "Use OnInsert Trigger"; boolean)
         {
-            CaptionML = DEU = 'OnInsert Trigger verwenden', ENU = 'Use OnInsert Trigger';
+            Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden';
             InitValue = true;
         }
-        field(61; "Sort Order"; Integer)
-        {
-            CaptionML = DEU = 'Sortierung', ENU = 'Sort Order';
-        }
-        field(100; LastImportToTargetAt; DateTime)
-        {
-            CaptionML = DEU = 'Letzter Import am', ENU = 'Last Import At';
-        }
+        field(61; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
+        field(100; LastImportToTargetAt; DateTime) { Caption = 'Last Import At', Comment = 'Letzter Import am'; }
         field(101; LastImportBy; Code[50])
         {
-            CaptionML = DEU = 'Benutzer-ID', ENU = 'User ID';
+            Caption = 'User ID', comment = 'Benutzer-ID';
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = User."User Name";
         }
@@ -141,15 +135,12 @@ table 81128 "DMTTable"
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)
         {
-            CaptionML = DEU = 'NAV Schema Datei Status', ENU = 'NAV Schema File Status';
+            Caption = 'NAV Schema File Status', Comment = 'NAV Schema Datei Status';
             Editable = false;
             OptionMembers = "Import required",Imported;
             OptionCaptionML = ENU = '"Import required",Imported', DEU = '"Import erforderlich",Importiert';
         }
-        field(42; "NAV Src.Table No."; Integer)
-        {
-            CaptionML = DEU = 'NAV Tabellennr.', ENU = 'NAV Src.Table No.';
-        }
+        field(42; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.'; }
         field(43; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; }
         field(44; "NAV Src.Table Caption"; Text[250])
         {
@@ -547,10 +538,4 @@ table 81128 "DMTTable"
             DMTField.Modify();
         end;
     end;
-
-
-    var
-        ObjectIDNotInIDRangeErr: TextConst DEU = 'Die Objekt ID muss im Bereich 50000 bis 99999 liegen.',
-                                            ENU = 'The object ID must be in the range 50000 to 99999.';
-
 }

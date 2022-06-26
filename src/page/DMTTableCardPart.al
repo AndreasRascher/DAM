@@ -2,6 +2,8 @@ page 81132 "DMTTableCardPart"
 {
     PageType = ListPart;
     SourceTable = "DMTField";
+    InsertAllowed = false;
+    SourceTableView = sorting("Validation Order");
 
     layout
     {
@@ -100,13 +102,81 @@ page 81132 "DMTTableCardPart"
                     DMTFields.ProposeValidationRules(DMTTable);
                 end;
             }
+            group(ChangeValidationOrder)
+            {
+                Image = Allocate;
+                Caption = 'Change Validation Order', Comment = 'Validierungsreihenfolge ändern';
+                action(MoveSelectedToEnd)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Move selected lines to the end', Comment = 'Markierte Zeilen an das Ende verschieben';
+                    Scope = Repeater;
+                    Image = EndingText;
+                    trigger OnAction()
+                    var
+                        DMTFieldSelection: Record DMTField;
+                        RecID: RecordId;
+                        i: Integer;
+                        SelectedLines: List of [RecordId];
+                        Direction: Option Up,Down,Top,Bottom;
+                    begin
+                        MoveSelectedLines(Direction::Top);
+                    end;
+                }
+            }
         }
     }
+
+    procedure GetSelection(var DMTField: Record DMTField temporary) HasLines: Boolean
+    begin
+        Clear(DMTField);
+        CurrPage.SetSelectionFilter(DMTField);
+        HasLines := DMTField.FindFirst();
+    end;
+
+    local procedure MoveSelectedLines(Direction: Option Up,Down,Top,Bottom)
+    var
+        DMTFieldSelection: Record DMTField;
+        SelectedLines: List of [RecordId];
+        // RecID: RecordId;
+        i: Integer;
+    // SelectedLines: List of [RecordId];
+    // Direction: Option Up,Down,Top,Bottom;
+    begin
+        // If not GetSelection(DMTFieldSelection) then
+        //     exit;
+
+        // DMTFieldSelection.FindSet();
+        // repeat
+        //     SelectedLines.Add(DMTFieldSelection.RecordId);
+        // until DMTFieldSelection.Next() = 0;
+
+        // clear(DMTFieldSelection);
+        // DMTFieldSelection.SetRange("To Table No.", Rec.GetRangeMin(Rec."To Table No."));
+        // DMTFieldSelection.SetCurrentKey("Validation Order");
+        // DMTFieldSelection.FindSet();
+        // repeat
+        //     if not SelectedLines.Contains(DMTFieldSelection.RecordId) then begin
+        //         i += 1;
+        //         if (DMTFieldSelection."Validation Order" <> i * 10000) then begin
+        //             DMTFieldSelection."Validation Order" := i * 10000;
+        //             DMTFieldSelection.Modify();
+        //         end;
+        //     end;
+        // until DMTFieldSelection.Next() = 0;
+        // foreach RecID in SelectedLines do begin
+        //     i += 1;
+        //     DMTFieldSelection.Get(RecID);
+        //     if (DMTFieldSelection."Validation Order" <> i * 10000) then begin
+        //         DMTFieldSelection."Validation Order" := i * 10000;
+        //         DMTFieldSelection.Modify();
+        //     end;
+        // end;
+    end;
+
     Var
         [InDataSet]
-        HideFromFieldInfo: Boolean;
-        [InDataSet]
-        ShowGenBufferTableColumns: Boolean;
+        HideFromFieldInfo, ShowGenBufferTableColumns : Boolean;
         [InDataSet]
         LineStyleExpr: text;
 

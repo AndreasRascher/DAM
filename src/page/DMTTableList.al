@@ -32,7 +32,7 @@ page 81133 "DMTTableList"
                 field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))
                 {
                     ApplicationArea = All;
-                    Caption = 'Qty.Lines In Trgt. Table';
+                    Caption = 'Qty.Lines In Trgt. Table', Comment = 'Anz. Datensätze in Zieltabelle';
                     trigger OnLookup(var Text: Text): Boolean
                     begin
                         Rec.ShowTableContent(Rec."To Table ID");
