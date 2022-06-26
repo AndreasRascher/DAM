@@ -14,7 +14,7 @@ table 81128 "DMTTable"
         }
         field(4; "Dest.Table Caption"; Text[250])
         {
-            CaptionML = DEU = 'Ziel Tabelle', ENU = 'Destination Table';
+            Caption = 'Destination Table', comment = 'Ziel Tabelle';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit DMTObjMgt;
@@ -50,17 +50,18 @@ table 81128 "DMTTable"
         }
         field(32; "No.of Fields in Trgt. Table"; Integer)
         {
-            CaptionML = DEU = 'Anz. Felder in Zieltabelle', ENU = 'No. of fields in target table';
+            Caption = 'No. of fields in target table', Comment = 'Anz. Felder in Zieltabelle';
             FieldClass = FlowField;
             CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
             Editable = false;
         }
         field(50; BufferTableType; Option)
         {
-            CaptionML = DEU = 'Puffertabellenart', ENU = 'Buffer Table Type';
-            OptionMembers = "Generic Buffer Table for all Files","Custom Buffer Table per file";
-            OptionCaptionML = DEU = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV',
-                              ENU = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV';
+            Caption = 'Buffer Table Type', Comment = 'Puffertabellenart';
+            OptionMembers = "Generic Buffer Table for all Files","One Buffer Table per file";
+            OptionCaption = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV',
+            comment = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV';
+
             trigger OnValidate()
             begin
                 ProposeObjectIDs();
@@ -68,7 +69,7 @@ table 81128 "DMTTable"
         }
         field(52; DataFilePath; Text[250])
         {
-            CaptionML = DEU = 'Dateipfad Exportdatei', ENU = 'Export File Path';
+            Caption = 'Export File Path', comment = 'Dateipfad Exportdatei';
             trigger OnValidate()
             var
                 FileMgt: Codeunit "File Management";
@@ -134,7 +135,7 @@ table 81128 "DMTTable"
         field(102; LastView; Blob) { }
         field(103; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
         field(104; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
-        field(105; LastFieldUpdateSelection; Blob) { }
+        field(105; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
 
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
@@ -207,7 +208,7 @@ table 81128 "DMTTable"
         ImportFileFromPathLbl: Label 'Importing %1';
     begin
         case Rec.BufferTableType of
-            Rec.BufferTableType::"Custom Buffer Table per file":
+            Rec.BufferTableType::"One Buffer Table per file":
                 begin
                     rec.TestField("Import XMLPort ID");
                     rec.Testfield(DataFilePath);
@@ -258,7 +259,7 @@ table 81128 "DMTTable"
             GenBuffTable.ShowImportDataForFile(Rec.DataFilePath);
         end;
 
-        if Rec.BufferTableType = Rec.BufferTableType::"Custom Buffer Table per file" then begin
+        if Rec.BufferTableType = Rec.BufferTableType::"One Buffer Table per file" then begin
             if Rec."Buffer Table ID" = 0 then exit(false);
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Rec."Buffer Table ID"));
         end;
@@ -338,7 +339,7 @@ table 81128 "DMTTable"
                     GenBuffTable.FilterByFileName(Rec.DataFilePath);
                     QtyLines := GenBuffTable.Count;
                 end;
-            Rec.BufferTableType::"Custom Buffer Table per file":
+            Rec.BufferTableType::"One Buffer Table per file":
                 begin
                     RecRef.Open(REc."Buffer Table ID");
                     QtyLines := RecRef.Count();

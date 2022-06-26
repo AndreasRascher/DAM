@@ -82,7 +82,7 @@ page 81120 "DMT Error Log List"
             }
             action(AddTableFilter)
             {
-                CaptionML = DEU = 'Tabellenfilter', ENU = 'TableFilter';
+                Caption = 'TableFilter', Comment = 'Tabellenfilter';
                 ApplicationArea = all;
                 Image = FilterLines;
                 Promoted = true;
@@ -111,7 +111,7 @@ page 81120 "DMT Error Log List"
                         Database::DMTReplacementsLine);
                     if allObjWithCaption.FindSet() then
                         repeat
-                            choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
+                                choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
                         until allObjWithCaption.Next() = 0;
                     choices := choices.TrimEnd(',');
                     selection := StrMenu(choices);

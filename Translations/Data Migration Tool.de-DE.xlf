@@ -1954,11 +1954,35 @@
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 2352204874 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table Type</source>
+          <target>Puffertabellenart</target>
+          <note from="Developer" annotates="general" priority="2">Puffertabellenart</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 2352204874 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Generic Buffer Table for all Files,Seperate Buffer Table per CSV</source>
+          <target>Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV</target>
+          <note from="Developer" annotates="general" priority="2">Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableType - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
           <target>Datenquelltyp</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Data Source Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 2480536789 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export File Path</source>
+          <target>Dateipfad Exportdatei</target>
+          <note from="Developer" annotates="general" priority="2">Dateipfad Exportdatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFilePath - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3400918588 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Destination Table</source>
+          <target>Ziel Tabelle</target>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Dest.Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 739200694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Duration (Longest)</source>
@@ -1995,6 +2019,12 @@
           <target>Name NAV Herkunftstabelle</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field NAV Src.Table Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 829191871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of fields in target table</source>
+          <target>Anz. Felder in Zieltabelle</target>
+          <note from="Developer" annotates="general" priority="2">Anz. Felder in Zieltabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No.of Fields in Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
@@ -2169,6 +2199,12 @@
           <target>DMT Fehlerprotokoll</target>
           <note from="Developer" annotates="general" priority="2">DMT Fehlerprotokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Error Log List - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3126398325 - Action 3638459641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>TableFilter</source>
+          <target>Tabellenfilter</target>
+          <note from="Developer" annotates="general" priority="2">Tabellenfilter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Error Log List - Action AddTableFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3126398325 - Action 3345471167 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete filtered lines</source>
@@ -2398,6 +2434,12 @@
           <note from="Developer" annotates="general" priority="2">Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control General - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Control 2480536789 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Path</source>
+          <target>Datendatei Pfad</target>
+          <note from="Developer" annotates="general" priority="2">Datendatei Pfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control DataFilePath - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Control 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields Setup</source>
           <target>Feldeinrichtung</target>
@@ -2433,6 +2475,12 @@
           <target>Fehlerprotokoll</target>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action OpenErrorLog - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retry Records With Error</source>
+          <target>Fehler erneut verarbeiten</target>
+          <note from="Developer" annotates="general" priority="2">Fehler erneut verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action RetryBufferRecordsWithError - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 4138182889 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Target Table</source>
@@ -2499,6 +2547,24 @@
           <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action TransferSelectedToTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 526679414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Task List</source>
+          <target>DMT Aufgabenliste</target>
+          <note from="Developer" annotates="general" priority="2">DMT Aufgabenliste</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 526679414 - Control 1202549442 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <target>Filter</target>
+          <note from="Developer" annotates="general" priority="2">Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Control CurrFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 526679414 - Action 2494889884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Run Selected</source>
+          <target>Auswahl ausführen</target>
+          <note from="Developer" annotates="general" priority="2">Auswahl ausführen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Action RunSelected - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1136506379 - Control 90423963 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update</source>

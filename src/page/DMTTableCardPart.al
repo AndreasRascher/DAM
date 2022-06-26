@@ -70,7 +70,7 @@ page 81132 "DMTTableCardPart"
         {
             action(InitTargetFields)
             {
-                CaptionML = DEU = 'Feldliste initialisieren', ENU = 'Init Target Fields';
+                Caption = 'Init Target Fields', comment = 'Feldliste initialisieren';
                 ApplicationArea = All;
                 Image = SuggestField;
 
@@ -86,7 +86,7 @@ page 81132 "DMTTableCardPart"
             }
             action(ProposeMatchingFields)
             {
-                CaptionML = DEU = 'Feldzuordnung vorschlagen';
+                Caption = 'Popose Matching Fields', comment = 'Feldzuordnung vorschlagen';
                 ApplicationArea = All;
                 Image = SuggestField;
 

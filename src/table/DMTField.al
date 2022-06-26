@@ -185,7 +185,7 @@ table 81122 "DMTField"
         OldFieldName: text;
         ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Custom Buffer Table per file") then begin
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file") then begin
             DMTTable.TestField("Buffer Table ID");
             if not DMTTable.CustomBufferTableExits() then begin
                 Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");

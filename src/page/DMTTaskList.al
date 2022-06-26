@@ -1,6 +1,6 @@
 page 81134 "DMTTaskList"
 {
-    CaptionML = DEU = 'DMT Aufgabenliste', ENU = 'DMT Task List';
+    Caption = 'DMT Task List', Comment = 'DMT Aufgabenliste';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTTask;
@@ -19,7 +19,7 @@ page 81134 "DMTTaskList"
                 field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
                 field(CurrFilter; CurrFilter)
                 {
-                    CaptionML = DEU = 'Filter', ENU = 'Filter';
+                    Caption = 'Filter', Comment = 'Filter';
                     ApplicationArea = All;
                     Editable = false;
                     trigger OnDrillDown()
@@ -53,7 +53,7 @@ page 81134 "DMTTaskList"
         {
             action(RunSelected)
             {
-                CaptionML = DEU = 'Auswahl ausführen', ENU = 'Run Selected';
+                Caption = 'Run Selected', Comment = 'Auswahl ausführen';
                 ApplicationArea = All;
                 Promoted = true;
                 PromotedOnly = true;
