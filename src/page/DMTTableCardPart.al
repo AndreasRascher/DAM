@@ -12,16 +12,8 @@ page 81132 "DMTTableCardPart"
             repeater(Lines)
             {
                 field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
-                field("To Field No."; Rec."To Field No.")
-                {
-                    Visible = false;
-                    ApplicationArea = All;
-                }
-                field("To Field Caption"; Rec."To Field Caption")
-                {
-                    ApplicationArea = All;
-                    StyleExpr = LineStyleExpr;
-                }
+                field("To Field No."; Rec."To Field No.") { Visible = false; ApplicationArea = All; }
+                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; }
                 field("From Field Caption"; Rec."From Field Caption")
                 {
                     Visible = not ShowGenBufferTableColumns;
@@ -38,26 +30,10 @@ page 81132 "DMTTableCardPart"
                         RunSelectSourceFieldDialog();
                     end;
                 }
-                field("From Field No."; Rec."From Field No.")
-                {
-                    HideValue = HideFromFieldInfo;
-                    ApplicationArea = All;
-                }
-                field("Ignore Validation Error"; Rec."Ignore Validation Error")
-                {
-                    ApplicationArea = All;
-                }
-                field("Trgt.Field Type"; Rec."To Field Type")
-                {
-                    Visible = false;
-                    ApplicationArea = All;
-                }
-                field("From Field Type"; Rec."From Field Type")
-                {
-                    HideValue = HideFromFieldInfo;
-                    Visible = false;
-                    ApplicationArea = All;
-                }
+                field("From Field No."; Rec."From Field No.") { HideValue = HideFromFieldInfo; ApplicationArea = All; }
+                field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
+                field("Trgt.Field Type"; Rec."To Field Type") { Visible = false; ApplicationArea = All; }
+                field("From Field Type"; Rec."From Field Type") { HideValue = HideFromFieldInfo; Visible = false; ApplicationArea = All; }
                 field("Validate Value"; Rec."Validate Value") { ApplicationArea = All; }
                 field("Use Try Function"; Rec."Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
@@ -265,12 +241,6 @@ page 81132 "DMTTableCardPart"
         until TempDMTField.Next() = 0;
     end;
 
-    Var
-        [InDataSet]
-        HideFromFieldInfo, ShowGenBufferTableColumns : Boolean;
-        [InDataSet]
-        LineStyleExpr: text;
-
     trigger OnAfterGetRecord()
     begin
         UpdateControlVariables();
@@ -322,4 +292,10 @@ page 81132 "DMTTableCardPart"
             DMTField2.Modify();
         end;
     end;
+
+    Var
+        [InDataSet]
+        HideFromFieldInfo, ShowGenBufferTableColumns : Boolean;
+        [InDataSet]
+        LineStyleExpr: text;
 }

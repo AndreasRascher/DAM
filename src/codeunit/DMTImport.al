@@ -61,7 +61,7 @@ codeunit 81123 DMTImport
                 COMMIT();
         until BufferRef.Next() = 0;
         DMTMgt.ProgressBar_Close();
-        DMTErrorLog.OpenListWithFilter(DMTTable);
+        DMTErrorLog.OpenListWithFilter(DMTTable, true);
         DMTMgt.GetResultQtyMessage();
     end;
 
@@ -106,7 +106,7 @@ codeunit 81123 DMTImport
                 COMMIT();
         end;
         DMTMgt.ProgressBar_Close();
-        DMTErrorLog.OpenListWithFilter(DMTTable);
+        DMTErrorLog.OpenListWithFilter(DMTTable, true);
         DMTMgt.GetResultQtyMessage();
     end;
 

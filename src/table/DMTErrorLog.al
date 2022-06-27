@@ -105,10 +105,10 @@ table 81120 "DMTErrorLog"
         DMTErrorlog.SetRange("From ID", BufferRef.RecordId);
         // DMTErrorlog.DeleteAll(); // Results in Tablelocks
         if DMTErrorlog.FindSet() then begin
-            repeat
-                DMTErrorlog2 := DMTErrorlog;
-                DMTErrorlog2.Delete(true);
-            until DMTErrorlog.Next() = 0;
+                                          repeat
+                                              DMTErrorlog2 := DMTErrorlog;
+                                              DMTErrorlog2.Delete(true);
+                                          until DMTErrorlog.Next() = 0;
         end;
     end;
 
@@ -129,11 +129,14 @@ table 81120 "DMTErrorLog"
         exit(not Rec.IsEmpty);
     end;
 
-    procedure OpenListWithFilter(DMTTable: Record DMTTable)
+    procedure OpenListWithFilter(DMTTable: Record DMTTable; OpenOnlyIfNotEmpty: Boolean)
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
         DMTErrorlog.Setrange("Import to Table No.", DMTTable."To Table ID");
+        if OpenOnlyIfNotEmpty then
+            if DMTErrorLog.IsEmpty then
+                exit;
         PAGE.RUN(PAGE::"DMT Error Log List", DMTErrorlog);
     end;
 

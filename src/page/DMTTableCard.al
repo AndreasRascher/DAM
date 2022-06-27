@@ -185,7 +185,7 @@ page 81131 "DMTTableCard"
                 var
                     DMTErrorLog: Record DMTErrorLog;
                 begin
-                    DMTErrorLog.OpenListWithFilter(Rec);
+                    DMTErrorLog.OpenListWithFilter(Rec, false);
                 end;
             }
             action(CreateXMLPort)
