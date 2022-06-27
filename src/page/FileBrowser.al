@@ -52,7 +52,7 @@ page 81135 FileBrowser
                     end;
                 }
                 field(Path; Rec.Path) { ApplicationArea = All; }
-                field(Size; Rec.Size) { ApplicationArea = All; }
+                field(Size; Rec.Size) { ApplicationArea = All; BlankZero = true; }
                 field("Time"; Rec."Time") { ApplicationArea = All; }
             }
         }
