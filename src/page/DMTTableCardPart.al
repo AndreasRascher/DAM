@@ -62,7 +62,7 @@ page 81132 "DMTTableCardPart"
                 field("Use Try Function"; Rec."Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
                 field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; }
-                field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; }
+                field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; Visible = false; }
             }
         }
     }
@@ -106,72 +106,163 @@ page 81132 "DMTTableCardPart"
             {
                 Image = Allocate;
                 Caption = 'Change Validation Order', Comment = 'Validierungsreihenfolge ändern';
-                action(MoveSelectedToEnd)
+                action(MoveSelectedUp)
                 {
                     ApplicationArea = All;
-                    Caption = 'Move selected lines to the end', Comment = 'Markierte Zeilen an das Ende verschieben';
+                    Caption = 'Up', Comment = 'Oben';
                     Scope = Repeater;
-                    Image = EndingText;
+                    Image = MoveUp;
                     trigger OnAction()
                     var
-                        DMTFieldSelection: Record DMTField;
-                        RecID: RecordId;
-                        i: Integer;
-                        SelectedLines: List of [RecordId];
+                        Direction: Option Up,Down,Top,Bottom;
+                    begin
+                        MoveSelectedLines(Direction::Up);
+                    end;
+                }
+                action(MoveSelectedDown)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Down', Comment = 'Unten';
+                    Scope = Repeater;
+                    Image = MoveDown;
+                    trigger OnAction()
+                    var
+                        Direction: Option Up,Down,Top,Bottom;
+                    begin
+                        MoveSelectedLines(Direction::Down);
+                    end;
+                }
+                action(MoveSelectedToTop)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Top', Comment = 'Anfang';
+                    Scope = Repeater;
+                    Image = ChangeTo;
+                    trigger OnAction()
+                    var
                         Direction: Option Up,Down,Top,Bottom;
                     begin
                         MoveSelectedLines(Direction::Top);
+                    end;
+                }
+                action(MoveSelectedToEnd)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Bottom', Comment = 'Ende';
+                    Scope = Repeater;
+                    Image = Apply;
+                    trigger OnAction()
+                    var
+                        Direction: Option Up,Down,Top,Bottom;
+                    begin
+                        MoveSelectedLines(Direction::Bottom);
                     end;
                 }
             }
         }
     }
 
-    procedure GetSelection(var DMTField: Record DMTField temporary) HasLines: Boolean
+    procedure GetSelection(var TempDMTField: Record DMTField temporary) HasLines: Boolean
+    var
+        DMTField: Record DMTField;
     begin
-        Clear(DMTField);
+        Clear(TempDMTField);
+        if TempDMTField.IsTemporary then TempDMTField.DeleteAll();
         CurrPage.SetSelectionFilter(DMTField);
-        HasLines := DMTField.FindFirst();
+        if not DMTField.MarkedOnly then begin
+            DMTField := Rec;
+            DMTField.Mark(true);
+            DMTField.MarkedOnly(true);
+        end;
+        DMTField.CopyToTemp(TempDMTField);
+        HasLines := TempDMTField.FindFirst();
     end;
 
     local procedure MoveSelectedLines(Direction: Option Up,Down,Top,Bottom)
     var
-        DMTFieldSelection: Record DMTField;
-        SelectedLines: List of [RecordId];
-        // RecID: RecordId;
+        DMTField: Record DMTField;
+        TempFieldSelection, TempDMTField : Record DMTField temporary;
         i: Integer;
-    // SelectedLines: List of [RecordId];
-    // Direction: Option Up,Down,Top,Bottom;
+        RefPos: Integer;
     begin
-        // If not GetSelection(DMTFieldSelection) then
-        //     exit;
+        If not GetSelection(TempFieldSelection) then
+            exit;
 
-        // DMTFieldSelection.FindSet();
-        // repeat
-        //     SelectedLines.Add(DMTFieldSelection.RecordId);
-        // until DMTFieldSelection.Next() = 0;
+        DMTField.SetRange("To Table No.", TempFieldSelection."To Table No.");
+        DMTField.SetCurrentKey("Validation Order");
+        DMTField.CopyToTemp(TempDMTField);
 
-        // clear(DMTFieldSelection);
-        // DMTFieldSelection.SetRange("To Table No.", Rec.GetRangeMin(Rec."To Table No."));
-        // DMTFieldSelection.SetCurrentKey("Validation Order");
-        // DMTFieldSelection.FindSet();
-        // repeat
-        //     if not SelectedLines.Contains(DMTFieldSelection.RecordId) then begin
-        //         i += 1;
-        //         if (DMTFieldSelection."Validation Order" <> i * 10000) then begin
-        //             DMTFieldSelection."Validation Order" := i * 10000;
-        //             DMTFieldSelection.Modify();
-        //         end;
-        //     end;
-        // until DMTFieldSelection.Next() = 0;
-        // foreach RecID in SelectedLines do begin
-        //     i += 1;
-        //     DMTFieldSelection.Get(RecID);
-        //     if (DMTFieldSelection."Validation Order" <> i * 10000) then begin
-        //         DMTFieldSelection."Validation Order" := i * 10000;
-        //         DMTFieldSelection.Modify();
-        //     end;
-        // end;
+        TempDMTField.SetCurrentKey("Validation Order");
+        case Direction of
+            Direction::Bottom:
+                begin
+                    TempDMTField.FindLast();
+                    RefPos := TempDMTField."Validation Order";
+                    TempFieldSelection.FindSet();
+                    repeat
+                        i += 1;
+                        TempDMTField.Get(TempFieldSelection.RecordId);
+                        TempDMTField."Validation Order" := RefPos + i * 10000;
+                        TempDMTField.Modify();
+                    until TempFieldSelection.Next() = 0;
+                end;
+            Direction::Top:
+                begin
+                    TempDMTField.FindFirst();
+                    RefPos := TempDMTField."Validation Order";
+                    TempFieldSelection.find('+');
+                    repeat
+                        i += 1;
+                        TempDMTField.Get(TempFieldSelection.RecordId);
+                        TempDMTField."Validation Order" := RefPos - i * 10000;
+                        TempDMTField.Modify();
+                    until TempFieldSelection.Next(-1) = 0;
+                end;
+            Direction::Up:
+                begin
+                    TempFieldSelection.FindSet();
+                    repeat
+                        TempDMTField.Get(TempFieldSelection.RecordId);
+                        RefPos := TempDMTField."Validation Order";
+                        if TempDMTField.Next(-1) <> 0 then begin
+                            i := TempDMTField."Validation Order";
+                            TempDMTField."Validation Order" := RefPos;
+                            TempDMTField.Modify();
+                            TempDMTField.Get(TempFieldSelection.RecordId);
+                            TempDMTField."Validation Order" := i;
+                            TempDMTField.Modify();
+                        end;
+                    until TempFieldSelection.Next() = 0;
+                end;
+            Direction::Down:
+                begin
+                    TempFieldSelection.SetCurrentKey("Validation Order");
+                    TempFieldSelection.Ascending(false);
+                    TempFieldSelection.FindSet();
+                    repeat
+                        TempDMTField.Get(TempFieldSelection.RecordId);
+                        RefPos := TempDMTField."Validation Order";
+                        if TempDMTField.Next(1) <> 0 then begin
+                            i := TempDMTField."Validation Order";
+                            TempDMTField."Validation Order" := RefPos;
+                            TempDMTField.Modify();
+                            TempDMTField.Get(TempFieldSelection.RecordId);
+                            TempDMTField."Validation Order" := i;
+                            TempDMTField.Modify();
+                        end;
+                    until TempFieldSelection.Next() = 0;
+                end;
+        end;
+        TempDMTField.Reset();
+        TempDMTField.SetCurrentKey("Validation Order");
+        TempDMTField.FindSet();
+        Clear(i);
+        repeat
+            i += 1;
+            DMTField.Get(TempDMTField.RecordId);
+            DMTField."Validation Order" := i * 10000;
+            DMTField.Modify(false);
+        until TempDMTField.Next() = 0;
     end;
 
     Var

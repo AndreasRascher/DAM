@@ -164,7 +164,7 @@ table 81122 "DMTField"
                         DMTFields_NEW."From Table ID" := DMTTable."Buffer Table ID";
                         DMTFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
                         DMTFields_NEW."To Table No." := DMTTable."To Table ID";
-                        DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Transfer;
+                        DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Ignore; //default for fields without action
                         DMTFields_NEW."Validation Order" := i * 10000;
                         DMTFields_NEW.Insert(true);
                     end;
@@ -193,12 +193,10 @@ table 81122 "DMTField"
             end;
             DMTFields.FilterBy(DMTTable);
             DMTFields.SetRange("From Field No.", 0);
-            // DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
 
             // Optional Overwrite
             DMTFields2.FilterBy(DMTTable);
             DMTFields2.SetFilter("From Field No.", '<>%1', 0);
-            DMTFields2.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
             if DMTFields2.FindFirst() then
                 if Confirm(ReplaceExistingMatchesQst) then begin
                     DMTFields.SetRange("From Field No.");
@@ -400,5 +398,19 @@ table 81122 "DMTField"
                 end;
 
         end;
+    end;
+
+    procedure CopyToTemp(var TempDMTField: Record DMTField temporary)
+    var
+        DMTField: Record DMTField;
+        TempDMTField2: Record DMTField temporary;
+    begin
+        DMTField.Copy(Rec);
+        if DMTField.FindSet(false, false) then
+            repeat
+                    TempDMTField2 := DMTField;
+                TempDMTField2.Insert(false);
+            until DMTField.Next() = 0;
+        TempDMTField.Copy(TempDMTField2, true);
     end;
 }

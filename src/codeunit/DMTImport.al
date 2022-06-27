@@ -194,6 +194,7 @@ codeunit 81123 DMTImport
         NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
         TempDMTField_COLLECTION.Reset();
         TempDMTField_COLLECTION.SetFilter("To Field No.", NonKeyFieldsFilter);
+        TempDMTField_COLLECTION.SetCurrentKey("Validation Order");
         TempDMTField_COLLECTION.findset();
         repeat
             TempDMTField_COLLECTION.CalcFields("To Field Caption", "From Field Caption");

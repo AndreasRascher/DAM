@@ -2123,10 +2123,25 @@
           <note from="Developer" annotates="general" priority="2">Validierungsreihenfolge ändern</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action ChangeValidationOrder - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 547832148 - Action 1937377350 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Down</source>
+          <note from="Developer" annotates="general" priority="2">Unten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action MoveSelectedDown - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 547832148 - Action 335558120 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Move selected lines to the end</source>
-          <note from="Developer" annotates="general" priority="2">Markierte Zeilen an das Ende verschieben</note>
+          <source>Bottom</source>
+          <note from="Developer" annotates="general" priority="2">Ende</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action MoveSelectedToEnd - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 1500585524 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Top</source>
+          <note from="Developer" annotates="general" priority="2">Anfang</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action MoveSelectedToTop - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 2279867719 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Up</source>
+          <note from="Developer" annotates="general" priority="2">Oben</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action MoveSelectedUp - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 547832148 - Action 2625649774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Init Target Fields</source>
