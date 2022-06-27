@@ -26,7 +26,7 @@ page 81133 "DMTTableList"
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
                 field(BufferTableType; BufferTableType) { ApplicationArea = All; Visible = false; }
                 field("Data Source Type"; "Data Source Type") { ApplicationArea = All; Visible = false; }
-                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
+                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))
@@ -101,9 +101,9 @@ page 81133 "DMTTableList"
                     DMTTable: Record DMTTable;
                 begin
                     if DMTTable.FindSet() then
-                            repeat
+                        repeat
                                 DMTTable.DownloadAllALDataMigrationObjects(Rec);
-                            until DMTTable.Next() = 0;
+                        until DMTTable.Next() = 0;
                 end;
             }
             action(TransferSelectedToTargetTable)

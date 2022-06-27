@@ -48,6 +48,7 @@ table 81122 "DMTField"
             DataClassification = SystemMetadata;
             TableRelation = DMTFieldBuffer."No." where(TableNo = field("From Field No."));
             ValidateTableRelation = false;
+            BlankZero = true;
             trigger OnValidate()
             begin
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
@@ -91,11 +92,13 @@ table 81122 "DMTField"
             begin
                 Rec.TestField("To Table No.");
                 Rec.TestField("To Field No.");
-                RecRef.Open(Rec."To Table No.");
-                FldRef := RecRef.Field(Rec."To Field No.");
-                ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
-                if ErrorMsg <> '' then
-                    Error(ErrorMsg);
+                if "Fixed Value" <> '' then begin
+                    RecRef.Open(Rec."To Table No.");
+                    FldRef := RecRef.Field(Rec."To Field No.");
+                    ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
+                    if ErrorMsg <> '' then
+                        Error(ErrorMsg);
+                end;
                 UpdateProcessingAction(Rec.FieldNo("Fixed Value"));
             end;
         }
