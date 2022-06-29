@@ -86,6 +86,11 @@ page 81141 "Copy Report Helper"
         }
     }
 
+    trigger OnOpenPage()
+    begin
+        CurrPage.Editable := true;
+    end;
+
     procedure GetSelection(var ReportMetadata_SELECTED: Record "Report Metadata") HasLines: Boolean
     begin
         Clear(ReportMetadata_SELECTED);
@@ -98,7 +103,7 @@ page 81141 "Copy Report Helper"
         AppObjectMetadata: Record "Application Object Metadata";
         BText: BigText;
         IStr: InStream;
-        ALCodeNotAvailableErr: Label 'User AL Code is not available for the %1 %2. Enable with Powershell command:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All';
+        ALCodeNotAvailableErr: Label 'User AL Code is not available for the %1 %2. Enable with Powershell command:\\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All';
     begin
         Clear(ReportALCode);
         AppObjectMetadata.SetRange("Object Type", AppObjectMetadata."Object Type"::Report);
@@ -287,7 +292,7 @@ page 81141 "Copy Report Helper"
         Lines := ReportALCode.Split(CRLF);
         for Index := 1 to Lines.Count do begin
             if Lines.get(Index).Trim().StartsWith('RDLCLayout =') then begin
-                Lines.Set(Index, StrSubstNo('    RDLCLayout = ''%1'';'));
+                Lines.Set(Index, StrSubstNo('    RDLCLayout = ''%1'';', RDLCFileName));
             end;
             ReportALCodeNew.AppendLine(Lines.Get(Index));
         end;
@@ -333,7 +338,7 @@ page 81141 "Copy Report Helper"
                         ReportALCodeNew.AppendLine(StrSubstNo('%1 {%2}', Lines.Get(Index), Lines.Get(Index + 2)));
                         Index += 3;
                     end;
-                // Compress brackets with one statement to two lines
+                // Compress brackets with two statements to two lines
                 4:
                     begin
                         ReportALCodeNew.AppendLine(StrSubstNo('%1 {%2 %3}', Lines.Get(Index).TrimStart(), Lines.Get(Index + 2).TrimStart(), Lines.Get(Index + 3).TrimStart()));
