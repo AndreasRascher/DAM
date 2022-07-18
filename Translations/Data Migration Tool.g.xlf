@@ -1829,7 +1829,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
+          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
         </trans-unit>
