@@ -118,8 +118,8 @@ page 81131 "DMTTableCard"
                     Rec.TestField("To Table ID");
                     CurrPage.SaveRecord();
                     Commit();
+                    RecRef.Open(Rec."To Table ID");
                     if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
-                        RecRef.Open(Rec."To Table ID");
                         RecRef.DeleteAll();
                     end;
                 end;
