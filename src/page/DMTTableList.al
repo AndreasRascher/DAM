@@ -27,6 +27,7 @@ page 81133 "DMTTableList"
                 field(BufferTableType; BufferTableType) { ApplicationArea = All; Visible = false; }
                 field("Data Source Type"; "Data Source Type") { ApplicationArea = All; Visible = false; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
+                field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))

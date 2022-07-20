@@ -1683,9 +1683,14 @@
           <note from="Developer" annotates="general" priority="2">Benutzer-ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportBy - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 4071015267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Import At (Buffer Table)</source>
+          <note from="Developer" annotates="general" priority="2">Letzter Import am (Puffertabelle)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportToBufferAt - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 1370377676 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Last Import At</source>
-          <note from="Developer" annotates="general" priority="2">Letzter Import am</note>
+          <source>Last Import At (Target Table)</source>
+          <note from="Developer" annotates="general" priority="2">Letzter Import am (Zieltabelle)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportToTargetAt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3480591641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

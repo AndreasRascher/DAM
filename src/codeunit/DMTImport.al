@@ -39,6 +39,7 @@ codeunit 81123 DMTImport
             if DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file" then begin
                 BufferRef.Open(DMTTable."Buffer Table ID");
             end;
+        Commit(); // Runmodal Dialog in Edit View
         EditView(BufferRef, DMTTable);
         BufferRef.findset();
         DMTMgt.ProgressBar_Open(BufferRef, StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
@@ -241,7 +242,7 @@ codeunit 81123 DMTImport
                 DMTField.setfilter("To Field No.", KeyFieldsFilter);
                 if DMTField.FindSet() then
                     repeat
-                            FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
+                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
                     until DMTField.Next() = 0;
             end;
         end else begin
@@ -251,7 +252,8 @@ codeunit 81123 DMTImport
                 FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FieldIndex(Index).NUMBER);
         end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RUNMODAL();
+        //Continue := FPBuilder.RUNMODAL();
+        FPBuilder.RUNMODAL();
         BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
     end;
 
@@ -326,7 +328,7 @@ codeunit 81123 DMTImport
         repeat
             ReplacementsHeader.Get(TempFieldWithReplacementCode."Replacements Code");
             ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
-            ToFieldRef := BufferRef.Field(TempDMTField_COLLECTION."From Field No.");
+            ToFieldRef := BufferRef.Field(TempFieldWithReplacementCode."From Field No.");
             if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
                 if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false) then
                     Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
