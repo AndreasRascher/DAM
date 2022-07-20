@@ -20,8 +20,12 @@
       "to": 81141
     },
     {
-      "from": 110000,
-      "to": 149999
+      "from": 90000,
+      "to": 110005
+    },
+    {
+      "from": 50100,
+      "to": 50100
     }
   ],
   "contextSensitiveHelpUrl": "https://DMT.com/help/",
