@@ -146,7 +146,7 @@ codeunit 81123 DMTImport
         AssignKeyFields(BufferRef, TmpTargetRef, TempDMTField_COLLECTION);
         if TmpTargetRef.Insert(false) then;
 
-        if DMTTable."Import Only New Records" then
+        if DMTTable."Import Only New Records" and not IsUpdateTask then
             if TargetRef2.Get(TmpTargetRef.RecordId) then begin
                 DMTMgt.UpdateResultQty(true, false);
                 exit;
@@ -252,8 +252,7 @@ codeunit 81123 DMTImport
                 FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FieldIndex(Index).NUMBER);
         end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        //Continue := FPBuilder.RUNMODAL();
-        FPBuilder.RUNMODAL();
+        Continue := FPBuilder.RUNMODAL();
         BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
     end;
 
@@ -273,7 +272,6 @@ codeunit 81123 DMTImport
             exit;
 
         if BufferTableView = '' then begin
-            ;
             if DMTTable.ReadTableLastView() <> '' then
                 BufferRef.SetView(DMTTable.ReadTableLastView());
 
