@@ -1683,9 +1683,14 @@
           <note from="Developer" annotates="general" priority="2">Benutzer-ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportBy - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 4071015267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Import At (Buffer Table)</source>
+          <note from="Developer" annotates="general" priority="2">Letzter Import am (Puffertabelle)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportToBufferAt - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 1370377676 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Last Import At</source>
-          <note from="Developer" annotates="general" priority="2">Letzter Import am</note>
+          <source>Last Import At (Target Table)</source>
+          <note from="Developer" annotates="general" priority="2">Letzter Import am (Zieltabelle)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastImportToTargetAt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3480591641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1829,7 +1834,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
+          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
         </trans-unit>
@@ -2092,6 +2097,16 @@
           <source>Create XMLPort</source>
           <note from="Developer" annotates="general" priority="2">XMLPort erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CreateXMLPort - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 116037593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Records In Target Table</source>
+          <note from="Developer" annotates="general" priority="2">Datensätze in Zieltabelle löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 116037593 - Method 1377591017 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
+          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>

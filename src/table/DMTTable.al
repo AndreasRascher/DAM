@@ -119,7 +119,7 @@ table 81128 "DMTTable"
             InitValue = true;
         }
         field(61; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
-        field(100; LastImportToTargetAt; DateTime) { Caption = 'Last Import At', Comment = 'Letzter Import am'; }
+        field(100; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(101; LastImportBy; Code[50])
         {
             Caption = 'User ID', comment = 'Benutzer-ID';
@@ -131,6 +131,7 @@ table 81128 "DMTTable"
         field(104; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         field(105; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
 
+        field(106; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)
@@ -287,9 +288,9 @@ table 81128 "DMTTable"
         // Collect used numbers
         if DMTTable.FindSet() then
             repeat
-                    if DMTTable."Import XMLPort ID" <> 0 then
-                        if AvailableXMLPorts.Contains(DMTTable."Import XMLPort ID") then
-                            AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
+                if DMTTable."Import XMLPort ID" <> 0 then
+                    if AvailableXMLPorts.Contains(DMTTable."Import XMLPort ID") then
+                        AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
                 if DMTTable."Buffer Table ID" <> 0 then
                     if AvailableTables.Contains(DMTTable."Buffer Table ID") then
                         AvailableTables.Remove(DMTTable."Buffer Table ID");
@@ -344,11 +345,12 @@ table 81128 "DMTTable"
                     QtyLines := RecRef.Count();
                 end;
         end;
-        if Rec."No.of Records in Buffer Table" <> QtyLines then begin
-            Rec.Get(Rec.RecordId);
-            Rec."No.of Records in Buffer Table" := QtyLines;
-            Rec.Modify();
-        end;
+        // if Rec."No.of Records in Buffer Table" <> QtyLines then begin
+        Rec.Get(Rec.RecordId);
+        Rec."No.of Records in Buffer Table" := QtyLines;
+        Rec.LastImportToBufferAt := CurrentDateTime;
+        Rec.Modify();
+        // end;
     end;
 
     procedure TryFindExportDataFile() Success: Boolean
@@ -422,20 +424,20 @@ table 81128 "DMTTable"
         DMTTable2.Copy(DMTTable);
         if DMTTable2.FindSet() then begin
             DataCompression.CreateZipArchive();
-                                        repeat
-                                            //Table
-                                            Clear(FileBlob);
-                                            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                                            OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
-                                            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                                            DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
-                                            //XMLPort
-                                            Clear(FileBlob);
-                                            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                                            OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
-                                            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                                            DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
-                                        until DMTTable2.Next() = 0;
+            repeat
+                //Table
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALTable(DMTTable2).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, DMTTable2.GetALBufferTableName());
+                //XMLPort
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable2).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, DMTTable2.GetALXMLPortName());
+            until DMTTable2.Next() = 0;
         end;
         Clear(FileBlob);
         FileBlob.CreateOutStream(OStr, DefaultTextEncoding);

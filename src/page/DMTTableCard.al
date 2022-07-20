@@ -99,6 +99,31 @@ page 81131 "DMTTableCard"
                     EnableControls(); // ShowMappingLines
                 end;
             }
+            action(DeleteRecordsInTargetTable)
+            {
+                Caption = 'Delete Records In Target Table', Comment = 'Datensätze in Zieltabelle löschen';
+                ApplicationArea = All;
+                Image = "Invoicing-Delete";
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    RecRef: RecordRef;
+                    DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! All Records in table "%1" (company "%2") will be deleted. Continue?',
+                    Comment = 'Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?';
+                begin
+                    Rec.TestField("To Table ID");
+                    CurrPage.SaveRecord();
+                    Commit();
+                    RecRef.Open(Rec."To Table ID");
+                    if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
+                        RecRef.DeleteAll();
+                    end;
+                end;
+            }
             action(TransferToTargetTable)
             {
                 Caption = 'Import to Target Table', Comment = 'In Zieltabelle übertragen';
