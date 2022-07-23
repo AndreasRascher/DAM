@@ -183,7 +183,8 @@ codeunit 81123 DMTImport
         TmpDMTField.SetFilter("To Field No.", KeyFieldsFilter);
         TmpDMTField.findset();
         repeat
-            DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."From Field No.", BufferRef, TmpDMTField."To Field No.", false);
+            if not IsKnownAutoincrementField(TmpDMTField) then
+                DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."From Field No.", BufferRef, TmpDMTField."To Field No.", false);
         until TmpDMTField.Next() = 0;
     end;
 
@@ -331,6 +332,32 @@ codeunit 81123 DMTImport
                 if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false) then
                     Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
         until TempFieldWithReplacementCode.Next() = 0;
+    end;
+
+    local procedure IsKnownAutoincrementField(var DMTField: Record DMTField temporary) IsAutoincrement: Boolean
+    var
+        RecordLink: Record "Record Link";
+        ReservationEntry: Record "Reservation Entry";
+        ChangeLogEntry: Record "Change Log Entry";
+        JobQueueLogEntry: Record "Job Queue Log Entry";
+        ActivityLog: Record "Activity Log";
+    begin
+        IsAutoincrement := false;
+        case true of
+            (DMTField.TableName = RecordLink.TableName) and (DMTField."To Field No." = RecordLink.FieldNo("Link ID")):
+                exit(true);
+            (DMTField.TableName = ReservationEntry.TableName) and (DMTField."To Field No." = ReservationEntry.FieldNo("Entry No.")):
+                exit(true);
+            (DMTField.TableName = ChangeLogEntry.TableName) and (DMTField."To Field No." = ChangeLogEntry.FieldNo("Entry No.")):
+                exit(true);
+            (DMTField.TableName = JobQueueLogEntry.TableName) and (DMTField."To Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
+                exit(true);
+            (DMTField.TableName = ActivityLog.TableName) and (DMTField."To Field No." = ActivityLog.FieldNo(ID)):
+                exit(true);
+            else
+                exit(false);
+        end;
+
     end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)

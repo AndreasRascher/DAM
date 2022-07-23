@@ -184,7 +184,7 @@ table 81122 "DMTField"
         if (DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file") then begin
             DMTTable.TestField("Buffer Table ID");
             if not DMTTable.CustomBufferTableExits() then begin
-                Message('Keine Puffertabelle mit der ID %1 vorhand', DMTTable."Buffer Table ID");
+                Message('Keine Puffertabelle mit der ID %1 vorhanden', DMTTable."Buffer Table ID");
                 exit;
             end;
             DMTFields.FilterBy(DMTTable);
