@@ -112,7 +112,7 @@ page 50100 FreeObjectsInLicense
         UNTIL permissionRange.Next() = 0;
         dgDialog.Close();
 
-        GetQtyObjetstByType;
+        GetQtyObjetstByType();
 
         IF rec.FINDFIRST() THEN;
     end;
@@ -154,7 +154,7 @@ page 50100 FreeObjectsInLicense
     begin
         rec.reset();
         iTotal := rec.Count;
-        FOR i := 1 TO GetMaxObjectType DO begin
+        FOR i := 1 TO GetMaxObjectType() DO begin
             permissionRange."Object Type" := i;
             rec.SETRANGE("Object Type", i);
             CASE permissionRange."Object Type" OF

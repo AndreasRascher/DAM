@@ -12,11 +12,12 @@ page 81132 "DMTTableCardPart"
             repeater(Lines)
             {
                 field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
-                field("To Field No."; Rec."To Field No.") { Visible = false; ApplicationArea = All; }
-                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; }
+                field("To Field No."; Rec."To Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
+                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
                 field("From Field Caption"; Rec."From Field Caption")
                 {
                     Visible = not ShowGenBufferTableColumns;
+                    Editable = false;
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
@@ -30,7 +31,7 @@ page 81132 "DMTTableCardPart"
                         RunSelectSourceFieldDialog();
                     end;
                 }
-                field("From Field No."; Rec."From Field No.") { HideValue = HideFromFieldInfo; ApplicationArea = All; }
+                field("From Field No."; Rec."From Field No.") { LookupPageId = DMTFieldLookup; HideValue = HideFromFieldInfo; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
                 field("Trgt.Field Type"; Rec."To Field Type") { Visible = false; ApplicationArea = All; }
                 field("From Field Type"; Rec."From Field Type") { HideValue = HideFromFieldInfo; Visible = false; ApplicationArea = All; }

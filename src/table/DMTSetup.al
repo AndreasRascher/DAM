@@ -2,7 +2,6 @@ table 81127 "DMTSetup"
 {
     Caption = 'DMT Setup', comment = 'DMT Einrichtung';
     DataClassification = ToBeClassified;
-    DataPerCompany = false;
 
     fields
     {
@@ -62,6 +61,7 @@ table 81127 "DMTSetup"
             trigger OnValidate()
             begin
                 Rec."Schema.csv File Path" := DelChr(Rec."Schema.csv File Path", '<>', '"');
+                SyncSomeSettingsForAllCompanies(CompanyName);
             end;
 
             trigger OnLookup()
@@ -103,8 +103,25 @@ table 81127 "DMTSetup"
 
     internal procedure InsertWhenEmpty()
     var
+        Company: Record Company;
+        FromDMTSetup: Record DMTSetup;
         fileMgt: Codeunit "File Management";
+        found: Boolean;
     begin
+        Company.SetFilter(Name, '<>%1', CompanyName);
+        Company.FindSet();
+        repeat
+            Clear(FromDMTSetup);
+            FromDMTSetup.ChangeCompany(Company.Name);
+            found := FromDMTSetup.FindFirst();
+        until (Company.Next() = 0) or found;
+
+        if found then begin
+            Rec := FromDMTSetup;
+            Rec.Insert();
+            exit;
+        end;
+
         if not Rec.Get() then begin
             Rec."Obj. ID Range Buffer Tables" := '90000..90099';
             Rec."Obj. ID Range XMLPorts" := '90000..90099';
@@ -123,6 +140,34 @@ table 81127 "DMTSetup"
         SessionStorage.DisposeLicenseInfo();
         Rec."Obj. ID Range Buffer Tables" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::Table, true), 1, MaxStrLen(Rec."Obj. ID Range Buffer Tables"));
         Rec."Obj. ID Range XMLPorts" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort, true), 1, MaxStrLen(Rec."Obj. ID Range XMLPorts"));
+    end;
+
+    procedure SyncSomeSettingsForAllCompanies(FromCompanyName: text)
+    var
+        Company: record Company;
+        RecRefFrom, RecRefTo : RecordRef;
+        FieldID: Integer;
+        FieldIDsToSyncList: List of [Integer];
+    begin
+        FieldIDsToSyncList.Add(Rec.FieldNo("Obj. ID Range Buffer Tables"));
+        FieldIDsToSyncList.Add(Rec.FieldNo("Obj. ID Range XMLPorts"));
+        FieldIDsToSyncList.Add(Rec.FieldNo("Schema.csv File Path"));
+        FieldIDsToSyncList.Add(Rec.FieldNo("Import with FlowFields"));
+
+        RecRefFrom.GetTable(Rec);
+        Company.SetFilter(Name, '<>%1', FromCompanyName);
+        If Company.FindSet() then
+            repeat
+                Clear(RecRefTo);
+                RecRefTo.Open(RecRefFrom.Number, false, Company.Name);
+                if not RecRefTo.FindFirst() then
+                    RecRefTo.Insert(false);
+                foreach FieldID in FieldIDsToSyncList do
+                    RecRefTo.Field(FieldID).Value := RecRefFrom.Field(FieldID).Value;
+                RecRefTo.Modify(false);
+            until Company.Next() = 0;
+        RecRefTo.Open(RecRefFrom.Number);
+
     end;
 
     procedure CheckSchemaInfoHasBeenImporterd()

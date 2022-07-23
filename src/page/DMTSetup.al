@@ -12,62 +12,67 @@ page 81130 "DMT Setup"
     {
         area(Content)
         {
-            group(General)
+            group("Global Settings")
             {
-                Caption = 'General', Comment = 'Allgemein';
-                group(VerticalAlign)
+                Caption = 'Global Settings', Comment = 'Globale Einstellungen';
+                group(ObjectIDs)
                 {
-                    ShowCaption = false;
-                    group(ObjectIDs)
-                    {
-                        Caption = 'Object IDs', comment = 'Objekt IDs';
-                        field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
-                        field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
-                    }
-                    group(Paths)
-                    {
-                        Caption = 'Paths', comment = 'Pfade';
-                        field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
-                        field("Schema File Path"; Rec."Schema.csv File Path") { ApplicationArea = All; }
-                        field("Backup.xml File Path"; Rec."Backup.xml File Path") { ApplicationArea = All; }
-                    }
-                    group(Performance)
-                    {
-                        field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = all; }
-                        field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = all; }
-                    }
-                    group(Debugging)
-                    {
-                        field(SessionID; SessionId())
-                        {
-                            ApplicationArea = all;
-                            Caption = 'SessionID';
-                            trigger OnAssistEdit()
-                            var
-                                activeSession: Record "Active Session";
-                                Choice: Integer;
-                                NoOfChoices: Integer;
-                                SessionList: List of [Integer];
-                                Choices: Text;
-                                StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
-                            begin
-                                if activeSession.FindSet() then
-                                    repeat
-                                        Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
-                                        NoOfChoices += 1;
-                                        SessionList.Add(activeSession."Session ID");
-                                    until activeSession.Next() = 0;
-                                Choices += 'Cancel';
-                                Choice := StrMenu(Choices, NoOfChoices + 1, StopSessionInstructionLbl);
-                                if Choice <> 0 then
-                                    if Choice <= NoOfChoices then begin
-                                        Message('%1', StopSession(SessionList.Get(Choice)));
-                                    end;
-                            end;
-                        }
-                        field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }
-                    }
+                    Caption = 'Object IDs', comment = 'Objekt IDs';
+                    field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
+                    field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                 }
+                group(Paths)
+                {
+                    Caption = 'Paths', comment = 'Pfade';
+                    field("Default Export Folder Path"; Rec."Default Export Folder Path") { ApplicationArea = All; }
+                    field("Backup.xml File Path"; Rec."Backup.xml File Path") { ApplicationArea = All; }
+                }
+                group(Debugging)
+                {
+                    field(SessionID; SessionId())
+                    {
+                        ApplicationArea = all;
+                        Caption = 'SessionID';
+                        trigger OnAssistEdit()
+                        var
+                            activeSession: Record "Active Session";
+                            Choice: Integer;
+                            NoOfChoices: Integer;
+                            SessionList: List of [Integer];
+                            Choices: Text;
+                            StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                        begin
+                            if activeSession.FindSet() then
+                                repeat
+                                    Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
+                                    NoOfChoices += 1;
+                                    SessionList.Add(activeSession."Session ID");
+                                until activeSession.Next() = 0;
+                            Choices += 'Cancel';
+                            Choice := StrMenu(Choices, NoOfChoices + 1, StopSessionInstructionLbl);
+                            if Choice <> 0 then
+                                if Choice <= NoOfChoices then begin
+                                    Message('%1', StopSession(SessionList.Get(Choice)));
+                                end;
+                        end;
+                    }
+                    field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }
+                }
+            }
+            group("Company Settings")
+            {
+                Caption = 'Company Settings', Comment = 'Mandanteneinstellungen';
+                group(CompanyPaths)
+                {
+                    Caption = 'Paths', comment = 'Pfade';
+                    field("Schema File Path"; Rec."Schema.csv File Path") { ApplicationArea = All; }
+                }
+                group(Performance)
+                {
+                    field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = all; }
+                    field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = all; }
+                }
+
             }
         }
     }

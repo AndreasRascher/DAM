@@ -353,20 +353,22 @@ table 81128 "DMTTable"
         // end;
     end;
 
-    procedure TryFindExportDataFile() Success: Boolean
+    procedure TryFindExportDataFile() FileExists: Boolean
     var
         DMTSetup: Record "DMTSetup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
+        if (Rec.DataFilePath <> '') and FileMgt.ServerFileExists(Rec.DataFilePath) then
+            exit(true);
+
         DMTSetup.Get();
-        if DMTSetup."Default Export Folder Path" = '' then exit(false);
-        if Rec.DataFilePath <> '' then exit(false);
+        if DMTSetup."Default Export Folder Path" = '' then
+            exit(false);
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
-            Success := true;
         end;
     end;
 
@@ -539,5 +541,28 @@ table 81128 "DMTTable"
             DMTField."Validation Order" := NewSortingValues.Get(RecID);
             DMTField.Modify();
         end;
+    end;
+
+    procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
+    var
+        DMTTable: Record DMTTable;
+    begin
+        If not DMTTable.FindSet(false, false) then
+            exit('');
+        repeat
+            case FieldNo of
+                DMTTable.FieldNo("To Table ID"):
+                    begin
+                        if DMTTable."To Table ID" <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DMTTable."To Table ID");
+                    end;
+                DMTTable.FieldNo("Buffer Table ID"):
+                    begin
+                        if DMTTable."Buffer Table ID" <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DMTTable."Buffer Table ID");
+                    end;
+            end;
+        until DMTTable.Next() = 0;
+        FilterExpr := FilterExpr.TrimEnd('|');
     end;
 }

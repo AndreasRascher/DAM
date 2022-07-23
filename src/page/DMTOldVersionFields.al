@@ -1,9 +1,10 @@
-page 110000 "DMTOldVersionFields"
+page 110000 "DMTFieldLookup"
 {
-    Caption = 'Old Version Fields', comment = 'Felder alte Version';
+    Caption = 'Fields', comment = 'Felder';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTFieldBuffer;
+    SourceTableTemporary = true;
 
     layout
     {
@@ -18,4 +19,30 @@ page 110000 "DMTOldVersionFields"
             }
         }
     }
+
+    trigger OnOpenPage()
+    begin
+        LoadLines();
+    end;
+
+    procedure LoadLines()
+    var
+        Field: Record Field;
+        TempFieldBuffer: Record DMTFieldBuffer temporary;
+    begin
+        if IsLoaded then exit;
+        Field.SetRange(TableNo, Rec.GetRangeMin(TableNo));
+        Field.SetFilter("No.", '<2000000000'); // no system fields
+        Field.FindSet(false, false);
+        repeat
+            TempFieldBuffer.ReadFrom(Field);
+            TempFieldBuffer.Insert(false);
+        until Field.Next() = 0;
+        IsLoaded := true;
+        Rec.Copy(TempFieldBuffer, true);
+    end;
+
+    var
+        [InDataSet]
+        IsLoaded: Boolean;
 }

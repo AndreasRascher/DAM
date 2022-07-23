@@ -18,28 +18,29 @@ page 81133 "DMTTableList"
             {
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
-                field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; }
-                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; }
-                field("To Table Caption"; Rec."Dest.Table Caption") { ApplicationArea = All; }
+                field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; Editable = false; }
+                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
+                field("To Table Caption"; Rec."Dest.Table Caption") { ApplicationArea = All; Editable = false; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
-                field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; }
-                field(BufferTableType; BufferTableType) { ApplicationArea = All; Visible = false; }
-                field("Data Source Type"; "Data Source Type") { ApplicationArea = All; Visible = false; }
-                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
-                field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
-                field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
+                field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
+                field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; Visible = false; }
+                field("Data Source Type"; Rec."Data Source Type") { ApplicationArea = All; Visible = false; }
+                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; Editable = false; }
+                field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; Editable = false; }
+                field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; Editable = false; }
+                field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; Editable = false; }
                 field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))
                 {
                     ApplicationArea = All;
+                    Editable = false;
                     Caption = 'Qty.Lines In Trgt. Table', Comment = 'Anz. Datensätze in Zieltabelle';
                     trigger OnLookup(var Text: Text): Boolean
                     begin
                         Rec.ShowTableContent(Rec."To Table ID");
                     end;
                 }
-                field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
+                field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; Editable = false; }
             }
         }
         area(FactBoxes)
@@ -70,26 +71,42 @@ page 81133 "DMTTableList"
             action(ImportBufferTables)
             {
                 Image = ImportDatabase;
-                Caption = 'Read all files into buffer tables', Comment = 'Alle Dateien in Puffertabellen einlesen';
+                Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
                 ApplicationArea = all;
                 trigger OnAction()
                 var
-                    DMTTable: Record DMTTable;
+                    DMTTable, DMTTable_SELECTED : Record DMTTable;
                     Progress: Dialog;
-                    Start: DateTime;
-                    ImportFilesProgressMsg: Label 'Reading files into buffer tables\ Table: ############1#', Comment = 'Dateien werden eingelesen\ Tabelle: ############1#';
+                    Start, TableStart : DateTime;
+                    ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
+                    ProgressMsg: Text;
                     FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
                 begin
-                    if DMTTable.FindSet() then begin
-                        Start := CurrentDateTime;
-                        Progress.Open(ImportFilesProgressMsg);
-                                                   repeat
-                                                       Progress.Update(1, DMTTable."Dest.Table Caption");
-                                                       DMTTable.ImportToBufferTable();
-                                                   until DMTTable.Next() = 0;
-                        Progress.Close();
-                        Message(FinishedMsg, CurrentDateTime - Start);
-                    end;
+                    DMTTable_SELECTED.SetCurrentKey("Sort Order");
+                    if not GetSelection(DMTTable_SELECTED) then
+                        exit;
+                    ProgressMsg := '==========================================\' +
+                                   ImportFilesProgressMsg + '\' +
+                                   '==========================================\';
+
+                    DMTTable_SELECTED.FindSet(false, false);
+                    REPEAT
+                        ProgressMsg += '\' + DMTTable_SELECTED."Dest.Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."To Table ID") + '#';
+                    UNTIL DMTTable_SELECTED.NEXT() = 0;
+
+                    DMTTable_SELECTED.FindSet();
+                    Start := CurrentDateTime;
+                    Progress.Open(ProgressMsg);
+                    repeat
+                        TableStart := CurrentDateTime;
+                        DMTTable := DMTTable_SELECTED;
+                        Progress.Update(DMTTable_SELECTED."To Table ID", 'Wird eingelesen');
+                        DMTTable.ImportToBufferTable();
+                        Commit();
+                        Progress.Update(DMTTable_SELECTED."To Table ID", CURRENTDATETIME - TableStart);
+                    until DMTTable_SELECTED.Next() = 0;
+                    Progress.Close();
+                    Message(FinishedMsg, CurrentDateTime - Start);
                 end;
             }
             action(ExportALObjects)
@@ -103,7 +120,7 @@ page 81133 "DMTTableList"
                 begin
                     if DMTTable.FindSet() then
                         repeat
-                                DMTTable.DownloadAllALDataMigrationObjects(Rec);
+                            DMTTable.DownloadAllALDataMigrationObjects(Rec);
                         until DMTTable.Next() = 0;
                 end;
             }
@@ -127,6 +144,20 @@ page 81133 "DMTTableList"
                         DMTImport.StartImport(DMTTable, true, false);
                     until DMTTable_SELECTED.Next() = 0;
                 end;
+            }
+            group(CreateFilter)
+            {
+                Caption = 'Create Filter', Comment = 'Filter erstellen';
+                action(GetToTableIDFilter)
+                {
+                    Image = FilterLines;
+                    Caption = 'To Table ID Filter', Comment = 'Zieltabellen-ID Filter';
+                    ApplicationArea = all;
+                    trigger OnAction()
+                    begin
+                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("To Table ID")));
+                    end;
+                }
             }
         }
     }
@@ -153,6 +184,7 @@ page 81133 "DMTTableList"
     begin
         ImportXMLPortIDStyle := 'Unfavorable';
         BufferTableIDStyle := 'Unfavorable';
+        DataFilePathStyle := 'Unfavorable';
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
             clear(ImportXMLPortIDStyle);
             clear(BufferTableIDStyle);
@@ -161,12 +193,11 @@ page 81133 "DMTTableList"
             ImportXMLPortIDStyle := 'Favorable';
         if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
             BufferTableIDStyle := 'Favorable';
-        Rec.TryFindExportDataFile();
+        if Rec.TryFindExportDataFile() then
+            DataFilePathStyle := 'Favorable';
     end;
 
     var
         [InDataSet]
-        ImportXMLPortIDStyle: Text;
-        [InDataSet]
-        BufferTableIDStyle: Text;
+        ImportXMLPortIDStyle, BufferTableIDStyle, DataFilePathStyle : Text;
 }
