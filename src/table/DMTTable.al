@@ -365,10 +365,13 @@ table 81128 "DMTTable"
         DMTSetup.Get();
         if DMTSetup."Default Export Folder Path" = '' then
             exit(false);
+        //Land/Region -> Land_Region
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
+        end else begin
+            //Message(FilePath);
         end;
     end;
 
