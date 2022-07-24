@@ -109,12 +109,12 @@ table 81127 "DMTSetup"
         found: Boolean;
     begin
         Company.SetFilter(Name, '<>%1', CompanyName);
-        Company.FindSet();
-        repeat
-            Clear(FromDMTSetup);
-            FromDMTSetup.ChangeCompany(Company.Name);
-            found := FromDMTSetup.FindFirst();
-        until (Company.Next() = 0) or found;
+        if Company.FindSet() then
+            repeat
+                Clear(FromDMTSetup);
+                FromDMTSetup.ChangeCompany(Company.Name);
+                found := FromDMTSetup.FindFirst();
+            until (Company.Next() = 0) or found;
 
         if found then begin
             Rec := FromDMTSetup;
