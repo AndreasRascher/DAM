@@ -16,11 +16,12 @@ page 81133 "DMTTableList"
         {
             repeater(DMTTableRepeater)
             {
+                FreezeColumn = "To Table Caption";
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
-                field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
                 field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; Editable = false; }
-                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
                 field("To Table Caption"; Rec."Dest.Table Caption") { ApplicationArea = All; Editable = false; }
+                field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
+                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
@@ -30,7 +31,7 @@ page 81133 "DMTTableList"
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; Editable = false; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; Editable = false; }
                 field("Qty.Lines In Src. Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; Editable = false; }
-                field("Qty.Lines In Trgt. Table"; GetNoOfRecordsInTrgtTable(Rec))
+                field("Qty.Lines In Trgt. Table"; Rec.GetNoOfRecordsInTrgtTable())
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -158,6 +159,16 @@ page 81133 "DMTTableList"
                         Message(Rec.CreateTableIDFilter(Rec.FieldNo("To Table ID")));
                     end;
                 }
+                action(GetFromTableIDFilter)
+                {
+                    Image = FilterLines;
+                    Caption = 'From Table ID Filter', Comment = 'Herkunftstabellen-ID Filter';
+                    ApplicationArea = all;
+                    trigger OnAction()
+                    begin
+                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
+                    end;
+                }
             }
         }
     }
@@ -167,15 +178,6 @@ page 81133 "DMTTableList"
         Clear(DMTTable_SELECTED);
         CurrPage.SetSelectionFilter(DMTTable_SELECTED);
         HasLines := DMTTable_SELECTED.FindFirst();
-    end;
-
-    local procedure GetNoOfRecordsInTrgtTable(DMTTable: Record DMTTable): Integer
-    var
-        TableInformation: Record "Table Information";
-    begin
-        if TableInformation.Get(CompanyName, DMTTable."To Table ID") then;
-        // TableInformation.Calcfields("No. of Records");
-        exit(TableInformation."No. of Records");
     end;
 
     trigger OnAfterGetRecord()

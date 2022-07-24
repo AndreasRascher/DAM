@@ -195,6 +195,13 @@
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType ReplaceExistingMatchesQst</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 3644312146 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table Type Filter</source>
+          <target>Puffertabellenart Filter</target>
+          <note from="Developer" annotates="general" priority="2">Puffertabellenart Filter</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field BufferTableTypeFilter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <target>Fester Wert</target>
@@ -1959,12 +1966,6 @@
           <note from="Developer" annotates="general" priority="2">Puffertabellenart</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableType - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 2352204874 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Generic Buffer Table for all Files,Seperate Buffer Table per CSV</source>
-          <target>Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV</target>
-          <note from="Developer" annotates="general" priority="2">Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableType - Property OptionCaption</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
           <target>Datenquelltyp</target>
@@ -2181,6 +2182,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
+          <source>"%1" is not a valid %2 value.</source>
+          <target>"%1" ist kein gültiger %2 Wert</target>
+          <note from="Developer" annotates="general" priority="2">"%1" ist kein gültiger %2 Wert</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMgt - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2885896688 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <target>Import abgeschlossen</target>
@@ -2293,21 +2301,18 @@
           <source>Company Settings</source>
           <target>Mandanteneinstellungen</target>
           <note from="Developer" annotates="general" priority="2">Mandanteneinstellungen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Company Settings - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 4260221963 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Paths</source>
           <target>Pfade</target>
           <note from="Developer" annotates="general" priority="2">Pfade</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control CompanyPaths - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 1706166186 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Global Settings</source>
           <target>Globale Einstellungen</target>
           <note from="Developer" annotates="general" priority="2">Globale Einstellungen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Global Settings - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 2293317941 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2502,6 +2507,13 @@
           <note from="Developer" annotates="general" priority="2">Datendatei Pfad</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control DataFilePath - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Control 447400343 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty.Lines In Trgt. Table</source>
+          <target>Anz. Datensätze in Zieltabelle</target>
+          <note from="Developer" annotates="general" priority="2">Anz. Datensätze in Zieltabelle</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control Qty.Lines In Trgt. Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Control 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields Setup</source>
           <target>Feldeinrichtung</target>
@@ -2632,14 +2644,18 @@
           <source>Create Filter</source>
           <target>Filter erstellen</target>
           <note from="Developer" annotates="general" priority="2">Filter erstellen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action CreateFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Table ID Filter</source>
+          <target>Herkunftstabellen-ID Filter</target>
+          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetFromTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>To Table ID Filter</source>
           <target>Zieltabellen-ID Filter</target>
           <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetToTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2755,6 +2771,18 @@
           <target>%1 Puffer\%2 Zeilen importiert</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTGenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="Enum 2352204874 - EnumValue 2375118780 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Generic Buffer Table for all Files</source>
+          <target>Generische Puffertabelle für alle Dateien</target>
+          <note from="Developer" annotates="general" priority="2">Generische Puffertabelle für alle Dateien</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2352204874 - EnumValue 1002754978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Seperate Buffer Table per CSV</source>
+          <target>Eine Puffertabelle pro CSV</target>
+          <note from="Developer" annotates="general" priority="2">Eine Puffertabelle pro CSV</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

@@ -45,6 +45,16 @@ page 81131 "DMTTableCard"
                         Rec.ShowBufferTable();
                     end;
                 }
+                field("Qty.Lines In Trgt. Table"; Rec.GetNoOfRecordsInTrgtTable())
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Caption = 'Qty.Lines In Trgt. Table', Comment = 'Anz. Datensätze in Zieltabelle';
+                    trigger OnAssistEdit()
+                    begin
+                        Rec.ShowTableContent(Rec."To Table ID");
+                    end;
+                }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
                 field("Import Only New Records"; "Import Only New Records") { ApplicationArea = All; }
             }
@@ -71,7 +81,7 @@ page 81131 "DMTTableCard"
                 Visible = LinesVisible;
                 ApplicationArea = all;
                 Caption = 'Fields Setup', Comment = 'Feldeinrichtung';
-                SubPageLink = "To Table No." = field("To Table ID");
+                SubPageLink = "To Table No." = field("To Table ID"), BufferTableTypeFilter = field(BufferTableType);
             }
         }
     }
@@ -189,7 +199,7 @@ page 81131 "DMTTableCard"
                     while DMTErrorLogQry.Read() do begin
                         RecIdList.Add(DMTErrorLogQry.FromID);
                     end;
-                    DMTImport.ProcessFullBuffer(RecIdList, Rec, false);
+                    DMTImport.RetryProcessFullBuffer(RecIdList, Rec, false);
                     Rec.Get(Rec.RecordId);
                     Rec.LastImportBy := CopyStr(UserId, 1, MaxStrLen(Rec.LastImportBy));
                     Rec.LastImportToTargetAt := CurrentDateTime;
@@ -263,7 +273,7 @@ page 81131 "DMTTableCard"
 
     local procedure EnableControls()
     begin
-        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"One Buffer Table per file");
+        UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
         LinesVisible := true;
         // LinesVisible := (Rec."To Table ID" <> 0) and
         //                 (Rec."No.of Records in Buffer Table" > 0) and
@@ -275,7 +285,7 @@ page 81131 "DMTTableCard"
     local procedure GetCaption(): Text
     begin
         case Rec.BufferTableType of
-            Rec.BufferTableType::"One Buffer Table per file":
+            Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 exit(Rec."Dest.Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 exit(Rec.DataFilePath);

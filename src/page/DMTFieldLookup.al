@@ -29,16 +29,39 @@ page 110000 "DMTFieldLookup"
     var
         Field: Record Field;
         TempFieldBuffer: Record DMTFieldBuffer temporary;
+        DMTTable: Record DMTTable;
+        GenBuffTable: Record DMTGenBuffTable;
+        BuffTableCaptions: Dictionary of [Integer, Text];
+        FieldNo: Integer;
     begin
         if IsLoaded then exit;
-        Field.SetRange(TableNo, Rec.GetRangeMin(TableNo));
-        Field.SetFilter("No.", '<2000000000'); // no system fields
-        Field.FindSet(false, false);
-        repeat
-            TempFieldBuffer.ReadFrom(Field);
-            TempFieldBuffer.Insert(false);
-        until Field.Next() = 0;
-        IsLoaded := true;
+        DMTTable.Get(Rec.GetRangeMin("To Table No. Filter"));
+        case DMTTable.BufferTableType of
+            DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+                    foreach FieldNo in BuffTableCaptions.Keys do begin
+                        TempFieldBuffer.TableNo := GenBuffTable.RecordId.TableNo;
+                        TempFieldBuffer."No." := FieldNo + 1000;
+                        TempFieldBuffer."Field Caption" := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempFieldBuffer."Field Caption"));
+                        TempFieldBuffer.Insert();
+                    end;
+                    IsLoaded := true;
+                end;
+
+            DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
+                begin
+                    Field.SetRange(TableNo, DMTTable."Buffer Table ID");
+                    Field.SetFilter("No.", '<2000000000'); // no system fields
+                    Field.FindSet(false, false);
+                    repeat
+                        TempFieldBuffer.ReadFrom(Field);
+                        TempFieldBuffer.Insert(false);
+                    until Field.Next() = 0;
+                    IsLoaded := true;
+                end;
+        end;
+
         Rec.Copy(TempFieldBuffer, true);
     end;
 

@@ -55,12 +55,9 @@ table 81128 "DMTTable"
             CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
             Editable = false;
         }
-        field(50; BufferTableType; Option)
+        field(50; BufferTableType; Enum BufferTableType)
         {
             Caption = 'Buffer Table Type', Comment = 'Puffertabellenart';
-            OptionMembers = "Generic Buffer Table for all Files","One Buffer Table per file";
-            OptionCaption = 'Generic Buffer Table for all Files,Seperate Buffer Table per CSV',
-            comment = 'Generische Puffertabelle für alle Dateien,Eine Puffertabelle pro CSV';
 
             trigger OnValidate()
             begin
@@ -200,7 +197,7 @@ table 81128 "DMTTable"
         ImportFileFromPathLbl: Label 'Importing %1';
     begin
         case Rec.BufferTableType of
-            Rec.BufferTableType::"One Buffer Table per file":
+            Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     rec.TestField("Import XMLPort ID");
                     rec.Testfield(DataFilePath);
@@ -251,7 +248,7 @@ table 81128 "DMTTable"
             GenBuffTable.ShowImportDataForFile(Rec.DataFilePath);
         end;
 
-        if Rec.BufferTableType = Rec.BufferTableType::"One Buffer Table per file" then begin
+        if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
             if Rec."Buffer Table ID" = 0 then exit(false);
             ShowTableContent(Rec."Buffer Table ID");
         end;
@@ -337,9 +334,10 @@ table 81128 "DMTTable"
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
                     GenBuffTable.FilterByFileName(Rec.DataFilePath);
+                    GenBuffTable.SetRange(IsCaptionLine, false);
                     QtyLines := GenBuffTable.Count;
                 end;
-            Rec.BufferTableType::"One Buffer Table per file":
+            Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     RecRef.Open(REc."Buffer Table ID");
                     QtyLines := RecRef.Count();
@@ -567,5 +565,14 @@ table 81128 "DMTTable"
             end;
         until DMTTable.Next() = 0;
         FilterExpr := FilterExpr.TrimEnd('|');
+    end;
+
+    procedure GetNoOfRecordsInTrgtTable(): Integer
+    var
+        TableInformation: Record "Table Information";
+    begin
+        if TableInformation.Get(CompanyName, Rec."To Table ID") then;
+        // TableInformation.Calcfields("No. of Records");
+        exit(TableInformation."No. of Records");
     end;
 }

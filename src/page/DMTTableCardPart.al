@@ -26,10 +26,6 @@ page 81132 "DMTTableCardPart"
                     Visible = ShowGenBufferTableColumns;
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
-                    trigger OnAssistEdit()
-                    begin
-                        RunSelectSourceFieldDialog();
-                    end;
                 }
                 field("From Field No."; Rec."From Field No.") { LookupPageId = DMTFieldLookup; HideValue = HideFromFieldInfo; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
@@ -268,30 +264,6 @@ page 81132 "DMTTableCardPart"
     begin
         ShowGenBufferTableColumns := BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files";
         CurrPage.Update();
-    end;
-
-    procedure RunSelectSourceFieldDialog()
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-        DMTTable: Record DMTTable;
-        DMTField2: Record DMTField;
-        BuffTableCaptions: Dictionary of [Integer, Text];
-        Choices: Text;
-        SelectedFieldNo: Integer;
-        FieldCaption: Text;
-    begin
-        DMTTable.Get(Rec."To Table No.");
-        GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
-        foreach FieldCaption in BuffTableCaptions.Values do begin
-            Choices += FieldCaption + ',';
-        end;
-        SelectedFieldNo := StrMenu(Choices);
-        if SelectedFieldNo <> 0 then begin
-            DMTField2 := Rec;
-            DMTField2."From Field No." := SelectedFieldNo;
-            DMTField2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(SelectedFieldNo), 1, MaxStrLen(DMTField2."From Field Caption (GenBuff)"));
-            DMTField2.Modify();
-        end;
     end;
 
     Var

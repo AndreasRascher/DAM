@@ -191,8 +191,8 @@ codeunit 81124 "DMTMgt"
         if ToField.Type = FromField.Type then
             ToField.Value := FromField.Value
         else
-            if not EvaluateFieldRef(ToField, Format(FromField.Value), false) then
-                Error('TODO EvaluateFieldRef');
+            if not EvaluateFieldRef(ToField, Format(FromField.Value), false, true) then
+                Error('THIS ERROR SHOULD NOT HAPPEN');
         IF DoModify then
             TargetRef.modify();
     end;
@@ -239,7 +239,7 @@ codeunit 81124 "DMTMgt"
         end;
     end;
 
-    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: text; EvaluateOptionValueAsNumber: Boolean): Boolean
+    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
         _DateFormula: DateFormula;
@@ -254,6 +254,7 @@ codeunit 81124 "DMTMgt"
         OptionIndex: Integer;
         _OutStream: OutStream;
         OptionElement: text;
+        InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = '"%1" ist kein gültiger %2 Wert';
     begin
         if FromText = '' then
             case UpperCase(Format(FieldRef_TO.TYPE)) of
@@ -267,16 +268,20 @@ codeunit 81124 "DMTMgt"
 
             'INTEGER':
                 begin
-                    IF EVALUATE(_Integer, FromText) then begin
+                    IF Evaluate(_Integer, FromText) then begin
                         FieldRef_TO.Value := _Integer;
                         exit(TRUE);
-                    end;
+                    end else
+                        if ThrowError then
+                            Evaluate(_Integer, FromText)
                 end;
             'BIGINTEGER':
-                IF EVALUATE(_BigInteger, FromText) then begin
+                IF Evaluate(_BigInteger, FromText) then begin
                     FieldRef_TO.Value := _BigInteger;
                     exit(TRUE);
-                end;
+                end else
+                    if ThrowError then
+                        Evaluate(_BigInteger, FromText);
             'TEXT', 'TABLEFILTER':
                 begin
                     FieldRef_TO.Value := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
@@ -288,27 +293,35 @@ codeunit 81124 "DMTMgt"
                     exit(TRUE);
                 end;
             'DECIMAL':
-                IF EVALUATE(_Decimal, FromText) then begin
+                IF Evaluate(_Decimal, FromText) then begin
                     FieldRef_TO.Value := _Decimal;
                     exit(TRUE);
-                end;
+                end else
+                    if ThrowError then
+                        Evaluate(_Decimal, FromText);
             'BOOLEAN':
-                IF EVALUATE(_Boolean, FromText) then begin
+                IF Evaluate(_Boolean, FromText) then begin
                     FieldRef_TO.Value := _Boolean;
                     exit(TRUE);
-                end;
+                end else
+                    if ThrowError then
+                        Evaluate(_Boolean, FromText);
             'RECORDID':
-                IF EVALUATE(_RecordID, FromText) then begin
+                IF Evaluate(_RecordID, FromText) then begin
                     FieldRef_TO.Value := _RecordID;
                     exit(TRUE);
-                end;
+                end else
+                    if ThrowError then
+                        Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
             'OPTION':
                 IF EvaluateOptionValueAsNumber then begin
                     //Optionswert wird als Zahl übergeben
-                    if EVALUATE(_Integer, FromText) then begin
+                    if Evaluate(_Integer, FromText) then begin
                         FieldRef_TO.Value := _Integer;
                         exit(TRUE);
-                    end;
+                    end else
+                        if ThrowError then
+                            Evaluate(_RecordID, FromText);
                 end else begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
@@ -323,19 +336,22 @@ codeunit 81124 "DMTMgt"
             'DATE':
                 begin
                     //ApplicationMgt.MakeDateText(FromText);
-                    IF EVALUATE(_Date, FromText) then begin
+                    IF Evaluate(_Date, FromText) then begin
                         FieldRef_TO.Value := _Date;
                         exit(TRUE);
-                    end;
+                    end else
+                        if ThrowError then
+                            Evaluate(_Date, FromText);
                 end;
 
             'DATETIME':
                 begin
                     //ApplicationMgt.MakeDateTimeText(FromText);
-                    IF EVALUATE(_DateTime, FromText) then begin
+                    IF Evaluate(_DateTime, FromText) then begin
                         FieldRef_TO.Value := _DateTime;
                         exit(TRUE);
-                    end;
+                    end else
+                        if ThrowError then Evaluate(_DateTime, FromText);
                 end;
             'BLOB':
                 begin
@@ -348,14 +364,15 @@ codeunit 81124 "DMTMgt"
                 end;
             'DATEFORMULA':
                 begin
-                    IF EVALUATE(_DateFormula, FromText) then begin
+                    IF Evaluate(_DateFormula, FromText) then begin
                         FieldRef_TO.Value := _DateFormula;
                         exit(TRUE);
-                    end;
+                    end else
+                        if ThrowError then Evaluate(_DateFormula, FromText);
                 end;
             ELSE
                 MESSAGE('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', FORMAT(FieldRef_TO.TYPE));
-        end;  // end_CASE
+        end;  // end_CASE
     end;
 
     [TryFunction]
@@ -386,7 +403,7 @@ codeunit 81124 "DMTMgt"
             (ToField.Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.VALUE; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
-                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), true) then
+                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), true, true) then
                     Error('TODO');
             else
                 Error('unhandled TODO %1', FromField.Type);

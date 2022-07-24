@@ -36,7 +36,7 @@ codeunit 81123 DMTImport
             GenBuffTable.FilterGroup(0);
             BufferRef.GetTable(GenBuffTable);
         end else
-            if DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file" then begin
+            if DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV" then begin
                 BufferRef.Open(DMTTable."Buffer Table ID");
             end;
         Commit(); // Runmodal Dialog in Edit View
@@ -66,7 +66,7 @@ codeunit 81123 DMTImport
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure ProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DMTTable: Record DMTTable; IsUpdateTask: Boolean)
+    procedure RetryProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DMTTable: Record DMTTable; IsUpdateTask: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
         TempDMTField_COLLECTION: Record "DMTField" temporary;
@@ -80,6 +80,7 @@ codeunit 81123 DMTImport
             Error('Keine Daten zum Verarbeiten');
 
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTTable);
+        LoadFieldMapping(DMTTable, IsUpdateTask, TempDMTField_COLLECTION);
 
         // Buffer loop
         BufferRef.OPEN(DMTTable."Buffer Table ID");
@@ -118,7 +119,7 @@ codeunit 81123 DMTImport
     begin
         field.FilterBy(table);
         field.SetFilter("Processing Action", '<>%1', field."Processing Action"::Ignore);
-        if table.BufferTableType = table.BufferTableType::"One Buffer Table per file" then
+        if table.BufferTableType = table.BufferTableType::"Seperate Buffer Table per CSV" then
             field.SetFilter("From Field No.", '<>0');
         if UseToFieldFilter then
             field.Setfilter("To Field No.", table.ReadLastFieldUpdateSelection());
@@ -197,7 +198,8 @@ codeunit 81123 DMTImport
         TempDMTField_COLLECTION.Reset();
         TempDMTField_COLLECTION.SetFilter("To Field No.", NonKeyFieldsFilter);
         TempDMTField_COLLECTION.SetCurrentKey("Validation Order");
-        TempDMTField_COLLECTION.findset();
+        if not TempDMTField_COLLECTION.findset() then
+            exit; // Required for tables with only key fields
         repeat
             TempDMTField_COLLECTION.CalcFields("To Field Caption", "From Field Caption");
             case true of
@@ -213,7 +215,7 @@ codeunit 81123 DMTImport
                 (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::FixedValue):
                     begin
                         ToFieldRef := TmpTargetRef.Field(TempDMTField_COLLECTION."To Field No.");
-                        if not DMTMgt.EvaluateFieldRef(ToFieldRef, TempDMTField_COLLECTION."Fixed Value", false) then
+                        if not DMTMgt.EvaluateFieldRef(ToFieldRef, TempDMTField_COLLECTION."Fixed Value", false, false) then
                             Error('Invalid Fixed Value %1', TempDMTField_COLLECTION."Fixed Value");
                         DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempDMTField_COLLECTION."To Field No.",
                           ToFieldRef.Value,
@@ -290,7 +292,7 @@ codeunit 81123 DMTImport
 
     local procedure StartImportForCustomBufferTable(var DMTTable: Record DMTTable; UseToFieldFilter_New: Boolean)
     begin
-        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"One Buffer Table per file" then
+        if DMTTable.BufferTableType <> DMTTable.BufferTableType::"Seperate Buffer Table per CSV" then
             exit;
         ProcessFullBuffer(DMTTable, UseToFieldFilter_New);
     end;
@@ -329,7 +331,7 @@ codeunit 81123 DMTImport
             ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
             ToFieldRef := BufferRef.Field(TempFieldWithReplacementCode."From Field No.");
             if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
-                if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false) then
+                if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
                     Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
         until TempFieldWithReplacementCode.Next() = 0;
     end;
@@ -344,15 +346,15 @@ codeunit 81123 DMTImport
     begin
         IsAutoincrement := false;
         case true of
-            (DMTField.TableName = RecordLink.TableName) and (DMTField."To Field No." = RecordLink.FieldNo("Link ID")):
+            (DMTField."To Table No." = RecordLink.RecordId.TableNo) and (DMTField."To Field No." = RecordLink.FieldNo("Link ID")):
                 exit(true);
-            (DMTField.TableName = ReservationEntry.TableName) and (DMTField."To Field No." = ReservationEntry.FieldNo("Entry No.")):
+            (DMTField."To Table No." = ReservationEntry.RecordId.TableNo) and (DMTField."To Field No." = ReservationEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField.TableName = ChangeLogEntry.TableName) and (DMTField."To Field No." = ChangeLogEntry.FieldNo("Entry No.")):
+            (DMTField."To Table No." = ChangeLogEntry.RecordId.TableNo) and (DMTField."To Field No." = ChangeLogEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField.TableName = JobQueueLogEntry.TableName) and (DMTField."To Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
+            (DMTField."To Table No." = JobQueueLogEntry.RecordId.TableNo) and (DMTField."To Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField.TableName = ActivityLog.TableName) and (DMTField."To Field No." = ActivityLog.FieldNo(ID)):
+            (DMTField."To Table No." = ActivityLog.RecordId.TableNo) and (DMTField."To Field No." = ActivityLog.FieldNo(ID)):
                 exit(true);
             else
                 exit(false);
@@ -366,7 +368,7 @@ codeunit 81123 DMTImport
         RecRef: RecordRef;
     begin
         case DMTTable.BufferTableType of
-            DMTTable.BufferTableType::"One Buffer Table per file":
+            DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     RecRef.OPEN(DMTTable."Buffer Table ID");
                     if RecRef.IsEmpty then

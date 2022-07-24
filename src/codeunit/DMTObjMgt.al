@@ -58,20 +58,20 @@ codeunit 81126 "DMTObjMgt"
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
             if TempAllObjWithCaption.FindSet() then
-                    repeat
-                        if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
-                            Clear(DMTTable);
-                            DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
-                            DMTTable.Insert();
-                            if DMTTable.TryFindExportDataFile() then begin
-                                // Assumption: If the filename pattern matches the default export -> Custom Buffertable
-                                DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
-                                DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"One Buffer Table per file");
-                                DMTTable.Modify();
-                            end;
-                            DMTField.InitForTargetTable(DMTTable);
+                repeat
+                    if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
+                        Clear(DMTTable);
+                        DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
+                        DMTTable.Insert();
+                        if DMTTable.TryFindExportDataFile() then begin
+                            // Assumption: If the filename pattern matches the default export -> Custom Buffertable
+                            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+                            DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+                            DMTTable.Modify();
                         end;
-                    until TempAllObjWithCaption.Next() = 0;
+                        DMTField.InitForTargetTable(DMTTable);
+                    end;
+                until TempAllObjWithCaption.Next() = 0;
         end;
     end;
 
@@ -204,7 +204,7 @@ codeunit 81126 "DMTObjMgt"
 
             if PermissionRange.FindSet(false, false) then
                 repeat
-                        PermRangeIDFilter += StrSubstNo('%1..%2|', PermissionRange.From, PermissionRange."To");
+                    PermRangeIDFilter += StrSubstNo('%1..%2|', PermissionRange.From, PermissionRange."To");
                 until PermissionRange.Next() = 0;
             PermRangeIDFilter := PermRangeIDFilter.TrimEnd('|');
             if PermRangeIDFilter <> '' then begin
@@ -214,14 +214,14 @@ codeunit 81126 "DMTObjMgt"
             end;
 
             if LicensePermission.FindSet() then begin
-                                                    repeat
-                                                        if AllObjWithCaption.Get(LicensePermission."Object Type", LicensePermission."Object Number") then begin
-                                                            if IsGeneratedAppObject(AllObjWithCaption) then
-                                                                ObjectIDsAvailable.Add(LicensePermission."Object Number");
-                                                        end else begin
-                                                            ObjectIDsAvailable.Add(LicensePermission."Object Number");
-                                                        end;
-                                                    until LicensePermission.Next() = 0;
+                repeat
+                    if AllObjWithCaption.Get(LicensePermission."Object Type", LicensePermission."Object Number") then begin
+                        if IsGeneratedAppObject(AllObjWithCaption) then
+                            ObjectIDsAvailable.Add(LicensePermission."Object Number");
+                    end else begin
+                        ObjectIDsAvailable.Add(LicensePermission."Object Number");
+                    end;
+                until LicensePermission.Next() = 0;
             end;
             SessionStorage.SetLicenseInfo(ObjectType, ObjectIDsAvailable);
         end;

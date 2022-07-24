@@ -39,7 +39,7 @@ table 81122 "DMTField"
         {
             Caption = 'Source Field No.', comment = 'Herkunft Feldnr.';
             DataClassification = SystemMetadata;
-            TableRelation = Field."No." where(TableNo = field("From Table ID"));
+            TableRelation = DMTFieldBuffer."No." where("To Table No. Filter" = field("To Table No."));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
@@ -124,6 +124,11 @@ table 81122 "DMTField"
         {
             Caption = 'Validation Order', comment = 'Reihenfolge Validierung';
         }
+        field(103; BufferTableTypeFilter; Enum BufferTableType)
+        {
+            Caption = 'Buffer Table Type Filter', comment = 'Puffertabellenart Filter';
+            FieldClass = FlowFilter;
+        }
     }
 
     keys
@@ -181,7 +186,7 @@ table 81122 "DMTField"
         OldFieldName: text;
         ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"One Buffer Table per file") then begin
+        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV") then begin
             DMTTable.TestField("Buffer Table ID");
             if not DMTTable.CustomBufferTableExits() then begin
                 Message('Keine Puffertabelle mit der ID %1 vorhanden', DMTTable."Buffer Table ID");
