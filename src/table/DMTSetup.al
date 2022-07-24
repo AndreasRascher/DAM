@@ -108,6 +108,8 @@ table 81127 "DMTSetup"
         fileMgt: Codeunit "File Management";
         found: Boolean;
     begin
+        if Rec.Get() then
+          exit;
         Company.SetFilter(Name, '<>%1', CompanyName);
         if Company.FindSet() then
             repeat
