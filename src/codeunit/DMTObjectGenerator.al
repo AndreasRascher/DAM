@@ -156,6 +156,8 @@ codeunit 110005 "DMTObjectGenerator"
         IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) then
             repeat
                 CASE DMTFieldBuffer.Type OF
+                    DMTFieldBuffer.Type::RecordID:
+                        _FieldTypeText := 'Text[250]'; // Import recordIDs as text to avoid validation issues on import
                     DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
                         _FieldTypeText := STRSUBSTNO('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
                     ELSE

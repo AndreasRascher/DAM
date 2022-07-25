@@ -116,13 +116,8 @@ page 81133 "DMTTableList"
                 ApplicationArea = all;
                 Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
-                var
-                    DMTTable: Record DMTTable;
                 begin
-                    if DMTTable.FindSet() then
-                        repeat
-                            DMTTable.DownloadAllALDataMigrationObjects(Rec);
-                        until DMTTable.Next() = 0;
+                    Rec.DownloadAllALDataMigrationObjects;
                 end;
             }
             action(TransferSelectedToTargetTable)
