@@ -185,14 +185,16 @@ codeunit 81124 "DMTMgt"
     var
         FromField: FieldRef;
         ToField: FieldRef;
+        EvaluateOptionValueAsNumber: Boolean;
     begin
+        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRef.Number);
         FromField := SourceRef.field(FromFieldNo);
         ToField := TargetRef.field(ToFieldNo);
         if ToField.Type = FromField.Type then
             ToField.Value := FromField.Value
         else
-            if not EvaluateFieldRef(ToField, Format(FromField.Value), false, true) then
-                Error('THIS ERROR SHOULD NOT HAPPEN');
+            if not EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
+                Error('Evaluating "%1" int "%2" failed', FromField.Value, ToField.Caption);
         IF DoModify then
             TargetRef.modify();
     end;
