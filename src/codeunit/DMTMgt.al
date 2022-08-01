@@ -207,9 +207,9 @@ codeunit 110005 "DMTMgt"
         ClearLastError();
         DMTSetup.GetRecordOnce();
         IF DMTFields."Use Try Function" and DMTSetup."Allow Usage of Try Function" then begin
-            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
+            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTFields."Source Field No.", DMTFields."Target Field No.", TargetRef);
         end else begin
-            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTFields."From Field No.", DMTFields."To Field No.", TargetRef);
+            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTFields."Source Field No.", DMTFields."Target Field No.", TargetRef);
         end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin

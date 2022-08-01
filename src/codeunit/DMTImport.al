@@ -120,9 +120,9 @@ codeunit 110000 DMTImport
         field.FilterBy(table);
         field.SetFilter("Processing Action", '<>%1', field."Processing Action"::Ignore);
         if table.BufferTableType = table.BufferTableType::"Seperate Buffer Table per CSV" then
-            field.SetFilter("From Field No.", '<>0');
+            field.SetFilter("Source Field No.", '<>0');
         if UseToFieldFilter then
-            field.Setfilter("To Field No.", table.ReadLastFieldUpdateSelection());
+            field.Setfilter("Target Field No.", table.ReadLastFieldUpdateSelection());
         field.FindSet(false, false);  // raise error if empty
         repeat
             tempDMTFields := field;
@@ -140,7 +140,7 @@ codeunit 110000 DMTImport
         Success: Boolean;
     begin
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        TmpTargetRef.OPEN(DMTTable."To Table ID", TRUE);
+        TmpTargetRef.OPEN(DMTTable."Target Table ID", TRUE);
 
         ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
 
@@ -181,11 +181,11 @@ codeunit 110000 DMTImport
         IF NOT TmpTargetRef.ISTEMPORARY then
             ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpDMTField.Reset();
-        TmpDMTField.SetFilter("To Field No.", KeyFieldsFilter);
+        TmpDMTField.SetFilter("Target Field No.", KeyFieldsFilter);
         TmpDMTField.findset();
         repeat
             if not IsKnownAutoincrementField(TmpDMTField) then
-                DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."From Field No.", BufferRef, TmpDMTField."To Field No.", false);
+                DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."Source Field No.", BufferRef, TmpDMTField."Target Field No.", false);
         until TmpDMTField.Next() = 0;
     end;
 
@@ -196,12 +196,12 @@ codeunit 110000 DMTImport
     begin
         NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
         TempDMTField_COLLECTION.Reset();
-        TempDMTField_COLLECTION.SetFilter("To Field No.", NonKeyFieldsFilter);
+        TempDMTField_COLLECTION.SetFilter("Target Field No.", NonKeyFieldsFilter);
         TempDMTField_COLLECTION.SetCurrentKey("Validation Order");
         if not TempDMTField_COLLECTION.findset() then
             exit; // Required for tables with only key fields
         repeat
-            TempDMTField_COLLECTION.CalcFields("To Field Caption", "From Field Caption");
+            TempDMTField_COLLECTION.CalcFields("Target Field Caption", "Source Field Caption");
             case true of
                 (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::Ignore):
                     ;
@@ -209,15 +209,15 @@ codeunit 110000 DMTImport
                     if TempDMTField_COLLECTION."Validate Value" then
                         DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempDMTField_COLLECTION)
                     else
-                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDMTField_COLLECTION."From Field No.", BufferRef, TempDMTField_COLLECTION."To Field No.", true);
+                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDMTField_COLLECTION."Source Field No.", BufferRef, TempDMTField_COLLECTION."Target Field No.", true);
 
 
                 (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::FixedValue):
                     begin
-                        ToFieldRef := TmpTargetRef.Field(TempDMTField_COLLECTION."To Field No.");
+                        ToFieldRef := TmpTargetRef.Field(TempDMTField_COLLECTION."Target Field No.");
                         if not DMTMgt.EvaluateFieldRef(ToFieldRef, TempDMTField_COLLECTION."Fixed Value", false, false) then
                             Error('Invalid Fixed Value %1', TempDMTField_COLLECTION."Fixed Value");
-                        DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempDMTField_COLLECTION."To Field No.",
+                        DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempDMTField_COLLECTION."Target Field No.",
                           ToFieldRef.Value,
                           TempDMTField_COLLECTION."Ignore Validation Error");
                     end;
@@ -240,12 +240,12 @@ codeunit 110000 DMTImport
             FPBuilder.SETVIEW(BufferRef.CAPTION, BufferRef.GETVIEW());
 
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
-            KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", true);
+            KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."Target Table ID", true);
             if DMTField.FilterBy(DMTTable) then begin
-                DMTField.setfilter("To Field No.", KeyFieldsFilter);
+                DMTField.setfilter("Target Field No.", KeyFieldsFilter);
                 if DMTField.FindSet() then
                     repeat
-                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."From Field No.");
+                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, DMTField."Source Field No.");
                     until DMTField.Next() = 0;
             end;
         end else begin
@@ -264,8 +264,8 @@ codeunit 110000 DMTImport
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        BuffKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", true /*include*/);
-        BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."To Table ID", false /*exclude*/);
+        BuffKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."Target Table ID", true /*include*/);
+        BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."Target Table ID", false /*exclude*/);
     end;
 
     local procedure EditView(var BufferRef: RecordRef; var DMTTable: Record DMTTable)
@@ -329,7 +329,7 @@ codeunit 110000 DMTImport
         repeat
             ReplacementsHeader.Get(TempFieldWithReplacementCode."Replacements Code");
             ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
-            ToFieldRef := BufferRef.Field(TempFieldWithReplacementCode."From Field No.");
+            ToFieldRef := BufferRef.Field(TempFieldWithReplacementCode."Source Field No.");
             if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
                 if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
                     Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
@@ -346,15 +346,15 @@ codeunit 110000 DMTImport
     begin
         IsAutoincrement := false;
         case true of
-            (DMTField."To Table No." = RecordLink.RecordId.TableNo) and (DMTField."To Field No." = RecordLink.FieldNo("Link ID")):
+            (DMTField."Target Table ID" = RecordLink.RecordId.TableNo) and (DMTField."Target Field No." = RecordLink.FieldNo("Link ID")):
                 exit(true);
-            (DMTField."To Table No." = ReservationEntry.RecordId.TableNo) and (DMTField."To Field No." = ReservationEntry.FieldNo("Entry No.")):
+            (DMTField."Target Table ID" = ReservationEntry.RecordId.TableNo) and (DMTField."Target Field No." = ReservationEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField."To Table No." = ChangeLogEntry.RecordId.TableNo) and (DMTField."To Field No." = ChangeLogEntry.FieldNo("Entry No.")):
+            (DMTField."Target Table ID" = ChangeLogEntry.RecordId.TableNo) and (DMTField."Target Field No." = ChangeLogEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField."To Table No." = JobQueueLogEntry.RecordId.TableNo) and (DMTField."To Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
+            (DMTField."Target Table ID" = JobQueueLogEntry.RecordId.TableNo) and (DMTField."Target Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
                 exit(true);
-            (DMTField."To Table No." = ActivityLog.RecordId.TableNo) and (DMTField."To Field No." = ActivityLog.FieldNo(ID)):
+            (DMTField."Target Table ID" = ActivityLog.RecordId.TableNo) and (DMTField."Target Field No." = ActivityLog.FieldNo(ID)):
                 exit(true);
             else
                 exit(false);
@@ -389,7 +389,7 @@ codeunit 110000 DMTImport
         DMTField.FilterBy(DMTTable);
         DMTField.SetFilter("Processing Action", '<>%1', DMTField."Processing Action"::Ignore);
         if DMTField.IsEmpty then
-            ERROR('Tabelle "%1" enthält kein Feldmapping', DMTTable."Dest.Table Caption");
+            ERROR('Tabelle "%1" enthält kein Feldmapping', DMTTable."Target Table Caption");
     end;
 
 

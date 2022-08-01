@@ -39,8 +39,8 @@ codeunit 110001 "DMTObjMgt"
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
-            DMTTable."To Table ID" := TempAllObjWithCaption."Object ID";
-            DMTTable."Dest.Table Caption" := TempAllObjWithCaption."Object Caption";
+            DMTTable."Target Table ID" := TempAllObjWithCaption."Object ID";
+            DMTTable."Target Table Caption" := TempAllObjWithCaption."Object Caption";
         end;
     end;
 
@@ -98,7 +98,7 @@ codeunit 110001 "DMTObjMgt"
         // IsNumber
         if Delchr(rec."NAV Src.Table Caption", '=', '0123456789') = '' then begin
             if DMTFieldBuffer.IsEmpty then begin
-                evaluate(rec."To Table ID", rec."NAV Src.Table Caption");
+                evaluate(rec."Target Table ID", rec."NAV Src.Table Caption");
             end else begin
                 DMTFieldBuffer.SetFilter(TableNo, rec."NAV Src.Table Caption");
                 if DMTFieldBuffer.FindFirst() then begin
@@ -113,15 +113,15 @@ codeunit 110001 "DMTObjMgt"
     var
         allObjWithCaption: Record AllObjWithCaption;
     begin
-        if rec."Dest.Table Caption" = xRec."Dest.Table Caption" then
+        if rec."Target Table Caption" = xRec."Target Table Caption" then
             exit;
-        if rec."Dest.Table Caption" = '' then
+        if rec."Target Table Caption" = '' then
             exit;
         // IsNumber
-        if Delchr(rec."Dest.Table Caption", '=', '0123456789') = '' then begin
-            if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."Dest.Table Caption") then begin
-                Rec."To Table ID" := allObjWithCaption."Object ID";
-                Rec."Dest.Table Caption" := allObjWithCaption."Object Caption";
+        if Delchr(rec."Target Table Caption", '=', '0123456789') = '' then begin
+            if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."Target Table Caption") then begin
+                Rec."Target Table ID" := allObjWithCaption."Object ID";
+                Rec."Target Table Caption" := allObjWithCaption."Object Caption";
             end;
         end;
     end;
@@ -263,7 +263,8 @@ codeunit 110001 "DMTObjMgt"
                                                                       Database::DMTGenBuffTable,
                                                                       Database::DMTDataSourceLine,
                                                                       Database::DMTReplacementsHeader,
-                                                                      Database::DMTReplacementsLine];
+                                                                      Database::DMTReplacementsLine,
+                                                                      Database::"DMT Log Entry"];
                 end;
             allObjWithCaption."Object Type"::XMLport:
                 begin

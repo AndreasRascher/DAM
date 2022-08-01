@@ -13,9 +13,9 @@ page 110007 "DMTReplacementsAssignedSub"
         {
             repeater(Lines)
             {
-                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; }
-                field("To Table No."; Rec."To Table No.") { ApplicationArea = All; }
-                field("To Field No."; Rec."To Field No.") { ApplicationArea = All; }
+                field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; }
+                field("To Table No."; Rec."Target Table ID") { ApplicationArea = All; }
+                field("To Field No."; Rec."Target Field No.") { ApplicationArea = All; }
                 field("Replacements Code"; Rec."Replacements Code") { ApplicationArea = All; }
             }
         }

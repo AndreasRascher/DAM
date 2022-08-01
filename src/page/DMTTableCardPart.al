@@ -12,18 +12,18 @@ page 110013 "DMTTableCardPart"
             repeater(Lines)
             {
                 field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
-                field("To Field No."; Rec."To Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
-                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
-                field("From Field Caption"; Rec."From Field Caption")
+                field("To Field No."; Rec."Target Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
+                field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
+                field("From Field Caption"; Rec."Source Field Caption")
                 {
                     Editable = false;
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
-                field("From Field No."; Rec."From Field No.") { LookupPageId = DMTFieldLookup; HideValue = HideFromFieldInfo; ApplicationArea = All; }
+                field("From Field No."; Rec."Source Field No.") { LookupPageId = DMTFieldLookup; HideValue = HideFromFieldInfo; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
-                field("Trgt.Field Type"; Rec."To Field Type") { Visible = false; ApplicationArea = All; }
-                field("From Field Type"; Rec."From Field Type") { HideValue = HideFromFieldInfo; Visible = false; ApplicationArea = All; }
+                field("Trgt.Field Type"; Rec."Target Field Type") { Visible = false; ApplicationArea = All; }
+                field("From Field Type"; Rec."Source Field Type") { HideValue = HideFromFieldInfo; Visible = false; ApplicationArea = All; }
                 field("Validate Value"; Rec."Validate Value") { ApplicationArea = All; }
                 field("Use Try Function"; Rec."Use Try Function") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
@@ -48,7 +48,7 @@ page 110013 "DMTTableCardPart"
                     DMTFields: Record "DMTField";
                     DMTTable: Record DMTTable;
                 begin
-                    DMTTable.Get(Rec.GetRangeMin(rec."To Table No."));
+                    DMTTable.Get(Rec.GetRangeMin(rec."Target Table ID"));
                     DMTFields.InitForTargetTable(DMTTable);
                 end;
             }
@@ -63,7 +63,7 @@ page 110013 "DMTTableCardPart"
                     DMTFields: Record "DMTField";
                     DMTTable: Record DMTTable;
                 begin
-                    DMTTable.Get(Rec.GetRangeMin(rec."To Table No."));
+                    DMTTable.Get(Rec.GetRangeMin(rec."Target Table ID"));
                     DMTFields.ProposeMatchingTargetFields(DMTTable);
                     DMTFields.ProposeValidationRules(DMTTable);
                 end;
@@ -154,7 +154,7 @@ page 110013 "DMTTableCardPart"
         If not GetSelection(TempFieldSelection) then
             exit;
 
-        DMTField.SetRange("To Table No.", TempFieldSelection."To Table No.");
+        DMTField.SetRange("Target Table ID", TempFieldSelection."Target Table ID");
         DMTField.SetCurrentKey("Validation Order");
         DMTField.CopyToTemp(TempDMTField);
 

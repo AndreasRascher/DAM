@@ -1,9 +1,9 @@
-OBJECT XMLport 50014 DMT Export
+OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=20.06.22;
-    Time=13:08:41;
+    Date=21.06.22;
+    Time=08:22:23;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2634,7 +2634,7 @@ OBJECT XMLport 50014 DMT Export
       MaxNoOfFields@1000000009 : Integer;
       ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
 
-    LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text[1024];exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text[1024]);
+    LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text;exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text);
     VAR
       fileMgt@1000000010 : Codeunit 419;
       serverFile@1000000007 : File;
@@ -2643,7 +2643,7 @@ OBJECT XMLport 50014 DMT Export
       start@1000000000 : DateTime;
       progress@1000000005 : Dialog;
       BigText@55000 : BigText;
-      DMTExport@1000000002 : XMLport 50014;
+      DMTExport@1000000002 : XMLport 50049;
     BEGIN
       CLEAR(ExportDuration);
 
@@ -2674,7 +2674,7 @@ OBJECT XMLport 50014 DMT Export
 
     LOCAL PROCEDURE CreateHeaderLine@1000000013(VAR _ExportFieldBuffer@1000000001 : TEMPORARY Record 2000000041;_LastFieldNo@1000000000 : Integer) HeaderLineText : Text;
     VAR
-      _ValueAsText@1000000002 : Text[1024];
+      _ValueAsText@1000000002 : Text;
       CRLF@55000 : Text[2];
     BEGIN
       IF NOT ExportWithTitleLine THEN EXIT('');
@@ -2693,9 +2693,9 @@ OBJECT XMLport 50014 DMT Export
     LOCAL PROCEDURE GetListOfOptionString@1000000021(_FieldRef@1000000000 : FieldRef;VAR _Result@1000000006 : Text);
     VAR
       _OptionCounter@1000000001 : Integer;
-      _OptionString@1000000002 : Text[1024];
+      _OptionString@1000000002 : Text;
       i@1000000003 : Integer;
-      _OptionElement@1000000004 : Text[1024];
+      _OptionElement@1000000004 : Text;
       _SubStr@1000000007 : Text[30];
       Letters@1000000005 : TextConst 'DEU=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     BEGIN
@@ -2719,7 +2719,7 @@ OBJECT XMLport 50014 DMT Export
       _Result := DELCHR(_Result,'>',',');
     END;
 
-    LOCAL PROCEDURE GetListOfKeyFieldIDs@1109900003(TableNo@1109900000 : Integer) KeyFieldsList : Text[1024];
+    LOCAL PROCEDURE GetListOfKeyFieldIDs@1109900003(TableNo@1109900000 : Integer) KeyFieldsList : Text;
     VAR
       Key@1109900001 : Record 2000000063;
       RecRef@1000000001 : RecordRef;
@@ -2737,12 +2737,12 @@ OBJECT XMLport 50014 DMT Export
       KeyFieldsList := DELCHR(KeyFieldsList,'>',',');
     END;
 
-    LOCAL PROCEDURE GetFormattedFieldValue@1000000010(VAR recRef@1000000008 : RecordRef;fieldNo@1000000009 : Integer) _Result : Text[1024];
+    LOCAL PROCEDURE GetFormattedFieldValue@1000000010(VAR recRef@1000000008 : RecordRef;fieldNo@1000000009 : Integer) _Result : Text;
     VAR
       fieldRef@1000000000 : FieldRef;
       _Value@1000000007 : Variant;
       _Integer@1000000002 : Integer;
-      _Text@1000000003 : Text[1024];
+      _Text@1000000003 : Text;
       _Decimal@1000000004 : Decimal;
       _Date@1000000005 : Date;
       _Time@1000000001 : Time;
@@ -2788,7 +2788,7 @@ OBJECT XMLport 50014 DMT Export
       END;
     END;
 
-    LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text[1024]) ResultText : Text[1024];
+    LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text) ResultText : Text;
     VAR
       CharArray@1109900001 : Text[30];
       Chunk@1000000000 : Text[1];
@@ -2801,7 +2801,7 @@ OBJECT XMLport 50014 DMT Export
       ResultText := DELCHR(Text,'=',CharArray);
     END;
 
-    LOCAL PROCEDURE ReplaceStr@1000000015(_Text@1000000000 : Text[1024];_FindWhat@1000000001 : Text[1024];_ReplaceWith@1000000002 : Text[1024]) _NewText : Text[1024];
+    LOCAL PROCEDURE ReplaceStr@1000000015(_Text@1000000000 : Text;_FindWhat@1000000001 : Text;_ReplaceWith@1000000002 : Text) _NewText : Text;
     BEGIN
       WHILE STRPOS(_Text,_FindWhat) > 0 DO
         _Text := DELSTR(_Text,STRPOS(_Text,_FindWhat)) +
@@ -2920,7 +2920,7 @@ OBJECT XMLport 50014 DMT Export
     LOCAL PROCEDURE StartTableExport@1000000005();
     VAR
       AllObjWithCaption@1000000000 : Record 2000000058;
-      ReadyMsg@1000000001 : Text[1024];
+      ReadyMsg@1000000001 : Text;
       ExportToFilePath@1000000002 : Text;
       ExportDuration@1000000003 : Duration;
       TAB@1000000004 : Text[1];
@@ -2950,8 +2950,8 @@ OBJECT XMLport 50014 DMT Export
 
     LOCAL PROCEDURE StartSchemaDefinitionExport@1000000016();
     VAR
-      ReadyMsg@55001 : Text[1024];
-      ExportToPath@1000000003 : Text[1024];
+      ReadyMsg@55001 : Text;
+      ExportToPath@1000000003 : Text;
       ExportDuration@1000000002 : Duration;
       AllObjWithCaption@55000 : Record 2000000058;
     BEGIN
@@ -3119,4 +3119,3 @@ OBJECT XMLport 50014 DMT Export
     END.
   }
 }
-

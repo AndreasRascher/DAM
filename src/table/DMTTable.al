@@ -6,15 +6,15 @@ table 110000 "DMTTable"
 
     fields
     {
-        field(1; "To Table ID"; Integer)
+        field(1; "Target Table ID"; Integer)
         {
-            Caption = 'To Table ID', comment = 'Nach Tabellen ID';
+            Caption = 'Target Table ID', comment = 'Zieltabellen ID';
             DataClassification = SystemMetadata;
             NotBlank = true;
         }
-        field(4; "Dest.Table Caption"; Text[250])
+        field(4; "Target Table Caption"; Text[250])
         {
-            Caption = 'Destination Table', comment = 'Ziel Tabelle';
+            Caption = 'Target Table Caption', comment = 'Zieltabelle Bezeichnung';
             trigger OnLookup()
             var
                 ObjectMgt: Codeunit DMTObjMgt;
@@ -37,11 +37,11 @@ table 110000 "DMTTable"
                 ShowBufferTable();
             end;
         }
-        field(31; "Qty.Lines In Trgt. Table"; Integer)
+        field(31; "No. of Lines In Trgt. Table"; Integer)
         {
-            Caption = 'Qty. lines in target table', Comment = 'Anz. Zeilen in Zieltabelle';
+            Caption = 'No. of Lines in Target Table', Comment = 'Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
-            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("To Table ID")));
+            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID")));
             Editable = false;
             trigger OnLookup()
             begin
@@ -52,7 +52,7 @@ table 110000 "DMTTable"
         {
             Caption = 'No. of fields in target table', Comment = 'Anz. Felder in Zieltabelle';
             FieldClass = FlowField;
-            CalcFormula = count("DMTField" where("To Table No." = field("To Table ID")));
+            CalcFormula = count("DMTField" where("Target Table ID" = field("Target Table ID")));
             Editable = false;
         }
         field(50; BufferTableType; Enum BufferTableType)
@@ -148,8 +148,8 @@ table 110000 "DMTTable"
                 ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.LookUpOldVersionTable(Rec);
-                if "To Table ID" = 0 then begin
-                    Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
+                if "Target Table ID" = 0 then begin
+                    Rec.Validate("Target Table Caption", Format("NAV Src.Table No."));
                     ProposeObjectIDs(false);
                     InitTableFieldMapping();
                 end;
@@ -160,8 +160,8 @@ table 110000 "DMTTable"
                 ObjectMgt: Codeunit DMTObjMgt;
             begin
                 ObjectMgt.ValidateFromTableCaption(Rec, xRec);
-                if ("To Table ID" = 0) and ("NAV Src.Table No." <> 0) then begin
-                    Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
+                if ("Target Table ID" = 0) and ("NAV Src.Table No." <> 0) then begin
+                    Rec.Validate("Target Table Caption", Format("NAV Src.Table No."));
                     ProposeObjectIDs(false);
                 end;
             end;
@@ -171,13 +171,13 @@ table 110000 "DMTTable"
 
     keys
     {
-        key(PK; "To Table ID") { Clustered = true; }
+        key(PK; "Target Table ID") { Clustered = true; }
         key(Sorted; "Sort Order") { }
     }
     fieldgroups
     {
-        fieldgroup(DropDown; "To Table ID", "Dest.Table Caption") { }
-        fieldgroup(Brick; "Dest.Table Caption", "No.of Records in Buffer Table") { }
+        fieldgroup(DropDown; "Target Table ID", "Target Table Caption") { }
+        fieldgroup(Brick; "Target Table Caption", "No.of Records in Buffer Table") { }
     }
 
     trigger OnDelete()
@@ -273,6 +273,8 @@ table 110000 "DMTTable"
         NoAvailableObjectIDsErr: Label 'No free object IDs of type %1 could be found. Defined ID range in setup: %2',
                                 comment = 'Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
     begin
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then
+            exit;
         if not DMTSetup.Get() then
             DMTSetup.InsertWhenEmpty();
         DMTSetup.Get();
@@ -329,7 +331,7 @@ table 110000 "DMTTable"
         GenBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
     begin
-        if Rec."To Table ID" = 0 then
+        if Rec."Target Table ID" = 0 then
             exit;
 
         case Rec.BufferTableType of
@@ -368,6 +370,7 @@ table 110000 "DMTTable"
         //Land/Region -> Land_Region
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
+            FileExists := true;
             Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
             Rec.Modify();
         end else begin
@@ -536,7 +539,7 @@ table 110000 "DMTTable"
         NewSortingValues: Dictionary of [RecordId, Integer];
         i: Integer;
     begin
-        if Rec."To Table ID" = 0 then
+        if Rec."Target Table ID" = 0 then
             exit(false);
         if not DMTField.FilterBy(Rec) then
             exit(false);
@@ -613,10 +616,10 @@ table 110000 "DMTTable"
             exit('');
         repeat
             case FieldNo of
-                DMTTable.FieldNo("To Table ID"):
+                DMTTable.FieldNo("Target Table ID"):
                     begin
-                        if DMTTable."To Table ID" <> 0 then
-                            FilterExpr += StrSubstNo('%1|', DMTTable."To Table ID");
+                        if DMTTable."Target Table ID" <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DMTTable."Target Table ID");
                     end;
                 DMTTable.FieldNo("NAV Src.Table No."):
                     begin
@@ -632,7 +635,7 @@ table 110000 "DMTTable"
     var
         TableInformation: Record "Table Information";
     begin
-        if TableInformation.Get(CompanyName, Rec."To Table ID") then;
+        if TableInformation.Get(CompanyName, Rec."Target Table ID") then;
         // TableInformation.Calcfields("No. of Records");
         exit(TableInformation."No. of Records");
     end;

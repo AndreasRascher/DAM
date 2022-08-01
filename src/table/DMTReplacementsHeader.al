@@ -79,7 +79,7 @@ table 110006 "DMTReplacementsHeader"
         TestField("Source Table ID");
         if DMTTable.FindSet(false, false) then
             repeat
-                TableNoFilter += StrSubstNo('%1|', DMTTable."To Table ID");
+                TableNoFilter += StrSubstNo('%1|', DMTTable."Target Table ID");
             until DMTTable.Next() = 0;
         TableNoFilter := TableNoFilter.TrimEnd('|');
         // TableRelationsMetadata.SetRange("Table ID", DMTField."To Table No.");

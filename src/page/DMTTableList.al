@@ -19,9 +19,9 @@ page 110014 "DMTTableList"
                 FreezeColumn = "To Table Caption";
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; BlankZero = true; }
                 field("From Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; Editable = false; }
-                field("To Table Caption"; Rec."Dest.Table Caption") { ApplicationArea = All; Editable = false; }
+                field("To Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; Editable = false; }
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
-                field("To Table ID"; Rec."To Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
+                field("To Table ID"; Rec."Target Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
@@ -38,7 +38,7 @@ page 110014 "DMTTableList"
                     Caption = 'Qty.Lines In Trgt. Table', Comment = 'Anz. Datensätze in Zieltabelle';
                     trigger OnLookup(var Text: Text): Boolean
                     begin
-                        Rec.ShowTableContent(Rec."To Table ID");
+                        Rec.ShowTableContent(Rec."Target Table ID");
                     end;
                 }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; Editable = false; }
@@ -48,7 +48,7 @@ page 110014 "DMTTableList"
         {
             part(DMTTableFactBox; DMTTableFactBox)
             {
-                SubPageLink = "To Table ID" = field("To Table ID");
+                SubPageLink = "Target Table ID" = field("Target Table ID");
                 Visible = false;
             }
         }
@@ -92,7 +92,7 @@ page 110014 "DMTTableList"
 
                     DMTTable_SELECTED.FindSet(false, false);
                     REPEAT
-                        ProgressMsg += '\' + DMTTable_SELECTED."Dest.Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."To Table ID") + '#';
+                        ProgressMsg += '\' + DMTTable_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."Target Table ID") + '#';
                     UNTIL DMTTable_SELECTED.NEXT() = 0;
 
                     DMTTable_SELECTED.FindSet();
@@ -101,10 +101,10 @@ page 110014 "DMTTableList"
                     repeat
                         TableStart := CurrentDateTime;
                         DMTTable := DMTTable_SELECTED;
-                        Progress.Update(DMTTable_SELECTED."To Table ID", 'Wird eingelesen');
+                        Progress.Update(DMTTable_SELECTED."Target Table ID", 'Wird eingelesen');
                         DMTTable.ImportToBufferTable();
                         Commit();
-                        Progress.Update(DMTTable_SELECTED."To Table ID", CURRENTDATETIME - TableStart);
+                        Progress.Update(DMTTable_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
                     until DMTTable_SELECTED.Next() = 0;
                     Progress.Close();
                     Message(FinishedMsg, CurrentDateTime - Start);
@@ -150,7 +150,7 @@ page 110014 "DMTTableList"
                     ApplicationArea = all;
                     trigger OnAction()
                     begin
-                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("To Table ID")));
+                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
                     end;
                 }
                 action(GetFromTableIDFilter)

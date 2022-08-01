@@ -196,7 +196,7 @@ page 110011 "DMT Setup"
             }
             action(ClearGenBuffer)
             {
-                Caption = 'ClearGenBuffer', comment = 'ClearGenBuffer';
+                Caption = 'Delete Gen. Buffer Table Lines', comment = 'Alle Zeilen in gen. Puffertabelle löschen';
                 ApplicationArea = All;
                 Image = ListPage;
                 Promoted = true;
@@ -207,7 +207,8 @@ page 110011 "DMT Setup"
                 var
                     DMTGenBuffTable: Record DMTGenBuffTable;
                 begin
-                    DMTGenBuffTable.DeleteAll();
+                    if confirm('Delete all lines in Gen. Buffer Table?') then
+                        DMTGenBuffTable.DeleteAll();
                 end;
             }
         }

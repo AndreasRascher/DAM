@@ -13,7 +13,7 @@ page 110012 "DMTTableCard"
             group(General)
             {
                 Caption = 'General', comment = 'Allgemein';
-                field("Dest. Table Caption"; Rec."Dest.Table Caption")
+                field("Dest. Table Caption"; Rec."Target Table Caption")
                 {
                     ApplicationArea = All;
                     Importance = Promoted;
@@ -52,7 +52,7 @@ page 110012 "DMTTableCard"
                     Caption = 'Qty.Lines In Trgt. Table', Comment = 'Anz. Datensätze in Zieltabelle';
                     trigger OnAssistEdit()
                     begin
-                        Rec.ShowTableContent(Rec."To Table ID");
+                        Rec.ShowTableContent(Rec."Target Table ID");
                     end;
                 }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
@@ -80,7 +80,7 @@ page 110012 "DMTTableCard"
             {
                 ApplicationArea = all;
                 Caption = 'Fields Setup', Comment = 'Feldeinrichtung';
-                SubPageLink = "To Table No." = field("To Table ID"), BufferTableTypeFilter = field(BufferTableType);
+                SubPageLink = "Target Table ID" = field("Target Table ID"), BufferTableTypeFilter = field(BufferTableType);
             }
         }
     }
@@ -101,7 +101,7 @@ page 110012 "DMTTableCard"
 
                 trigger OnAction()
                 begin
-                    Rec.TestField("To Table ID");
+                    Rec.TestField("Target Table ID");
                     CurrPage.SaveRecord();
                     Commit();
                     Rec.ImportToBufferTable();
@@ -124,10 +124,10 @@ page 110012 "DMTTableCard"
                     DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! All Records in table "%1" (company "%2") will be deleted. Continue?',
                     Comment = 'Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?';
                 begin
-                    Rec.TestField("To Table ID");
+                    Rec.TestField("Target Table ID");
                     CurrPage.SaveRecord();
                     Commit();
-                    RecRef.Open(Rec."To Table ID");
+                    RecRef.Open(Rec."Target Table ID");
                     if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
                         RecRef.DeleteAll();
                     end;
@@ -280,7 +280,7 @@ page 110012 "DMTTableCard"
     begin
         case Rec.BufferTableType of
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
-                exit(Rec."Dest.Table Caption");
+                exit(Rec."Target Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 exit(Rec.DataFilePath);
         end
@@ -288,11 +288,8 @@ page 110012 "DMTTableCard"
 
     var
         [InDataSet]
-        ImportXMLPortIDStyle: Text;
+        ImportXMLPortIDStyle, BufferTableIDStyle : Text;
         [InDataSet]
-        BufferTableIDStyle: Text;
-        [InDataSet]
-        UseXMLPortAndBufferTable: Boolean;
-        [InDataSet]
-        NAVDataSourcePropertiesVisible: boolean;
+        UseXMLPortAndBufferTable, NAVDataSourcePropertiesVisible : Boolean;
+
 }

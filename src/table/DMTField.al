@@ -3,65 +3,67 @@ table 110003 "DMTField"
     DataClassification = SystemMetadata;
     fields
     {
-        field(20; "To Table No."; Integer)
+        field(20; "Target Table ID"; Integer)
         {
             Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
-        field(21; "To Field No."; Integer)
+        field(21; "Target Field No."; Integer)
         {
             Caption = 'Target Field No.', comment = 'Ziel Feldnr.';
             DataClassification = SystemMetadata;
-            TableRelation = Field."No." WHERE(TableNo = field("To Table No."));
+            TableRelation = Field."No." WHERE(TableNo = field("Target Table ID"));
         }
-        field(22; "To Field Caption"; Text[80])
+        field(22; "Target Field Caption"; Text[80])
         {
             Caption = 'Target Field Caption', comment = 'Zielfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(23; "To Field Type"; Text[30])
+        field(23; "Target Field Type"; Text[30])
         {
             Caption = 'Target Field Type', comment = 'Zielfeld Typ';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Type Name" where(TableNo = field("To Table No."), "No." = field("To Field No.")));
+            CalcFormula = lookup(Field."Type Name" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(24; "From Table ID"; Integer)
+        field(24; "Source Table ID"; Integer)
         {
             Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
-        field(31; "From Field No."; Integer)
+        field(31; "Source Field No."; Integer)
         {
-            Caption = 'Source Field No.', comment = 'Herkunft Feldnr.';
+            Caption = 'Source Field No.', comment = 'Herkunftsfeld Nr.';
             DataClassification = SystemMetadata;
-            TableRelation = DMTFieldBuffer."No." where("To Table No. Filter" = field("To Table No."));
+            TableRelation = DMTFieldBuffer."No." where("To Table No. Filter" = field("Target Table ID"));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
             begin
-                UpdateProcessingAction(Rec.FieldNo("From Field No."));
+                if CurrFieldNo = Rec.FieldNo("Source Field No.") then
+                    UpdateSourceFieldCaption();
+                UpdateProcessingAction(Rec.FieldNo("Source Field No."));
             end;
         }
-        field(33; "From Field Caption"; Text[80])
+        field(33; "Source Field Caption"; Text[80])
         {
             Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Source Table ID"), "No." = field("Source Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("Source Table ID"));
         }
-        field(34; "From Field Type"; Text[30])
+        field(34; "Source Field Type"; Text[30])
         {
             Caption = 'Source Field Type', comment = 'Herkunftsfeld Typ';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Type Name" where(TableNo = field("From Table ID"), "No." = field("From Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("From Table ID"));
+            CalcFormula = lookup(Field."Type Name" where(TableNo = field("Source Table ID"), "No." = field("Source Field No.")));
+            TableRelation = Field."No." WHERE(TableNo = field("Source Table ID"));
         }
 
         field(35; "Fixed Value"; Text[250])
@@ -74,11 +76,11 @@ table 110003 "DMTField"
                 FldRef: FieldRef;
                 ErrorMsg: Text;
             begin
-                Rec.TestField("To Table No.");
-                Rec.TestField("To Field No.");
+                Rec.TestField("Target Table ID");
+                Rec.TestField("Target Field No.");
                 if "Fixed Value" <> '' then begin
-                    RecRef.Open(Rec."To Table No.");
-                    FldRef := RecRef.Field(Rec."To Field No.");
+                    RecRef.Open(Rec."Target Table ID");
+                    FldRef := RecRef.Field(Rec."Target Field No.");
                     ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
                     if ErrorMsg <> '' then
                         Error(ErrorMsg);
@@ -124,16 +126,16 @@ table 110003 "DMTField"
 
     keys
     {
-        key(PK; "To Table No.", "To Field No.") { Clustered = true; }
+        key(PK; "Target Table ID", "Target Field No.") { Clustered = true; }
         key(ValidationOrder; "Validation Order") { }
     }
     fieldgroups
     {
-        fieldgroup(DropDown; "To Table No.", "From Field Caption", "To Field Caption") { }
+        fieldgroup(DropDown; "Target Table ID", "Source Field Caption", "Target Field Caption") { }
     }
     internal procedure FilterBy(DMTTable: Record DMTTable) NotIsEmpty: Boolean
     begin
-        Rec.SetRange("To Table No.", DMTTable."To Table ID");
+        Rec.SetRange("Target Table ID", DMTTable."Target Table ID");
         NotIsEmpty := not Rec.IsEmpty;
     end;
 
@@ -144,18 +146,18 @@ table 110003 "DMTField"
         TargetRecRef: RecordRef;
         i: Integer;
     begin
-        if DMTTable."To Table ID" = 0 then
+        if DMTTable."Target Table ID" = 0 then
             exit(false);
-        TargetRecRef.Open(DMTTable."To Table ID");
+        TargetRecRef.Open(DMTTable."Target Table ID");
         for i := 1 to TargetRecRef.FieldCount do begin
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
                     DMTFields.FilterBy(DMTTable);
-                    DMTFields.setrange("To Field No.", TargetRecRef.FieldIndex(i).Number);
+                    DMTFields.setrange("Target Field No.", TargetRecRef.FieldIndex(i).Number);
                     if DMTFields.IsEmpty then begin
-                        DMTFields_NEW."From Table ID" := DMTTable."Buffer Table ID";
-                        DMTFields_NEW."To Field No." := TargetRecRef.FieldIndex(i).Number;
-                        DMTFields_NEW."To Table No." := DMTTable."To Table ID";
+                        DMTFields_NEW."Source Table ID" := DMTTable."Buffer Table ID";
+                        DMTFields_NEW."Target Field No." := TargetRecRef.FieldIndex(i).Number;
+                        DMTFields_NEW."Target Table ID" := DMTTable."Target Table ID";
                         DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Ignore; //default for fields without action
                         DMTFields_NEW."Validation Order" := i * 10000;
                         DMTFields_NEW.Insert(true);
@@ -184,32 +186,32 @@ table 110003 "DMTField"
                 exit;
             end;
             DMTFields.FilterBy(DMTTable);
-            DMTFields.SetRange("From Field No.", 0);
+            DMTFields.SetRange("Source Field No.", 0);
 
             // Optional Overwrite
             DMTFields2.FilterBy(DMTTable);
-            DMTFields2.SetFilter("From Field No.", '<>%1', 0);
+            DMTFields2.SetFilter("Source Field No.", '<>%1', 0);
             if DMTFields2.FindFirst() then
                 if Confirm(ReplaceExistingMatchesQst) then begin
-                    DMTFields.SetRange("From Field No.");
+                    DMTFields.SetRange("Source Field No.");
                 end;
             Clear(DMTFields2);
             if DMTFields.FindSet(false, false) then
                 repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                     SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
                     SourceField.SetRange(Enabled, true);
                     SourceField.SetRange(Class, SourceField.Class::Normal);
                     SourceField.SetRange(FieldName, TargetField.FieldName);
                     Found := SourceField.FindFirst();
                     if not Found then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then begin
+                        if FindFieldNameInOldVersion(TargetField, DMTFields."Target Table ID", OldFieldName) then begin
                             SourceField.SetRange(FieldName, OldFieldName);
                             Found := SourceField.FindFirst();
                         end;
                     if Found then begin
                         DMTFields2 := DMTFields;
-                        DMTFields2.Validate("From Field No.", SourceField."No.");
+                        DMTFields2.Validate("Source Field No.", SourceField."No.");
                         DMTFields2.Modify();
                     end;
                 until DMTFields.Next() = 0;
@@ -219,14 +221,14 @@ table 110003 "DMTField"
             GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
             // Loop Target Fields
             DMTFields.FilterBy(DMTTable);
-            DMTFields.setrange("From Field No.", 0);
+            DMTFields.setrange("Source Field No.", 0);
             if DMTFields.FindSet(false, false) then
                 repeat
-                    TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                    TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                     // 1.Try - Match by Name
                     FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
                     if FoundAtIndex = 0 then begin
-                        if DMTTable."To Table ID" = Database::"Payment Terms" then
+                        if DMTTable."Target Table ID" = Database::"Payment Terms" then
                             case TargetField."Field Caption" of
                                 //'Rabatt in %' -> 'Skonto %'
                                 'Skonto %':
@@ -235,13 +237,13 @@ table 110003 "DMTField"
                     end;
                     // 2.Try - Match by known Name Changes
                     if FoundAtIndex = 0 then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."To Table No.", OldFieldName) then
+                        if FindFieldNameInOldVersion(TargetField, DMTFields."Target Table ID", OldFieldName) then
                             FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
                     if FoundAtIndex <> 0 then begin
                         DMTFields2 := DMTFields;
                         // Buffer Fields Start from 1000
-                        DMTFields2.Validate("From Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
-                        DMTFields2."From Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption"));
+                        DMTFields2.Validate("Source Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
+                        DMTFields2."Source Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."Source Field Caption"));
 
                         DMTFields2.Modify();
                     end;
@@ -266,7 +268,7 @@ table 110003 "DMTField"
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
         if DMTFields.FindSet(false, false) then
             repeat
-                TargetField.Get(DMTFields."To Table No.", DMTFields."To Field No.");
+                TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                 DMTFields2 := DMTFields;
                 case true of
                     TargetField.FieldName IN ['Global Dimension 1 Code',
@@ -384,13 +386,13 @@ table 110003 "DMTField"
                         end;
                     end;
                 end;
-            Rec.FieldNo(rec."From Field No."):
+            Rec.FieldNo(rec."Source Field No."):
                 begin
-                    if (xRec."From Field No." <> Rec."From Field No.") then begin
-                        if Rec."From Field No." <> 0 then
+                    if (xRec."Source Field No." <> Rec."Source Field No.") then begin
+                        if Rec."Source Field No." <> 0 then
                             if Rec."Processing Action" = Rec."Processing Action"::Ignore then
                                 Rec."Processing Action" := Rec."Processing Action"::Transfer;
-                        if Rec."From Field No." = 0 then
+                        if Rec."Source Field No." = 0 then
                             if Rec."Processing Action" = Rec."Processing Action"::Transfer then
                                 Rec."Processing Action" := Rec."Processing Action"::Ignore;
                     end;
@@ -411,5 +413,43 @@ table 110003 "DMTField"
                 TempDMTField2.Insert(false);
             until DMTField.Next() = 0;
         TempDMTField.Copy(TempDMTField2, true);
+    end;
+
+    local procedure UpdateSourceFieldCaption()
+    var
+        DMTGenBuffTable: Record DMTGenBuffTable;
+        DMTTable: Record DMTTable;
+        DMTField: Record DMTField;
+        SourceField, TargetField : Record Field;
+        BuffTableCaptions: Dictionary of [Integer, Text];
+        BuffTableCaption: Text;
+    begin
+        DMTField := Rec;
+        if Rec."Source Field No." = 0 then begin
+            Rec."Source Field Caption" := '';
+            exit;
+        end;
+        DMTTable.get(Rec."Target Table ID");
+        case DMTTable.BufferTableType of
+            DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+                    if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
+                        TargetField.SetRange(TableNo, Rec."Target Table ID");
+                        TargetField.SetFilter(FieldName, BuffTableCaption);
+                        if (TargetField.Count() = 1) then begin
+                            Rec."Source Field Caption" := CopyStr(BuffTableCaption, 1, MaxStrLen(Rec."Source Field Caption"));
+                        end;
+                    end;
+                end;
+            DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
+                begin
+                    Rec.TestField("Target Table ID");
+                    if SourceField.Get(Rec."Target Table ID", Rec."Target Field No.") then
+                        Rec."Target Field Caption" := SourceField."Field Caption";
+                end;
+        end;
+        if Format(DMTField) <> Format(Rec) then
+            Rec.Modify();
     end;
 }

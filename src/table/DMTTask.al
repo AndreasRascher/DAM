@@ -25,8 +25,8 @@ table 110009 "DMTTask"
         }
         field(11; ID; integer)
         {
-            TableRelation = if (Type = const(ImportToBuffer)) DMTTable."To Table ID" else
-            if (Type = const(ImportToTarget)) DMTTable."To Table ID" else
+            TableRelation = if (Type = const(ImportToBuffer)) DMTTable."Target Table ID" else
+            if (Type = const(ImportToTarget)) DMTTable."Target Table ID" else
             if (Type = const(RunCodeunit)) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit), "Object ID" = filter(50000 ..));
             ValidateTableRelation = false;
 
@@ -40,7 +40,7 @@ table 110009 "DMTTask"
                         begin
                             DMTTable.Get(Rec.ID);
                             DMTTable.testfield("Buffer Table ID");
-                            Rec."Context Description" := DMTTable."Dest.Table Caption";
+                            Rec."Context Description" := DMTTable."Target Table Caption";
                         end;
                     Type::RunCodeunit:
                         begin

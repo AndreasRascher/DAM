@@ -67,10 +67,10 @@ table 110001 "DMTErrorLog"
         _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
         _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."to ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
 
-        _DMTErrorlog."Import from Table No." := DMTFields."From Table ID";
-        _DMTErrorlog."Import from Field No." := DMTFields."From Field No.";
-        _DMTErrorlog."Import to Table No." := DMTFields."To Table No.";
-        _DMTErrorlog."Import to Field No." := DMTFields."To Field No.";
+        _DMTErrorlog."Import from Table No." := DMTFields."Source Table ID";
+        _DMTErrorlog."Import from Field No." := DMTFields."Source Field No.";
+        _DMTErrorlog."Import to Table No." := DMTFields."Target Table ID";
+        _DMTErrorlog."Import to Field No." := DMTFields."Target Field No.";
         _DMTErrorlog."Ignore Error" := DMTFields."Ignore Validation Error";
 
         _DMTErrorlog.Errortext := COPYSTR(GETLASTERRORTEXT, 1, MAXSTRLEN(_DMTErrorlog.Errortext));
@@ -122,8 +122,8 @@ table 110001 "DMTErrorLog"
 
     procedure ErrorsExistFor(DMTField: Record "DMTField"; ExcludeIgnoreErrorRecords: Boolean): Boolean
     begin
-        SetRange("Import to Table No.", DMTField."To Table No.");
-        SETRANGE("Import to Field No.", DMTField."To Field No.");
+        SetRange("Import to Table No.", DMTField."Target Table ID");
+        SETRANGE("Import to Field No.", DMTField."Target Field No.");
         IF ExcludeIgnoreErrorRecords then
             SETRANGE("Ignore Error", FALSE);
         exit(not Rec.IsEmpty);
@@ -133,7 +133,7 @@ table 110001 "DMTErrorLog"
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
-        DMTErrorlog.Setrange("Import to Table No.", DMTTable."To Table ID");
+        DMTErrorlog.Setrange("Import to Table No.", DMTTable."Target Table ID");
         if OpenOnlyIfNotEmpty then
             if DMTErrorLog.IsEmpty then
                 exit;

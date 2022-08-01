@@ -20,22 +20,22 @@ page 110024 "DMTUpdateTask"
             }
             repeater(SelectedFields)
             {
-                field("To Field No."; Rec."To Field No.") { ApplicationArea = All; Editable = false; }
-                field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; Editable = false; }
+                field("To Field No."; Rec."Target Field No.") { ApplicationArea = All; Editable = false; }
+                field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; Editable = false; }
                 field(Selected; IsSelected)
                 {
                     ApplicationArea = All;
                     Caption = 'Update';
                     trigger OnValidate()
                     begin
-                        if rec."To Field No." = 0 then
+                        if rec."Target Field No." = 0 then
                             exit;
                         if IsSelected then begin
-                            if not SelectedFields.Contains(Rec."To Field No.") then
-                                SelectedFields.Add(Rec."To Field No.");
+                            if not SelectedFields.Contains(Rec."Target Field No.") then
+                                SelectedFields.Add(Rec."Target Field No.");
                         end else begin
-                            if SelectedFields.Contains(Rec."To Field No.") then
-                                SelectedFields.Remove(Rec."To Field No.");
+                            if SelectedFields.Contains(Rec."Target Field No.") then
+                                SelectedFields.Remove(Rec."Target Field No.");
                         end;
                     end;
                 }
@@ -45,7 +45,7 @@ page 110024 "DMTUpdateTask"
 
     trigger OnAfterGetRecord()
     begin
-        IsSelected := SelectedFields.Contains(Rec."To Field No.");
+        IsSelected := SelectedFields.Contains(Rec."Target Field No.");
     end;
 
     procedure GetToFieldNoFilter() ToFieldNoFilter: text
@@ -56,7 +56,7 @@ page 110024 "DMTUpdateTask"
     begin
 
         // Collect Key Field IDs
-        KeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDMTTable."To Table ID", true /*include*/);
+        KeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDMTTable."Target Table ID", true /*include*/);
         KeyFields := ConvertNumberFilterToNumberList(KeyFieldFilter);
         foreach ToFieldNo in KeyFields do begin
             ToFieldNoFilter += StrSubstNo('%1|', ToFieldNo);
@@ -80,16 +80,16 @@ page 110024 "DMTUpdateTask"
     begin
         OK := true;
         CurrDMTTable.copy(DMTTable);
-        if CurrDMTTable."To Table ID" = 0 then
+        if CurrDMTTable."Target Table ID" = 0 then
             exit(false);
 
         // Filter Fields Avaible for Update
         Rec.FilterGroup(2);
-        Rec.SetRange("To Table No.", CurrDMTTable."To Table ID");
+        Rec.SetRange("Target Table ID", CurrDMTTable."Target Table ID");
         Rec.Setfilter("Processing Action", '<>%1', Field."Processing Action"::Ignore);
-        Rec.SetFilter("From Field No.", '<>%1', 0);
-        NonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDMTTable."To Table ID", false /*exclude*/);
-        Rec.Setfilter("To Field No.", NonKeyFieldFilter);
+        Rec.SetFilter("Source Field No.", '<>%1', 0);
+        NonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDMTTable."Target Table ID", false /*exclude*/);
+        Rec.Setfilter("Target Field No.", NonKeyFieldFilter);
         // restore last selection
         if DMTTable.ReadLastFieldUpdateSelection() <> '' then begin
             SelectedFields := ConvertNumberFilterToNumberList(DMTTable.ReadLastFieldUpdateSelection());
