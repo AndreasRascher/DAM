@@ -1,4 +1,4 @@
-table 81121 "DMTExportObject"
+table 50001 "DMTExportObject"
 {
     DataClassification = ToBeClassified;
     DataPerCompany = false;

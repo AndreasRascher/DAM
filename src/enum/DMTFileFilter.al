@@ -1,4 +1,4 @@
-enum 81122 DMTFileFilter
+enum 50002 DMTFileFilter
 {
     Extensible = true;
 

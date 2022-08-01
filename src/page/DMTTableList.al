@@ -1,4 +1,4 @@
-page 81133 "DMTTableList"
+page 50014 "DMTTableList"
 {
     Caption = 'DMT Table List', comment = 'DMT Tabellenübersicht';
     PageType = List;
@@ -118,6 +118,16 @@ page 81133 "DMTTableList"
                 trigger OnAction()
                 begin
                     Rec.DownloadAllALDataMigrationObjects;
+                end;
+            }
+            action(RenumberALObjects)
+            {
+                Image = NumberGroup;
+                ApplicationArea = all;
+                Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
+                trigger OnAction()
+                begin
+                    Rec.RenumberALObjects();
                 end;
             }
             action(TransferSelectedToTargetTable)

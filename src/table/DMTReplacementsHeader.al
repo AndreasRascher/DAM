@@ -1,4 +1,4 @@
-table 81125 "DMTReplacementsHeader"
+table 50005 "DMTReplacementsHeader"
 {
     Caption = 'Replacements Header', Comment = 'Ersetzungungen Kopf';
     DataClassification = ToBeClassified;

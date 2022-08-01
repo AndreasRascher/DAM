@@ -1,4 +1,4 @@
-page 81131 "DMTTableCard"
+page 50012 "DMTTableCard"
 {
     Caption = 'DMT Table Card (Data Migration Tool)', Comment = 'DMT Tabellenkarte (Data Migration Tool)';
     PageType = Document;

@@ -1,4 +1,4 @@
-codeunit 81126 "DMTObjMgt"
+codeunit 50005 "DMTObjMgt"
 {
     procedure LookUpOldVersionTable(var DMTTable: Record DMTTable) OK: Boolean;
     var

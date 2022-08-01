@@ -1,4 +1,4 @@
-query 81120 "DMTErrorLogQry"
+query 50000 "DMTErrorLogQry"
 {
     QueryType = Normal;
 

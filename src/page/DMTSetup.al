@@ -1,4 +1,4 @@
-page 81130 "DMT Setup"
+page 50011 "DMT Setup"
 {
     Caption = 'Data Migration Tool Setup', comment = 'Data Migration Tool Einrichtung';
     AdditionalSearchTerms = 'DMT Setup', Comment = 'DMT Einrichtung';

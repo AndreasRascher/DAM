@@ -1,4 +1,4 @@
-table 81122 "DMTField"
+table 50002 "DMTField"
 {
     DataClassification = SystemMetadata;
     fields

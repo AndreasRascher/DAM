@@ -2233,6 +2233,11 @@
           <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Method OnAction - NamedType FinishedMsg</note>
         </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 3138244177 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renumber AL Objects</source>
+          <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action RenumberALObjects - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Tables</source>
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>

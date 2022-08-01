@@ -1,4 +1,4 @@
-page 81139 DataSourceList
+page 50020 DataSourceList
 {
     ApplicationArea = All;
     Caption = 'Data Source List', Comment = 'Datenquellen Übersicht';

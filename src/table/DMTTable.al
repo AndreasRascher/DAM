@@ -1,4 +1,4 @@
-table 81128 "DMTTable"
+table 50008 "DMTTable"
 {
     DataClassification = SystemMetadata;
     LookupPageId = DMTTableList;
@@ -61,7 +61,7 @@ table 81128 "DMTTable"
 
             trigger OnValidate()
             begin
-                ProposeObjectIDs();
+                ProposeObjectIDs(false);
             end;
         }
         field(52; DataFilePath; Text[250])
@@ -150,7 +150,7 @@ table 81128 "DMTTable"
                 ObjectMgt.LookUpOldVersionTable(Rec);
                 if "To Table ID" = 0 then begin
                     Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
-                    ProposeObjectIDs();
+                    ProposeObjectIDs(false);
                     InitTableFieldMapping();
                 end;
             end;
@@ -162,7 +162,7 @@ table 81128 "DMTTable"
                 ObjectMgt.ValidateFromTableCaption(Rec, xRec);
                 if ("To Table ID" = 0) and ("NAV Src.Table No." <> 0) then begin
                     Rec.Validate("Dest.Table Caption", Format("NAV Src.Table No."));
-                    ProposeObjectIDs();
+                    ProposeObjectIDs(false);
                 end;
             end;
         }
@@ -263,7 +263,7 @@ table 81128 "DMTTable"
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
 
-    local procedure ProposeObjectIDs()
+    procedure ProposeObjectIDs(IsRenumberObjectsIntent: Boolean)
     var
         DMTSetup: Record "DMTSetup";
         DMTTable: Record DMTTable;
@@ -305,8 +305,10 @@ table 81128 "DMTTable"
             rec."Import XMLPort ID" := AvailableXMLPorts.get(1);
             AvailableXMLPorts.Remove(Rec."Import XMLPort ID");
         end;
-        TryFindBufferTableID(false);
-        TryFindXMLPortID(false);
+        if not IsRenumberObjectsIntent then begin
+            TryFindBufferTableID(false);
+            TryFindXMLPortID(false);
+        end
     end;
 
     local procedure InitTableFieldMapping()
@@ -542,6 +544,42 @@ table 81128 "DMTTable"
             DMTField."Validation Order" := NewSortingValues.Get(RecID);
             DMTField.Modify();
         end;
+    end;
+
+    internal procedure RenumberALObjects()
+    var
+        DMTTable: Record DMTTable;
+        DMTSetup: Record DMTSetup;
+        SessionStorage: Codeunit DMTSessionStorage;
+        ObjectMgt: Codeunit DMTObjMgt;
+        AvailableTables, AvailableXMLPorts : List of [Integer];
+    begin
+        SessionStorage.DisposeLicenseInfo();
+
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
+            Error('NoAvailableObjectIDsErr', format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
+            Error('NoAvailableObjectIDsErr', format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
+        DMTSetup.Get();
+        DMTSetup.TestField("Obj. ID Range Buffer Tables");
+        DMTSetup.TestField("Obj. ID Range XMLPorts");
+
+        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+        DMTTable.ModifyAll("Buffer Table ID", 0);
+        DMTTable.ModifyAll("Import XMLPort ID", 0);
+
+        if DMTTable.FindSet() then
+            repeat
+                if AvailableTables.Count > 0 then begin
+                    DMTTable."Buffer Table ID" := AvailableTables.Get(1);
+                    AvailableTables.Remove(DMTTable."Buffer Table ID");
+                end;
+                if AvailableXMLPorts.Count > 0 then begin
+                    DMTTable."Import XMLPort ID" := AvailableXMLPorts.Get(1);
+                    AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
+                end;
+                DMTTable.Modify();
+            until DMTTable.Next() = 0;
     end;
 
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;

@@ -1,4 +1,4 @@
-codeunit 110005 "DMTObjectGenerator"
+codeunit 50007 "DMTObjectGenerator"
 {
     procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
     var

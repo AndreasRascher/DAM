@@ -1,4 +1,4 @@
-table 81120 "DMTErrorLog"
+table 50000 "DMTErrorLog"
 {
     DataClassification = ToBeClassified;
 
@@ -105,10 +105,10 @@ table 81120 "DMTErrorLog"
         DMTErrorlog.SetRange("From ID", BufferRef.RecordId);
         // DMTErrorlog.DeleteAll(); // Results in Tablelocks
         if DMTErrorlog.FindSet() then begin
-                                          repeat
-                                              DMTErrorlog2 := DMTErrorlog;
-                                              DMTErrorlog2.Delete(true);
-                                          until DMTErrorlog.Next() = 0;
+            repeat
+                DMTErrorlog2 := DMTErrorlog;
+                DMTErrorlog2.Delete(true);
+            until DMTErrorlog.Next() = 0;
         end;
     end;
 
