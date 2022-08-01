@@ -42,6 +42,13 @@ page 110014 "DMTTableList"
                     end;
                 }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; Editable = false; }
+                field("No. of Unhandled Table Relations";RelationsCheck.FindUnhandledRelatedTableIDs(Rec).Count){
+                    ApplicationArea=All;
+                    trigger OnDrillDown()
+                    begin
+                        RelationsCheck.ShowUnhandledTableRelations(Rec);
+                    end;
+                }
             }
         }
         area(FactBoxes)
@@ -218,4 +225,5 @@ page 110014 "DMTTableList"
     var
         [InDataSet]
         ImportXMLPortIDStyle, BufferTableIDStyle, DataFilePathStyle : Text;
+        RelationsCheck: Codeunit DMTRelationsCheck;
 }

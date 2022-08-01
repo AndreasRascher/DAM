@@ -222,7 +222,7 @@ table 110003 "DMTField"
             // Loop Target Fields
             DMTFields.FilterBy(DMTTable);
             DMTFields.setrange("Source Field No.", 0);
-            if DMTFields.FindSet(false, false) then
+            if DMTFields.FindSet(true, false) then
                 repeat
                     TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                     // 1.Try - Match by Name
