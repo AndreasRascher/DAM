@@ -1,10 +1,4 @@
-/*   DatenimportLine:
-	Column Caption
-	Column Name
-	Column Type (Text, Decimal, Integer, Option,..) 
-	Column Width
-*/
-table 81131 "DMTDataSourceHeader"
+table 110011 "DMTDataSourceHeader"
 {
     fields
     {

@@ -1,4 +1,4 @@
-page 81132 "DMTTableCardPart"
+page 110013 "DMTTableCardPart"
 {
     PageType = ListPart;
     SourceTable = "DMTField";
@@ -16,14 +16,7 @@ page 81132 "DMTTableCardPart"
                 field("To Field Caption"; Rec."To Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
                 field("From Field Caption"; Rec."From Field Caption")
                 {
-                    Visible = not ShowGenBufferTableColumns;
                     Editable = false;
-                    HideValue = HideFromFieldInfo;
-                    ApplicationArea = All;
-                }
-                field("From Field Caption (GenBufferTable)"; Rec."From Field Caption (GenBuff)")
-                {
-                    Visible = ShowGenBufferTableColumns;
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
@@ -258,17 +251,9 @@ page 81132 "DMTTableCardPart"
             LineStyleExpr := 'Attention';
     end;
 
-    internal procedure SetBufferTableType(BufferTableType: Option)
-    var
-        DMTTable: Record DMTTable;
-    begin
-        ShowGenBufferTableColumns := BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files";
-        CurrPage.Update();
-    end;
-
     Var
         [InDataSet]
-        HideFromFieldInfo, ShowGenBufferTableColumns : Boolean;
+        HideFromFieldInfo: Boolean;
         [InDataSet]
         LineStyleExpr: text;
 }

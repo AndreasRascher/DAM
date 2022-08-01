@@ -1,4 +1,4 @@
-enum 81121 DMTObjTypes
+enum 110001 DMTObjTypes
 {
     Extensible = true;
 

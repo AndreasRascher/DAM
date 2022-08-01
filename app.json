@@ -16,16 +16,8 @@
   "application": "18.0.0.0",
   "idRanges": [
     {
-      "from": 81120,
-      "to": 81141
-    },
-    {
-      "from": 90000,
-      "to": 110005
-    },
-    {
-      "from": 50100,
-      "to": 50100
+      "from": 110000,
+      "to": 149999
     }
   ],
   "contextSensitiveHelpUrl": "https://DMT.com/help/",

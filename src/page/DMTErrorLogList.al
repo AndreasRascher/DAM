@@ -1,4 +1,4 @@
-page 81120 "DMT Error Log List"
+page 110001 "DMT Error Log List"
 {
     Caption = 'DMT Error Log', comment = 'DMT Fehlerprotokoll';
     PageType = List;
@@ -111,7 +111,7 @@ page 81120 "DMT Error Log List"
                         Database::DMTReplacementsLine);
                     if allObjWithCaption.FindSet() then
                         repeat
-                                choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
+                            choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
                         until allObjWithCaption.Next() = 0;
                     choices := choices.TrimEnd(',');
                     selection := StrMenu(choices);

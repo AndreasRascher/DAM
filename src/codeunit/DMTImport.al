@@ -1,4 +1,4 @@
-codeunit 81123 DMTImport
+codeunit 110000 DMTImport
 {
     procedure StartImport(var DMTTable: Record DMTTable; NoUserInteraction_New: Boolean; IsUpdateTask: Boolean)
     var

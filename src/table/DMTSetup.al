@@ -1,4 +1,4 @@
-table 81127 "DMTSetup"
+table 110008 "DMTSetup"
 {
     Caption = 'DMT Setup', comment = 'DMT Einrichtung';
     DataClassification = ToBeClassified;
@@ -109,7 +109,7 @@ table 81127 "DMTSetup"
         found: Boolean;
     begin
         if Rec.Get() then
-          exit;
+            exit;
         Company.SetFilter(Name, '<>%1', CompanyName);
         if Company.FindSet() then
             repeat

@@ -1,4 +1,4 @@
-page 81136 NAVObjects
+page 110017 NAVObjects
 {
     CaptionML = ENU = 'NAV Data Export Objects', DEU = 'Objekte für den NAV Datenexport';
     PageType = Card;

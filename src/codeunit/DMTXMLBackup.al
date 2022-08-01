@@ -1,4 +1,4 @@
-codeunit 81127 "DMTXMLBackup"
+codeunit 110006 "DMTXMLBackup"
 {
 
     procedure Export();
@@ -435,10 +435,10 @@ codeunit 81127 "DMTXMLBackup"
         foreach TableID in TablesToExport do begin
             _RecRef.OPEN(TableID);
             if _RecRef.FINDSET(false, false) then
-                    repeat
-                        if not RecordIDList.Contains(_RecRef.RecordId) then
-                            RecordIDList.Add(_RecRef.RecordId);
-                    until _RecRef.Next() = 0;
+                repeat
+                    if not RecordIDList.Contains(_RecRef.RecordId) then
+                        RecordIDList.Add(_RecRef.RecordId);
+                until _RecRef.Next() = 0;
             _RecRef.close();
 
         end;
