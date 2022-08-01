@@ -5,6 +5,9 @@ page 81129 "DMTSelectTables"
     SourceTable = AllObjWithCaption;
     SourceTableTemporary = true;
     UsageCategory = None;
+    Editable = false;
+    InsertAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
