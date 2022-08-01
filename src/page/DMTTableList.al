@@ -117,7 +117,7 @@ page 50014 "DMTTableList"
                 Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
                 trigger OnAction()
                 begin
-                    Rec.DownloadAllALDataMigrationObjects;
+                    Rec.DownloadAllALDataMigrationObjects();
                 end;
             }
             action(RenumberALObjects)

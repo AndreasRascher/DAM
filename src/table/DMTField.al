@@ -47,15 +47,6 @@ table 50002 "DMTField"
                 UpdateProcessingAction(Rec.FieldNo("From Field No."));
             end;
         }
-        field(32; "From Field Caption (GenBuff)"; Text[80])
-        {
-            Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
-            Editable = false;
-            trigger OnLookup()
-            begin
-                Message('ToDo: Feldauswahl aus GenBufferTable');
-            end;
-        }
         field(33; "From Field Caption"; Text[80])
         {
             Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
@@ -250,7 +241,7 @@ table 50002 "DMTField"
                         DMTFields2 := DMTFields;
                         // Buffer Fields Start from 1000
                         DMTFields2.Validate("From Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
-                        DMTFields2."From Field Caption (GenBuff)" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption (GenBuff)"));
+                        DMTFields2."From Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."From Field Caption"));
 
                         DMTFields2.Modify();
                     end;

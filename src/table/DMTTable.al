@@ -557,9 +557,9 @@ table 50008 "DMTTable"
         SessionStorage.DisposeLicenseInfo();
 
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
-            Error('NoAvailableObjectIDsErr', format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
-            Error('NoAvailableObjectIDsErr', format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
         DMTSetup.Get();
         DMTSetup.TestField("Obj. ID Range Buffer Tables");
         DMTSetup.TestField("Obj. ID Range XMLPorts");

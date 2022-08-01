@@ -78,7 +78,6 @@ page 50012 "DMTTableCard"
             }
             part(Lines; DMTTableCardPart)
             {
-                Visible = LinesVisible;
                 ApplicationArea = all;
                 Caption = 'Fields Setup', Comment = 'Feldeinrichtung';
                 SubPageLink = "To Table No." = field("To Table ID"), BufferTableTypeFilter = field(BufferTableType);
@@ -274,12 +273,7 @@ page 50012 "DMTTableCard"
     local procedure EnableControls()
     begin
         UseXMLPortAndBufferTable := (Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV");
-        LinesVisible := true;
-        // LinesVisible := (Rec."To Table ID" <> 0) and
-        //                 (Rec."No.of Records in Buffer Table" > 0) and
-        //                 (Rec."Data Source Type" <> Rec."Data Source Type"::" ");
         NAVDataSourcePropertiesVisible := Rec."Data Source Type" = Rec."Data Source Type"::"NAV CSV Export";
-        CurrPage.Lines.Page.SetBufferTableType(Rec.BufferTableType);
     end;
 
     local procedure GetCaption(): Text
@@ -299,8 +293,6 @@ page 50012 "DMTTableCard"
         BufferTableIDStyle: Text;
         [InDataSet]
         UseXMLPortAndBufferTable: Boolean;
-        [InDataSet]
-        LinesVisible: Boolean;
         [InDataSet]
         NAVDataSourcePropertiesVisible: boolean;
 }
