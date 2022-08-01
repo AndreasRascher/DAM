@@ -1973,6 +1973,11 @@
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action XMLImport - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Action 3714397591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ClearGenBuffer</source>
+          <note from="Developer" annotates="general" priority="2">ClearGenBuffer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ClearGenBuffer - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Action 1418398776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Log</source>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>

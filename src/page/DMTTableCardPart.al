@@ -1,4 +1,4 @@
-page 50013 "DMTTableCardPart"
+page 110013 "DMTTableCardPart"
 {
     PageType = ListPart;
     SourceTable = "DMTField";

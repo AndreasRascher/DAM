@@ -1,4 +1,4 @@
-page 50008 "DMTReplacementsCard"
+page 110008 "DMTReplacementsCard"
 {
     Caption = 'DMT Replacements Card', Comment = 'DMT Ersetzungen Karte';
     PageType = Document;

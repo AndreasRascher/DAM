@@ -1,4 +1,4 @@
-page 50001 "DMT Error Log List"
+page 110001 "DMT Error Log List"
 {
     Caption = 'DMT Error Log', comment = 'DMT Fehlerprotokoll';
     PageType = List;

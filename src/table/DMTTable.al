@@ -1,4 +1,4 @@
-table 50008 "DMTTable"
+table 110000 "DMTTable"
 {
     DataClassification = SystemMetadata;
     LookupPageId = DMTTableList;
@@ -574,10 +574,11 @@ table 50008 "DMTTable"
         DMTSetup.TestField("Obj. ID Range Buffer Tables");
         DMTSetup.TestField("Obj. ID Range XMLPorts");
 
-        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+
         DMTTable.ModifyAll("Buffer Table ID", 0);
         DMTTable.ModifyAll("Import XMLPort ID", 0);
 
+        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
         if DMTTable.FindSet() then
             repeat
                 if AvailableTables.Count > 0 then begin
@@ -617,9 +618,9 @@ table 50008 "DMTTable"
                         if DMTTable."To Table ID" <> 0 then
                             FilterExpr += StrSubstNo('%1|', DMTTable."To Table ID");
                     end;
-                DMTTable.FieldNo("Buffer Table ID"):
+                DMTTable.FieldNo("NAV Src.Table No."):
                     begin
-                        if DMTTable."Buffer Table ID" <> 0 then
+                        if DMTTable."NAV Src.Table No." <> 0 then
                             FilterExpr += StrSubstNo('%1|', DMTTable."Buffer Table ID");
                     end;
             end;

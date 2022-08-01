@@ -1,4 +1,4 @@
-page 50000 FreeObjectsInLicense
+page 110000 FreeObjectsInLicense
 {
     ApplicationArea = All;
     UsageCategory = Administration;

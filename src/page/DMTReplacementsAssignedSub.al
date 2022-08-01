@@ -1,4 +1,4 @@
-page 50007 "DMTReplacementsAssignedSub"
+page 110007 "DMTReplacementsAssignedSub"
 {
     Caption = 'Lines', Comment = 'Zeilen';
     PageType = ListPart;

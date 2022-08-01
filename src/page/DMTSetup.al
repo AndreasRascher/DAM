@@ -1,4 +1,4 @@
-page 50011 "DMT Setup"
+page 110011 "DMT Setup"
 {
     Caption = 'Data Migration Tool Setup', comment = 'Data Migration Tool Einrichtung';
     AdditionalSearchTerms = 'DMT Setup', Comment = 'DMT Einrichtung';
@@ -192,6 +192,22 @@ page 50011 "DMT Setup"
                     if DMTGenBuffTable.FindFirst() then begin
                         DMTGenBuffTable.ShowImportDataForFile(DMTGenBuffTable."Import from Filename");
                     end;
+                end;
+            }
+            action(ClearGenBuffer)
+            {
+                Caption = 'ClearGenBuffer', comment = 'ClearGenBuffer';
+                ApplicationArea = All;
+                Image = ListPage;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                trigger OnAction()
+                var
+                    DMTGenBuffTable: Record DMTGenBuffTable;
+                begin
+                    DMTGenBuffTable.DeleteAll();
                 end;
             }
         }
