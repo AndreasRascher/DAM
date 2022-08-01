@@ -213,12 +213,6 @@
           <note from="Developer" annotates="general" priority="2">Herkunftsfeld Bezeichnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field From Field Caption - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1670326073 - Field 1101841876 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source Field Caption</source>
-          <target>Herkunftsfeld Bezeichnung</target>
-          <note from="Developer" annotates="general" priority="2">Herkunftsfeld Bezeichnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field From Field Caption (GenBuff) - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 4010365805 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Field No.</source>
           <target>Herkunft Feldnr.</target>
@@ -2637,30 +2631,6 @@
           <note from="Developer" annotates="general" priority="2">Anz. Datensätze in Zieltabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Control Qty.Lines In Trgt. Table - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 2476196872 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create Filter</source>
-          <target>Filter erstellen</target>
-          <note from="Developer" annotates="general" priority="2">Filter erstellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action CreateFilter - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Table ID Filter</source>
-          <target>Herkunftstabellen-ID Filter</target>
-          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetFromTableIDFilter - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>To Table ID Filter</source>
-          <target>Zieltabellen-ID Filter</target>
-          <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetToTableIDFilter - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Download buffer table objects</source>
-          <target>Puffertabellen Objekte runterladen</target>
-          <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ExportALObjects - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Read files into buffer tables (marked lines)</source>
           <target>Dateien in Puffertabellen einlesen (Markierte Zeilen)</target>
@@ -2679,11 +2649,35 @@
           <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Method OnAction - NamedType FinishedMsg</note>
         </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download buffer table objects</source>
+          <target>Puffertabellen Objekte runterladen</target>
+          <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ExportALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Table ID Filter</source>
+          <target>Herkunftstabellen-ID Filter</target>
+          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetFromTableIDFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>To Table ID Filter</source>
+          <target>Zieltabellen-ID Filter</target>
+          <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetToTableIDFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 47655189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renew object id assignments</source>
+          <target>Objekt-IDs neu zuordnen</target>
+          <note from="Developer" annotates="general" priority="2">Objekt-IDs neu zuordnen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action RenewObjectIdAssignments - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3138244177 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Renumber AL Objects</source>
           <target>AL Objekte neu Nummerieren</target>
           <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action RenumberALObjects - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

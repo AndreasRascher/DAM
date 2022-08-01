@@ -110,50 +110,39 @@ page 50014 "DMTTableList"
                     Message(FinishedMsg, CurrentDateTime - Start);
                 end;
             }
-            action(ExportALObjects)
+            group(Objects)
             {
-                Image = ExportFile;
-                ApplicationArea = all;
-                Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
-                trigger OnAction()
-                begin
-                    Rec.DownloadAllALDataMigrationObjects();
-                end;
-            }
-            action(RenumberALObjects)
-            {
-                Image = NumberGroup;
-                ApplicationArea = all;
-                Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
-                trigger OnAction()
-                begin
-                    Rec.RenumberALObjects();
-                end;
-            }
-            action(TransferSelectedToTargetTable)
-            {
-                Image = TransferToLines;
-                ApplicationArea = all;
-                Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
-                trigger OnAction()
-                var
-                    DMTTable: Record DMTTable;
-                    DMTTable_SELECTED: Record DMTTable;
-                    DMTImport: Codeunit "DMTImport";
-                begin
-                    DMTTable_SELECTED.SetCurrentKey("Sort Order");
-                    if not GetSelection(DMTTable_SELECTED) then
-                        exit;
-                    DMTTable_SELECTED.FindSet();
-                    repeat
-                        DMTTable := DMTTable_SELECTED;
-                        DMTImport.StartImport(DMTTable, true, false);
-                    until DMTTable_SELECTED.Next() = 0;
-                end;
-            }
-            group(CreateFilter)
-            {
-                Caption = 'Create Filter', Comment = 'Filter erstellen';
+                Image = Action;
+                action(ExportALObjects)
+                {
+                    Image = ExportFile;
+                    ApplicationArea = all;
+                    Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
+                    trigger OnAction()
+                    begin
+                        Rec.DownloadAllALDataMigrationObjects();
+                    end;
+                }
+                action(RenumberALObjects)
+                {
+                    Image = NumberGroup;
+                    ApplicationArea = all;
+                    Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
+                    trigger OnAction()
+                    begin
+                        Rec.RenumberALObjects();
+                    end;
+                }
+                action(RenewObjectIdAssignments)
+                {
+                    Image = NumberGroup;
+                    ApplicationArea = all;
+                    Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
+                    trigger OnAction()
+                    begin
+                        Rec.RenewObjectIdAssignments();
+                    end;
+                }
                 action(GetToTableIDFilter)
                 {
                     Image = FilterLines;
@@ -174,6 +163,28 @@ page 50014 "DMTTableList"
                         Message(Rec.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
                     end;
                 }
+            }
+
+            action(TransferSelectedToTargetTable)
+            {
+                Image = TransferToLines;
+                ApplicationArea = all;
+                Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
+                trigger OnAction()
+                var
+                    DMTTable: Record DMTTable;
+                    DMTTable_SELECTED: Record DMTTable;
+                    DMTImport: Codeunit "DMTImport";
+                begin
+                    DMTTable_SELECTED.SetCurrentKey("Sort Order");
+                    if not GetSelection(DMTTable_SELECTED) then
+                        exit;
+                    DMTTable_SELECTED.FindSet();
+                    repeat
+                        DMTTable := DMTTable_SELECTED;
+                        DMTImport.StartImport(DMTTable, true, false);
+                    until DMTTable_SELECTED.Next() = 0;
+                end;
             }
         }
     }

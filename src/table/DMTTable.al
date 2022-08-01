@@ -377,12 +377,17 @@ table 50008 "DMTTable"
 
     procedure TryFindBufferTableID(DoModify: Boolean)
     var
-        TableMeta: Record "Table Metadata";
+        AllObjWithCaption: Record AllObjWithCaption;
+        DMTSetup: Record DMTSetup;
     begin
-        TableMeta.SetRange(ID, 50000, 99999);
-        TableMeta.SetRange(Name, StrSubstNo('T%1Buffer', Rec."NAV Src.Table No."));
-        if TableMeta.FindFirst() then begin
-            Rec."Buffer Table ID" := TableMeta.ID;
+        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
+        if DMTSetup.Get() and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
+            AllObjWithCaption.SetFilter("Object ID", DMTSetup."Obj. ID Range Buffer Tables")
+        else
+            AllObjWithCaption.SetRange("Object ID", 50000, 99999);
+        AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Buffer', Rec."NAV Src.Table No."));
+        if AllObjWithCaption.FindFirst() then begin
+            Rec."Buffer Table ID" := AllObjWithCaption."Object ID";
             if DoModify then
                 Rec.Modify();
         end;
@@ -391,8 +396,13 @@ table 50008 "DMTTable"
     procedure TryFindXMLPortID(DoModify: Boolean)
     var
         AllObjWithCaption: Record AllObjWithCaption;
+        DMTSetup: Record DMTSetup;
     begin
-        AllObjWithCaption.SetRange("Object ID", 50000, 99999);
+        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::XMLport);
+        if DMTSetup.Get() and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
+            AllObjWithCaption.SetFilter("Object ID", DMTSetup."Obj. ID Range XMLPorts")
+        else
+            AllObjWithCaption.SetRange("Object ID", 50000, 99999);
         AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Import', Rec."NAV Src.Table No."));
         if AllObjWithCaption.FindFirst() then begin
             Rec."Import XMLPort ID" := AllObjWithCaption."Object ID";
@@ -579,6 +589,18 @@ table 50008 "DMTTable"
                     AvailableXMLPorts.Remove(DMTTable."Import XMLPort ID");
                 end;
                 DMTTable.Modify();
+            until DMTTable.Next() = 0;
+    end;
+
+    internal procedure RenewObjectIdAssignments()
+    var
+        DMTTable: Record DMTTable;
+    begin
+        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+        if DMTTable.FindSet() then
+            repeat
+                DMTTable.TryFindBufferTableID(true);
+                DMTTable.TryFindXMLPortID(true);
             until DMTTable.Next() = 0;
     end;
 
