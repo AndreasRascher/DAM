@@ -243,8 +243,8 @@ table 110003 "DMTField"
                         DMTFields2 := DMTFields;
                         // Buffer Fields Start from 1000
                         DMTFields2.Validate("Source Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
-                        DMTFields2."Source Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."Source Field Caption"));
-
+                        //DMTFields2."Source Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."Source Field Caption"));
+                        DMTFields2.UpdateSourceFieldCaption();
                         DMTFields2.Modify();
                     end;
                 until DMTFields.Next() = 0;
@@ -415,7 +415,7 @@ table 110003 "DMTField"
         TempDMTField.Copy(TempDMTField2, true);
     end;
 
-    local procedure UpdateSourceFieldCaption()
+    procedure UpdateSourceFieldCaption()
     var
         DMTGenBuffTable: Record DMTGenBuffTable;
         DMTTable: Record DMTTable;
@@ -436,7 +436,7 @@ table 110003 "DMTField"
                     DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
-                        TargetField.SetFilter(FieldName, BuffTableCaption);
+                        TargetField.SetFilter("Field Caption", BuffTableCaption);
                         if (TargetField.Count() = 1) then begin
                             Rec."Source Field Caption" := CopyStr(BuffTableCaption, 1, MaxStrLen(Rec."Source Field Caption"));
                         end;
@@ -445,8 +445,9 @@ table 110003 "DMTField"
             DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     Rec.TestField("Target Table ID");
-                    if SourceField.Get(Rec."Target Table ID", Rec."Target Field No.") then
-                        Rec."Target Field Caption" := SourceField."Field Caption";
+                    if SourceField.Get(Rec."Source Table ID", Rec."Source Field No.") then
+                        Rec."Source Field Caption" := CopyStr(SourceField."Field Caption", 1, MaxStrLen(Rec."Source Field Caption"));
+                    ;
                 end;
         end;
         if Format(DMTField) <> Format(Rec) then

@@ -61,6 +61,10 @@ table 110000 "DMTTable"
 
             trigger OnValidate()
             begin
+                if (Rec.BuffertableType = Rec.BufferTableType::"Generic Buffer Table for all Files") then begin
+                    Clear(Rec."Import XMLPort ID");
+                    Clear(Rec."Buffer Table ID");
+                end;
                 ProposeObjectIDs(false);
             end;
         }

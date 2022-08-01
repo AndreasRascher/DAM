@@ -9,7 +9,7 @@
             "server": "http://bc20",
             "serverInstance": "BC",
             "authentication": "UserPassword",
-            "startupObjectId": 90003,
+            "startupObjectId": 110014,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,

@@ -3,36 +3,6 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="Data Migration Tool">
     <body>
       <group id="body">
-        <trans-unit id="Table 2751305127 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT Log Entry</source>
-          <note from="Developer" annotates="general" priority="2">DMT Protokollposten</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2751305127 - Field 2491730758 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Date and Time</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Field Date and Time - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2751305127 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Entry No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Field Entry No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2751305127 - Field 1017370016 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Process No.</source>
-          <note from="Developer" annotates="general" priority="2">Prozessnr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Field Process No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2751305127 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Field Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2751305127 - Field 2708250016 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMT Log Entry - Field User ID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 2013700009 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2352,11 +2322,6 @@
           <source>Seperate Buffer Table per CSV</source>
           <note from="Developer" annotates="general" priority="2">Eine Puffertabelle pro CSV</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3467984287 - EnumValue 558468528 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Batch Import To Buffer Table</source>
-          <note from="Developer" annotates="general" priority="2">Stapellauf</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMT Log Entry Type - EnumValue Batch Import To Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

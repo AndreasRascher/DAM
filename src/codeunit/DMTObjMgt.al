@@ -263,8 +263,7 @@ codeunit 110001 "DMTObjMgt"
                                                                       Database::DMTGenBuffTable,
                                                                       Database::DMTDataSourceLine,
                                                                       Database::DMTReplacementsHeader,
-                                                                      Database::DMTReplacementsLine,
-                                                                      Database::"DMT Log Entry"];
+                                                                      Database::DMTReplacementsLine];
                 end;
             allObjWithCaption."Object Type"::XMLport:
                 begin
