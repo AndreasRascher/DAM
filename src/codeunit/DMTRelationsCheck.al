@@ -11,17 +11,18 @@ codeunit 110008 DMTRelationsCheck
             exit;
         DMTField.FindSet(false, false);
         repeat
-            TargetField.Get(DMTField."Target Table ID", DMTField."Target Field No.");
-            TableRelations.SetRange("Table ID", TargetField.TableNo);
-            TableRelations.SetRange("Field No.", TargetField."No.");
-            TableRelations.setfilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
-            if TableRelations.FindSet() then
-                repeat
-                    if not RelatedTableIDsList.Contains(TableRelations."Related Table ID") then
-                        RelatedTableIDsList.Add(TableRelations."Related Table ID");
-                    ExcludeKnownTableIDsFromSearchFilter += StrSubstNo('&<>%1', TableRelations."Related Table ID");
-                until TableRelations.Next() = 0;
-            ExcludeKnownTableIDsFromSearchFilter := ExcludeKnownTableIDsFromSearchFilter.TrimStart('&');
+            if TargetField.Get(DMTField."Target Table ID", DMTField."Target Field No.") then begin
+                TableRelations.SetRange("Table ID", TargetField.TableNo);
+                TableRelations.SetRange("Field No.", TargetField."No.");
+                TableRelations.setfilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
+                if TableRelations.FindSet() then
+                    repeat
+                        if not RelatedTableIDsList.Contains(TableRelations."Related Table ID") then
+                            RelatedTableIDsList.Add(TableRelations."Related Table ID");
+                        ExcludeKnownTableIDsFromSearchFilter += StrSubstNo('&<>%1', TableRelations."Related Table ID");
+                    until TableRelations.Next() = 0;
+                ExcludeKnownTableIDsFromSearchFilter := ExcludeKnownTableIDsFromSearchFilter.TrimStart('&');
+            end;
         until DMTField.Next() = 0;
     end;
 

@@ -30,7 +30,7 @@
             "serverInstance": "TEST_MC",
             "authentication": "UserPassword",
             "startupObjectType": "Report",
-            "startupObjectId": 52914,
+            "startupObjectId": 110014,
             "breakOnError": true,
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
