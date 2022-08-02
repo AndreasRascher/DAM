@@ -258,6 +258,7 @@ table 110003 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
+        FixedAsset: Record "Fixed Asset";
     // Vendor: Record Vendor;
     // Customer: Record Customer;
     // Contact: Record Contact;
@@ -334,6 +335,10 @@ table 110003 "DMTField"
                         end;
                     (TargetField.TableNo = Database::"Vendor Posting Group") and
                     (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Fixed Asset") and (TargetField.FieldName in ['Budgeted Asset']):
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
@@ -436,7 +441,7 @@ table 110003 "DMTField"
                     DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
-                        TargetField.SetFilter("Field Caption", BuffTableCaption);
+                        TargetField.SetFilter("Field Caption", ConvertStr(BuffTableCaption, '@()&', '????'));
                         if (TargetField.Count() = 1) then begin
                             Rec."Source Field Caption" := CopyStr(BuffTableCaption, 1, MaxStrLen(Rec."Source Field Caption"));
                         end;
