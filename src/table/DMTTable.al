@@ -1,4 +1,4 @@
-table 110000 "DMTTable"
+table 50000 "DMTTable"
 {
     DataClassification = SystemMetadata;
     LookupPageId = DMTTableList;
@@ -133,6 +133,8 @@ table 110000 "DMTTable"
         field(105; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
 
         field(106; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
+        field(107; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen';}
+
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)

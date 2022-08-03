@@ -1,4 +1,4 @@
-page 110018 "Data Source Card"
+page 50018 "Data Source Card"
 {
     CaptionML = DEU = 'Datenquelle Karte', ENU = 'Data Source Card';
     PageType = Document;

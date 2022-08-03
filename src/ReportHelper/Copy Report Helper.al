@@ -1,4 +1,4 @@
-page 110021 "Copy Report Helper"
+page 50021 "Copy Report Helper"
 {
     Caption = 'Copy Report Helper';
     PageType = List;

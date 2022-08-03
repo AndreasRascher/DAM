@@ -1,4 +1,4 @@
-table 110011 "DMTDataSourceHeader"
+table 50011 "DMTDataSourceHeader"
 {
     fields
     {

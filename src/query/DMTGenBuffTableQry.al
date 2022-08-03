@@ -1,4 +1,4 @@
-query 110001 "DMTGenBuffTableQry"
+query 50001 "DMTGenBuffTableQry"
 {
     QueryType = Normal;
 

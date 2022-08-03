@@ -1,4 +1,4 @@
-codeunit 110005 "DMTMgt"
+codeunit 50005 "DMTMgt"
 {
 
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)

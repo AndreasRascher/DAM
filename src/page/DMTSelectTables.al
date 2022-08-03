@@ -1,4 +1,4 @@
-page 110010 "DMTSelectTables"
+page 50010 "DMTSelectTables"
 {
     Caption = 'Tables', Comment = 'Tabellen';
     PageType = List;

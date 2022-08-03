@@ -1,4 +1,4 @@
-table 110007 "DMTReplacementsLine"
+table 50007 "DMTReplacementsLine"
 {
     Caption = 'Replacements Line', Comment = 'Ersetzungen Zeile';
     DataClassification = ToBeClassified;

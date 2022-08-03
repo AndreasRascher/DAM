@@ -1,4 +1,4 @@
-page 110024 "DMTUpdateTask"
+page 50024 "DMTUpdateTask"
 {
     PageType = Worksheet;
     UsageCategory = None;

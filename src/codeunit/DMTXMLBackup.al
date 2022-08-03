@@ -1,4 +1,4 @@
-codeunit 110006 "DMTXMLBackup"
+codeunit 50006 "DMTXMLBackup"
 {
 
     procedure Export();

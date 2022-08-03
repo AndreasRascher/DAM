@@ -1723,6 +1723,11 @@
           <note from="Developer" annotates="general" priority="2">Sortierung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Sort Order - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 268594253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table Relations</source>
+          <note from="Developer" annotates="general" priority="2">Tabellenrelationen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Table Relations - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table Caption</source>
           <note from="Developer" annotates="general" priority="2">Zieltabelle Bezeichnung</note>

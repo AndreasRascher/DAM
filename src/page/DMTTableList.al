@@ -1,4 +1,4 @@
-page 110014 "DMTTableList"
+page 50014 "DMTTableList"
 {
     Caption = 'DMT Table List', comment = 'DMT Tabellenübersicht';
     PageType = List;
@@ -42,9 +42,12 @@ page 110014 "DMTTableList"
                     end;
                 }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; Editable = false; }
-                field("No. of Unhandled Table Relations";RelationsCheck.FindUnhandledRelatedTableIDs(Rec).Count){
-                    ApplicationArea=All;
+                field("No. of Unhandled Table Relations"; rec."Table Relations")
+                {
+                    ApplicationArea = All;
                     trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
                     begin
                         RelationsCheck.ShowUnhandledTableRelations(Rec);
                     end;
@@ -203,6 +206,14 @@ page 110014 "DMTTableList"
         HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
+    trigger OnOpenPage()
+    var
+        PageTaskID: Integer;
+        Params: Dictionary of [Text, Text];
+    begin
+        // CurrPage.EnqueueBackgroundTask(PageTaskID, Codeunit::DMTPageBackgroundTasks, Params, 60 * 2, PageBackgroundTaskErrorLevel::Error);
+    end;
+
     trigger OnAfterGetRecord()
     var
         AllObj: Record AllObjWithCaption;
@@ -220,10 +231,35 @@ page 110014 "DMTTableList"
             BufferTableIDStyle := 'Favorable';
         if Rec.TryFindExportDataFile() then
             DataFilePathStyle := 'Favorable';
+
+    end;
+
+    trigger OnPageBackgroundTaskCompleted(TaskId: Integer; Results: Dictionary of [Text, Text])
+    var
+        DMTTable: Record DMTTable;
+        RecID: RecordId;
+        NoOfTableRelations: Integer;
+        RecIDAsText: Text;
+    begin
+        foreach RecIDAsText in Results.Keys do begin
+            Evaluate(RecID, RecIDAsText);
+            Evaluate(NoOfTableRelations, Results.Get(RecIDAsText));
+            DMTTable.get(RecID);
+            if DMTTable."Table Relations" <> NoOfTableRelations then begin
+                DMTTable."Table Relations" := NoOfTableRelations;
+                DMTTable.Modify();
+            end;
+        end;
+        CurrPage.Update();
+    end;
+
+    trigger OnPageBackgroundTaskError(TaskId: Integer; ErrorCode: Text; ErrorText: Text; ErrorCallStack: Text; var IsHandled: Boolean)
+    begin
+        Error(ErrorText);
     end;
 
     var
         [InDataSet]
         ImportXMLPortIDStyle, BufferTableIDStyle, DataFilePathStyle : Text;
-        RelationsCheck: Codeunit DMTRelationsCheck;
+
 }

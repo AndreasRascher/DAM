@@ -1,4 +1,4 @@
-page 110006 "DMTReplacementRules"
+page 50006 "DMTReplacementRules"
 {
     Caption = 'DMT Replacement Rules', Comment = 'DMT Ersetzungsregeln';
     PageType = List;

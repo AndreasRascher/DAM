@@ -1,4 +1,4 @@
-table 110009 "DMTTask"
+table 50009 "DMTTask"
 {
     DataClassification = SystemMetadata;
     Caption = 'DMT Task', comment = 'DMT Aufgabe';

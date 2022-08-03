@@ -1,4 +1,4 @@
-table 110008 "DMTSetup"
+table 50008 "DMTSetup"
 {
     Caption = 'DMT Setup', comment = 'DMT Einrichtung';
     DataClassification = ToBeClassified;

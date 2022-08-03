@@ -1,4 +1,4 @@
-table 110001 "DMTErrorLog"
+table 50001 "DMTErrorLog"
 {
     DataClassification = ToBeClassified;
 

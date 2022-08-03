@@ -1,4 +1,4 @@
-page 110019 DataSourceCardPart
+page 50019 DataSourceCardPart
 {
     Caption = 'DataSourceCardPart', Locked = true;
     PageType = ListPart;

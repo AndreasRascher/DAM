@@ -1,4 +1,4 @@
-codeunit 110003 "DMTErrorWrapper"
+codeunit 50003 "DMTErrorWrapper"
 {
     trigger OnRun()
     begin
