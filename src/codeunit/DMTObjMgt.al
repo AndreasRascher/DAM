@@ -47,8 +47,10 @@ codeunit 50001 "DMTObjMgt"
     procedure AddSelectedTables() OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTTable: Record DMTTable;
         DMTField: Record DMTField;
+        DMTTable: Record DMTTable;
+        File: Record File;
+        FileMgt: Codeunit "File Management";
         DMTSelectTables: Page DMTSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
@@ -64,8 +66,13 @@ codeunit 50001 "DMTObjMgt"
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
                         if DMTTable.TryFindExportDataFile() then begin
-                            // Assumption: If the filename pattern matches the default export -> Custom Buffertable
-                            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+                            File.SetRange(Path, FileMgt.GetDirectoryName(DMTTable.DataFilePath));
+                            File.SetRange(Name, FileMgt.GetFileName(DMTTable.DataFilePath));
+                            // lager than 100KB -> CSV
+                            if File.FindFirst() and ((File.Size / 1024) < 100) then
+                                DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")
+                            else
+                                DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
                             DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
                             DMTTable.Modify();
                         end;
@@ -90,6 +97,7 @@ codeunit 50001 "DMTObjMgt"
     internal procedure ValidateFromTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
+        AllObjWithCaption: Record AllObjWithCaption;
     begin
         if rec."NAV Src.Table Caption" = xRec."NAV Src.Table Caption" then
             exit;
@@ -99,6 +107,8 @@ codeunit 50001 "DMTObjMgt"
         if Delchr(rec."NAV Src.Table Caption", '=', '0123456789') = '' then begin
             if DMTFieldBuffer.IsEmpty then begin
                 evaluate(rec."Target Table ID", rec."NAV Src.Table Caption");
+                if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Target Table ID") then
+                    Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
             end else begin
                 DMTFieldBuffer.SetFilter(TableNo, rec."NAV Src.Table Caption");
                 if DMTFieldBuffer.FindFirst() then begin
