@@ -2067,6 +2067,13 @@
           <note from="Developer" annotates="general" priority="2">Sortierung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Sort Order - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 268594253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table Relations</source>
+          <target>Tabellenrelationen</target>
+          <note from="Developer" annotates="general" priority="2">Tabellenrelationen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Table Relations - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table Caption</source>
           <target>Zieltabelle Bezeichnung</target>
@@ -2371,7 +2378,6 @@
           <source>Delete Gen. Buffer Table Lines</source>
           <target>Alle Zeilen in gen. Puffertabelle löschen</target>
           <note from="Developer" annotates="general" priority="2">Alle Zeilen in gen. Puffertabelle löschen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ClearGenBuffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 1418398776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2778,14 +2784,14 @@
         </trans-unit>
         <trans-unit id="Enum 2352204874 - EnumValue 2375118780 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Generic Buffer Table for all Files</source>
-          <target>Generische Puffertabelle für alle Dateien</target>
-          <note from="Developer" annotates="general" priority="2">Generische Puffertabelle für alle Dateien</note>
+          <target>Generisch</target>
+          <note from="Developer" annotates="general" priority="2">Generisch</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 2352204874 - EnumValue 1002754978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Seperate Buffer Table per CSV</source>
-          <target>Eine Puffertabelle pro CSV</target>
-          <note from="Developer" annotates="general" priority="2">Eine Puffertabelle pro CSV</note>
+          <target>Separate Tabelle</target>
+          <note from="Developer" annotates="general" priority="2">Separate Tabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

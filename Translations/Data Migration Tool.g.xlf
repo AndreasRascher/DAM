@@ -2320,12 +2320,12 @@
         </trans-unit>
         <trans-unit id="Enum 2352204874 - EnumValue 2375118780 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Generic Buffer Table for all Files</source>
-          <note from="Developer" annotates="general" priority="2">Generische Puffertabelle für alle Dateien</note>
+          <note from="Developer" annotates="general" priority="2">Generisch</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 2352204874 - EnumValue 1002754978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Seperate Buffer Table per CSV</source>
-          <note from="Developer" annotates="general" priority="2">Eine Puffertabelle pro CSV</note>
+          <note from="Developer" annotates="general" priority="2">Separate Tabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

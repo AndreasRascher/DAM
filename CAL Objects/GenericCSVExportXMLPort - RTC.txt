@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=21.06.22;
-    Time=08:22:23;
+    Date=03.08.22;
+    Time=14:46:10;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2681,7 +2681,8 @@ OBJECT XMLport 50049 DMT Export
 
       _ExportFieldBuffer.FINDSET;
       REPEAT
-        _ValueAsText := ReplaceStr(_ExportFieldBuffer."Field Caption",FieldSeparator,'');  // Remove FieldSeparator from Value
+        //_ValueAsText := ReplaceStr(_ExportFieldBuffer."Field Caption",FieldSeparator,'');  // Remove FieldSeparator from Value
+        _ValueAsText := ReplaceStr(_ExportFieldBuffer.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
         HeaderLineText += _ValueAsText;
         IF LastFieldNo <> _ExportFieldBuffer."No." THEN
           HeaderLineText += FieldSeparator;
@@ -3119,3 +3120,4 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
+

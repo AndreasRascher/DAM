@@ -226,7 +226,7 @@ table 50003 "DMTField"
                 repeat
                     TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                     // 1.Try - Match by Name
-                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField."Field Caption");
+                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField.FieldName);
                     if FoundAtIndex = 0 then begin
                         if DMTTable."Target Table ID" = Database::"Payment Terms" then
                             case TargetField."Field Caption" of

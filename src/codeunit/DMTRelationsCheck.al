@@ -35,9 +35,10 @@ codeunit 50008 DMTRelationsCheck
         RelatedTableIDs := FindRelatedTableIDs(DMTTable);
         if RelatedTableIDs.Count = 0 then exit;
         foreach TableID in RelatedTableIDs do
-            if not DMTTable2.Get(TableID) then begin
-                UnhandledTableIDs.Add(TableID);
-            end;
+            if not (TableID >= 2000000000) then
+                if not DMTTable2.Get(TableID) then begin
+                    UnhandledTableIDs.Add(TableID);
+                end;
     end;
 
     procedure ShowUnhandledTableRelations(DMTTable: Record DMTTable)
