@@ -276,14 +276,14 @@ table 50005 "DMTGenBuffTable"
             GenBuffTable.ModifyAll("Column Count", MaxColCount);
     end;
 
-    procedure InitFirstLineAsCaptions(FileName: Text) NoOfCols: Integer
+    procedure InitFirstLineAsCaptions(FullFilePath: Text) NoOfCols: Integer
     var
         GenBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
-        if not GenBuffTable.FindSetLinesByFileName(FileName) then
-            Error('No lines found for %1', FileName);
+        if not GenBuffTable.FindSetLinesByFileName(FullFilePath) then
+            Error('No lines found for %1', FullFilePath);
         DMTGenBufferFieldCaptions.DisposeCaptions();
         RecRef.GetTable(GenBuffTable);
         for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin
@@ -292,18 +292,18 @@ table 50005 "DMTGenBuffTable"
         NoOfCols := DMTGenBufferFieldCaptions.GetNoOfCaptions();
     end;
 
-    internal procedure FilterByFileName(FileName: Text) HasLinesInFilter: Boolean
+    internal procedure FilterByFileName(FullFilePath: Text) HasLinesInFilter: Boolean
     var
         FileMgt: Codeunit "File Management";
     begin
-        FileName := FileMgt.GetFileName(FileName);  // Get Filename from path
-        Rec.SetRange("Import from Filename", CopyStr(FileName, 1, Maxstrlen(Rec."Import from Filename")));
+        FullFilePath := FileMgt.GetFileName(FullFilePath);  // Get Filename from path
+        Rec.SetRange("Import from Filename", CopyStr(FullFilePath, 1, Maxstrlen(Rec."Import from Filename")));
         HasLinesInFilter := not Rec.IsEmpty;
     end;
 
-    internal procedure FindSetLinesByFileName(FileName: Text) FindSetOK: Boolean
+    internal procedure FindSetLinesByFileName(FullFilePath: Text) FindSetOK: Boolean
     begin
-        Rec.FilterByFileName(FileName);
+        Rec.FilterByFileName(FullFilePath);
         FindSetOK := Rec.FindSet(false, false);
     end;
 
@@ -333,20 +333,20 @@ table 50005 "DMTGenBuffTable"
             exit(Choices.Split(',').Get(Choice));
     end;
 
-    internal procedure GetColCaptionForImportedFile(DMTTable: Record DMTTable; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
+    internal procedure GetColCaptionForImportedFile(FullFilePath: Text; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
         OK := true;
-        if not GenBuffTable.FilterByFileName(DMTTable.DataFilePath) then begin
-            Message('Keine Zeilen in der Puffertabelle gefunden für %1', DMTTable.DataFilePath);
+        if not GenBuffTable.FilterByFileName(FullFilePath) then begin
+            Message('Keine Zeilen in der Puffertabelle gefunden für %1', FullFilePath);
             exit(false);
         end;
         GenBuffTable.SetRange(IsCaptionLine, true);
         if not GenBuffTable.FindFirst() then begin
-            Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', DMTTable.DataFilePath);
+            Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', FullFilePath);
             exit(false);
         end;
         RecRef.GetTable(GenBuffTable);
@@ -362,16 +362,16 @@ table 50005 "DMTGenBuffTable"
         FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
     end;
 
-    procedure ShowImportDataForFile(FileName: Text[250])
+    procedure ShowImportDataForFile(FullFilePath: Text)
     var
         DMTGenBuffTable: Record DMTGenBuffTable;
         NoOfCols: Integer;
     begin
         DMTGenBufferFieldCaptions.DisposeCaptions();
-        NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(FileName);
+        NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(FullFilePath);
 
         DMTGenBuffTable.reset();
-        DMTGenBuffTable.FilterByFileName(FileName);
+        DMTGenBuffTable.FilterByFileName(FullFilePath);
         DMTGenBuffTable.SetRange(IsCaptionLine, false);
         // less Columns is faster
         case NoOfCols of

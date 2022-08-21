@@ -24,7 +24,8 @@ page 50014 "DMTTableList"
                 field("To Table ID"; Rec."Target Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
-                field(ExportFilePath; Rec.DataFilePath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
+                field(ExportFileFolderPath; Rec.DataFileFolderPath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
+                field(ExportFileName; Rec.DataFileName) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
                 field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; Visible = false; }
                 field("Data Source Type"; Rec."Data Source Type") { ApplicationArea = All; Visible = false; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; Editable = false; }

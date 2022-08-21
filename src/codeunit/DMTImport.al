@@ -29,10 +29,10 @@ codeunit 50000 DMTImport
 
         // Buffer loop
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
-            GenBuffTable.InitFirstLineAsCaptions(DMTTable.DataFilePath);
+            GenBuffTable.InitFirstLineAsCaptions(DMTTable.GetDataFilePath());
             GenBuffTable.FilterGroup(2);
             GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterByFileName(DMTTable.DataFilePath);
+            GenBuffTable.FilterByFileName(DMTTable.GetDataFilePath());
             GenBuffTable.FilterGroup(0);
             BufferRef.GetTable(GenBuffTable);
         end else
@@ -376,8 +376,8 @@ codeunit 50000 DMTImport
                 end;
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    if not GenBuffTable.FilterByFileName(DMTTable.DataFilePath) then
-                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.DataFilePath);
+                    if not GenBuffTable.FilterByFileName(DMTTable.GetDataFilePath()) then
+                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.DataFileFolderPath);
                 end;
         end;
     end;

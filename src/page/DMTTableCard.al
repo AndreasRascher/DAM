@@ -22,12 +22,6 @@ page 50012 "DMTTableCard"
                         EnableControls();
                     end;
                 }
-                field(DataFilePath; Rec.DataFilePath)
-                {
-                    Caption = 'Data File Path', Comment = 'Datendatei Pfad';
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                }
                 field("Data Source Type"; Rec."Data Source Type")
                 {
                     ApplicationArea = All;
@@ -57,6 +51,16 @@ page 50012 "DMTTableCard"
                 }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
                 field("Import Only New Records"; "Import Only New Records") { ApplicationArea = All; }
+            }
+
+            group(Paths)
+            {
+                field(DataFilePath; Rec.DataFileFolderPath)
+                {
+                    Caption = 'Data File Path', Comment = 'Datendatei Pfad';
+                    ApplicationArea = All;
+                    Importance = Promoted;
+                }
             }
             group(NAVDataSourceProperties)
             {
@@ -249,8 +253,14 @@ page 50012 "DMTTableCard"
     }
 
     trigger OnOpenPage()
+    var
+        fileMgt: Codeunit "File Management";
     begin
         Rec.InitOrRefreshFieldSortOrder();
+        FileRec.SetRange(Path, fileMgt.GetDirectoryName(Rec.DataFileFolderPath));
+        FileRec.SetRange(Name, Rec.DataFileName);
+        if not FileRec.findfirst() then
+            Clear(FileRec);
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -282,11 +292,12 @@ page 50012 "DMTTableCard"
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 exit(Rec."Target Table Caption");
             Rec.BufferTableType::"Generic Buffer Table for all Files":
-                exit(Rec.DataFilePath);
+                exit(Rec.DataFileFolderPath);
         end
     end;
 
     var
+        FileRec: Record File;
         [InDataSet]
         ImportXMLPortIDStyle, BufferTableIDStyle : Text;
         [InDataSet]

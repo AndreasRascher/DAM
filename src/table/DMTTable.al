@@ -45,15 +45,8 @@ table 50000 "DMTTable"
             Editable = false;
             trigger OnLookup()
             begin
-                ShowBufferTable();
+                ShowTableContent(Rec."Target Table ID");
             end;
-        }
-        field(32; "No.of Fields in Trgt. Table"; Integer)
-        {
-            Caption = 'No. of fields in target table', Comment = 'Anz. Felder in Zieltabelle';
-            FieldClass = FlowField;
-            CalcFormula = count("DMTField" where("Target Table ID" = field("Target Table ID")));
-            Editable = false;
         }
         field(50; BufferTableType; Enum BufferTableType)
         {
@@ -68,29 +61,41 @@ table 50000 "DMTTable"
                 ProposeObjectIDs(false);
             end;
         }
-        field(52; DataFilePath; Text[250])
+        #region SourceFileProperties        
+        field(52; DataFileFolderPath; Text[250])
         {
-            Caption = 'Export File Path', comment = 'Dateipfad Exportdatei';
+            Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei';
             trigger OnValidate()
-            var
-                FileMgt: Codeunit "File Management";
-                FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', Comment = 'The path "%1" is not accessibly for the service tier';
             begin
-                if rec.DataFilePath <> '' then begin
-                    rec.DataFilePath := CopyStr(rec.DataFilePath.TrimEnd('"').TrimStart('"'), 1, MaxStrLen(rec.DataFilePath));
-                    if not FileMgt.ServerFileExists(rec.DataFilePath) then
-                        Message(FileNotAccessibleFromServiceLabelMsg, DataFilePath);
-                end;
+                SetDataFilePath(DataFileFolderPath);
             end;
 
             trigger OnLookup()
             var
                 DMTMgt: Codeunit DMTMgt;
             begin
-                Rec.DataFilePath := DMTMgt.LookUpPath(Rec.DataFilePath, false);
+                DataFileFolderPath := DMTMgt.LookUpPath(Rec.DataFileFolderPath, true);
             end;
         }
-        field(53; "Import XMLPort ID"; Integer)
+        field(53; DataFileName; Text[250])
+        {
+            Caption = 'Data File Name', comment = 'Dateiname Exportdatei';
+            trigger OnValidate()
+            begin
+                SetDataFilePath(DataFileName);
+            end;
+
+            trigger OnLookup()
+            var
+                DMTMgt: Codeunit DMTMgt;
+                CurrPath: Text;
+            begin
+                CurrPath := Rec.GetDataFilePath();
+                SetDataFilePath(DMTMgt.LookUpPath(Rec.DataFileName, false));
+            end;
+        }
+        #endregion SourceFileProperties
+        field(60; "Import XMLPort ID"; Integer)
         {
             Caption = 'Import XMLPortID', Comment = 'XMLPort ID für Import';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "Object ID" = filter('50000..'));
@@ -102,7 +107,7 @@ table 50000 "DMTTable"
                 //     Error(ObjectIDNotInIDRangeErr);
             end;
         }
-        field(54; "Buffer Table ID"; Integer)
+        field(61; "Buffer Table ID"; Integer)
         {
             Caption = 'Buffertable ID', Comment = 'Puffertabelle ID';
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "Object ID" = filter('50000..'));
@@ -114,27 +119,32 @@ table 50000 "DMTTable"
                 //     Error(ObjectIDNotInIDRangeErr);
             end;
         }
-        field(60; "Use OnInsert Trigger"; boolean)
+        field(62; "No.of Src.Fields Assigned"; Integer)
+        {
+            Caption = 'No.of Src.Fields Assigned', Comment = 'Anz. zugeordneter Felder';
+            FieldClass = FlowField;
+            CalcFormula = count("DMTField" where("Target Table ID" = field("Target Table ID"), "Source Field No." = filter(> 0)));
+            Editable = false;
+        }
+        field(100; "Use OnInsert Trigger"; boolean)
         {
             Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden';
             InitValue = true;
         }
-        field(61; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
-        field(100; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
-        field(101; LastImportBy; Code[50])
+        field(101; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
+        field(102; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+        field(103; LastView; Blob) { }
+        field(104; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
+        field(105; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
+        field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
+        field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
+        field(202; LastImportBy; Code[50])
         {
             Caption = 'User ID', comment = 'Benutzer-ID';
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = User."User Name";
         }
-        field(102; LastView; Blob) { }
-        field(103; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
-        field(104; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
-        field(105; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
-
-        field(106; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
-        field(107; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen';}
-
+        field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)
@@ -206,20 +216,20 @@ table 50000 "DMTTable"
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     rec.TestField("Import XMLPort ID");
-                    rec.Testfield(DataFilePath);
-                    file.Open(DataFilePath, TextEncoding::MSDos);
+                    rec.Testfield(DataFileFolderPath);
+                    file.Open(DataFileFolderPath, TextEncoding::MSDos);
                     file.CreateInStream(InStr);
                     Xmlport.Import(Rec."Import XMLPort ID", InStr);
                     UpdateQtyLinesInBufferTable();
                 end;
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    rec.Testfield(DataFilePath);
-                    file.Open(DataFilePath, TextEncoding::MSDos);
+                    rec.Testfield(DataFileFolderPath);
+                    file.Open(DataFileFolderPath, TextEncoding::MSDos);
                     file.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
                     GenBuffImport.SetDMTTable(Rec);
-                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(Rec.DataFilePath, '\', '/')));
+                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(Rec.DataFileFolderPath, '\', '/')));
                     GenBuffImport.Import();
                     Progress.Close();
                     UpdateQtyLinesInBufferTable();
@@ -249,9 +259,9 @@ table 50000 "DMTTable"
     begin
 
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if not GenBuffTable.FilterByFileName(Rec.DataFilePath) then
+            if not GenBuffTable.FilterByFileName(Rec.DataFileFolderPath) then
                 exit(false);
-            GenBuffTable.ShowImportDataForFile(Rec.DataFilePath);
+            GenBuffTable.ShowImportDataForFile(Rec.DataFileFolderPath);
         end;
 
         if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
@@ -332,6 +342,29 @@ table 50000 "DMTTable"
 
     end;
 
+    procedure SetDataFilePath(CurrPath: Text)
+    var
+        FileMgt: Codeunit "File Management";
+        FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', Comment = 'The path "%1" is not accessibly for the service tier';
+    begin
+        if CurrPath = '' then begin
+            Rec.DataFileFolderPath := '';
+            Rec.DataFileName := '';
+            exit;
+        end;
+        // Remove quotes from path 
+        CurrPath := CurrPath.TrimEnd('"').TrimStart('"');
+        if CurrPath <> '' then begin
+            Rec.DataFileFolderPath := FileMgt.GetDirectoryName(CurrPath);
+            Rec.DataFileName := FileMgt.GetFileName(CurrPath);
+        end;
+
+        if (CurrPath <> '') then begin
+            if not FileMgt.ServerFileExists(CurrPath) then
+                Message(FileNotAccessibleFromServiceLabelMsg, DataFileFolderPath);
+        end;
+    end;
+
     procedure UpdateQtyLinesInBufferTable() QtyLines: Decimal;
     var
         GenBuffTable: Record DMTGenBuffTable;
@@ -343,7 +376,7 @@ table 50000 "DMTTable"
         case Rec.BufferTableType of
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.FilterByFileName(Rec.DataFilePath);
+                    GenBuffTable.FilterByFileName(Rec.DataFileFolderPath);
                     GenBuffTable.SetRange(IsCaptionLine, false);
                     QtyLines := GenBuffTable.Count;
                 end;
@@ -367,7 +400,7 @@ table 50000 "DMTTable"
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
-        if (Rec.DataFilePath <> '') and FileMgt.ServerFileExists(Rec.DataFilePath) then
+        if (Rec.DataFileFolderPath <> '') and FileMgt.ServerFileExists(Rec.DataFileFolderPath) then
             exit(true);
 
         DMTSetup.Get();
@@ -377,7 +410,7 @@ table 50000 "DMTTable"
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             FileExists := true;
-            Rec.DataFilePath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFilePath));
+            Rec.DataFileFolderPath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFileFolderPath));
             Rec.Modify();
         end else begin
             //Message(FilePath);
@@ -614,6 +647,15 @@ table 50000 "DMTTable"
             until DMTTable.Next() = 0;
     end;
 
+    internal procedure GetDataFilePath() Path: Text
+    var
+        FileMgt: Codeunit "File Management";
+    begin
+        if (Rec.DataFileFolderPath = '') or (Rec.DataFileName = '') then
+            exit('');
+        Path := FileMgt.CombinePath(Rec.DataFileFolderPath, Rec.DataFileName);
+    end;
+
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
     var
         DMTTable: Record DMTTable;
@@ -644,5 +686,10 @@ table 50000 "DMTTable"
         if TableInformation.Get(CompanyName, Rec."Target Table ID") then;
         // TableInformation.Calcfields("No. of Records");
         exit(TableInformation."No. of Records");
+    end;
+
+    procedure OpenCardPage()
+    begin
+        Page.Run(Page::DMTTableCard, Rec);
     end;
 }

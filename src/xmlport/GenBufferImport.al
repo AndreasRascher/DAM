@@ -101,7 +101,7 @@ xmlport 50001 DMTGenBuffImport
         FileMgt: Codeunit "File Management";
     begin
         CurrDMTTable := DMTTable;
-        CurrFileName := FileMgt.GetFileName(CurrDMTTable.DataFilePath);
+        CurrFileName := FileMgt.GetFileName(CurrDMTTable.DataFileFolderPath);
     end;
 
     var

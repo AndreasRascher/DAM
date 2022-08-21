@@ -50,7 +50,6 @@ codeunit 50001 "DMTObjMgt"
         DMTField: Record DMTField;
         DMTTable: Record DMTTable;
         File: Record File;
-        FileMgt: Codeunit "File Management";
         DMTSelectTables: Page DMTSelectTables;
     begin
         LoadTableList(TempAllObjWithCaption);
@@ -66,8 +65,8 @@ codeunit 50001 "DMTObjMgt"
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
                         if DMTTable.TryFindExportDataFile() then begin
-                            File.SetRange(Path, FileMgt.GetDirectoryName(DMTTable.DataFilePath));
-                            File.SetRange(Name, FileMgt.GetFileName(DMTTable.DataFilePath));
+                            File.SetRange(Path, DMTTable.DataFileFolderPath);
+                            File.SetRange(Name, DMTTable.DataFileName);
                             // lager than 100KB -> CSV
                             if File.FindFirst() and ((File.Size / 1024) < 100) then
                                 DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")

@@ -218,7 +218,7 @@ table 50003 "DMTField"
         end;
 
         if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files") then begin
-            GenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+            GenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
             // Loop Target Fields
             DMTFields.FilterBy(DMTTable);
             DMTFields.setrange("Source Field No.", 0);
@@ -438,7 +438,7 @@ table 50003 "DMTField"
         case DMTTable.BufferTableType of
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable, BuffTableCaptions);
+                    DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
                         TargetField.SetFilter("Field Caption", ConvertStr(BuffTableCaption, '@()&', '????'));
