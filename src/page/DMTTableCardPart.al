@@ -64,7 +64,8 @@ page 50013 "DMTTableCardPart"
                     DMTTable: Record DMTTable;
                 begin
                     DMTTable.Get(Rec.GetRangeMin(rec."Target Table ID"));
-                    DMTFields.ProposeMatchingTargetFields(DMTTable);
+                    // DMTFields.ProposeMatchingTargetFields(DMTTable);
+                    DMTFields.AssignSourceToTargetFields(DMTTable);
                     DMTFields.ProposeValidationRules(DMTTable);
                 end;
             }
@@ -76,7 +77,7 @@ page 50013 "DMTTableCardPart"
                 {
                     ApplicationArea = All;
                     Caption = 'Up', Comment = 'Oben';
-                    Scope = Repeater;
+                    // Scope = Repeater;
                     Image = MoveUp;
                     trigger OnAction()
                     var
@@ -89,7 +90,7 @@ page 50013 "DMTTableCardPart"
                 {
                     ApplicationArea = All;
                     Caption = 'Down', Comment = 'Unten';
-                    Scope = Repeater;
+                    // Scope = Repeater;
                     Image = MoveDown;
                     trigger OnAction()
                     var
@@ -102,7 +103,7 @@ page 50013 "DMTTableCardPart"
                 {
                     ApplicationArea = All;
                     Caption = 'Top', Comment = 'Anfang';
-                    Scope = Repeater;
+                    // Scope = Repeater;
                     Image = ChangeTo;
                     trigger OnAction()
                     var
@@ -115,7 +116,7 @@ page 50013 "DMTTableCardPart"
                 {
                     ApplicationArea = All;
                     Caption = 'Bottom', Comment = 'Ende';
-                    Scope = Repeater;
+                    // Scope = Repeater;
                     Image = Apply;
                     trigger OnAction()
                     var

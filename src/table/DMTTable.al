@@ -74,7 +74,7 @@ table 50000 "DMTTable"
             var
                 DMTMgt: Codeunit DMTMgt;
             begin
-                DataFileFolderPath := DMTMgt.LookUpPath(Rec.DataFileFolderPath, true);
+                DataFileFolderPath := DMTMgt.LookUpPath(Rec.GetDataFilePath(), true);
             end;
         }
         field(53; DataFileName; Text[250])
@@ -91,7 +91,7 @@ table 50000 "DMTTable"
                 CurrPath: Text;
             begin
                 CurrPath := Rec.GetDataFilePath();
-                SetDataFilePath(DMTMgt.LookUpPath(Rec.DataFileName, false));
+                SetDataFilePath(DMTMgt.LookUpPath(Rec.GetDataFilePath(), false));
             end;
         }
         #endregion SourceFileProperties
@@ -137,7 +137,7 @@ table 50000 "DMTTable"
         field(104; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
         field(105; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
         field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
-        field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer(Längste)'; }
+        field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; }
         field(202; LastImportBy; Code[50])
         {
             Caption = 'User ID', comment = 'Benutzer-ID';
@@ -212,24 +212,23 @@ table 50000 "DMTTable"
         Progress: Dialog;
         ImportFileFromPathLbl: Label 'Importing %1';
     begin
+        rec.GetDataFilePathWithError(); //ThrowErrorIfNotSet
         case Rec.BufferTableType of
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     rec.TestField("Import XMLPort ID");
-                    rec.Testfield(DataFileFolderPath);
-                    file.Open(DataFileFolderPath, TextEncoding::MSDos);
+                    file.Open(Rec.GetDataFilePath(), TextEncoding::MSDos);
                     file.CreateInStream(InStr);
                     Xmlport.Import(Rec."Import XMLPort ID", InStr);
                     UpdateQtyLinesInBufferTable();
                 end;
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    rec.Testfield(DataFileFolderPath);
-                    file.Open(DataFileFolderPath, TextEncoding::MSDos);
+                    file.Open(Rec.GetDataFilePath(), TextEncoding::MSDos);
                     file.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
                     GenBuffImport.SetDMTTable(Rec);
-                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(Rec.DataFileFolderPath, '\', '/')));
+                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(file.Name, '\', '/')));
                     GenBuffImport.Import();
                     Progress.Close();
                     UpdateQtyLinesInBufferTable();
@@ -259,7 +258,7 @@ table 50000 "DMTTable"
     begin
 
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if not GenBuffTable.FilterByFileName(Rec.DataFileFolderPath) then
+            if not GenBuffTable.FilterByFileName(Rec.GetDataFilePathWithError()) then
                 exit(false);
             GenBuffTable.ShowImportDataForFile(Rec.DataFileFolderPath);
         end;
@@ -337,7 +336,8 @@ table 50000 "DMTTable"
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
         if not DMTFields.FilterBy(Rec) then begin
             DMTFields.InitForTargetTable(Rec);
-            DMTFields.ProposeMatchingTargetFields(Rec);
+            // DMTFields.ProposeMatchingTargetFields(Rec);
+            DMTFields.AssignSourceToTargetFields(Rec);
         end;
 
     end;
@@ -376,7 +376,7 @@ table 50000 "DMTTable"
         case Rec.BufferTableType of
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.FilterByFileName(Rec.DataFileFolderPath);
+                    GenBuffTable.FilterByFileName(Rec.GetDataFilePathWithError());
                     GenBuffTable.SetRange(IsCaptionLine, false);
                     QtyLines := GenBuffTable.Count;
                 end;
@@ -654,6 +654,14 @@ table 50000 "DMTTable"
         if (Rec.DataFileFolderPath = '') or (Rec.DataFileName = '') then
             exit('');
         Path := FileMgt.CombinePath(Rec.DataFileFolderPath, Rec.DataFileName);
+    end;
+
+    internal procedure GetDataFilePathWithError() Path: Text
+    var
+        FilePathEmptyErr: Label 'The Filepath is undefined.', comment = 'Der Dateipfad wurde nicht definiert.';
+    begin
+        Path := GetDataFilePath();
+        if Path = '' then Error(FilePathEmptyErr);
     end;
 
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;

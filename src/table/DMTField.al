@@ -52,10 +52,10 @@ table 50003 "DMTField"
         field(33; "Source Field Caption"; Text[80])
         {
             Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung';
-            FieldClass = FlowField;
+            // FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Source Table ID"), "No." = field("Source Field No.")));
-            TableRelation = Field."No." WHERE(TableNo = field("Source Table ID"));
+            // CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Source Table ID"), "No." = field("Source Field No.")));
+            // TableRelation = Field."No." WHERE(TableNo = field("Source Table ID"));
         }
         field(34; "Source Field Type"; Text[30])
         {
@@ -166,88 +166,40 @@ table 50003 "DMTField"
         end;
     end;
 
-    internal procedure ProposeMatchingTargetFields(DMTTable: Record DMTTable): Boolean
+    internal procedure AssignSourceToTargetFields(DMTTable: Record DMTTable)
     var
-        DMTFields: Record "DMTField";
-        DMTFields2: Record "DMTField";
-        GenBuffTable: Record DMTGenBuffTable;
-        SourceField: Record Field;
-        TargetField: Record Field;
-        Found: Boolean;
-        BuffTableCaptions: Dictionary of [Integer, Text];
+        DMTField: Record DMTField;
+        SourceFieldNames, TargetFieldNames : Dictionary of [Integer, Text];
         FoundAtIndex: Integer;
-        OldFieldName: text;
-        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+        SourceFieldID, TargetFieldID : Integer;
+        NewFieldName, SourceFieldName : Text;
     begin
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV") then begin
-            DMTTable.TestField("Buffer Table ID");
-            if not DMTTable.CustomBufferTableExits() then begin
-                Message('Keine Puffertabelle mit der ID %1 vorhanden', DMTTable."Buffer Table ID");
-                exit;
+        // Load Target Field Names
+        TargetFieldNames := CreateTargetFieldNamesDict(DMTTable);
+        If TargetFieldNames.Count = 0 then
+            exit;
+
+        //Load Source Field Names
+        SourceFieldNames := CreateSourceFieldNamesDict(DMTTable);
+        If SourceFieldNames.Count = 0 then
+            exit;
+
+        //Match Fields by Name
+        foreach SourceFieldID in SourceFieldNames.Keys do begin
+            SourceFieldName := SourceFieldNames.Get(SourceFieldID);
+            FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
+            // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
+            if FoundAtIndex = 0 then
+                if FindFieldNameInOldVersion(SourceFieldName, DMTTable."Target Table ID", NewFieldName) then
+                    FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
+            if FoundAtIndex <> 0 then begin
+                TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
+                // SetSourceField
+                DMTField.Get(DMTTable."Target Table ID", TargetFieldID);
+                DMTField.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
+                DMTField."Source Field Caption" := copyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(DMTField."Source Field Caption"));
+                DMTField.Modify();
             end;
-            DMTFields.FilterBy(DMTTable);
-            DMTFields.SetRange("Source Field No.", 0);
-
-            // Optional Overwrite
-            DMTFields2.FilterBy(DMTTable);
-            DMTFields2.SetFilter("Source Field No.", '<>%1', 0);
-            if DMTFields2.FindFirst() then
-                if Confirm(ReplaceExistingMatchesQst) then begin
-                    DMTFields.SetRange("Source Field No.");
-                end;
-            Clear(DMTFields2);
-            if DMTFields.FindSet(false, false) then
-                repeat
-                    TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
-                    SourceField.SetRange(TableNo, DMTTable."Buffer Table ID");
-                    SourceField.SetRange(Enabled, true);
-                    SourceField.SetRange(Class, SourceField.Class::Normal);
-                    SourceField.SetRange(FieldName, TargetField.FieldName);
-                    Found := SourceField.FindFirst();
-                    if not Found then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."Target Table ID", OldFieldName) then begin
-                            SourceField.SetRange(FieldName, OldFieldName);
-                            Found := SourceField.FindFirst();
-                        end;
-                    if Found then begin
-                        DMTFields2 := DMTFields;
-                        DMTFields2.Validate("Source Field No.", SourceField."No.");
-                        DMTFields2.Modify();
-                    end;
-                until DMTFields.Next() = 0;
-        end;
-
-        if (DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files") then begin
-            GenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
-            // Loop Target Fields
-            DMTFields.FilterBy(DMTTable);
-            DMTFields.setrange("Source Field No.", 0);
-            if DMTFields.FindSet(true, false) then
-                repeat
-                    TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
-                    // 1.Try - Match by Name
-                    FoundAtIndex := BuffTableCaptions.Values.IndexOf(TargetField.FieldName);
-                    if FoundAtIndex = 0 then begin
-                        if DMTTable."Target Table ID" = Database::"Payment Terms" then
-                            case TargetField."Field Caption" of
-                                //'Rabatt in %' -> 'Skonto %'
-                                'Skonto %':
-                                    FoundAtIndex := BuffTableCaptions.Values.IndexOf('Rabatt in %');
-                            end;
-                    end;
-                    // 2.Try - Match by known Name Changes
-                    if FoundAtIndex = 0 then
-                        if FindFieldNameInOldVersion(TargetField, DMTFields."Target Table ID", OldFieldName) then
-                            FoundAtIndex := BuffTableCaptions.Values.IndexOf(OldFieldName);
-                    if FoundAtIndex <> 0 then begin
-                        DMTFields2 := DMTFields;
-                        // Buffer Fields Start from 1000
-                        DMTFields2.Validate("Source Field No.", 1000 + BuffTableCaptions.Keys.Get(FoundAtIndex));
-                        //DMTFields2."Source Field Caption" := CopyStr(BuffTableCaptions.Get(FoundAtIndex), 1, MaxStrLen(DMTFields2."Source Field Caption"));
-                        DMTFields2.UpdateSourceFieldCaption();
-                        DMTFields2.Modify();
-                    end;
-                until DMTFields.Next() = 0;
         end;
     end;
 
@@ -267,7 +219,7 @@ table 50003 "DMTField"
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
-        if DMTFields.FindSet(false, false) then
+        if DMTFields.FindSet(true, false) then
             repeat
                 TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                 DMTFields2 := DMTFields;
@@ -349,27 +301,27 @@ table 50003 "DMTField"
             until DMTFields.Next() = 0;
     end;
 
-    procedure FindFieldNameInOldVersion(TargetField: Record Field; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
+    procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
     begin
         //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
         CLEAR(OldFieldName);
         CASE TRUE OF
-            (TargetTableNo = DATABASE::Customer) AND (TargetField.FieldName = 'Country/Region Code'):
+            (TargetTableNo = DATABASE::Customer) AND (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Vendor) AND (TargetField.FieldName = 'Country/Region Code'):
+            (TargetTableNo = DATABASE::Vendor) AND (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Contact) AND (TargetField.FieldName = 'Country/Region Code'):
+            (TargetTableNo = DATABASE::Contact) AND (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Item) AND (TargetField.FieldName = 'Country/Region of Origin Code'):
+            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Country/Region of Origin Code'):
                 OldFieldName := 'Country of Origin Code';
-            (TargetTableNo = DATABASE::Item) AND (TargetField.FieldName = 'Time Bucket'):
+            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Time Bucket'):
                 OldFieldName := 'Reorder Cycle';
             // Item Cross Reference -> Item Reference
-            (TargetTableNo = DATABASe::"Item Reference") AND (TargetField.FieldName = 'Reference Type'):
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type'):
                 OldFieldName := 'Cross-Reference Type';
-            (TargetTableNo = DATABASe::"Item Reference") AND (TargetField.FieldName = 'Reference Type No.'):
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type No.'):
                 OldFieldName := 'Cross-Reference Type No.';
-            (TargetTableNo = DATABASe::"Item Reference") AND (TargetField.FieldName = 'Reference No.'):
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference No.'):
                 OldFieldName := 'Cross-Reference No.';
         end; // end_CASE
         Found := OldFieldName <> '';
@@ -406,6 +358,57 @@ table 50003 "DMTField"
         end;
     end;
 
+    local procedure CreateSourceFieldNamesDict(DMTTable: Record DMTTable) SourceFieldNames: Dictionary of [Integer, Text]
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        Field: Record Field;
+        SourceFieldNames2: Dictionary of [Integer, Text];
+        FieldID: Integer;
+    begin
+        case DMTTable.BufferTableType of
+            DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
+                begin
+                    Field.SetRange(TableNo, DMTTable."Buffer Table ID");
+                    Field.SetRange(Enabled, true);
+                    Field.SetRange(Class, Field.Class::Normal);
+                    Field.FindSet();
+                    repeat
+                        SourceFieldNames.Add(Field."No.", Field.FieldName);
+                    until Field.Next() = 0;
+                end;
+            DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), SourceFieldNames2);
+                    foreach FieldID in SourceFieldNames2.Keys do begin
+                        SourceFieldNames.Add(FieldID + 1000, SourceFieldNames2.Get(FieldID));
+                    end;
+                end;
+        end;
+    end;
+
+    local procedure CreateTargetFieldNamesDict(var DMTTable: Record DMTTable) TargetFieldNames: Dictionary of [Integer, Text]
+    var
+        DMTField: Record DMTField;
+        Field: Record Field;
+        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+    begin
+        DMTField.FilterBy(DMTTable);
+        DMTField.SetFilter("Source Field No.", '<>%1', 0);
+        if DMTField.FindFirst() then begin
+            if Confirm(ReplaceExistingMatchesQst) then begin
+                DMTField.SetRange("Source Field No.");
+            end;
+        end else begin
+            DMTField.SetRange("Source Field No."); // no fields assigned case
+        end;
+        if not DMTField.FindSet() then
+            exit;
+        repeat
+            Field.get(DMTField."Target Table ID", DMTField."Target Field No.");
+            TargetFieldNames.Add(Field."No.", Field.FieldName);
+        until DMTField.Next() = 0;
+    end;
+
     procedure CopyToTemp(var TempDMTField: Record DMTField temporary)
     var
         DMTField: Record DMTField;
@@ -429,11 +432,11 @@ table 50003 "DMTField"
         BuffTableCaptions: Dictionary of [Integer, Text];
         BuffTableCaption: Text;
     begin
-        DMTField := Rec;
         if Rec."Source Field No." = 0 then begin
             Rec."Source Field Caption" := '';
             exit;
         end;
+        DMTField := Rec;
         DMTTable.get(Rec."Target Table ID");
         case DMTTable.BufferTableType of
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
@@ -441,7 +444,7 @@ table 50003 "DMTField"
                     DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
-                        TargetField.SetFilter("Field Caption", ConvertStr(BuffTableCaption, '@()&', '????'));
+                        TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
                         if (TargetField.Count() = 1) then begin
                             Rec."Source Field Caption" := CopyStr(BuffTableCaption, 1, MaxStrLen(Rec."Source Field Caption"));
                         end;
@@ -452,7 +455,6 @@ table 50003 "DMTField"
                     Rec.TestField("Target Table ID");
                     if SourceField.Get(Rec."Source Table ID", Rec."Source Field No.") then
                         Rec."Source Field Caption" := CopyStr(SourceField."Field Caption", 1, MaxStrLen(Rec."Source Field Caption"));
-                    ;
                 end;
         end;
         if Format(DMTField) <> Format(Rec) then

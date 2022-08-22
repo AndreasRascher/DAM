@@ -377,7 +377,7 @@ codeunit 50000 DMTImport
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
                     if not GenBuffTable.FilterByFileName(DMTTable.GetDataFilePath()) then
-                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.DataFileFolderPath);
+                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.GetDataFilePath());
                 end;
         end;
     end;
@@ -389,7 +389,7 @@ codeunit 50000 DMTImport
         DMTField.FilterBy(DMTTable);
         DMTField.SetFilter("Processing Action", '<>%1', DMTField."Processing Action"::Ignore);
         if DMTField.IsEmpty then
-            ERROR('Tabelle "%1" enthält kein Feldmapping', DMTTable."Target Table Caption");
+            Error('Tabelle "%1" enthält kein Feldmapping', DMTTable."Target Table Caption");
     end;
 
 

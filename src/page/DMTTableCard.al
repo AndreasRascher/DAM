@@ -55,11 +55,19 @@ page 50012 "DMTTableCard"
 
             group(Paths)
             {
-                field(DataFilePath; Rec.DataFileFolderPath)
+                field(DataFilePath; Rec.GetDataFilePath())
                 {
                     Caption = 'Data File Path', Comment = 'Datendatei Pfad';
                     ApplicationArea = All;
                     Importance = Promoted;
+                    trigger OnAssistEdit()
+                    var
+                        DMTMgt: Codeunit DMTMgt;
+                        SelectedPath: Text;
+                    begin
+                        SelectedPath := DMTMgt.LookUpPath(Rec.DataFileFolderPath, false);
+                        Rec.SetDataFilePath(SelectedPath);
+                    end;
                 }
             }
             group(NAVDataSourceProperties)
@@ -288,12 +296,10 @@ page 50012 "DMTTableCard"
 
     local procedure GetCaption(): Text
     begin
-        case Rec.BufferTableType of
-            Rec.BufferTableType::"Seperate Buffer Table per CSV":
-                exit(Rec."Target Table Caption");
-            Rec.BufferTableType::"Generic Buffer Table for all Files":
-                exit(Rec.DataFileFolderPath);
-        end
+        if rec.DataFileName = '' then
+            exit(StrSubstNo('<%1>', Rec."Target Table Caption"))
+        else
+            exit(StrSubstNo('%1', Rec.DataFileName));
     end;
 
     var

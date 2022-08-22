@@ -52,9 +52,21 @@ page 50025 "DMTTableList2"
                 }
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
-                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
+                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
+                field(ImportToBufferIndicator; ImportToBufferIndicator)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = ImportToBufferIndicatorStyle;
+                    Caption = 'Buffer Import';
+                }
+                field(ImportToTargetIndicator; ImportToTargetIndicator)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = ImportToTargetIndicatorStyle;
+                    Caption = 'Target Import';
+                }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
             }
@@ -195,13 +207,53 @@ page 50025 "DMTTableList2"
 
     trigger OnAfterGetRecord()
     begin
+        UpdateIndicators();
     end;
 
     trigger OnOpenPage()
+    var
+        DMTSetup: Record DMTSetup;
     begin
+        DMTSetup.InsertWhenEmpty();
+    end;
+
+    local procedure UpdateIndicators()
+    begin
+        /* Import To Buffer */
+        ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        ImportToBufferIndicator := ' ';
+        case true of
+            (Rec."No.of Records in Buffer Table" = 0):
+                begin
+                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    ImportToBufferIndicator := '✘';
+                end;
+            (Rec."No.of Records in Buffer Table" > 0):
+                begin
+                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    ImportToBufferIndicator := '✔';
+                end;
+        end;
+        /* Import To Target */
+        ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        ImportToTargetIndicator := ' ';
+        case true of
+            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
+                begin
+                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    ImportToTargetIndicator := '✘';
+                end;
+            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
+                begin
+                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    ImportToTargetIndicator := '✔';
+                end;
+        end;
     end;
 
     var
         [InDataSet]
         SetupViewActive: Boolean;
+        ImportToBufferIndicatorStyle, ImportToTargetIndicatorStyle : Text;
+        ImportToBufferIndicator, ImportToTargetIndicator : Char;
 }

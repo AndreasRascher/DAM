@@ -158,10 +158,10 @@
           <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field Primary Key - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1670326073 - Method 3956241681 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 1670326073 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method ProposeMatchingTargetFields - NamedType ReplaceExistingMatchesQst</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Method CreateTargetFieldNamesDict - NamedType ReplaceExistingMatchesQst</note>
         </trans-unit>
         <trans-unit id="Table 1670326073 - Field 3644312146 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table Type Filter</source>
@@ -1613,6 +1613,11 @@
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Method 3861128585 - NamedType 29755781" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Filepath is undefined.</source>
+          <note from="Developer" annotates="general" priority="2">Der Dateipfad wurde nicht definiert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method GetDataFilePathWithError - NamedType FilePathEmptyErr</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1650,7 +1655,7 @@
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 739200694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Duration (Longest)</source>
-          <note from="Developer" annotates="general" priority="2">Import Dauer(Längste)</note>
+          <note from="Developer" annotates="general" priority="2">Import Dauer (Längste)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Import Duration (Longest) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2262,6 +2267,16 @@
           <source>DMT Table List 2</source>
           <note from="Developer" annotates="general" priority="2">DMT Tabellenübersicht 2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Control 4225240329 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Import</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Control ImportToBufferIndicator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Control 109950602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Import</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Control ImportToTargetIndicator - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Control 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Zieltab. ID</source>
