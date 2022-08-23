@@ -175,6 +175,7 @@ codeunit 50000 DMTImport
 
     procedure AssignKeyFields(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpDMTField: record "DMTField" temporary)
     var
+        ToFieldRef: FieldRef;
         KeyFieldsFilter: text;
     begin
         KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, true);
@@ -184,8 +185,18 @@ codeunit 50000 DMTImport
         TmpDMTField.SetFilter("Target Field No.", KeyFieldsFilter);
         TmpDMTField.findset();
         repeat
-            if not IsKnownAutoincrementField(TmpDMTField) then
-                DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."Source Field No.", BufferRef, TmpDMTField."Target Field No.", false);
+            if not IsKnownAutoincrementField(TmpDMTField) then begin
+                if (TmpDMTField."Processing Action" <> TmpDMTField."Processing Action"::FixedValue) then begin
+                    DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."Source Field No.", BufferRef, TmpDMTField."Target Field No.", false);
+                end else begin
+                    ToFieldRef := TmpTargetRef.Field(TmpDMTField."Target Field No.");
+                    if not DMTMgt.EvaluateFieldRef(ToFieldRef, TmpDMTField."Fixed Value", false, false) then
+                        Error('Invalid Fixed Value %1', TmpDMTField."Fixed Value");
+                    DMTMgt.ValidateFieldWithValue(TmpTargetRef, TmpDMTField."Target Field No.",
+                      ToFieldRef.Value,
+                      TmpDMTField."Ignore Validation Error");
+                end;
+            end;
         until TmpDMTField.Next() = 0;
     end;
 
