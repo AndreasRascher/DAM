@@ -2258,6 +2258,11 @@
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action SelectTablesToAdd - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 3994797191 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action Task - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3691651546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to target tables (marked lines)</source>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>

@@ -197,6 +197,21 @@ page 50014 "DMTTableList"
                     until DMTTable_SELECTED.Next() = 0;
                 end;
             }
+            action("Task")
+            {
+                Caption = 'Task';
+                Promoted = true;
+                PromotedCategory = New;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    MyDictionary: Dictionary of [Text, Text];
+                begin
+                    MyDictionary.Add('Param1', 'Value1');
+                    MyTaskId := 1;
+                    CurrPage.EnqueueBackgroundTask(MyTaskId, Codeunit::DMTPageBackgroundTasks);
+                end;
+            }
         }
     }
 
@@ -252,15 +267,17 @@ page 50014 "DMTTableList"
             end;
         end;
         CurrPage.Update();
+        Message('ok for task: %1', TaskId);
     end;
 
     trigger OnPageBackgroundTaskError(TaskId: Integer; ErrorCode: Text; ErrorText: Text; ErrorCallStack: Text; var IsHandled: Boolean)
     begin
-        Error(ErrorText);
+        Message('not ok for task: %1', TaskId);
     end;
 
     var
         [InDataSet]
         ImportXMLPortIDStyle, BufferTableIDStyle, DataFilePathStyle : Text;
+        MyTaskId: Integer;
 
 }

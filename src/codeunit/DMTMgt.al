@@ -187,6 +187,9 @@ codeunit 50005 "DMTMgt"
         ToField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
+        // Check - Don't copy from or to timestamp
+        if (FromFieldNo = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter FromFieldNo = 0');
+        if (ToFieldNo = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter ToFieldNo = 0');
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRef.Number);
         FromField := SourceRef.field(FromFieldNo);
         ToField := TargetRef.field(ToFieldNo);
@@ -194,26 +197,28 @@ codeunit 50005 "DMTMgt"
             ToField.Value := FromField.Value
         else
             if not EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
-                Error('Evaluating "%1" int "%2" failed', FromField.Value, ToField.Caption);
+                Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
         IF DoModify then
             TargetRef.modify();
     end;
 
-    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DMTFields: Record "DMTField")
+    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DMTField: Record "DMTField")
     var
         DMTErrorLog: Record DMTErrorLog;
         IsValidateSuccessful: Boolean;
     begin
+        if (DMTField."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
+        if (DMTField."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
         ClearLastError();
         DMTSetup.GetRecordOnce();
-        IF DMTFields."Use Try Function" and DMTSetup."Allow Usage of Try Function" then begin
-            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTFields."Source Field No.", DMTFields."Target Field No.", TargetRef);
+        IF DMTField."Use Try Function" and DMTSetup."Allow Usage of Try Function" then begin
+            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTField."Source Field No.", DMTField."Target Field No.", TargetRef);
         end else begin
-            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTFields."Source Field No.", DMTFields."Target Field No.", TargetRef);
+            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTField."Source Field No.", DMTField."Target Field No.", TargetRef);
         end;
         // HANDLE VALIDATE RESULT
         IF NOT IsValidateSuccessful then begin
-            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTFields);
+            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTField);
         end else begin
             // Save Successful changes
             IF TargetRef.modify() then;
