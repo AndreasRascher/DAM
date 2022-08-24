@@ -400,7 +400,7 @@ table 110000 "DMTTable"
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
-        if (Rec.DataFileFolderPath <> '') and FileMgt.ServerFileExists(Rec.DataFileFolderPath) then
+        if (Rec.GetDataFilePath() <> '') and FileMgt.ServerFileExists(Rec.GetDataFilePath()) then
             exit(true);
 
         DMTSetup.Get();
@@ -410,7 +410,7 @@ table 110000 "DMTTable"
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             FileExists := true;
-            Rec.DataFileFolderPath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFileFolderPath));
+            Rec.SetDataFilePath(FilePath);
             Rec.Modify();
         end else begin
             //Message(FilePath);

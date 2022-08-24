@@ -11,7 +11,6 @@ page 110025 "DMTTableList2"
     DelayedInsert = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    ModifyAllowed = false;
     PromotedActionCategoriesML = ENU = '1,2,3,Lines,Objects,View', DEU = '1,2,3,Zeilen,Objekte,Ansicht';
     // Editable = false;
 
@@ -69,6 +68,16 @@ page 110025 "DMTTableList2"
                 }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
+                field("No. of Unhandled Table Relations"; rec."Table Relations")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowUnhandledTableRelations(Rec);
+                    end;
+                }
             }
         }
     }
@@ -93,22 +102,21 @@ page 110025 "DMTTableList2"
                         ObjMgt.AddSelectedTables();
                     end;
                 }
-                action(SelectTablesToAdd2)
+                action(DeleteMarkedLines)
                 {
-                    Caption = 'Add Tables2', Comment = 'Tab. hinzufügen';
-                    Image = Add;
+                    Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
+                    Image = DeleteRow;
                     ApplicationArea = all;
                     Promoted = true;
                     PromotedCategory = Category4;
                     trigger OnAction()
                     var
-                        ObjMgt: Codeunit DMTObjMgt;
+                        DMTTable: Record DMTTable;
                     begin
-                        ObjMgt.AddSelectedTables();
+                        if GetSelection(DMTTable) then
+                            DMTTable.DeleteAll(true);
                     end;
                 }
-
-
             }
             group(Objects)
             {
@@ -123,6 +131,23 @@ page 110025 "DMTTableList2"
                     trigger OnAction()
                     begin
                         Rec.DownloadAllALDataMigrationObjects();
+                    end;
+                }
+                action(UpdateTableRelationInfo)
+                {
+                    Image = Relationship;
+                    ApplicationArea = All;
+                    Caption = 'Update Missing Table Relations', Comment = 'Update der offenen Tabellenrelationen';
+                    trigger OnAction()
+                    var
+                        DMTTable: Record DMTTable;
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        if DMTTable.FindSet() then
+                            repeat
+                                DMTTable."Table Relations" := RelationsCheck.FindRelatedTableIDs(DMTTable).Count;
+                                DMTTable.Modify();
+                            until DMTTable.Next() = 0;
                     end;
                 }
                 action(RenumberALObjects)
@@ -208,6 +233,7 @@ page 110025 "DMTTableList2"
     trigger OnAfterGetRecord()
     begin
         UpdateIndicators();
+        Rec.TryFindExportDataFile();
     end;
 
     trigger OnOpenPage()
@@ -249,6 +275,13 @@ page 110025 "DMTTableList2"
                     ImportToTargetIndicator := '✔';
                 end;
         end;
+    end;
+
+    procedure GetSelection(var DMTTable_SELECTED: Record DMTTable) HasLines: Boolean
+    begin
+        Clear(DMTTable_SELECTED);
+        CurrPage.SetSelectionFilter(DMTTable_SELECTED);
+        HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
     var

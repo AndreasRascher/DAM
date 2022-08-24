@@ -212,7 +212,7 @@ codeunit 110009 DMTImport
         if not TempDMTField_COLLECTION.findset() then
             exit; // Required for tables with only key fields
         repeat
-            TempDMTField_COLLECTION.CalcFields("Target Field Caption", "Source Field Caption");
+            TempDMTField_COLLECTION.CalcFields("Target Field Caption");
             case true of
                 (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::Ignore):
                     ;

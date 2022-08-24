@@ -205,7 +205,13 @@ page 110012 "DMTTableCard"
                     DMTErrorLogQry: Query DMTErrorLogQry;
                     RecIdList: list of [RecordID];
                 begin
-                    DMTErrorLogQry.setrange(Import_from_Table_No_, REc."Buffer Table ID");
+                    if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then
+                        DMTErrorLogQry.setrange(Import_from_Table_No_, Rec."Buffer Table ID");
+                    if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+                        DMTErrorLogQry.setrange(Import_from_Table_No_, Database::DMTGenBuffTable);
+                        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileFolderPath, rec.DataFileFolderPath);
+                        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileName, rec.DataFileName);
+                    end;
                     DMTErrorLogQry.Open();
                     while DMTErrorLogQry.Read() do begin
                         RecIdList.Add(DMTErrorLogQry.FromID);

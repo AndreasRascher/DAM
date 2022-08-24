@@ -63,6 +63,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataSourceLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 527249511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Folder Path</source>
+          <note from="Developer" annotates="general" priority="2">Ordnerpfad Exportdatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field DataFileFolderPath - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 2474578035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Name</source>
+          <note from="Developer" annotates="general" priority="2">Dateiname Exportdatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field DataFileName - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2600471051 - Field 3113114552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Errorlog Created At</source>
           <note from="Developer" annotates="general" priority="2">Datum der Protokollierung</note>
@@ -2298,15 +2308,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action ActivateSetupView - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Marked Lines</source>
+          <note from="Developer" annotates="general" priority="2">Markiert Zeilen löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action DeleteMarkedLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3374423421 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Tables</source>
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action SelectTablesToAdd - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 3374423421 - Action 3451661551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add Tables2</source>
-          <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action SelectTablesToAdd2 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download buffer table objects</source>
@@ -2332,6 +2342,11 @@
           <source>Renumber AL Objects</source>
           <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action RenumberALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 903289417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Missing Table Relations</source>
+          <note from="Developer" annotates="general" priority="2">Update der offenen Tabellenrelationen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action UpdateTableRelationInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 526679414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Task List</source>

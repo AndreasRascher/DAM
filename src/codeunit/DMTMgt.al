@@ -371,7 +371,7 @@ codeunit 110002 "DMTMgt"
                 end;
             'DATEFORMULA':
                 begin
-                    IF Evaluate(_DateFormula, FromText) then begin
+                    IF Evaluate(_DateFormula, FromText, 9) then begin
                         FieldRef_TO.Value := _DateFormula;
                         exit(TRUE);
                     end else
