@@ -1,4 +1,4 @@
-table 50000 "DMTTable"
+table 110000 "DMTTable"
 {
     DataClassification = SystemMetadata;
     LookupPageId = DMTTableList;

@@ -1,4 +1,4 @@
-page 50023 DMTTableFactBox
+page 110023 DMTTableFactBox
 {
     Caption = 'DMT Table FactBox';
     PageType = CardPart;

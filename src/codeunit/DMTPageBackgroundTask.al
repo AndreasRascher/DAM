@@ -1,4 +1,4 @@
-codeunit 50009 DMTPageBackgroundTasks
+codeunit 110006 DMTPageBackgroundTasks
 {
     trigger OnRun()
     begin

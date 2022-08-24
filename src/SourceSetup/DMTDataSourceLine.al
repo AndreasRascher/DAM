@@ -1,4 +1,4 @@
-table 50010 "DMTDataSourceLine"
+table 110010 "DMTDataSourceLine"
 {
     Caption = 'DMT Data Source Line';
     fields
