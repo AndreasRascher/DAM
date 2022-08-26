@@ -40,12 +40,19 @@ codeunit 110008 "DMTErrorWrapper"
 
     LOCAL procedure FieldValidateRecRef(_RecRef_FROM: RecordRef; _FieldNo_FROM: Integer; var _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
     var
+        DMTMgt: Codeunit DMTMgt;
         ToField: FieldRef;
         FromField: FieldRef;
+        EvaluateOptionValueAsNumber: Boolean;
     begin
         FromField := _RecRef_FROM.FIELD(_FieldNo_FROM);
         ToField := _RecRef_TO.FIELD(_FieldNo_TO);
-        ToField.VALIDATE(FromField.VALUE);
+        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = _RecRef_FROM.Number);
+        if ToField.Type = FromField.Type then
+            ToField.VALIDATE(FromField.Value)
+        else
+            if not DMTMgt.EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
+                Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
     end;
 
     LOCAL procedure FieldValidateWithValue(_NewValue: Variant; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)

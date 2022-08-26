@@ -80,47 +80,6 @@ page 110014 "DMTTableList"
                     ObjMgt.AddSelectedTables();
                 end;
             }
-            action(ImportBufferTables)
-            {
-                Image = ImportDatabase;
-                Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
-                ApplicationArea = all;
-                trigger OnAction()
-                var
-                    DMTTable, DMTTable_SELECTED : Record DMTTable;
-                    Progress: Dialog;
-                    Start, TableStart : DateTime;
-                    ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
-                    ProgressMsg: Text;
-                    FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
-                begin
-                    DMTTable_SELECTED.SetCurrentKey("Sort Order");
-                    if not GetSelection(DMTTable_SELECTED) then
-                        exit;
-                    ProgressMsg := '==========================================\' +
-                                   ImportFilesProgressMsg + '\' +
-                                   '==========================================\';
-
-                    DMTTable_SELECTED.FindSet(false, false);
-                    REPEAT
-                        ProgressMsg += '\' + DMTTable_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."Target Table ID") + '#';
-                    UNTIL DMTTable_SELECTED.NEXT() = 0;
-
-                    DMTTable_SELECTED.FindSet();
-                    Start := CurrentDateTime;
-                    Progress.Open(ProgressMsg);
-                    repeat
-                        TableStart := CurrentDateTime;
-                        DMTTable := DMTTable_SELECTED;
-                        Progress.Update(DMTTable_SELECTED."Target Table ID", 'Wird eingelesen');
-                        DMTTable.ImportToBufferTable();
-                        Commit();
-                        Progress.Update(DMTTable_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
-                    until DMTTable_SELECTED.Next() = 0;
-                    Progress.Close();
-                    Message(FinishedMsg, CurrentDateTime - Start);
-                end;
-            }
             group(Objects)
             {
                 Image = Action;

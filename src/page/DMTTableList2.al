@@ -33,9 +33,9 @@ page 110025 "DMTTableList2"
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
                 field(Folder; Rec.DataFileFolderPath) { ApplicationArea = All; }
                 field(FileName; Rec.DataFileName) { ApplicationArea = All; }
-                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; }
+                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field(BufferTableType; rec.BufferTableType) { ApplicationArea = All; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
             }
             repeater(ImportView)
@@ -54,18 +54,8 @@ page 110025 "DMTTableList2"
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field(ImportToBufferIndicator; ImportToBufferIndicator)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = ImportToBufferIndicatorStyle;
-                    Caption = 'Buffer Import';
-                }
-                field(ImportToTargetIndicator; ImportToTargetIndicator)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = ImportToTargetIndicatorStyle;
-                    Caption = 'Target Import';
-                }
+                field(ImportToBufferIndicator; ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = ImportToBufferIndicatorStyle; }
+                field(ImportToTargetIndicator; ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
                 field("No. of Unhandled Table Relations"; rec."Table Relations")
@@ -90,11 +80,13 @@ page 110025 "DMTTableList2"
                 Image = AllLines;
                 action(SelectTablesToAdd)
                 {
+                    Visible = SetupViewActive;
                     Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
                     Image = Add;
                     ApplicationArea = all;
                     Promoted = true;
                     PromotedCategory = Category4;
+                    PromotedOnly = true;
                     trigger OnAction()
                     var
                         ObjMgt: Codeunit DMTObjMgt;
@@ -104,17 +96,36 @@ page 110025 "DMTTableList2"
                 }
                 action(DeleteMarkedLines)
                 {
+                    Visible = SetupViewActive;
                     Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
                     Image = DeleteRow;
                     ApplicationArea = all;
                     Promoted = true;
                     PromotedCategory = Category4;
+                    PromotedOnly = true;
                     trigger OnAction()
                     var
                         DMTTable: Record DMTTable;
                     begin
                         if GetSelection(DMTTable) then
                             DMTTable.DeleteAll(true);
+                    end;
+                }
+                action(ImportBufferTables)
+                {
+                    Visible = not SetupViewActive;
+                    Image = ImportDatabase;
+                    Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
+                    ApplicationArea = all;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    trigger OnAction()
+                    var
+                        DMTTable_SELECTED: Record DMTTable;
+                    begin
+                        if GetSelection(DMTTable_SELECTED) then
+                            Rec.ImportSelectedIntoBuffer(DMTTable_SELECTED);
                     end;
                 }
             }
@@ -229,6 +240,24 @@ page 110025 "DMTTableList2"
             }
         }
     }
+    views
+    {
+        view(BufferTableTypeSeperate)
+        {
+            Caption = 'Seperate Buffer Table per CSV', Comment = 'Leere Puffertab.';
+            Filters = where(BufferTableType = const("Seperate Buffer Table per CSV"));
+        }
+        view(BufferTableTypeGeneric)
+        {
+            Caption = 'Generic Buffer Table for all Files', Comment = 'Gen. Puffertab.';
+            Filters = where(BufferTableType = const("Generic Buffer Table for all Files"));
+        }
+        view(EmptyBuffer)
+        {
+            Caption = 'Empty Buffer Table', Comment = 'Leere Puffertab.';
+            Filters = where("No.of Records in Buffer Table" = const(0));
+        }
+    }
 
     trigger OnAfterGetRecord()
     begin
@@ -244,6 +273,8 @@ page 110025 "DMTTableList2"
     end;
 
     local procedure UpdateIndicators()
+    var
+        AllObj: Record AllObjWithCaption;
     begin
         /* Import To Buffer */
         ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
@@ -275,6 +306,18 @@ page 110025 "DMTTableList2"
                     ImportToTargetIndicator := '✔';
                 end;
         end;
+
+
+        ImportXMLPortIDStyle := 'Unfavorable';
+        BufferTableIDStyle := 'Unfavorable';
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            clear(ImportXMLPortIDStyle);
+            clear(BufferTableIDStyle);
+        end;
+        if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
+            ImportXMLPortIDStyle := 'Favorable';
+        if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
+            BufferTableIDStyle := 'Favorable';
     end;
 
     procedure GetSelection(var DMTTable_SELECTED: Record DMTTable) HasLines: Boolean
@@ -288,5 +331,6 @@ page 110025 "DMTTableList2"
         [InDataSet]
         SetupViewActive: Boolean;
         ImportToBufferIndicatorStyle, ImportToTargetIndicatorStyle : Text;
+        ImportXMLPortIDStyle, BufferTableIDStyle : Text;
         ImportToBufferIndicator, ImportToTargetIndicator : Char;
 }

@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=03.08.22;
-    Time=14:46:10;
+    Date=25.08.22;
+    Time=17:29:33;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2796,9 +2796,10 @@ OBJECT XMLport 50049 DMT Export
       TextOLD@1000000001 : BigText;
       i@1000000002 : Integer;
     BEGIN
-      CharArray[1] := 9; // TAB
-      CharArray[2] := 10; // LF
-      CharArray[3] := 13; // CR
+      CharArray[1] := 3; // End of Text
+      CharArray[2] := 9; // TAB
+      CharArray[3] := 10; // LF
+      CharArray[4] := 13; // CR
       ResultText := DELCHR(Text,'=',CharArray);
     END;
 
@@ -2821,7 +2822,11 @@ OBJECT XMLport 50049 DMT Export
       IF _ExportTableID <> 0 THEN
         _fields.SETRANGE(TableNo,_ExportTableID);
       _fields.SETFILTER(Type,'<>%1',_fields.Type::BLOB);
-      _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField);
+      IF ExportFlowFields THEN
+        _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField)
+      ELSE
+        _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
+
       _fields.SETRANGE(Enabled,TRUE);
       SetObsoleteFieldFilter(_fields);
       _fields.FINDSET;

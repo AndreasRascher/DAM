@@ -217,7 +217,9 @@ codeunit 110002 "DMTMgt"
             IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTField."Source Field No.", DMTField."Target Field No.", TargetRef);
         end;
         // HANDLE VALIDATE RESULT
-        IF NOT IsValidateSuccessful then begin
+        IF not IsValidateSuccessful then begin
+            if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
+                Error(GetLastErrorCode);
             DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTField);
         end else begin
             // Save Successful changes

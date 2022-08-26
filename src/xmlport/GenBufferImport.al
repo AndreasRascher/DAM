@@ -97,8 +97,6 @@ xmlport 110001 DMTGenBuffImport
     end;
 
     procedure SetDMTTable(DMTTable: Record DMTTable)
-    var
-        FileMgt: Codeunit "File Management";
     begin
         CurrDMTTable := DMTTable;
         CurrFileName := CurrDMTTable.DataFileName;
