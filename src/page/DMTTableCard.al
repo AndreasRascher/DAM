@@ -39,7 +39,7 @@ page 110012 "DMTTableCard"
                         Rec.ShowBufferTable();
                     end;
                 }
-                field("Qty.Lines In Trgt. Table"; Rec.GetNoOfRecordsInTrgtTable())
+                field("Qty.Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -271,10 +271,7 @@ page 110012 "DMTTableCard"
         fileMgt: Codeunit "File Management";
     begin
         Rec.InitOrRefreshFieldSortOrder();
-        FileRec.SetRange(Path, fileMgt.GetDirectoryName(Rec.DataFileFolderPath));
-        FileRec.SetRange(Name, Rec.DataFileName);
-        if not FileRec.findfirst() then
-            Clear(FileRec);
+        Rec.setrange(CompanyNameFilter, CompanyName);
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -309,7 +306,6 @@ page 110012 "DMTTableCard"
     end;
 
     var
-        FileRec: Record File;
         [InDataSet]
         ImportXMLPortIDStyle, BufferTableIDStyle : Text;
         [InDataSet]

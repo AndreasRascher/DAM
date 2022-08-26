@@ -11,7 +11,8 @@ page 110025 "DMTTableList2"
     DelayedInsert = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    PromotedActionCategoriesML = ENU = '1,2,3,Lines,Objects,View', DEU = '1,2,3,Zeilen,Objekte,Ansicht';
+    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,View', DEU = '1,2,3,Tabellen,Objekte,Ansicht';
+    RefreshOnActivate = true;
     // Editable = false;
 
     layout
@@ -58,7 +59,17 @@ page 110025 "DMTTableList2"
                 field(ImportToTargetIndicator; ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
-                field("No. of Unhandled Table Relations"; rec."Table Relations")
+                field("No. of Table Relations"; rec."Table Relations")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowTableRelations(Rec);
+                    end;
+                }
+                field("Unhandled Table Rel."; "Unhandled Table Rel.")
                 {
                     ApplicationArea = All;
                     trigger OnDrillDown()
@@ -157,8 +168,21 @@ page 110025 "DMTTableList2"
                         if DMTTable.FindSet() then
                             repeat
                                 DMTTable."Table Relations" := RelationsCheck.FindRelatedTableIDs(DMTTable).Count;
+                                DMTTable."Unhandled Table Rel." := RelationsCheck.FindUnhandledRelatedTableIDs(DMTTable).Count;
                                 DMTTable.Modify();
                             until DMTTable.Next() = 0;
+                    end;
+                }
+                action(UpdateSortOrder)
+                {
+                    Image = BulletList;
+                    ApplicationArea = All;
+                    Caption = 'Update Sort Order', Comment = 'Update der Sortierung';
+                    trigger OnAction()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ProposeSortOrder();
                     end;
                 }
                 action(RenumberALObjects)
@@ -269,6 +293,7 @@ page 110025 "DMTTableList2"
     var
         DMTSetup: Record DMTSetup;
     begin
+        Rec.SetRange(CompanyNameFilter, CompanyName);
         DMTSetup.InsertWhenEmpty();
     end;
 

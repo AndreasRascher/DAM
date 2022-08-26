@@ -13,6 +13,7 @@ codeunit 110009 DMTImport
         StartImportForGenericBufferTable(DMTTable, IsUpdateTask);
 
         UpdateProcessingTime(DMTTable, start);
+        DMTTable.CalcFields("No. of Lines In Trgt. Table");
     end;
 
     procedure ProcessFullBuffer(var DMTTable: Record DMTTable; IsUpdateTask: Boolean)

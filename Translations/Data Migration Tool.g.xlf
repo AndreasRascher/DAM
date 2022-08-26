@@ -1658,6 +1658,11 @@
           <note from="Developer" annotates="general" priority="2">Puffertabellenart</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableType - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 462739636 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company Name Filter</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field CompanyNameFilter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Source Type</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1777,6 +1782,11 @@
           <source>Target Table ID</source>
           <note from="Developer" annotates="general" priority="2">Zieltabellen ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Target Table ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3337045114 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unhandled Table Rel.</source>
+          <note from="Developer" annotates="general" priority="2">Offene Tab. Rel.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Unhandled Table Rel. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 1801721943 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Use OnInsert Trigger</source>
@@ -2352,6 +2362,11 @@
           <source>Renumber AL Objects</source>
           <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action RenumberALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 2531305551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Sort Order</source>
+          <note from="Developer" annotates="general" priority="2">Update der Sortierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action UpdateSortOrder - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 903289417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Missing Table Relations</source>

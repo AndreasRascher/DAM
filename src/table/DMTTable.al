@@ -41,12 +41,19 @@ table 110000 "DMTTable"
         {
             Caption = 'No. of Lines in Target Table', Comment = 'Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
-            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID")));
+            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID"), "Company Name" = field(CompanyNameFilter)));
             Editable = false;
             trigger OnLookup()
             begin
                 ShowTableContent(Rec."Target Table ID");
             end;
+        }
+        field(32; "CompanyNameFilter"; Text[30])
+        {
+            Caption = 'Company Name Filter';
+            FieldClass = FlowFilter;
+            TableRelation = Company.Name;
+            Editable = false;
         }
         field(50; BufferTableType; Enum BufferTableType)
         {
@@ -139,6 +146,7 @@ table 110000 "DMTTable"
         field(103; LastView; Blob) { }
         field(104; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
         field(105; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
+        field(106; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; }
         field(202; LastImportBy; Code[50])
