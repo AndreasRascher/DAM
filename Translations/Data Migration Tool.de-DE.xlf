@@ -1995,6 +1995,20 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Data Source Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 4265010797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Created At</source>
+          <target>Datei erstellt am</target>
+          <note from="Developer" annotates="general" priority="2">Datei erstellt am</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFile Created At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 1782888461 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Size (Byte)</source>
+          <target>Dateigröße (Byte)</target>
+          <note from="Developer" annotates="general" priority="2">Dateigröße (Byte)</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFile Size - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 527249511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Folder Path</source>
           <target>Ordnerpfad Exportdatei</target>
@@ -2831,89 +2845,10 @@
         </trans-unit>
         <trans-unit id="Page 3374423421 - View 719566031 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Empty Buffer Table</source>
-          <target>Leere Puffertab.          Leere Puffertab.          New translation.          Page DMTTableList2 - View EmptyBuffer - Property Caption                          DMT Task List          DMT Aufgabenliste          DMT Aufgabenliste          Page DMTTaskList - Property Caption                          Filter          Filter          Filter          Page DMTTaskList - Control CurrFilter - Property Caption                          Run Selected          Auswahl ausführen          Auswahl ausführen          Page DMTTaskList - Action RunSelected - Property Caption                          Update          Aktualisieren                    Page DMTUpdateTask - Control Selected - Property Caption                          Dataport (until NAV2009)          Dataport (NAV Versionen bis NAV2009)                    Page NAVObjects - Control Dataport - Property Caption                          XMLPort (NAV2013 - BC14)          XMLPort (NAV2013 - BC14)                    Page NAVObjects - Control XMLPort - Property Caption                          Field          Feld                    XmlPort DMTFieldBufferImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          Environment          Umgebung                    XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption                          Company          Mandant                    XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption                          Database          Datenbank                    XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption                          DMTFirstLineImport          DMTFirstLineImport                    New translation.          XmlPort DMTFirstLineImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    Suggested translation inserted.          XmlPort DMTFirstLineImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          GenBufferImport          Import in generische Puffertabelle                    XmlPort DMTGenBuffImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    XmlPort DMTGenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          Generic Buffer Table for all Files          Generisch          Generisch          Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption                          Seperate Buffer Table per CSV          Separate Tabelle          Separate Tabelle          Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption                          Custom CSV          Benutzerdefinierte CSV                    Enum DMTDataSourceType - EnumValue Custom CSV - Property Caption                          NAV CSV Export          NAV CSV Export                    Enum DMTDataSourceType - EnumValue NAV CSV Export - Property Caption                          All Files (*.*)|*.*          Alle Dateien (*.*)|*.*          Alle Dateien (*.*)|*.*          Enum DMTFileFilter - EnumValue All - Property Caption                          CSV Files|*.csv          CSV Dateien|*.csv          CSV Dateien|*.csv          Enum DMTFileFilter - EnumValue CSV - Property Caption                          Excel Files (*.xlsx)|*.xlsx          Excel-Dateien (*.xlsx)|*.xlsx          Excel-Dateien (*.xlsx)|*.xlsx          Enum DMTFileFilter - EnumValue Excel - Property Caption                          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          Enum DMTFileFilter - EnumValue RDL - Property Caption                          Text Files (*.txt)|*.txt          Textdateien (*.txt)|*.txt          Textdateien (*.txt)|*.txt          Enum DMTFileFilter - EnumValue Txt - Property Caption                          XML Files (*.xml)|*.xml          XML-Dateien (*.xml)|*.xml          XML-Dateien (*.xml)|*.xml          Enum DMTFileFilter - EnumValue Xml - Property Caption                          ZIP Files (*.zip)|*.zip          ZIP-Dateien (*.zip)|*.zip          ZIP-Dateien (*.zip)|*.zip          Enum DMTFileFilter - EnumValue ZIP - Property Caption                    </target>
-          <target>          Leere Puffertab.          New translation.          Page DMTTableList2 - View EmptyBuffer - Property Caption                          DMT Task List          DMT Aufgabenliste          DMT Aufgabenliste          Page DMTTaskList - Property Caption                          Filter          Filter          Filter          Page DMTTaskList - Control CurrFilter - Property Caption                          Run Selected          Auswahl ausführen          Auswahl ausführen          Page DMTTaskList - Action RunSelected - Property Caption                          Update          Aktualisieren                    Page DMTUpdateTask - Control Selected - Property Caption                          Dataport (until NAV2009)          Dataport (NAV Versionen bis NAV2009)                    Page NAVObjects - Control Dataport - Property Caption                          XMLPort (NAV2013 - BC14)          XMLPort (NAV2013 - BC14)                    Page NAVObjects - Control XMLPort - Property Caption                          Field          Feld                    XmlPort DMTFieldBufferImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          Environment          Umgebung                    XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption                          Company          Mandant                    XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption                          Database          Datenbank                    XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption                          DMTFirstLineImport          DMTFirstLineImport                    New translation.          XmlPort DMTFirstLineImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    Suggested translation inserted.          XmlPort DMTFirstLineImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          GenBufferImport          Import in generische Puffertabelle                    XmlPort DMTGenBuffImport - Property Caption                          %1 Buffer\%2 lines imported          %1 Puffer\%2 Zeilen importiert                    XmlPort DMTGenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg                          Generic Buffer Table for all Files          Generisch          Generisch          Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption                          Seperate Buffer Table per CSV          Separate Tabelle          Separate Tabelle          Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption                          Custom CSV          Benutzerdefinierte CSV                    Enum DMTDataSourceType - EnumValue Custom CSV - Property Caption                          NAV CSV Export          NAV CSV Export                    Enum DMTDataSourceType - EnumValue NAV CSV Export - Property Caption                          All Files (*.*)|*.*          Alle Dateien (*.*)|*.*          Alle Dateien (*.*)|*.*          Enum DMTFileFilter - EnumValue All - Property Caption                          CSV Files|*.csv          CSV Dateien|*.csv          CSV Dateien|*.csv          Enum DMTFileFilter - EnumValue CSV - Property Caption                          Excel Files (*.xlsx)|*.xlsx          Excel-Dateien (*.xlsx)|*.xlsx          Excel-Dateien (*.xlsx)|*.xlsx          Enum DMTFileFilter - EnumValue Excel - Property Caption                          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc          Enum DMTFileFilter - EnumValue RDL - Property Caption                          Text Files (*.txt)|*.txt          Textdateien (*.txt)|*.txt          Textdateien (*.txt)|*.txt          Enum DMTFileFilter - EnumValue Txt - Property Caption                          XML Files (*.xml)|*.xml          XML-Dateien (*.xml)|*.xml          XML-Dateien (*.xml)|*.xml          Enum DMTFileFilter - EnumValue Xml - Property Caption                          ZIP Files (*.zip)|*.zip          ZIP-Dateien (*.zip)|*.zip          ZIP-Dateien (*.zip)|*.zip          Enum DMTFileFilter - EnumValue ZIP - Property Caption                    </target>
-          <target>DMT Aufgabenliste</target>
-          <target>Filter</target>
-          <target>Auswahl ausführen</target>
-          <target>Aktualisieren</target>
-          <target>Dataport (NAV Versionen bis NAV2009)</target>
-          <target>XMLPort (NAV2013 - BC14)</target>
-          <target>Feld</target>
-          <target>%1 Puffer\%2 Zeilen importiert</target>
-          <target>Umgebung</target>
-          <target>Mandant</target>
-          <target>Datenbank</target>
-          <target>DMTFirstLineImport</target>
-          <target>%1 Puffer\%2 Zeilen importiert</target>
-          <target>Import in generische Puffertabelle</target>
-          <target>%1 Puffer\%2 Zeilen importiert</target>
-          <target>Generisch</target>
-          <target>Separate Tabelle</target>
-          <target>Benutzerdefinierte CSV</target>
-          <target>NAV CSV Export
-</target>
-          <target>Alle Dateien (*.*)|*.*</target>
-          <target>CSV Dateien|*.csv</target>
-          <target>Excel-Dateien (*.xlsx)|*.xlsx</target>
-          <target>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</target>
-          <target>Textdateien (*.txt)|*.txt</target>
-          <target>XML-Dateien (*.xml)|*.xml</target>
-          <target>ZIP-Dateien (*.zip)|*.zip</target>
+          <target>Leere Puffertab.</target>
           <note from="Developer" annotates="general" priority="2">Leere Puffertab.</note>
-          <note from="Developer" annotates="general" priority="2">DMT Aufgabenliste</note>
-          <note from="Developer" annotates="general" priority="2">Filter</note>
-          <note from="Developer" annotates="general" priority="2">Auswahl ausführen</note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2">Generisch</note>
-          <note from="Developer" annotates="general" priority="2">Separate Tabelle</note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Developer" annotates="general" priority="2">Alle Dateien (*.*)|*.*</note>
-          <note from="Developer" annotates="general" priority="2">CSV Dateien|*.csv</note>
-          <note from="Developer" annotates="general" priority="2">Excel-Dateien (*.xlsx)|*.xlsx</note>
-          <note from="Developer" annotates="general" priority="2">SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</note>
-          <note from="Developer" annotates="general" priority="2">Textdateien (*.txt)|*.txt</note>
-          <note from="Developer" annotates="general" priority="2">XML-Dateien (*.xml)|*.xml</note>
-          <note from="Developer" annotates="general" priority="2">ZIP-Dateien (*.zip)|*.zip</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - View EmptyBuffer - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Control CurrFilter - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTaskList - Action RunSelected - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTUpdateTask - Control Selected - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control Dataport - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control XMLPort - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFirstLineImport - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFirstLineImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTGenBuffImport - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTGenBuffImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Generic Buffer Table for all Files - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTDataSourceType - EnumValue Custom CSV - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTDataSourceType - EnumValue NAV CSV Export - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue All - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue CSV - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Excel - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue RDL - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Txt - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Xml - Property Caption</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 526679414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Task List</source>
@@ -2980,18 +2915,6 @@
           <target>Datenbank</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 419451768 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMTFirstLineImport</source>
-          <target>DMTFirstLineImport</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFirstLineImport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 419451768 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 Buffer\%2 lines imported</source>
-          <target>%1 Puffer\%2 Zeilen importiert</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFirstLineImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
         </trans-unit>
         <trans-unit id="XmlPort 2013711061 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
