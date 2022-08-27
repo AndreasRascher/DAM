@@ -46,14 +46,8 @@ table 110001 "DMTErrorLog"
         field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
         field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
         field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
-        field(52; DataFileFolderPath; Text[250])
-        {
-            Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei';
-        }
-        field(53; DataFileName; Text[250])
-        {
-            Caption = 'Data File Name', comment = 'Dateiname Exportdatei';
-        }
+        field(52; DataFileFolderPath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
+        field(53; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
     }
 
     keys

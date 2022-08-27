@@ -697,6 +697,13 @@ table 110000 "DMTTable"
         if Path = '' then Error(FilePathEmptyErr);
     end;
 
+    procedure SetDefaultFilters()
+    begin
+        Rec.FilterGroup(2);
+        Rec.SetRange(CompanyNameFilter, CompanyName);
+        Rec.FilterGroup(0);
+    end;
+
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
     var
         DMTTable: Record DMTTable;

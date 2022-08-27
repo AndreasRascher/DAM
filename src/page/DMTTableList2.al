@@ -21,7 +21,7 @@ page 110025 "DMTTableList2"
         {
             repeater(SetupView)
             {
-                Visible = SetupViewActive;
+                field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
                 field("Target Table ID"; Rec."Target Table ID")
                 {
                     ApplicationArea = All;
@@ -32,25 +32,20 @@ page 110025 "DMTTableList2"
                     end;
                 }
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
-                field(Folder; Rec.DataFileFolderPath) { ApplicationArea = All; }
-                field(FileName; Rec.DataFileName) { ApplicationArea = All; }
-                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
-                field(BufferTableType; rec.BufferTableType) { ApplicationArea = All; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
-                field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
-            }
-            repeater(ImportView)
-            {
-                Visible = not SetupViewActive;
-                field(FileName_ImportView; Rec.DataFileName)
+                field(Folder; Rec.DataFileFolderPath) { ApplicationArea = All; Visible = false; }
+                field(FileName; Rec.DataFileName)
                 {
                     ApplicationArea = All;
-                    trigger OnDrillDown()
-                    begin
-                        Rec.OpenCardPage();
-                    end;
+                    StyleExpr = Rec.DataFilePathStyle;
+                    // trigger OnDrillDown()
+                    // begin
+                    //     Rec.OpenCardPage();
+                    // end;
                 }
-                field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
+                field(BufferTableType; rec.BufferTableType) { ApplicationArea = All; }
+                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
+                field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
                 field("Import Duration (Longest)"; Rec."Import Duration (Longest)") { ApplicationArea = All; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
@@ -91,7 +86,6 @@ page 110025 "DMTTableList2"
                 Image = AllLines;
                 action(SelectTablesToAdd)
                 {
-                    Visible = SetupViewActive;
                     Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
                     Image = Add;
                     ApplicationArea = all;
@@ -107,7 +101,6 @@ page 110025 "DMTTableList2"
                 }
                 action(DeleteMarkedLines)
                 {
-                    Visible = SetupViewActive;
                     Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
                     Image = DeleteRow;
                     ApplicationArea = all;
@@ -124,7 +117,6 @@ page 110025 "DMTTableList2"
                 }
                 action(ImportBufferTables)
                 {
-                    Visible = not SetupViewActive;
                     Image = ImportDatabase;
                     Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
                     ApplicationArea = all;
@@ -234,34 +226,6 @@ page 110025 "DMTTableList2"
                     end;
                 }
             }
-            action(ActivateSetupView)
-            {
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedCategory = Category6;
-                PromotedIsBig = true;
-                Visible = not SetupViewActive;
-                Caption = 'Zu Einrichtungsansicht wechseln';
-                trigger OnAction()
-                begin
-                    SetupViewActive := not SetupViewActive;
-                    CurrPage.Update();
-                end;
-            }
-            action(ActivateImportView)
-            {
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedCategory = Category6;
-                PromotedIsBig = true;
-                Visible = SetupViewActive;
-                Caption = 'Zu Importansicht wechseln';
-                trigger OnAction()
-                begin
-                    SetupViewActive := not SetupViewActive;
-                    CurrPage.Update();
-                end;
-            }
         }
     }
     views
@@ -293,47 +257,18 @@ page 110025 "DMTTableList2"
     var
         DMTSetup: Record DMTSetup;
     begin
-        Rec.FilterGroup(2);
-        Rec.SetRange(CompanyNameFilter, CompanyName);
-        Rec.FilterGroup(0);
+        Rec.SetDefaultFilters();
         DMTSetup.InsertWhenEmpty();
     end;
 
-    local procedure UpdateIndicators()
+    procedure GetSelection(var DMTTable_SELECTED: Record DMTTable) HasLines: Boolean
     begin
-        /* Import To Buffer */
-        ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        ImportToBufferIndicator := ' ';
-        case true of
-            (Rec."No.of Records in Buffer Table" = 0):
-                begin
-                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    ImportToBufferIndicator := '✘';
-                end;
-            (Rec."No.of Records in Buffer Table" > 0):
-                begin
-                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    ImportToBufferIndicator := '✔';
-                end;
-        end;
-        /* Import To Target */
-        ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        ImportToTargetIndicator := ' ';
-        case true of
-            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
-                begin
-                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    ImportToTargetIndicator := '✘';
-                end;
-            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
-                begin
-                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    ImportToTargetIndicator := '✔';
-                end;
-        end;
+        Clear(DMTTable_SELECTED);
+        CurrPage.SetSelectionFilter(DMTTable_SELECTED);
+        HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
     var
         [InDataSet]
-        SetupViewActive, ShowSetup : Boolean;
+        ShowSetup: Boolean;
 }

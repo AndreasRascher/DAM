@@ -1,25 +1,26 @@
 {
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "name": "Docker BC20",
-        //     "type": "al",
-        //     "request": "launch",
-        //     "environmentType": "OnPrem",
-        //     "server": "http://bc20",
-        //     "serverInstance": "BC",
-        //     "authentication": "UserPassword",
-        //     "startupObjectId": 50025,
-        //     "breakOnError": true,
-        //     "breakOnRecordWrite": false,
-        //     "launchBrowser": true,
-        //     "enableSqlInformationDebugger": true,
-        //     "enableLongRunningSqlStatements": true,
-        //     "longRunningSqlStatementsThreshold": 500,
-        //     "numberOfSqlStatements": 10,
-        //     "tenant": "default",
-        //     "schemaUpdateMode": "ForceSync"
-        // }
+        {
+            "name": "Docker BC20",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "OnPrem",
+            "server": "http://bc20",
+            "serverInstance": "BC",
+            "authentication": "UserPassword",
+            "startupObjectType": "Page",
+            "startupObjectId": 110025,
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "launchBrowser": true,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "tenant": "default",
+            "schemaUpdateMode": "ForceSync"
+        }
         // ,
         // {
         //     "name": "Graef PROD - Synchronize",
@@ -59,23 +60,23 @@
         //     "schemaUpdateMode": "ForceSync",
         //     "port": 7049
         // },
-        {
-            "name": "TEST_MC",
-            "request": "launch",
-            "type": "al",
-            "environmentType": "OnPrem",
-            "server": "https://businesscentraltest.sag-schlagbaum.com/TEST_MC/",
-            "serverInstance": "TEST_MC",
-            "authentication": "UserPassword",
-            "startupObjectType": "Page",
-            "startupObjectId": 110025,
-            "breakOnError": true,
-            "launchBrowser": true,
-            "enableLongRunningSqlStatements": true,
-            "enableSqlInformationDebugger": true,
-            "tenant": "default",
-            "schemaUpdateMode": "ForceSync"
-        }
+        // {
+        //     "name": "TEST_MC",
+        //     "request": "launch",
+        //     "type": "al",
+        //     "environmentType": "OnPrem",
+        //     "server": "https://businesscentraltest.sag-schlagbaum.com/TEST_MC/",
+        //     "serverInstance": "TEST_MC",
+        //     "authentication": "UserPassword",
+        //     "startupObjectType": "Page",
+        //     "startupObjectId": 110025,
+        //     "breakOnError": true,
+        //     "launchBrowser": true,
+        //     "enableLongRunningSqlStatements": true,
+        //     "enableSqlInformationDebugger": true,
+        //     "tenant": "default",
+        //     "schemaUpdateMode": "ForceSync"
+        // }
     
     ]
 }

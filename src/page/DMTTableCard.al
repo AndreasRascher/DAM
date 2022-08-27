@@ -60,7 +60,7 @@ page 110012 "DMTTableCard"
                     Caption = 'Data File Path', Comment = 'Datendatei Pfad';
                     ApplicationArea = All;
                     Importance = Promoted;
-                    StyleExpr = Rec.DataFilePathStyle;
+                    StyleExpr = DataFilePathStyleExpr;
                     trigger OnAssistEdit()
                     var
                         DMTMgt: Codeunit DMTMgt;
@@ -85,8 +85,8 @@ page 110012 "DMTTableCard"
                 }
                 field("NAV Schema File Status"; Rec."NAV Schema File Status") { ApplicationArea = All; }
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
 
             }
             part(Lines; DMTTableCardPart)
@@ -282,6 +282,7 @@ page 110012 "DMTTableCard"
         Rec.UpdateIndicators();
         Rec.TryFindExportDataFile();
         Rec.UpdateNAVSchemaFileStatus();
+        DataFilePathStyleExpr := Rec.DataFilePathStyle;
     end;
 
     trigger OnAfterGetRecord()
@@ -304,6 +305,8 @@ page 110012 "DMTTableCard"
     end;
 
     var
+        [InDataSet]
+        DataFilePathStyleExpr: Text;
         [InDataSet]
         UseXMLPortAndBufferTable, NAVDataSourcePropertiesVisible : Boolean;
 
