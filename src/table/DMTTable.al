@@ -41,12 +41,19 @@ table 110000 "DMTTable"
         {
             Caption = 'No. of Lines in Target Table', Comment = 'Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
-            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID")));
+            CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID"), "Company Name" = field(CompanyNameFilter)));
             Editable = false;
             trigger OnLookup()
             begin
                 ShowTableContent(Rec."Target Table ID");
             end;
+        }
+        field(32; "CompanyNameFilter"; Text[30])
+        {
+            Caption = 'Company Name Filter';
+            FieldClass = FlowFilter;
+            TableRelation = Company.Name;
+            Editable = false;
         }
         field(50; BufferTableType; Enum BufferTableType)
         {
@@ -94,6 +101,9 @@ table 110000 "DMTTable"
                 SetDataFilePath(DMTMgt.LookUpPath(Rec.GetDataFilePath(), false));
             end;
         }
+        field(54; "DataFile Size"; Integer) { Caption = 'Data File Size (Byte)', Comment = 'Dateigröße (Byte)'; }
+        field(55; "DataFile Created At"; DateTime) { Caption = 'Data File Created At', Comment = 'Datei erstellt am'; }
+
         #endregion SourceFileProperties
         field(60; "Import XMLPort ID"; Integer)
         {
@@ -136,6 +146,7 @@ table 110000 "DMTTable"
         field(103; LastView; Blob) { }
         field(104; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
         field(105; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
+        field(106; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; }
         field(202; LastImportBy; Code[50])
@@ -268,7 +279,7 @@ table 110000 "DMTTable"
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
             if not GenBuffTable.FilterByFileName(Rec.GetDataFilePathWithError()) then
                 exit(false);
-            GenBuffTable.ShowImportDataForFile(Rec.DataFileFolderPath);
+            GenBuffTable.ShowImportDataForFile(Rec.GetDataFilePath());
         end;
 
         if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
@@ -350,9 +361,17 @@ table 110000 "DMTTable"
 
     end;
 
+    procedure FindFileRec(File: Record File) Found: Boolean
+    begin
+        File.SetRange(Path, Rec.DataFileFolderPath);
+        File.SetRange(Name, Rec.DataFileName);
+        Found := File.FindFirst();
+    end;
+
     procedure SetDataFilePath(CurrPath: Text)
     var
         FileMgt: Codeunit "File Management";
+        File: Record File;
         FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', Comment = 'The path "%1" is not accessibly for the service tier';
     begin
         if CurrPath = '' then begin
@@ -369,7 +388,13 @@ table 110000 "DMTTable"
 
         if (CurrPath <> '') then begin
             if not FileMgt.ServerFileExists(CurrPath) then
-                Message(FileNotAccessibleFromServiceLabelMsg, DataFileFolderPath);
+                Message(FileNotAccessibleFromServiceLabelMsg, DataFileFolderPath)
+            else begin
+                if Rec.FindFileRec(File) then begin
+                    Rec."DataFile Size" := File.Size;
+                    Rec."DataFile Created At" := CreateDateTime(File.Date, File.Time);
+                end;
+            end;
         end;
     end;
 
@@ -408,7 +433,7 @@ table 110000 "DMTTable"
         FileMgt: Codeunit "File Management";
         FilePath: Text;
     begin
-        if (Rec.DataFileFolderPath <> '') and FileMgt.ServerFileExists(Rec.DataFileFolderPath) then
+        if (Rec.GetDataFilePath() <> '') and FileMgt.ServerFileExists(Rec.GetDataFilePath()) then
             exit(true);
 
         DMTSetup.Get();
@@ -418,7 +443,7 @@ table 110000 "DMTTable"
         FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
         if FileMgt.ServerFileExists(FilePath) then begin
             FileExists := true;
-            Rec.DataFileFolderPath := CopyStr(FilePath, 1, MaxStrLen(Rec.DataFileFolderPath));
+            Rec.SetDataFilePath(FilePath);
             Rec.Modify();
         end else begin
             //Message(FilePath);
@@ -707,6 +732,41 @@ table 110000 "DMTTable"
     procedure OpenCardPage()
     begin
         Page.Run(Page::DMTTableCard, Rec);
+    end;
+
+    procedure ImportSelectedIntoBuffer(var DMTTable_SELECTED: Record DMTTable)
+    var
+        DMTTable: Record DMTTable;
+        Start: DateTime;
+        TableStart: DateTime;
+        Progress: Dialog;
+        FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
+        ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
+        ProgressMsg: Text;
+    begin
+        DMTTable_SELECTED.SetCurrentKey("Sort Order");
+        ProgressMsg := '==========================================\' +
+                       ImportFilesProgressMsg + '\' +
+                       '==========================================\';
+
+        DMTTable_SELECTED.FindSet(false, false);
+        REPEAT
+            ProgressMsg += '\' + DMTTable_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."Target Table ID") + '#';
+        UNTIL DMTTable_SELECTED.NEXT() = 0;
+
+        DMTTable_SELECTED.FindSet();
+        Start := CurrentDateTime;
+        Progress.Open(ProgressMsg);
+        repeat
+            TableStart := CurrentDateTime;
+            DMTTable := DMTTable_SELECTED;
+            Progress.Update(DMTTable_SELECTED."Target Table ID", 'Wird eingelesen');
+            DMTTable.ImportToBufferTable();
+            Commit();
+            Progress.Update(DMTTable_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
+        until DMTTable_SELECTED.Next() = 0;
+        Progress.Close();
+        Message(FinishedMsg, CurrentDateTime - Start);
     end;
 
     procedure UpdateIndicators()

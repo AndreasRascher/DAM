@@ -13,6 +13,7 @@ codeunit 110009 DMTImport
         StartImportForGenericBufferTable(DMTTable, IsUpdateTask);
 
         UpdateProcessingTime(DMTTable, start);
+        DMTTable.CalcFields("No. of Lines In Trgt. Table");
     end;
 
     procedure ProcessFullBuffer(var DMTTable: Record DMTTable; IsUpdateTask: Boolean)
@@ -40,7 +41,8 @@ codeunit 110009 DMTImport
                 BufferRef.Open(DMTTable."Buffer Table ID");
             end;
         Commit(); // Runmodal Dialog in Edit View
-        EditView(BufferRef, DMTTable);
+        if not EditView(BufferRef, DMTTable) then
+            exit;
         BufferRef.findset();
         DMTMgt.ProgressBar_Open(BufferRef, StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
                                                       ProgressBarText_FilterTok +
@@ -212,7 +214,7 @@ codeunit 110009 DMTImport
         if not TempDMTField_COLLECTION.findset() then
             exit; // Required for tables with only key fields
         repeat
-            TempDMTField_COLLECTION.CalcFields("Target Field Caption", "Source Field Caption");
+            TempDMTField_COLLECTION.CalcFields("Target Field Caption");
             case true of
                 (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::Ignore):
                     ;
@@ -279,20 +281,24 @@ codeunit 110009 DMTImport
         BuffNonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."Target Table ID", false /*exclude*/);
     end;
 
-    local procedure EditView(var BufferRef: RecordRef; var DMTTable: Record DMTTable)
+    local procedure EditView(var BufferRef: RecordRef; var DMTTable: Record DMTTable) Continue: Boolean
     begin
+        Continue := true; // Canceling the dialog should stop th process
 
         if NoUserInteraction then
-            exit;
+            exit(Continue);
 
         if BufferTableView = '' then begin
             if DMTTable.ReadTableLastView() <> '' then
                 BufferRef.SetView(DMTTable.ReadTableLastView());
 
             if not ShowRequestPageFilterDialog(BufferRef, DMTTable) then
-                exit;
+                exit(false);
             if BufferRef.HasFilter then begin
                 DMTTable.WriteTableLastView(BufferRef.GetView());
+                Commit();
+            end else begin
+                DMTTable.WriteTableLastView('');
                 Commit();
             end;
         end else begin

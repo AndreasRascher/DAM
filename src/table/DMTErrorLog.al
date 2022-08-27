@@ -46,6 +46,14 @@ table 110001 "DMTErrorLog"
         field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
         field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
         field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
+        field(52; DataFileFolderPath; Text[250])
+        {
+            Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei';
+        }
+        field(53; DataFileName; Text[250])
+        {
+            Caption = 'Data File Name', comment = 'Dateiname Exportdatei';
+        }
     }
 
     keys
@@ -60,7 +68,11 @@ table 110001 "DMTErrorLog"
     procedure AddEntryForLastError(FromRecRef: recordref; ToRecRef: RecordRef; DMTFields: Record "DMTField");
     var
         _DMTErrorlog: Record DMTErrorLog;
+        DMTTable: Record DMTTable;
     begin
+        DMTTable.Get(DMTFields."Target Table ID");
+        _DMTErrorlog.DataFileName := DMTTable.DataFileName;
+        _DMTErrorlog.DataFileFolderPath := DMTTable.DataFileFolderPath;
 
         _DMTErrorlog."From ID" := FromRecRef.RecordId;
         _DMTErrorlog."To ID" := ToRecRef.RecordId;
@@ -77,6 +89,7 @@ table 110001 "DMTErrorLog"
         _DMTErrorlog.ErrorCode := CopyStr(GETLASTERRORCODE, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
         _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
+
         _DMTErrorlog.INSERT(TRUE);
     end;
 

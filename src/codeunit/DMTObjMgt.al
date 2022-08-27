@@ -65,14 +65,13 @@ codeunit 110000 "DMTObjMgt"
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
                         if DMTTable.TryFindExportDataFile() then begin
-                            File.SetRange(Path, DMTTable.DataFileFolderPath);
-                            File.SetRange(Name, DMTTable.DataFileName);
-                            // lager than 100KB -> CSV
-                            if File.FindFirst() and ((File.Size / 1024) < 100) then
-                                DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")
-                            else
-                                DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
-                            DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+                            if DMTTable.FindFileRec(File) then
+                                // lager than 100KB -> CSV
+                                if ((File.Size / 1024) < 100) then
+                                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")
+                                else
+                                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+                            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
                             DMTTable.Modify();
                         end;
                         DMTField.InitForTargetTable(DMTTable);

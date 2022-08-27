@@ -210,9 +210,9 @@ table 110003 "DMTField"
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
         RoutingHeader: Record "Routing Header";
-        FixedAsset: Record "Fixed Asset";
-    // Vendor: Record Vendor;
-    // Customer: Record Customer;
+        GLSetup: Record "General Ledger Setup";
+        // Vendor: Record Vendor;
+        Customer: Record Customer;
     // Contact: Record Contact;
     // GLAccount: Record "G/L Account";
     // CustomerPostingGroup: Record "Customer Posting Group";
@@ -224,9 +224,13 @@ table 110003 "DMTField"
                 TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                 DMTFields2 := DMTFields;
                 case true of
+                    TargetField.FieldName IN ['VAT Registration No.']:
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                            DMTFields2."Validate Value" := false;
+                        end;
                     TargetField.FieldName IN ['Global Dimension 1 Code',
-                                              'Global Dimension 2 Code',
-                                              'VAT Registration No.']:
+                                              'Global Dimension 2 Code']:
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
@@ -234,13 +238,13 @@ table 110003 "DMTField"
                     (TargetField.FieldName IN ['Costing Method',
                                                'Tariff No.',
                                                'Base Unit of Measure',
-                                               'Indirect Cost %']):
+                                               'Indirect Cost %',
+                                               'Standard Cost']):
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;
                     (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                    (TargetField.FieldName IN ['Primary Contact No.',
-                                               'Contact']):
+                    (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
                         begin
                             DMTFields2."Validate Value" := false;
                         end;
@@ -250,7 +254,7 @@ table 110003 "DMTField"
                             DMTFields2."Validate Value" := false;
                         end;
                     (TargetField.TableNo IN [Database::Customer]) and
-                    (TargetField.FieldName IN ['Block Payment Tolerance', 'VAT Registration No.']):
+                    (TargetField.FieldName IN ['Block Payment Tolerance', 'Bill-to Customer No.']):
                         begin
                             DMTFields2."Validate Value" := false;
                         end;
@@ -293,6 +297,18 @@ table 110003 "DMTField"
                     (TargetField.TableNo = Database::"Fixed Asset") and (TargetField.FieldName in ['Budgeted Asset']):
                         begin
                             DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Company Information") and (TargetField.FieldName in ['IC Partner Code', 'IC Inbox Type', 'IC Inbox Details']):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"General Ledger Setup"):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Location") and (TargetField.FieldName IN ['ESCM In Behalf of Customer No.']):
+                        begin
+                            DMTFields2."Validate Value" := false;
                         end;
                 end;
 

@@ -11,8 +11,8 @@ page 110025 "DMTTableList2"
     DelayedInsert = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    ModifyAllowed = false;
-    PromotedActionCategoriesML = ENU = '1,2,3,Lines,Objects,View', DEU = '1,2,3,Zeilen,Objekte,Ansicht';
+    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,View', DEU = '1,2,3,Tabellen,Objekte,Ansicht';
+    RefreshOnActivate = true;
     // Editable = false;
 
     layout
@@ -34,9 +34,9 @@ page 110025 "DMTTableList2"
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
                 field(Folder; Rec.DataFileFolderPath) { ApplicationArea = All; }
                 field(FileName; Rec.DataFileName) { ApplicationArea = All; }
-                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; }
+                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
                 field(BufferTableType; rec.BufferTableType) { ApplicationArea = All; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
                 field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
             }
             repeater(ImportView)
@@ -55,20 +55,30 @@ page 110025 "DMTTableList2"
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field(ImportToBufferIndicator; ImportToBufferIndicator)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = ImportToBufferIndicatorStyle;
-                    Caption = 'Buffer Import';
-                }
-                field(ImportToTargetIndicator; ImportToTargetIndicator)
-                {
-                    ApplicationArea = All;
-                    StyleExpr = ImportToTargetIndicatorStyle;
-                    Caption = 'Target Import';
-                }
+                field(ImportToBufferIndicator; ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = ImportToBufferIndicatorStyle; }
+                field(ImportToTargetIndicator; ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
+                field("No. of Table Relations"; rec."Table Relations")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowTableRelations(Rec);
+                    end;
+                }
+                field("Unhandled Table Rel."; "Unhandled Table Rel.")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowUnhandledTableRelations(Rec);
+                    end;
+                }
             }
         }
     }
@@ -81,11 +91,13 @@ page 110025 "DMTTableList2"
                 Image = AllLines;
                 action(SelectTablesToAdd)
                 {
+                    Visible = SetupViewActive;
                     Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
                     Image = Add;
                     ApplicationArea = all;
                     Promoted = true;
                     PromotedCategory = Category4;
+                    PromotedOnly = true;
                     trigger OnAction()
                     var
                         ObjMgt: Codeunit DMTObjMgt;
@@ -93,22 +105,40 @@ page 110025 "DMTTableList2"
                         ObjMgt.AddSelectedTables();
                     end;
                 }
-                action(SelectTablesToAdd2)
+                action(DeleteMarkedLines)
                 {
-                    Caption = 'Add Tables2', Comment = 'Tab. hinzufügen';
-                    Image = Add;
+                    Visible = SetupViewActive;
+                    Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
+                    Image = DeleteRow;
                     ApplicationArea = all;
                     Promoted = true;
                     PromotedCategory = Category4;
+                    PromotedOnly = true;
                     trigger OnAction()
                     var
-                        ObjMgt: Codeunit DMTObjMgt;
+                        DMTTable: Record DMTTable;
                     begin
-                        ObjMgt.AddSelectedTables();
+                        if GetSelection(DMTTable) then
+                            DMTTable.DeleteAll(true);
                     end;
                 }
-
-
+                action(ImportBufferTables)
+                {
+                    Visible = not SetupViewActive;
+                    Image = ImportDatabase;
+                    Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
+                    ApplicationArea = all;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    trigger OnAction()
+                    var
+                        DMTTable_SELECTED: Record DMTTable;
+                    begin
+                        if GetSelection(DMTTable_SELECTED) then
+                            Rec.ImportSelectedIntoBuffer(DMTTable_SELECTED);
+                    end;
+                }
             }
             group(Objects)
             {
@@ -123,6 +153,36 @@ page 110025 "DMTTableList2"
                     trigger OnAction()
                     begin
                         Rec.DownloadAllALDataMigrationObjects();
+                    end;
+                }
+                action(UpdateTableRelationInfo)
+                {
+                    Image = Relationship;
+                    ApplicationArea = All;
+                    Caption = 'Update Missing Table Relations', Comment = 'Update der offenen Tabellenrelationen';
+                    trigger OnAction()
+                    var
+                        DMTTable: Record DMTTable;
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        if DMTTable.FindSet() then
+                            repeat
+                                DMTTable."Table Relations" := RelationsCheck.FindRelatedTableIDs(DMTTable).Count;
+                                DMTTable."Unhandled Table Rel." := RelationsCheck.FindUnhandledRelatedTableIDs(DMTTable).Count;
+                                DMTTable.Modify();
+                            until DMTTable.Next() = 0;
+                    end;
+                }
+                action(UpdateSortOrder)
+                {
+                    Image = BulletList;
+                    ApplicationArea = All;
+                    Caption = 'Update Sort Order', Comment = 'Update der Sortierung';
+                    trigger OnAction()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ProposeSortOrder();
                     end;
                 }
                 action(RenumberALObjects)
@@ -204,17 +264,73 @@ page 110025 "DMTTableList2"
             }
         }
     }
+    views
+    {
+        view(BufferTableTypeSeperate)
+        {
+            Caption = 'Seperate Buffer Table per CSV', Comment = 'Leere Puffertab.';
+            Filters = where(BufferTableType = const("Seperate Buffer Table per CSV"));
+        }
+        view(BufferTableTypeGeneric)
+        {
+            Caption = 'Generic Buffer Table for all Files', Comment = 'Gen. Puffertab.';
+            Filters = where(BufferTableType = const("Generic Buffer Table for all Files"));
+        }
+        view(EmptyBuffer)
+        {
+            Caption = 'Empty Buffer Table', Comment = 'Leere Puffertab.';
+            Filters = where("No.of Records in Buffer Table" = const(0));
+        }
+    }
 
     trigger OnAfterGetRecord()
     begin
         UpdateIndicators();
+        Rec.TryFindExportDataFile();
     end;
 
     trigger OnOpenPage()
     var
         DMTSetup: Record DMTSetup;
     begin
+        Rec.FilterGroup(2);
+        Rec.SetRange(CompanyNameFilter, CompanyName);
+        Rec.FilterGroup(0);
         DMTSetup.InsertWhenEmpty();
+    end;
+
+    local procedure UpdateIndicators()
+    begin
+        /* Import To Buffer */
+        ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        ImportToBufferIndicator := ' ';
+        case true of
+            (Rec."No.of Records in Buffer Table" = 0):
+                begin
+                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    ImportToBufferIndicator := '✘';
+                end;
+            (Rec."No.of Records in Buffer Table" > 0):
+                begin
+                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    ImportToBufferIndicator := '✔';
+                end;
+        end;
+        /* Import To Target */
+        ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        ImportToTargetIndicator := ' ';
+        case true of
+            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
+                begin
+                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    ImportToTargetIndicator := '✘';
+                end;
+            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
+                begin
+                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    ImportToTargetIndicator := '✔';
+                end;
+        end;
     end;
 
     var
