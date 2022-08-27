@@ -217,43 +217,7 @@ page 110025 "DMTTableList2"
         DMTSetup.InsertWhenEmpty();
     end;
 
-    local procedure UpdateIndicators()
-    begin
-        /* Import To Buffer */
-        ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        ImportToBufferIndicator := ' ';
-        case true of
-            (Rec."No.of Records in Buffer Table" = 0):
-                begin
-                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    ImportToBufferIndicator := '✘';
-                end;
-            (Rec."No.of Records in Buffer Table" > 0):
-                begin
-                    ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    ImportToBufferIndicator := '✔';
-                end;
-        end;
-        /* Import To Target */
-        ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        ImportToTargetIndicator := ' ';
-        case true of
-            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
-                begin
-                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    ImportToTargetIndicator := '✘';
-                end;
-            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
-                begin
-                    ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    ImportToTargetIndicator := '✔';
-                end;
-        end;
-    end;
-
     var
         [InDataSet]
-        SetupViewActive: Boolean;
-        ImportToBufferIndicatorStyle, ImportToTargetIndicatorStyle : Text;
-        ImportToBufferIndicator, ImportToTargetIndicator : Char;
+        SetupViewActive, ShowSetup : Boolean;
 }

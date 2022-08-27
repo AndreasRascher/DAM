@@ -22,10 +22,10 @@ page 110014 "DMTTableList"
                 field("To Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; Editable = false; }
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; Visible = false; }
                 field("To Table ID"; Rec."Target Table ID") { ApplicationArea = All; Visible = false; Editable = false; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = BufferTableIDStyle; }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = ImportXMLPortIDStyle; }
-                field(ExportFileFolderPath; Rec.DataFileFolderPath) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
-                field(ExportFileName; Rec.DataFileName) { ApplicationArea = All; StyleExpr = DataFilePathStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
+                field(ExportFileFolderPath; Rec.DataFileFolderPath) { ApplicationArea = All; StyleExpr = Rec.DataFilePathStyle; }
+                field(ExportFileName; Rec.DataFileName) { ApplicationArea = All; StyleExpr = Rec.DataFilePathStyle; }
                 field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; Visible = false; }
                 field("Data Source Type"; Rec."Data Source Type") { ApplicationArea = All; Visible = false; }
                 field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; Editable = false; }
@@ -231,23 +231,8 @@ page 110014 "DMTTableList"
     end;
 
     trigger OnAfterGetRecord()
-    var
-        AllObj: Record AllObjWithCaption;
     begin
-        ImportXMLPortIDStyle := 'Unfavorable';
-        BufferTableIDStyle := 'Unfavorable';
-        DataFilePathStyle := 'Unfavorable';
-        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            clear(ImportXMLPortIDStyle);
-            clear(BufferTableIDStyle);
-        end;
-        if AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID") then
-            ImportXMLPortIDStyle := 'Favorable';
-        if AllObj.Get(AllObj."Object Type"::Table, Rec."Buffer Table ID") then
-            BufferTableIDStyle := 'Favorable';
-        if Rec.TryFindExportDataFile() then
-            DataFilePathStyle := 'Favorable';
-
+        Rec.UpdateIndicators();
     end;
 
     trigger OnPageBackgroundTaskCompleted(TaskId: Integer; Results: Dictionary of [Text, Text])
@@ -276,8 +261,6 @@ page 110014 "DMTTableList"
     end;
 
     var
-        [InDataSet]
-        ImportXMLPortIDStyle, BufferTableIDStyle, DataFilePathStyle : Text;
         MyTaskId: Integer;
 
 }

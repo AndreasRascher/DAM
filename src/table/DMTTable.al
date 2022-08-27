@@ -145,6 +145,14 @@ table 110000 "DMTTable"
             TableRelation = User."User Name";
         }
         field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
+        field(300; ImportToBufferIndicator; Text[1]) { }
+        field(301; ImportToBufferIndicatorStyle; Text[15]) { }
+        field(302; ImportToTargetIndicator; Text[1]) { }
+        field(303; ImportToTargetIndicatorStyle; Text[15]) { }
+        field(304; ImportXMLPortIDStyle; Text[15]) { }
+        field(305; BufferTableIDStyle; Text[15]) { }
+        field(306; DataFilePathStyle; Text[15]) { }
+
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
         field(41; "NAV Schema File Status"; Option)
@@ -355,8 +363,8 @@ table 110000 "DMTTable"
         // Remove quotes from path 
         CurrPath := CurrPath.TrimEnd('"').TrimStart('"');
         if CurrPath <> '' then begin
-            Rec.DataFileFolderPath := FileMgt.GetDirectoryName(CurrPath);
-            Rec.DataFileName := FileMgt.GetFileName(CurrPath);
+            Rec.DataFileFolderPath := CopyStr(FileMgt.GetDirectoryName(CurrPath), 1, MaxstrLen(Rec.DataFileFolderPath));
+            Rec.DataFileName := CopyStr(FileMgt.GetFileName(CurrPath), 1, MaxStrLen(Rec.DataFileName));
         end;
 
         if (CurrPath <> '') then begin
@@ -700,4 +708,61 @@ table 110000 "DMTTable"
     begin
         Page.Run(Page::DMTTableCard, Rec);
     end;
+
+    procedure UpdateIndicators()
+    begin
+        UpdateIndicator_ImportToBuffer();
+        UpdateIndicator_ImportToTarget();
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            clear(Rec.ImportXMLPortIDStyle);
+            clear(Rec.BufferTableIDStyle);
+        end else begin
+            Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if Rec.ImportXMLPortExits() then
+                Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if Rec.CustomBufferTableExits() then
+                Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+        end;
+        DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+        if Rec.TryFindExportDataFile() then
+            DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+    end;
+
+    local procedure UpdateIndicator_ImportToBuffer()
+    begin
+        Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        Rec.ImportToBufferIndicator := ' ';
+        case true of
+            (Rec."No.of Records in Buffer Table" = 0):
+                begin
+                    Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    Rec.ImportToBufferIndicator := '✘';
+                end;
+            (Rec."No.of Records in Buffer Table" > 0):
+                begin
+                    Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    Rec.ImportToBufferIndicator := '✔';
+                end;
+        end;
+    end;
+
+    local procedure UpdateIndicator_ImportToTarget()
+    begin
+        Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        Rec.ImportToTargetIndicator := ' ';
+        case true of
+            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
+                begin
+                    Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    Rec.ImportToTargetIndicator := '✘';
+                end;
+            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
+                begin
+                    Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    Rec.ImportToTargetIndicator := '✔';
+                end;
+        end;
+    end;
+
 }

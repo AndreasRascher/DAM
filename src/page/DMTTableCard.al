@@ -50,7 +50,7 @@ page 110012 "DMTTableCard"
                     end;
                 }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
-                field("Import Only New Records"; "Import Only New Records") { ApplicationArea = All; }
+                field("Import Only New Records"; Rec."Import Only New Records") { ApplicationArea = All; }
             }
 
             group(Paths)
@@ -60,6 +60,7 @@ page 110012 "DMTTableCard"
                     Caption = 'Data File Path', Comment = 'Datendatei Pfad';
                     ApplicationArea = All;
                     Importance = Promoted;
+                    StyleExpr = Rec.DataFilePathStyle;
                     trigger OnAssistEdit()
                     var
                         DMTMgt: Codeunit DMTMgt;
@@ -273,12 +274,7 @@ page 110012 "DMTTableCard"
 
     trigger OnAfterGetCurrRecord()
     begin
-        ImportXMLPortIDStyle := 'Unfavorable';
-        BufferTableIDStyle := 'Unfavorable';
-        if Rec.ImportXMLPortExits() then
-            ImportXMLPortIDStyle := 'Favorable';
-        if Rec.CustomBufferTableExits() then
-            BufferTableIDStyle := 'Favorable';
+        Rec.UpdateIndicators();
         Rec.TryFindExportDataFile();
         Rec.UpdateNAVSchemaFileStatus();
     end;
@@ -304,8 +300,6 @@ page 110012 "DMTTableCard"
 
     var
         FileRec: Record File;
-        [InDataSet]
-        ImportXMLPortIDStyle, BufferTableIDStyle : Text;
         [InDataSet]
         UseXMLPortAndBufferTable, NAVDataSourcePropertiesVisible : Boolean;
 

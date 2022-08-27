@@ -1633,6 +1633,11 @@
           <note from="Developer" annotates="general" priority="2">Puffertabelle ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Buffer Table ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 4034769312 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BufferTableIDStyle</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableIDStyle - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 2352204874 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table Type</source>
           <note from="Developer" annotates="general" priority="2">Puffertabellenart</note>
@@ -1653,6 +1658,11 @@
           <note from="Developer" annotates="general" priority="2">Dateiname Exportdatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFileName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 557242229 - Field 93283288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DataFilePathStyle</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFilePathStyle - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 557242229 - Field 739200694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Duration (Longest)</source>
           <note from="Developer" annotates="general" priority="2">Import Dauer (Längste)</note>
@@ -1667,6 +1677,31 @@
           <source>Import XMLPortID</source>
           <note from="Developer" annotates="general" priority="2">XMLPort ID für Import</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Import XMLPort ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 4225240329 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportToBufferIndicator</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToBufferIndicator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 321274548 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportToBufferIndicatorStyle</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToBufferIndicatorStyle - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 109950602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportToTargetIndicator</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToTargetIndicator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3380134587 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportToTargetIndicatorStyle</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToTargetIndicatorStyle - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3225662489 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportXMLPortIDStyle</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportXMLPortIDStyle - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Field Update Selection</source>
