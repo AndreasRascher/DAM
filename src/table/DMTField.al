@@ -238,7 +238,8 @@ table 110003 "DMTField"
                     (TargetField.FieldName IN ['Costing Method',
                                                'Tariff No.',
                                                'Base Unit of Measure',
-                                               'Indirect Cost %']):
+                                               'Indirect Cost %',
+                                               'Standard Cost']):
                         begin
                             DMTFields2."Use Try Function" := false;
                         end;

@@ -293,7 +293,9 @@ page 110025 "DMTTableList2"
     var
         DMTSetup: Record DMTSetup;
     begin
+        Rec.FilterGroup(2);
         Rec.SetRange(CompanyNameFilter, CompanyName);
+        Rec.FilterGroup(0);
         DMTSetup.InsertWhenEmpty();
     end;
 

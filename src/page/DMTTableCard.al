@@ -271,7 +271,9 @@ page 110012 "DMTTableCard"
         fileMgt: Codeunit "File Management";
     begin
         Rec.InitOrRefreshFieldSortOrder();
-        Rec.setrange(CompanyNameFilter, CompanyName);
+        Rec.FilterGroup(2);
+        Rec.SetRange(CompanyNameFilter, CompanyName);
+        Rec.FilterGroup(0);
     end;
 
     trigger OnAfterGetCurrRecord()
