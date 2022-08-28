@@ -11,7 +11,7 @@ page 110025 "DMTTableList2"
     DelayedInsert = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,View', DEU = '1,2,3,Tabellen,Objekte,Ansicht';
+    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,Migration', DEU = '1,2,3,Tabellen,Objekte,Migration';
     RefreshOnActivate = true;
     // Editable = false;
 
@@ -79,153 +79,169 @@ page 110025 "DMTTableList2"
     }
     actions
     {
-        area(Navigation)
+        area(Processing)
         {
-            group(MarkedLines)
+            #region Tabellen
+            action(SelectTablesToAdd)
             {
-                Image = AllLines;
-                action(SelectTablesToAdd)
-                {
-                    Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
-                    Image = Add;
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category4;
-                    PromotedOnly = true;
-                    trigger OnAction()
-                    var
-                        ObjMgt: Codeunit DMTObjMgt;
-                    begin
-                        ObjMgt.AddSelectedTables();
-                    end;
-                }
-                action(DeleteMarkedLines)
-                {
-                    Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
-                    Image = DeleteRow;
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category4;
-                    PromotedOnly = true;
-                    trigger OnAction()
-                    var
-                        DMTTable: Record DMTTable;
-                    begin
-                        if GetSelection(DMTTable) then
-                            DMTTable.DeleteAll(true);
-                    end;
-                }
-                action(ImportBufferTables)
-                {
-                    Image = ImportDatabase;
-                    Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category4;
-                    PromotedOnly = true;
-                    trigger OnAction()
-                    var
-                        DMTTable_SELECTED: Record DMTTable;
-                    begin
-                        if GetSelection(DMTTable_SELECTED) then
-                            Rec.ImportSelectedIntoBuffer(DMTTable_SELECTED);
-                    end;
-                }
+                Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
+                Image = Add;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category4;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    PageActions.AddSelectedTargetTables();
+                end;
             }
-            group(Objects)
+            action(DeleteMarkedLines)
             {
-                Image = Action;
-                action(ExportALObjects)
-                {
-                    Image = ExportFile;
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category5;
-                    Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
-                    trigger OnAction()
-                    begin
-                        Rec.DownloadAllALDataMigrationObjects();
-                    end;
-                }
-                action(UpdateTableRelationInfo)
-                {
-                    Image = Relationship;
-                    ApplicationArea = All;
-                    Caption = 'Update Missing Table Relations', Comment = 'Update der offenen Tabellenrelationen';
-                    trigger OnAction()
-                    var
-                        DMTTable: Record DMTTable;
-                        RelationsCheck: Codeunit DMTRelationsCheck;
-                    begin
-                        if DMTTable.FindSet() then
-                            repeat
-                                DMTTable."Table Relations" := RelationsCheck.FindRelatedTableIDs(DMTTable).Count;
-                                DMTTable."Unhandled Table Rel." := RelationsCheck.FindUnhandledRelatedTableIDs(DMTTable).Count;
-                                DMTTable.Modify();
-                            until DMTTable.Next() = 0;
-                    end;
-                }
-                action(UpdateSortOrder)
-                {
-                    Image = BulletList;
-                    ApplicationArea = All;
-                    Caption = 'Update Sort Order', Comment = 'Update der Sortierung';
-                    trigger OnAction()
-                    var
-                        RelationsCheck: Codeunit DMTRelationsCheck;
-                    begin
-                        RelationsCheck.ProposeSortOrder();
-                    end;
-                }
-                action(RenumberALObjects)
-                {
-                    Image = NumberGroup;
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category5;
-                    Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
-                    trigger OnAction()
-                    begin
-                        Rec.RenumberALObjects();
-                    end;
-                }
-                action(RenewObjectIdAssignments)
-                {
-                    Image = NumberGroup;
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category5;
-                    Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
-                    trigger OnAction()
-                    begin
-                        Rec.RenewObjectIdAssignments();
-                    end;
-                }
-                action(GetToTableIDFilter)
-                {
-                    Image = FilterLines;
-                    Caption = 'To Table ID Filter', Comment = 'Zieltabellen-ID Filter';
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category5;
-                    trigger OnAction()
-                    begin
-                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
-                    end;
-                }
-                action(GetFromTableIDFilter)
-                {
-                    Image = FilterLines;
-                    Caption = 'From Table ID Filter', Comment = 'Herkunftstabellen-ID Filter';
-                    ApplicationArea = all;
-                    Promoted = true;
-                    PromotedCategory = Category5;
-                    trigger OnAction()
-                    begin
-                        Message(Rec.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
-                    end;
-                }
+                Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
+                Image = DeleteRow;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category4;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(DMTTable_SELECTED);
+                    PageActions.DeleteSelectedTargetTables(DMTTable_SELECTED);
+                end;
             }
+            #endregion Tabellen
+
+            #region Objekte
+            action(ExportALObjects)
+            {
+                Image = ExportFile;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
+                trigger OnAction()
+                begin
+                    PageActions.DownloadAllALDataMigrationObjects();
+                end;
+            }
+            action(RenumberALObjects)
+            {
+                Image = NumberGroup;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
+                trigger OnAction()
+                begin
+                    Rec.RenumberALObjects();
+                end;
+            }
+            action(RenewObjectIdAssignments)
+            {
+                Image = NumberGroup;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
+                trigger OnAction()
+                begin
+                    PageActions.RenewObjectIdAssignments();
+                end;
+            }
+            #endregion Objekte
+
+            #region Migration
+            action(ImportBufferTables)
+            {
+                Image = ImportDatabase;
+                Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category6;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(DMTTable_SELECTED);
+                    PageActions.ImportSelectedIntoBuffer(DMTTable_SELECTED);
+                end;
+            }
+            action(ProposeMatchingFields)
+            {
+                Caption = 'Popose Matching Fields', comment = 'Feldzuordnung vorschlagen';
+                ApplicationArea = All;
+                Image = SuggestField;
+                trigger OnAction()
+                begin
+                    GetSelection(DMTTable_SELECTED);
+                    PageActions.ProposeMatchingFieldsForSelection(DMTTable_SELECTED);
+                end;
+            }
+            action(TransferSelectedToTargetTable)
+            {
+                Image = TransferToLines;
+                ApplicationArea = all;
+                Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
+                trigger OnAction()
+                begin
+                    GetSelection(DMTTable_SELECTED);
+                    PageActions.ImportSelectedIntoTarget(DMTTable_SELECTED);
+                end;
+            }
+            #endregion Migration
+
+
+            action(UpdateTableRelationInfo)
+            {
+                Image = Relationship;
+                ApplicationArea = All;
+                Caption = 'Update Missing Table Relations', Comment = 'Update der offenen Tabellenrelationen';
+                trigger OnAction()
+                var
+                    DMTTable: Record DMTTable;
+                    RelationsCheck: Codeunit DMTRelationsCheck;
+                begin
+                    if DMTTable.FindSet() then
+                        repeat
+                            DMTTable."Table Relations" := RelationsCheck.FindRelatedTableIDs(DMTTable).Count;
+                            DMTTable."Unhandled Table Rel." := RelationsCheck.FindUnhandledRelatedTableIDs(DMTTable).Count;
+                            DMTTable.Modify();
+                        until DMTTable.Next() = 0;
+                end;
+            }
+            action(UpdateSortOrder)
+            {
+                Image = BulletList;
+                ApplicationArea = All;
+                Caption = 'Update Sort Order', Comment = 'Update der Sortierung';
+                trigger OnAction()
+                var
+                    RelationsCheck: Codeunit DMTRelationsCheck;
+                begin
+                    RelationsCheck.ProposeSortOrder();
+                end;
+            }
+
+            action(GetToTableIDFilter)
+            {
+                Image = FilterLines;
+                Caption = 'To Table ID Filter', Comment = 'Zieltabellen-ID Filter';
+                ApplicationArea = all;
+                trigger OnAction()
+                begin
+                    Message(Rec.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
+                end;
+            }
+            action(GetFromTableIDFilter)
+            {
+                Image = FilterLines;
+                Caption = 'From Table ID Filter', Comment = 'Herkunftstabellen-ID Filter';
+                ApplicationArea = all;
+                trigger OnAction()
+                begin
+                    Message(Rec.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
+                end;
+            }
+
         }
     }
     views
@@ -271,4 +287,6 @@ page 110025 "DMTTableList2"
     var
         [InDataSet]
         ShowSetup: Boolean;
+        PageActions: Codeunit DMTPageActions;
+        DMTTable_SELECTED: Record DMTTable;
 }

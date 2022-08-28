@@ -355,10 +355,8 @@ table 110000 "DMTTable"
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
         if not DMTFields.FilterBy(Rec) then begin
             DMTFields.InitForTargetTable(Rec);
-            // DMTFields.ProposeMatchingTargetFields(Rec);
             DMTFields.AssignSourceToTargetFields(Rec);
         end;
-
     end;
 
     procedure FindFileRec(File: Record File) Found: Boolean
@@ -496,47 +494,6 @@ table 110000 "DMTTable"
         Name := StrSubstNo('XMLPORT %1 - T%2Import.al', Rec."Import XMLPort ID", "NAV Src.Table No.");
     end;
 
-    procedure DownloadAllALDataMigrationObjects()
-    var
-        DMTTable: Record DMTTable;
-        DataCompression: Codeunit "Data Compression";
-        ObjGen: Codeunit DMTObjectGenerator;
-        FileBlob: Codeunit "Temp Blob";
-        IStr: InStream;
-        OStr: OutStream;
-        toFileName: text;
-        DefaultTextEncoding: TextEncoding;
-    begin
-        DefaultTextEncoding := TextEncoding::UTF8;
-        // DefaultTextEncoding := TextEncoding::MSDos;
-        // DefaultTextEncoding := TextEncoding::UTF16;
-        // DefaultTextEncoding := TextEncoding::Windows;
-        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
-        if DMTTable.FindSet() then begin
-            DataCompression.CreateZipArchive();
-            repeat
-                //Table
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALTable(DMTTable).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, DMTTable.GetALBufferTableName());
-                //XMLPort
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALXMLPort(DMTTable).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, DMTTable.GetALXMLPortName());
-            until DMTTable.Next() = 0;
-        end;
-        Clear(FileBlob);
-        FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-        DataCompression.SaveZipArchive(OStr);
-        FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-        toFileName := 'BufferTablesAndXMLPorts.zip';
-        DownloadFromStream(iStr, 'Download', 'ToFolder', format(Enum::DMTFileFilter::ZIP), toFileName);
-    end;
-
     procedure WriteTableLastView(TableView: Text)
     var
         OStr: OutStream;
@@ -668,18 +625,6 @@ table 110000 "DMTTable"
             until DMTTable.Next() = 0;
     end;
 
-    internal procedure RenewObjectIdAssignments()
-    var
-        DMTTable: Record DMTTable;
-    begin
-        DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
-        if DMTTable.FindSet() then
-            repeat
-                DMTTable.TryFindBufferTableID(true);
-                DMTTable.TryFindXMLPortID(true);
-            until DMTTable.Next() = 0;
-    end;
-
     internal procedure GetDataFilePath() Path: Text
     var
         FileMgt: Codeunit "File Management";
@@ -739,41 +684,6 @@ table 110000 "DMTTable"
     procedure OpenCardPage()
     begin
         Page.Run(Page::DMTTableCard, Rec);
-    end;
-
-    procedure ImportSelectedIntoBuffer(var DMTTable_SELECTED: Record DMTTable)
-    var
-        DMTTable: Record DMTTable;
-        Start: DateTime;
-        TableStart: DateTime;
-        Progress: Dialog;
-        FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
-        ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
-        ProgressMsg: Text;
-    begin
-        DMTTable_SELECTED.SetCurrentKey("Sort Order");
-        ProgressMsg := '==========================================\' +
-                       ImportFilesProgressMsg + '\' +
-                       '==========================================\';
-
-        DMTTable_SELECTED.FindSet(false, false);
-        REPEAT
-            ProgressMsg += '\' + DMTTable_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."Target Table ID") + '#';
-        UNTIL DMTTable_SELECTED.NEXT() = 0;
-
-        DMTTable_SELECTED.FindSet();
-        Start := CurrentDateTime;
-        Progress.Open(ProgressMsg);
-        repeat
-            TableStart := CurrentDateTime;
-            DMTTable := DMTTable_SELECTED;
-            Progress.Update(DMTTable_SELECTED."Target Table ID", 'Wird eingelesen');
-            DMTTable.ImportToBufferTable();
-            Commit();
-            Progress.Update(DMTTable_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
-        until DMTTable_SELECTED.Next() = 0;
-        Progress.Close();
-        Message(FinishedMsg, CurrentDateTime - Start);
     end;
 
     procedure UpdateIndicators()

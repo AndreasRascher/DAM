@@ -1628,16 +1628,6 @@
           <note from="Developer" annotates="general" priority="2">Der Dateipfad wurde nicht definiert.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method GetDataFilePathWithError - NamedType FilePathEmptyErr</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Method 2406207420 - NamedType 563229157" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Processing finished\Duration %1</source>
-          <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportSelectedIntoBuffer - NamedType FinishedMsg</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Method 2406207420 - NamedType 1757551544" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Reading files into buffer tables</source>
-          <note from="Developer" annotates="general" priority="2">Dateien werden eingelesen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ImportSelectedIntoBuffer - NamedType ImportFilesProgressMsg</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1912,6 +1902,16 @@
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3621685117 - Method 2406207420 - NamedType 563229157" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing finished\Duration %1</source>
+          <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTPageActions - Method ImportSelectedIntoBuffer - NamedType FinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3621685117 - Method 2406207420 - NamedType 1757551544" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reading files into buffer tables</source>
+          <note from="Developer" annotates="general" priority="2">Dateien werden eingelesen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTPageActions - Method ImportSelectedIntoBuffer - NamedType ImportFilesProgressMsg</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
@@ -2353,16 +2353,6 @@
           <note from="Developer" annotates="general" priority="2">Markiert Zeilen löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action DeleteMarkedLines - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3374423421 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Read files into buffer tables (marked lines)</source>
-          <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action ImportBufferTables - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 3374423421 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add Tables</source>
-          <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action SelectTablesToAdd - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3374423421 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download buffer table objects</source>
           <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
@@ -2378,6 +2368,16 @@
           <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action GetToTableIDFilter - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read files into buffer tables (marked lines)</source>
+          <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action ImportBufferTables - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Popose Matching Fields</source>
+          <note from="Developer" annotates="general" priority="2">Feldzuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action ProposeMatchingFields - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3374423421 - Action 47655189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Renew object id assignments</source>
           <note from="Developer" annotates="general" priority="2">Objekt-IDs neu zuordnen</note>
@@ -2387,6 +2387,16 @@
           <source>Renumber AL Objects</source>
           <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action RenumberALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 2645018433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add Tables</source>
+          <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action SelectTablesToAdd - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3374423421 - Action 3691651546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to target tables (marked lines)</source>
+          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action TransferSelectedToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 2531305551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Sort Order</source>

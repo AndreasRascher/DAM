@@ -57,16 +57,9 @@ page 110013 "DMTTableCardPart"
                 Caption = 'Popose Matching Fields', comment = 'Feldzuordnung vorschlagen';
                 ApplicationArea = All;
                 Image = SuggestField;
-
                 trigger OnAction()
-                var
-                    DMTFields: Record "DMTField";
-                    DMTTable: Record DMTTable;
                 begin
-                    DMTTable.Get(Rec.GetRangeMin(rec."Target Table ID"));
-                    // DMTFields.ProposeMatchingTargetFields(DMTTable);
-                    DMTFields.AssignSourceToTargetFields(DMTTable);
-                    DMTFields.ProposeValidationRules(DMTTable);
+                    PageActions.ProposeMatchingFields(Rec);
                 end;
             }
             group(ChangeValidationOrder)
@@ -257,4 +250,5 @@ page 110013 "DMTTableCardPart"
         HideFromFieldInfo: Boolean;
         [InDataSet]
         LineStyleExpr: text;
+        PageActions: Codeunit DMTPageActions;
 }
