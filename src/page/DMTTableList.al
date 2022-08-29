@@ -90,7 +90,7 @@ page 110014 "DMTTableList"
                     Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
                     trigger OnAction()
                     begin
-                        Rec.DownloadAllALDataMigrationObjects();
+                        PageActions.DownloadAllALDataMigrationObjects();
                     end;
                 }
                 action(RenumberALObjects)
@@ -110,7 +110,7 @@ page 110014 "DMTTableList"
                     Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
                     trigger OnAction()
                     begin
-                        Rec.RenewObjectIdAssignments();
+                        PageActions.RenewObjectIdAssignments();
                     end;
                 }
                 action(GetToTableIDFilter)
@@ -221,5 +221,6 @@ page 110014 "DMTTableList"
 
     var
         MyTaskId: Integer;
+        PageActions: Codeunit DMTPageActions;
 
 }

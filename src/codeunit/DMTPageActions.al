@@ -145,7 +145,6 @@ codeunit 110010 "DMTPageActions"
     var
         DMTField: Record DMTField;
     begin
-        DMTTable.Get(DMTField.GetRangeMin(DMTField."Target Table ID"));
         DMTField.AssignSourceToTargetFields(DMTTable);
         DMTField.ProposeValidationRules(DMTTable);
     end;
