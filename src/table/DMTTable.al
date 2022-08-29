@@ -156,13 +156,13 @@ table 110000 "DMTTable"
             TableRelation = User."User Name";
         }
         field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
-        field(300; ImportToBufferIndicator; Text[1]) { }
-        field(301; ImportToBufferIndicatorStyle; Text[15]) { }
-        field(302; ImportToTargetIndicator; Text[1]) { }
-        field(303; ImportToTargetIndicatorStyle; Text[15]) { }
-        field(304; ImportXMLPortIDStyle; Text[15]) { }
-        field(305; BufferTableIDStyle; Text[15]) { }
-        field(306; DataFilePathStyle; Text[15]) { }
+        field(300; ImportToBufferIndicator; Text[1]) { Caption = 'ImportToBufferIndicator', Locked = true; }
+        field(301; ImportToBufferIndicatorStyle; Text[15]) { Caption = 'ImportToBufferIndicatorStyle', Locked = true; }
+        field(302; ImportToTargetIndicator; Text[1]) { Caption = 'ImportToTargetIndicator', Locked = true; }
+        field(303; ImportToTargetIndicatorStyle; Text[15]) { Caption = 'ImportToTargetIndicatorStyle', Locked = true; }
+        field(304; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; }
+        field(305; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; }
+        field(306; DataFilePathStyle; Text[15]) { Caption = 'DataFilePathStyle', Locked = true; }
 
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
@@ -359,7 +359,7 @@ table 110000 "DMTTable"
         end;
     end;
 
-    procedure FindFileRec(File: Record File) Found: Boolean
+    procedure FindFileRec(var File: Record File) Found: Boolean
     begin
         File.SetRange(Path, Rec.DataFileFolderPath);
         File.SetRange(Name, Rec.DataFileName);
@@ -368,8 +368,8 @@ table 110000 "DMTTable"
 
     procedure SetDataFilePath(CurrPath: Text)
     var
-        FileMgt: Codeunit "File Management";
         File: Record File;
+        FileMgt: Codeunit "File Management";
         FileNotAccessibleFromServiceLabelMsg: TextConst DEU = 'Der Pfad "%1" konnte vom Service Tier nicht erreicht werden', Comment = 'The path "%1" is not accessibly for the service tier';
     begin
         if CurrPath = '' then begin
@@ -430,9 +430,15 @@ table 110000 "DMTTable"
         DMTSetup: Record "DMTSetup";
         FileMgt: Codeunit "File Management";
         FilePath: Text;
+        FileRec: Record File;
     begin
-        if (Rec.GetDataFilePath() <> '') and FileMgt.ServerFileExists(Rec.GetDataFilePath()) then
+        if (Rec.GetDataFilePath() <> '') and FileMgt.ServerFileExists(Rec.GetDataFilePath()) then begin
+            if Rec.FindFileRec(FileRec) then begin
+                Rec."DataFile Size" := FileRec.Size;
+                Rec."DataFile Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+            end;
             exit(true);
+        end;
 
         DMTSetup.Get();
         if DMTSetup."Default Export Folder Path" = '' then

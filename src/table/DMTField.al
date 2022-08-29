@@ -122,6 +122,10 @@ table 110003 "DMTField"
             Caption = 'Buffer Table Type Filter', comment = 'Puffertabellenart Filter';
             FieldClass = FlowFilter;
         }
+        field(200; Comment; Text[250])
+        {
+            Caption = 'Comment', Comment = 'Bemerkung';
+        }
     }
 
     keys
@@ -209,6 +213,7 @@ table 110003 "DMTField"
         DMTFields: Record "DMTField";
         DMTFields2: Record "DMTField";
         ProdBOMHeader: Record "Production BOM Header";
+        ProdBOMVersion: Record "Production BOM Version";
         RoutingHeader: Record "Routing Header";
         GLSetup: Record "General Ledger Setup";
         // Vendor: Record Vendor;
@@ -272,6 +277,12 @@ table 110003 "DMTField"
                         begin
                             ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
                             DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
+                        end;
+                    (TargetField.TableNo = Database::"Production BOM Version") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            ProdBOMVersion.Status := ProdBOMVersion.Status::"Under Development";
+                            DMTFields2.Validate("Fixed Value", Format(ProdBOMVersion.Status));
                         end;
                     (TargetField.TableNo = Database::"Routing Header") and
                     (TargetField.FieldName IN ['Status']):

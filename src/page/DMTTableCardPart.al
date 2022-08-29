@@ -29,6 +29,7 @@ page 110013 "DMTTableCardPart"
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
                 field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; }
                 field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; Visible = false; }
+                field(Comment; Rec.Comment) { ApplicationArea = All; }
             }
         }
     }
@@ -246,9 +247,9 @@ page 110013 "DMTTableCardPart"
     end;
 
     Var
+        PageActions: Codeunit DMTPageActions;
         [InDataSet]
         HideFromFieldInfo: Boolean;
         [InDataSet]
         LineStyleExpr: text;
-        PageActions: Codeunit DMTPageActions;
 }

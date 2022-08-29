@@ -26,6 +26,7 @@ page 110025 "DMTTableList2"
                 {
                     ApplicationArea = All;
                     Caption = 'Zieltab. ID';
+                    Editable = false; // LookUp
                     trigger OnDrillDown()
                     begin
                         Rec.OpenCardPage();
@@ -285,8 +286,8 @@ page 110025 "DMTTableList2"
     end;
 
     var
+        DMTTable_SELECTED: Record DMTTable;
+        PageActions: Codeunit DMTPageActions;
         [InDataSet]
         ShowSetup: Boolean;
-        PageActions: Codeunit DMTPageActions;
-        DMTTable_SELECTED: Record DMTTable;
 }

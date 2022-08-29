@@ -24,6 +24,8 @@ codeunit 110009 DMTImport
         BufferRef, BufferRef2 : RecordRef;
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
+        ProgressBarTitle: Text;
+        MaxWith: Integer;
     begin
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTTable);
         LoadFieldMapping(DMTTable, IsUpdateTask, TempDMTField_COLLECTION);
@@ -44,12 +46,18 @@ codeunit 110009 DMTImport
         if not EditView(BufferRef, DMTTable) then
             exit;
         BufferRef.findset();
-        DMTMgt.ProgressBar_Open(BufferRef, StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
-                                                      ProgressBarText_FilterTok +
-                                                      ProgressBarText_RecordTok +
-                                                      ProgressBarText_DurationTok +
-                                                      ProgressBarText_ProgressTok +
-                                                      ProgressBarText_TimeRemainingTok);
+        ProgressBarTitle := BufferRef.Caption;
+        if Strlen(ProgressBarTitle) < MaxWith then begin
+            ProgressBarTitle := PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_') +
+                                ProgressBarTitle +
+                                PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_');
+        end;
+        DMTMgt.ProgressBar_Open(BufferRef, ProgressBarTitle +
+                                           ProgressBarText_FilterTok +
+                                           ProgressBarText_RecordTok +
+                                           ProgressBarText_DurationTok +
+                                           ProgressBarText_ProgressTok +
+                                           ProgressBarText_TimeRemainingTok);
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 

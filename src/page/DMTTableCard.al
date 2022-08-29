@@ -53,22 +53,26 @@ page 110012 "DMTTableCard"
                 field("Import Only New Records"; Rec."Import Only New Records") { ApplicationArea = All; }
             }
 
-            group(Paths)
+            group(DataFile)
             {
-                field(DataFilePath; Rec.GetDataFilePath())
+                group(Path)
                 {
-                    Caption = 'Data File Path', Comment = 'Datendatei Pfad';
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    StyleExpr = DataFilePathStyleExpr;
-                    trigger OnAssistEdit()
-                    var
-                        DMTMgt: Codeunit DMTMgt;
-                        SelectedPath: Text;
-                    begin
-                        SelectedPath := DMTMgt.LookUpPath(Rec.DataFileFolderPath, false);
-                        Rec.SetDataFilePath(SelectedPath);
-                    end;
+                    field(DataFilePath; Rec.GetDataFilePath())
+                    {
+                        Caption = 'Data File Path', Comment = 'Datendatei Pfad';
+                        ApplicationArea = All;
+                        Importance = Promoted;
+                        StyleExpr = DataFilePathStyleExpr;
+                        trigger OnAssistEdit()
+                        var
+                            DMTMgt: Codeunit DMTMgt;
+                            SelectedPath: Text;
+                        begin
+                            SelectedPath := DMTMgt.LookUpPath(Rec.DataFileFolderPath, false);
+                            Rec.SetDataFilePath(SelectedPath);
+                        end;
+                    }
+                    field("DataFile Created At"; Rec."DataFile Created At") { ApplicationArea = All; }
                 }
             }
             group(NAVDataSourceProperties)
@@ -102,6 +106,24 @@ page 110012 "DMTTableCard"
     {
         area(Processing)
         {
+            action(AutoMigration)
+            {
+                Caption = 'Autom. Übernahme', Comment = 'Auto Migration';
+                ApplicationArea = All;
+                Image = Process;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    CurrPage.SaveRecord();
+                    Commit();
+                    PageActions.AutoMigration(Rec);
+                    EnableControls(); // ShowMappingLines;
+                end;
+            }
             action(ImportBufferDataFromFile)
             {
                 Caption = 'Import to Buffer Table', Comment = 'Import in Puffertabelle';
@@ -126,10 +148,7 @@ page 110012 "DMTTableCard"
                 Caption = 'Delete Records In Target Table', Comment = 'Datensätze in Zieltabelle löschen';
                 ApplicationArea = All;
                 Image = "Invoicing-Delete";
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
+                Promoted = false;
 
                 trigger OnAction()
                 var
@@ -268,8 +287,6 @@ page 110012 "DMTTableCard"
     }
 
     trigger OnOpenPage()
-    var
-        fileMgt: Codeunit "File Management";
     begin
         Rec.InitOrRefreshFieldSortOrder();
         Rec.FilterGroup(2);
@@ -309,5 +326,6 @@ page 110012 "DMTTableCard"
         DataFilePathStyleExpr: Text;
         [InDataSet]
         UseXMLPortAndBufferTable, NAVDataSourcePropertiesVisible : Boolean;
+        PageActions: Codeunit DMTPageActions;
 
 }

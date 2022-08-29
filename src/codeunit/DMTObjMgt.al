@@ -83,11 +83,14 @@ codeunit 110000 "DMTObjMgt"
     local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
     var
         AllObjWithCaption: Record AllObjWithCaption;
+        DMTTable: Record DMTTable;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
         AllObjWithCaption.FindSet();
         repeat
             TempAllObjWithCaption := AllObjWithCaption;
+            if DMTTable.Get(TempAllObjWithCaption."Object ID") then
+                TempAllObjWithCaption."Object Subtype" := 'DMTTableExists';
             TempAllObjWithCaption.Insert(false);
         until AllObjWithCaption.Next() = 0;
     end;

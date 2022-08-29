@@ -119,6 +119,18 @@ codeunit 110010 "DMTPageActions"
         until DMTTable_SELECTED.Next() = 0;
     end;
 
+    internal procedure AutoMigration(var DMTTable: Record DMTTable)
+    var
+        DMTImport: Codeunit "DMTImport";
+    begin
+        DMTTable.TestField("Target Table ID");
+        DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+        DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files");
+        DMTTable.ImportToBufferTable();
+        ProposeMatchingFields(DMTTable);
+        DMTImport.StartImport(DMTTable, true, false);
+    end;
+
     procedure ProposeMatchingFields(var DMTField: Record DMTField)
     var
         DMTTable: Record DMTTable;

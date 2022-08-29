@@ -213,6 +213,12 @@
           <note from="Developer" annotates="general" priority="2">Puffertabellenart Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field BufferTableTypeFilter - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 2790486453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comment</source>
+          <target>Bemerkung</target>
+          <note from="Developer" annotates="general" priority="2">Bemerkung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Comment - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <target>Fester Wert</target>
@@ -1971,13 +1977,6 @@
           <note from="Developer" annotates="general" priority="2">Puffertabelle ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Buffer Table ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 4034769312 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>BufferTableIDStyle</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field BufferTableIDStyle - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Field 2352204874 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table Type</source>
           <target>Puffertabellenart</target>
@@ -1986,9 +1985,8 @@
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 462739636 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Company Name Filter</source>
-          <target>[NAB: NOT TRANSLATED]</target>
+          <target>Company Name Filter</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field CompanyNameFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3821907751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2021,13 +2019,6 @@
           <note from="Developer" annotates="general" priority="2">Dateiname Exportdatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFileName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 93283288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DataFilePathStyle</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field DataFilePathStyle - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Field 739200694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Duration (Longest)</source>
           <target>Import Dauer(Längste)</target>
@@ -2045,41 +2036,6 @@
           <target>XMLPort ID für Import</target>
           <note from="Developer" annotates="general" priority="2">XMLPort ID für Import</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Import XMLPort ID - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Field 4225240329 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ImportToBufferIndicator</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToBufferIndicator - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Field 321274548 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ImportToBufferIndicatorStyle</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToBufferIndicatorStyle - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Field 109950602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ImportToTargetIndicator</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToTargetIndicator - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Field 3380134587 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ImportToTargetIndicatorStyle</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportToTargetIndicatorStyle - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 557242229 - Field 3225662489 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ImportXMLPortIDStyle</source>
-          <target>[NAB: NOT TRANSLATED]</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field ImportXMLPortIDStyle - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Field Update Selection</source>
@@ -2181,7 +2137,6 @@
           <source>Unhandled Table Rel.</source>
           <target>Offene Tab. Rel.</target>
           <note from="Developer" annotates="general" priority="2">Offene Tab. Rel.</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Unhandled Table Rel. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 1801721943 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2296,14 +2251,12 @@
           <source>Processing finished\Duration %1</source>
           <target>Vorgang abgeschlossen\Dauer %1</target>
           <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTPageActions - Method ImportSelectedIntoBuffer - NamedType FinishedMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 3621685117 - Method 2406207420 - NamedType 1757551544" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reading files into buffer tables</source>
           <target>Dateien werden eingelesen</target>
           <note from="Developer" annotates="general" priority="2">Dateien werden eingelesen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTPageActions - Method ImportSelectedIntoBuffer - NamedType ImportFilesProgressMsg</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2612,6 +2565,12 @@
           <note from="Developer" annotates="general" priority="2">DMT Tabellenkarte (Data Migration Tool)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Control 2480536789 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Path</source>
+          <target>Datendatei Pfad</target>
+          <note from="Developer" annotates="general" priority="2">Datendatei Pfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control DataFilePath - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General</source>
           <target>Allgemein</target>
@@ -2636,11 +2595,12 @@
           <note from="Developer" annotates="general" priority="2">Datenquelle NAV</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control NAVDataSourceProperties - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3331395113 - Control 2480536789 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data File Path</source>
-          <target>Datendatei Pfad</target>
-          <note from="Developer" annotates="general" priority="2">Datendatei Pfad</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Control DataFilePath - Property Caption</note>
+        <trans-unit id="Page 3331395113 - Action 1733595285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Autom. Übernahme</source>
+          <target>Auto Migration</target>
+          <note from="Developer" annotates="general" priority="2">Auto Migration</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action AutoMigration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Buffer Table</source>
@@ -2862,7 +2822,6 @@
           <source>Popose Matching Fields</source>
           <target>Feldzuordnung vorschlagen</target>
           <note from="Developer" annotates="general" priority="2">Feldzuordnung vorschlagen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 47655189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2887,14 +2846,12 @@
           <source>Import to target tables (marked lines)</source>
           <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action TransferSelectedToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 2531305551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Sort Order</source>
           <target>Update der Sortierung</target>
           <note from="Developer" annotates="general" priority="2">Update der Sortierung</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList2 - Action UpdateSortOrder - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3374423421 - Action 903289417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

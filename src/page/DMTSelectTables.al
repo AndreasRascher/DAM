@@ -15,9 +15,9 @@ page 110010 "DMTSelectTables"
         {
             repeater(General)
             {
-                field("Object ID"; Rec."Object ID") { ApplicationArea = All; }
-                field("Object Caption"; Rec."Object Caption") { ApplicationArea = All; }
-                field("Object Name"; Rec."Object Name") { ApplicationArea = All; }
+                field("Object ID"; Rec."Object ID") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Object Caption"; Rec."Object Caption") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Object Name"; Rec."Object Name") { ApplicationArea = All; StyleExpr = LineStyle; }
             }
 
         }
@@ -53,5 +53,16 @@ page 110010 "DMTSelectTables"
         debug := allObjWithCaption_SELECTED.Count;
         HasLines := allObjWithCaption_SELECTED.FindFirst();
     end;
+
+    trigger OnAfterGetRecord()
+    begin
+        LineStyle := Format(Enum::DMTFieldStyle::None);
+        if Rec."Object Subtype" = 'DMTTableExists' then
+            LineStyle := Format(Enum::DMTFieldStyle::Bold);
+    end;
+
+    var
+        [InDataSet]
+        LineStyle: Text[15];
 
 }
