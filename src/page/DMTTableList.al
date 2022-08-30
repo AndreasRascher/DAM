@@ -163,12 +163,8 @@ page 110014 "DMTTableList"
                 PromotedCategory = New;
                 ApplicationArea = All;
                 trigger OnAction()
-                var
-                    MyDictionary: Dictionary of [Text, Text];
                 begin
-                    MyDictionary.Add('Param1', 'Value1');
-                    MyTaskId := 1;
-                    CurrPage.EnqueueBackgroundTask(MyTaskId, Codeunit::DMTPageBackgroundTasks);
+                    RunBackgroundTask();
                 end;
             }
         }
@@ -181,12 +177,24 @@ page 110014 "DMTTableList"
         HasLines := DMTTable_SELECTED.FindFirst();
     end;
 
-    trigger OnOpenPage()
+    local procedure RunBackgroundTask()
     var
-        PageTaskID: Integer;
-        Params: Dictionary of [Text, Text];
+        MyDictionary: Dictionary of [Text, Text];
     begin
-        // CurrPage.EnqueueBackgroundTask(PageTaskID, Codeunit::DMTPageBackgroundTasks, Params, 60 * 2, PageBackgroundTaskErrorLevel::Error);
+        MyDictionary.Add('Param1', 'Value1');
+        MyTaskId := 1;
+        CurrPage.EnqueueBackgroundTask(MyTaskId, Codeunit::DMTPageBackgroundTasks);
+    end;
+
+    trigger OnOpenPage()
+    begin
+        Message('OnOpenPage');
+        RunBackgroundTask();
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        Message('OnAfterGetCurrRecord');
     end;
 
     trigger OnAfterGetRecord()
