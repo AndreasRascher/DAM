@@ -257,6 +257,7 @@ codeunit 110002 "DMTMgt"
         _Boolean: Boolean;
         _Date: Date;
         _DateTime: DateTime;
+        _Time: Time;
         _Decimal: Decimal;
         _Integer: Integer;
         NoOfOptions: Integer;
@@ -361,6 +362,14 @@ codeunit 110002 "DMTMgt"
                         exit(TRUE);
                     end else
                         if ThrowError then Evaluate(_DateTime, FromText);
+                end;
+            'TIME':
+                begin
+                    IF Evaluate(_Time, FromText) then begin
+                        FieldRef_TO.Value := _Time;
+                        exit(TRUE);
+                    end else
+                        if ThrowError then Evaluate(_Time, FromText);
                 end;
             'BLOB':
                 begin

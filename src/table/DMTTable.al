@@ -689,7 +689,7 @@ table 110000 "DMTTable"
 
     procedure OpenCardPage()
     begin
-        Page.Run(Page::DMTTableCard, Rec);
+        Page.Runmodal(Page::DMTTableCard, Rec);
     end;
 
     procedure UpdateIndicators()

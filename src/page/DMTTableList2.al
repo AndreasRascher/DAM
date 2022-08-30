@@ -30,6 +30,7 @@ page 110025 "DMTTableList2"
                     trigger OnDrillDown()
                     begin
                         Rec.OpenCardPage();
+                        Rec.get(Rec.RecordId);
                     end;
                 }
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }

@@ -321,6 +321,18 @@ table 110003 "DMTField"
                         begin
                             DMTFields2."Validate Value" := false;
                         end;
+                    (TargetField.TableNo = Database::"Depreciation Book") and (TargetField.FieldName IN ['Fiscal Year 365 Days']):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Stockkeeping Unit") and (TargetField.FieldName IN ['Phys Invt Counting Period Code', 'Standard Cost']):
+                        begin
+                            DMTFields2."Validate Value" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Sales Header") and (TargetField.FieldName IN ['Sell-to Customer No.', 'Bill-to Customer No.']):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
                 end;
 
                 if format(DMTFields2) <> Format(DMTFields) then

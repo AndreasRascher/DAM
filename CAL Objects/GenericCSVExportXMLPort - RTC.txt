@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=25.08.22;
-    Time=17:29:33;
+    Date=30.08.22;
+    Time=11:33:55;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2881,6 +2881,14 @@ OBJECT XMLport 50049 DMT Export
       EXIT(_LicensePermission."Execute Permission"<>_LicensePermission."Execute Permission"::" ");
     END;
 
+    PROCEDURE IsTableEmpty@1000000002(TableID@1000000000 : Integer) TabeIsEmpty : Boolean;
+    VAR
+      RecRef@1000000001 : RecordRef;
+    BEGIN
+      RecRef.OPEN(TableID,FALSE,COMPANYNAME);
+      TabeIsEmpty := RecRef.ISEMPTY;
+    END;
+
     PROCEDURE InitExport@1000000017(exportTableIDNew@1000000000 : Integer;tableView@1000000001 : Text);
     VAR
       field@55000 : Record 2000000041;
@@ -2926,11 +2934,14 @@ OBJECT XMLport 50049 DMT Export
     LOCAL PROCEDURE StartTableExport@1000000005();
     VAR
       AllObjWithCaption@1000000000 : Record 2000000058;
+      TableInformation@1000000006 : Record 2000000028;
       ReadyMsg@1000000001 : Text;
       ExportToFilePath@1000000002 : Text;
       ExportDuration@1000000003 : Duration;
       TAB@1000000004 : Text[1];
       ObjectNotInLicenseMsg@1000000005 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.;ENU=Warning: Table %1 - %2 is not in license.';
+      EmptyTableMsg@1000000007 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist leer. Fr leere Tabellen wird keine Exportdatei erstellt.';
+      IsTableValidForExport@1000000008 : Boolean;
     BEGIN
       CheckFolderPathRTC(ExportToFolderPath);
 
@@ -2940,16 +2951,21 @@ OBJECT XMLport 50049 DMT Export
 
       REPEAT
         IF NOT IsTableInLicense(AllObjWithCaption."Object ID") THEN
-        MESSAGE(ObjectNotInLicenseMsg,AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
+          MESSAGE(ObjectNotInLicenseMsg,AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
+        IF IsTableEmpty(AllObjWithCaption."Object ID") THEN
+          MESSAGE(EmptyTableMsg,AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
       UNTIL AllObjWithCaption.NEXT = 0;
 
       TAB[1] := 9; // TAB
       ReadyMsg := ExportFinished + ':';
       AllObjWithCaption.FINDSET;
       REPEAT
-        ExportToFilePath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
-        ExportTable(ExportToFilePath,AllObjWithCaption."Object ID",ExportDuration,'');
-        ReadyMsg += STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
+        IsTableValidForExport := NOT IsTableEmpty(AllObjWithCaption."Object ID") AND IsTableInLicense(AllObjWithCaption."Object ID");
+        IF IsTableValidForExport THEN BEGIN
+          ExportToFilePath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
+          ExportTable(ExportToFilePath,AllObjWithCaption."Object ID",ExportDuration,'');
+          ReadyMsg += STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
+        END;
       UNTIL AllObjWithCaption.NEXT = 0;
       MESSAGE(ReadyMsg)
     END;
