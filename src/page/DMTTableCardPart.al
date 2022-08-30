@@ -63,6 +63,32 @@ page 110013 "DMTTableCardPart"
                     PageActions.ProposeMatchingFields(Rec);
                 end;
             }
+            group(Lines)
+            {
+                Caption = 'Lines', Comment = 'Zeilen';
+                action(DMTField_SetValidateFieldToTrue)
+                {
+                    Caption = 'Set Field Validate to True', Comment = 'Feld Validieren auf Ja setzen';
+                    ApplicationArea = All;
+                    Image = SetupLines;
+                    trigger OnAction()
+                    begin
+                        GetSelection(TempDMTFieldSelected);
+                        PageActions.DMTField_SetValidateField(TempDMTFieldSelected, true);
+                    end;
+                }
+                action(DMTField_SetValidateFieldToFalse)
+                {
+                    Caption = 'Set Field Validate to False', Comment = 'Feld Validieren auf Nein setzen';
+                    ApplicationArea = All;
+                    Image = SetupLines;
+                    trigger OnAction()
+                    begin
+                        GetSelection(TempDMTFieldSelected);
+                        PageActions.DMTField_SetValidateField(TempDMTFieldSelected, false);
+                    end;
+                }
+            }
             group(ChangeValidationOrder)
             {
                 Image = Allocate;
@@ -123,20 +149,19 @@ page 110013 "DMTTableCardPart"
         }
     }
 
-    procedure GetSelection(var TempDMTField: Record DMTField temporary) HasLines: Boolean
+    procedure GetSelection(var TempDMTField_SELECTED: Record DMTField temporary) HasLines: Boolean
     var
         DMTField: Record DMTField;
+        Debug: Integer;
     begin
-        Clear(TempDMTField);
-        if TempDMTField.IsTemporary then TempDMTField.DeleteAll();
+        Clear(TempDMTField_SELECTED);
+        if TempDMTField_SELECTED.IsTemporary then TempDMTField_SELECTED.DeleteAll();
+        Debug := Rec.Count;
+        DMTField.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(DMTField);
-        if not DMTField.MarkedOnly then begin
-            DMTField := Rec;
-            DMTField.Mark(true);
-            DMTField.MarkedOnly(true);
-        end;
-        DMTField.CopyToTemp(TempDMTField);
-        HasLines := TempDMTField.FindFirst();
+        Debug := DMTField.Count;
+        DMTField.CopyToTemp(TempDMTField_SELECTED);
+        HasLines := TempDMTField_SELECTED.FindFirst();
     end;
 
     local procedure MoveSelectedLines(Direction: Option Up,Down,Top,Bottom)
@@ -248,6 +273,7 @@ page 110013 "DMTTableCardPart"
 
     Var
         PageActions: Codeunit DMTPageActions;
+        TempDMTFieldSelected: Record DMTField temporary;
         [InDataSet]
         HideFromFieldInfo: Boolean;
         [InDataSet]

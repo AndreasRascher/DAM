@@ -150,6 +150,7 @@ codeunit 110009 DMTImport
         Success: Boolean;
     begin
         DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
+        Commit(); // End Transaction to avoid locks when debugging
         TmpTargetRef.OPEN(DMTTable."Target Table ID", TRUE);
 
         ReplaceBufferValuesBeforeProcessing(BufferRef, TempDMTField_COLLECTION);
@@ -159,6 +160,11 @@ codeunit 110009 DMTImport
 
         if DMTTable."Import Only New Records" and not IsUpdateTask then
             if TargetRef2.Get(TmpTargetRef.RecordId) then begin
+                DMTMgt.UpdateResultQty(true, false);
+                exit;
+            end;
+        if DMTTable."Valid Key Fld.Rel. Only" and not IsUpdateTask then
+            if not HasValidKeyFldRelations(TmpTargetRef) then begin
                 DMTMgt.UpdateResultQty(true, false);
                 exit;
             end;
@@ -385,6 +391,35 @@ codeunit 110009 DMTImport
                 exit(false);
         end;
 
+    end;
+
+    local procedure HasValidKeyFldRelations(var TmpTargetRef: RecordRef): Boolean
+    var
+        KeyRef: KeyRef;
+        FldRef: FieldRef;
+        KeyFieldIndex: Integer;
+        RelatedRef: RecordRef;
+        Debug: List of [Text];
+    begin
+        KeyRef := TmpTargetRef.KeyIndex(1);
+        for KeyFieldIndex := 1 To KeyRef.FieldCount do begin
+            FldRef := KeyRef.FieldIndex(KeyFieldIndex);
+            Debug.Add('FieldName:' + FldRef.Name);
+            if FldRef.Relation <> 0 then begin
+                Debug.Add('Relation' + format(FldRef.Relation));
+                RelatedRef.Open(FldRef.Relation);
+                case true of
+                    (RelatedRef.KeyIndex(1).FieldCount = 2) and (KeyRef.FieldCount = 3):
+                        begin
+                            RelatedRef.Field(RelatedRef.KeyIndex(1).FieldIndex(1).Number).SetRange(KeyRef.FieldIndex(1).Value);
+                            RelatedRef.Field(RelatedRef.KeyIndex(1).FieldIndex(2).Number).SetRange(KeyRef.FieldIndex(2).Value);
+                            if RelatedRef.FindFirst() then exit(true);
+                        end;
+                    else
+                        Error('HasValidKeyFldRelations - Unhandled Case');
+                end;
+            end;
+        end;
     end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)

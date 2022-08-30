@@ -1588,11 +1588,6 @@
           <note from="Developer" annotates="general" priority="2">DMT Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 521254526 - Field 3166256172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Allow Usage of Try Function</source>
-          <note from="Developer" annotates="general" priority="2"> Verwendung von Try Funktion zulassen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Allow Usage of Try Function - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 521254526 - Field 2843815182 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Backup.xml File Path</source>
           <note from="Developer" annotates="general" priority="2">Pfad Backup.xml</note>
@@ -1642,6 +1637,11 @@
           <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 3166256172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allow Usage of Try Function</source>
+          <note from="Developer" annotates="general" priority="2">Verwendung von Try Funktion zulassen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Allow Usage of Try Function - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 3434788173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffertable ID</source>
@@ -1787,6 +1787,11 @@
           <source>Use OnInsert Trigger</source>
           <note from="Developer" annotates="general" priority="2">OnInsert Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Use OnInsert Trigger - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 557242229 - Field 360116804 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Valid Key Field Relations Only</source>
+          <note from="Developer" annotates="general" priority="2">Nur einfügen wenn Schlüsselfeld-Relationen vorhanden (Zeile-&gt;Kopf)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field Valid Key Fld.Rel. Only - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1472721356 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Task</source>
@@ -2242,6 +2247,21 @@
           <source>Init Target Fields</source>
           <note from="Developer" annotates="general" priority="2">Feldliste initialisieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action InitTargetFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <note from="Developer" annotates="general" priority="2">Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 925261692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Field Validate to False</source>
+          <note from="Developer" annotates="general" priority="2">Feld Validieren auf Nein setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action DMTField_SetValidateFieldToFalse - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 547832148 - Action 3573582341 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Field Validate to True</source>
+          <note from="Developer" annotates="general" priority="2">Feld Validieren auf Ja setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCardPart - Action DMTField_SetValidateFieldToTrue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 547832148 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Popose Matching Fields</source>

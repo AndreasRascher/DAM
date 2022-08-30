@@ -90,7 +90,6 @@ page 110011 "DMT Setup"
                 }
                 group(Performance)
                 {
-                    field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = all; }
                     field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = all; }
                 }
 

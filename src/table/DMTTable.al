@@ -101,8 +101,8 @@ table 110000 "DMTTable"
                 SetDataFilePath(DMTMgt.LookUpPath(Rec.GetDataFilePath(), false));
             end;
         }
-        field(54; "DataFile Size"; Integer) { Caption = 'Data File Size (Byte)', Comment = 'Dateigröße (Byte)'; }
-        field(55; "DataFile Created At"; DateTime) { Caption = 'Data File Created At', Comment = 'Datei erstellt am'; }
+        field(54; "DataFile Size"; Integer) { Caption = 'Data File Size (Byte)', Comment = 'Dateigröße (Byte)'; Editable = false; }
+        field(55; "DataFile Created At"; DateTime) { Caption = 'Data File Created At', Comment = 'Datei erstellt am'; Editable = false; }
 
         #endregion SourceFileProperties
         field(60; "Import XMLPort ID"; Integer)
@@ -141,12 +141,22 @@ table 110000 "DMTTable"
             Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden';
             InitValue = true;
         }
-        field(101; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
-        field(102; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
-        field(103; LastView; Blob) { }
-        field(104; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
-        field(105; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
-        field(106; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
+        field(101; "Allow Usage of Try Function"; Boolean)
+        {
+            Caption = 'Allow Usage of Try Function', Comment = 'Verwendung von Try Funktion zulassen';
+            InitValue = true;
+        }
+        field(102; "Valid Key Fld.Rel. Only"; Boolean)
+        {
+            Caption = 'Valid Key Field Relations Only', Comment = 'Nur einfügen wenn Schlüsselfeld-Relationen vorhanden (Zeile->Kopf)';
+            InitValue = true;
+        }
+        field(103; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+        field(110; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
+        field(111; LastView; Blob) { }
+        field(112; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
+        field(113; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
+        field(114; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; }
         field(202; LastImportBy; Code[50])

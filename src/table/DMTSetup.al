@@ -86,11 +86,6 @@ table 110008 "DMTSetup"
                 Rec."Backup.xml File Path" := DMTMgt.LookUpPath(Rec."Backup.xml File Path", false);
             end;
         }
-        field(40; "Allow Usage of Try Function"; Boolean)
-        {
-            Caption = 'Allow Usage of Try Function', Comment = ' Verwendung von Try Funktion zulassen';
-            InitValue = true;
-        }
         field(41; "Import with FlowFields"; Boolean)
         {
             Caption = 'Import with Flowfields', Comment = 'Import mit Flowfields';

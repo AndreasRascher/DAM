@@ -50,7 +50,9 @@ page 110012 "DMTTableCard"
                     end;
                 }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
+                field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = All; }
                 field("Import Only New Records"; Rec."Import Only New Records") { ApplicationArea = All; }
+                field("Valid Key Fld.Rel. Only"; "Valid Key Fld.Rel. Only") { ApplicationArea = All; }
             }
 
             group(DataFile)
@@ -73,6 +75,7 @@ page 110012 "DMTTableCard"
                         end;
                     }
                     field("DataFile Created At"; Rec."DataFile Created At") { ApplicationArea = All; }
+                    field("DataFile Size"; Rec."DataFile Size") { ApplicationArea = All; }
                 }
             }
             group(NAVDataSourceProperties)

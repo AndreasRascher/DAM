@@ -104,7 +104,7 @@ codeunit 110010 "DMTPageActions"
             until DMTTable.Next() = 0;
     end;
 
-    internal procedure ImportSelectedIntoTarget(DMTTable_SELECTED: Record DMTTable)
+    internal procedure ImportSelectedIntoTarget(var DMTTable_SELECTED: Record DMTTable)
     var
         DMTTable: Record DMTTable;
         DMTImport: Codeunit "DMTImport";
@@ -125,10 +125,34 @@ codeunit 110010 "DMTPageActions"
     begin
         DMTTable.TestField("Target Table ID");
         DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
-        DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files");
+        // case DMTTable.BufferTableType of
+        //   DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+        //   DMTTable.BufferTableType::"Seperate Buffer Table per CSV": begin
+        //     if DMTTable.CustomBufferTableExits() and DMTTable.ImportXMLPortExits() then
+        //   end;
+        // end;
+
+        // DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files");        
         DMTTable.ImportToBufferTable();
         ProposeMatchingFields(DMTTable);
         DMTImport.StartImport(DMTTable, true, false);
+    end;
+
+    internal procedure DMTField_SetValidateField(var TempDMTFieldSelected: Record DMTField temporary; NewValue: Boolean)
+    var
+        DMTField: Record DMTField;
+        NoOfRecords: Integer;
+    begin
+        NoOfRecords := TempDMTFieldSelected.Count;
+        if not TempDMTFieldSelected.FindFirst() then exit;
+        TempDMTFieldSelected.FindSet();
+        repeat
+            DMTField.Get(TempDMTFieldSelected.RecordId);
+            if DMTField."Validate Value" <> NewValue then begin
+                DMTField."Validate Value" := NewValue;
+                DMTField.Modify()
+            end;
+        until TempDMTFieldSelected.Next() = 0;
     end;
 
     procedure ProposeMatchingFields(var DMTField: Record DMTField)
