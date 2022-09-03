@@ -5,37 +5,44 @@ codeunit 110008 "DMTErrorWrapper"
         ClearLastError();
         CASE OnRunAction OF
             OnRunAction::FieldValidate:
-                FieldValidateRecRef(RecRef_FROM, FieldNo_FROM, RecRef_TO, FieldNo_TO);
+                FieldValidateRecRef(SourceRef, FieldNo_FROM, TargetRef, TargetFieldNo);
             OnRunAction::FieldValidateWithValue:
-                FieldValidateWithValue(NewValue, RecRef_TO, FieldNo_TO);
+                FieldValidateWithValue(NewValue, TargetRef, TargetFieldNo);
+            OnRunAction::MigrateFields:
+                MigrateFields(SourceRef, TargetRef, TempDMTField);
         end;
     end;
 
     procedure SetFieldValidateRecRef(_RecRef_FROM: RecordRef; _FieldNo_FROM: Integer; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
     begin
         OnRunAction := OnRunAction::FieldValidate;
-        RecRef_FROM := _RecRef_FROM.duplicate();
-        RecRef_TO := _RecRef_TO.duplicate();
+        SourceRef := _RecRef_FROM.duplicate();
+        TargetRef := _RecRef_TO.duplicate();
         FieldNo_FROM := _FieldNo_FROM;
-        FieldNo_TO := _FieldNo_TO;
+        TargetFieldNo := _FieldNo_TO;
     end;
 
-    procedure SetFieldValidateWithValue(_NewValue: Variant; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
+    procedure SetFieldValidateWithValue(_NewValue: Variant; _RecRef_TO: RecordRef; _TargetFieldNo: Integer)
     begin
         OnRunAction := OnRunAction::FieldValidateWithValue;
         NewValue := _NewValue;
-        RecRef_TO := _RecRef_TO.duplicate();
-        FieldNo_TO := _FieldNo_TO;
+        TargetRef := _RecRef_TO.duplicate();
+        TargetFieldNo := _TargetFieldNo;
     end;
 
-    procedure GetRecRefFrom(VAR _RecRef_FROM: RecordRef)
+    procedure GetSourceRef(VAR _SourceRef: RecordRef)
     begin
-        _RecRef_FROM := RecRef_FROM;
+        _SourceRef := SourceRef;
     end;
 
-    procedure GetRecRefTo(VAR _RecRef_TO: RecordRef)
+    procedure GetTargetRef(VAR _TargetRef: RecordRef)
     begin
-        _RecRef_TO := RecRef_TO;
+        _TargetRef := TargetRef;
+    end;
+
+    procedure GetLastFieldProcessed(VAR _LastFieldProcessed: RecordId)
+    begin
+        _LastFieldProcessed := LastFieldProcessed;
     end;
 
     LOCAL procedure FieldValidateRecRef(_RecRef_FROM: RecordRef; _FieldNo_FROM: Integer; var _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
@@ -63,12 +70,49 @@ codeunit 110008 "DMTErrorWrapper"
         ToField.VALIDATE(_NewValue);
     end;
 
+    local procedure MigrateFields(TargetRef: RecordRef; SourceRef: RecordRef; var TempDMTField: Record DMTField temporary)
+    var
+        DMTMgt: Codeunit DMTMgt;
+        TargetFieldRef: FieldRef;
+    begin
+        if not TempDMTField.FindSet() then
+            exit;
+        repeat
+            CurrFieldToProcess := TempDMTField.RecordId;
+            case TempDMTField."Processing Action" of
+                TempDMTField."Processing Action"::Ignore:
+                    ;
+                TempDMTField."Processing Action"::FixedValue:
+                    begin
+                        TargetFieldRef := SourceRef.Field(TempDMTField."Target Field No.");
+                        DMTMgt.AssignFixedValueToFieldRef(TargetFieldRef, TempDMTField."Fixed Value");
+                        if TempDMTField."Validate Value" then
+                            DMTMgt.ValidateFieldWithValue(SourceRef, TempDMTField."Target Field No.", format(TargetFieldRef), TempDMTField."Ignore Validation Error")
+                        else
+                            SourceRef.Field(TempDMTField."Target Field No.").Validate(TargetFieldRef.Value);
+                    end;
+                TempDMTField."Processing Action"::Transfer:
+                    if TempDMTField."Validate Value" then
+                        DMTMgt.ValidateField(TargetRef, SourceRef, TempDMTField)
+                    else
+                        DMTMgt.AssignFieldWithoutValidate(TargetRef,
+                                                          TempDMTField."Source Field No.",
+                                                          SourceRef,
+                                                          TempDMTField."Target Field No.",
+                                                          false);
+            end;
+            LastFieldProcessed := TempDMTField.RecordId;
+        until TempDMTField.Next() = 0;
+    end;
+
 
     var
-        RecRef_FROM: RecordRef;
-        RecRef_TO: RecordRef;
+        TempDMTField: Record DMTField temporary;
+        CurrFieldToProcess, LastFieldProcessed : RecordID;
+        SourceRef: RecordRef;
+        TargetRef: RecordRef;
         FieldNo_FROM: Integer;
-        FieldNo_TO: Integer;
-        OnRunAction: Option FieldValidate,FieldValidateWithValue;
+        TargetFieldNo: Integer;
+        OnRunAction: Option FieldValidate,FieldValidateWithValue,MigrateFields;
         NewValue: Variant;
 }

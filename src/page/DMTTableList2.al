@@ -1,6 +1,6 @@
-page 110025 "DMTTableList2"
+page 110014 "DMTTableList"
 {
-    Caption = 'DMT Table List 2', comment = 'DMT Tabellenübersicht 2';
+    Caption = 'DMT Table List', comment = 'DMT Tabellenübersicht';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -25,12 +25,13 @@ page 110025 "DMTTableList2"
                 field("Target Table ID"; Rec."Target Table ID")
                 {
                     ApplicationArea = All;
-                    Caption = 'Zieltab. ID';
+                    Caption = 'Source Table ID', Comment = 'Zieltab. ID';
                     Editable = false; // LookUp
                     trigger OnDrillDown()
                     begin
+                        Commit();
                         Rec.OpenCardPage();
-                        Rec.get(Rec.RecordId);
+                        if Rec.get(Rec.RecordId) then;  //Delete from Card Page
                     end;
                 }
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
@@ -93,13 +94,19 @@ page 110025 "DMTTableList2"
                 PromotedCategory = Category4;
                 PromotedOnly = true;
                 trigger OnAction()
+                var
+                    DMTSetup: Record DMTSetup;
                 begin
+                    if Rec."Target Table ID" <> 0 then
+                        CurrPage.SaveRecord();
+                    DMTSetup.CheckSchemaInfoHasBeenImporterd();
+                    Commit();
                     PageActions.AddSelectedTargetTables();
                 end;
             }
             action(DeleteMarkedLines)
             {
-                Caption = 'Delete Marked Lines', Comment = 'Markiert Zeilen löschen';
+                Caption = 'Delete Marked Lines', Comment = 'Markierte Zeilen löschen';
                 Image = DeleteRow;
                 ApplicationArea = all;
                 Promoted = true;
@@ -107,8 +114,8 @@ page 110025 "DMTTableList2"
                 PromotedOnly = true;
                 trigger OnAction()
                 begin
-                    GetSelection(DMTTable_SELECTED);
-                    PageActions.DeleteSelectedTargetTables(DMTTable_SELECTED);
+                    GetSelection(TempDMTTable_SELECTED);
+                    PageActions.DeleteSelectedTargetTables(TempDMTTable_SELECTED);
                 end;
             }
             #endregion Tabellen
@@ -153,7 +160,7 @@ page 110025 "DMTTableList2"
             #endregion Objekte
 
             #region Migration
-            action(ImportBufferTables)
+            action(ImportSelectedToBuffer)
             {
                 Image = ImportDatabase;
                 Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
@@ -163,8 +170,8 @@ page 110025 "DMTTableList2"
                 PromotedOnly = true;
                 trigger OnAction()
                 begin
-                    GetSelection(DMTTable_SELECTED);
-                    PageActions.ImportSelectedIntoBuffer(DMTTable_SELECTED);
+                    GetSelection(TempDMTTable_SELECTED);
+                    PageActions.ImportSelectedIntoBuffer(TempDMTTable_SELECTED);
                 end;
             }
             action(ProposeMatchingFields)
@@ -174,23 +181,22 @@ page 110025 "DMTTableList2"
                 Image = SuggestField;
                 trigger OnAction()
                 begin
-                    GetSelection(DMTTable_SELECTED);
-                    PageActions.ProposeMatchingFieldsForSelection(DMTTable_SELECTED);
+                    GetSelection(TempDMTTable_SELECTED);
+                    PageActions.ProposeMatchingFieldsForSelection(TempDMTTable_SELECTED);
                 end;
             }
-            action(TransferSelectedToTargetTable)
+            action(ImportSelectedToTarget)
             {
                 Image = TransferToLines;
                 ApplicationArea = all;
                 Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()
                 begin
-                    GetSelection(DMTTable_SELECTED);
-                    PageActions.ImportSelectedIntoTarget(DMTTable_SELECTED);
+                    GetSelection(TempDMTTable_SELECTED);
+                    PageActions.ImportSelectedIntoTarget(TempDMTTable_SELECTED);
                 end;
             }
             #endregion Migration
-
 
             action(UpdateTableRelationInfo)
             {
@@ -268,7 +274,7 @@ page 110025 "DMTTableList2"
     trigger OnAfterGetRecord()
     begin
         UpdateIndicators();
-        Rec.TryFindExportDataFile();
+        Rec.TryFindExportDataFile(false);
     end;
 
     trigger OnOpenPage()
@@ -279,16 +285,20 @@ page 110025 "DMTTableList2"
         DMTSetup.InsertWhenEmpty();
     end;
 
-    procedure GetSelection(var DMTTable_SELECTED: Record DMTTable) HasLines: Boolean
+    procedure GetSelection(var DMTTable_Selected: Record DMTTable temporary) HasLines: Boolean
+    var
+        DMTTable: Record DMTTable;
     begin
-        Clear(DMTTable_SELECTED);
-        CurrPage.SetSelectionFilter(DMTTable_SELECTED);
-        HasLines := DMTTable_SELECTED.FindFirst();
+        Clear(DMTTable_Selected);
+        if DMTTable_Selected.IsTemporary then
+            DMTTable_Selected.DeleteAll();
+        DMTTable.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CurrPage.SetSelectionFilter(DMTTable);
+        DMTTable.CopyToTemp(DMTTable_Selected);
+        HasLines := DMTTable_Selected.FindFirst();
     end;
 
     var
-        DMTTable_SELECTED: Record DMTTable;
+        TempDMTTable_SELECTED: Record DMTTable temporary;
         PageActions: Codeunit DMTPageActions;
-        [InDataSet]
-        ShowSetup: Boolean;
 }

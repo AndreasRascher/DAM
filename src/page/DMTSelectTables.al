@@ -1,4 +1,4 @@
-page 110010 "DMTSelectTables"
+page 110010 "DMTSelectTableList"
 {
     Caption = 'Tables', Comment = 'Tabellen';
     PageType = List;
@@ -18,12 +18,14 @@ page 110010 "DMTSelectTables"
                 field("Object ID"; Rec."Object ID") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Caption"; Rec."Object Caption") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Name"; Rec."Object Name") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field(ObjectStatus; ObjectStatus) { ApplicationArea = All; Caption = 'Object Status', comment = 'Objektstatus'; StyleExpr = LineStyle; }
             }
 
         }
     }
-    procedure Set(var AllObjWithCaption: Record AllObjWithCaption temporary);
+    procedure Set(var AllObjWithCaption: Record AllObjWithCaption temporary; ObjectPendingStatus: Boolean);
     begin
+        ObjectPendingStatusVisible := not ObjectPendingStatus;
         if Rec.IsTemporary then begin
             Clear(Rec);
             Rec.DeleteAll(false);
@@ -57,12 +59,24 @@ page 110010 "DMTSelectTables"
     trigger OnAfterGetRecord()
     begin
         LineStyle := Format(Enum::DMTFieldStyle::None);
-        if Rec."Object Subtype" = 'DMTTableExists' then
+        ObjectStatus := ObjectStatus::" ";
+        if Rec."Object Subtype".Contains('TableExists') then begin
             LineStyle := Format(Enum::DMTFieldStyle::Bold);
+        end;
+        if Rec."Object Subtype".Contains('Pending') then begin
+            LineStyle := Format(Enum::DMTFieldStyle::Yellow);
+            ObjectStatus := ObjectStatus::"ObsoleteState:Pending";
+        end;
+        if Rec."Object Subtype".Contains('Removed') then begin
+            LineStyle := Format(Enum::DMTFieldStyle::"Red + Italic");
+            ObjectStatus := ObjectStatus::"ObsoleteState:Removed";
+        end;
     end;
 
     var
         [InDataSet]
         LineStyle: Text[15];
-
+        ObjectStatus: Option " ","ObsoleteState:Pending","ObsoleteState:Removed";
+        [InDataSet]
+        ObjectPendingStatusVisible: Boolean;
 }

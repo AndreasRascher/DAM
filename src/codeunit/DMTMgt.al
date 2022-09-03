@@ -157,13 +157,13 @@ codeunit 110002 "DMTMgt"
         TargetRef: RecordRef;
         TargetRef2: RecordRef;
     begin
-        TargetRef.OPEN(TmpTargetRef.NUMBER, FALSE);
+        TargetRef.Open(TmpTargetRef.Number, FALSE);
         CopyRecordRef(TmpTargetRef, TargetRef);
 
-        IF TargetRef2.GET(TargetRef.RECORDID) then begin
-            InsertOK := TargetRef.MODIFY(InsertTrue);
+        IF TargetRef2.Get(TargetRef.RecordId) then begin
+            InsertOK := TargetRef.Modify(InsertTrue);
         end else begin
-            InsertOK := TargetRef.INSERT(InsertTrue);
+            InsertOK := TargetRef.Insert(InsertTrue);
         end;
 
     end;
@@ -174,7 +174,7 @@ codeunit 110002 "DMTMgt"
         FieldRefTarget: FieldRef;
         i: Integer;
     begin
-        for i := 1 TO RecRefSource.FIELDCOUNT do begin
+        for i := 1 TO RecRefSource.FieldCount do begin
             FieldRefTarget := RecRefTarget.FieldIndex(i);
             FieldRefSource := RecRefSource.FieldIndex(i);
             FieldRefTarget.Value := FieldRefSource.Value;
@@ -239,7 +239,7 @@ codeunit 110002 "DMTMgt"
         Commit();
         DMTErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
         IsValidateSuccessful := DMTErrorWrapper.RUN();
-        DMTErrorWrapper.GetRecRefTo(TargetRef);
+        DMTErrorWrapper.GetTargetRef(TargetRef);
         // HANDLE VALIDATE RESULT
         if not IsValidateSuccessful then begin
             DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
@@ -407,7 +407,7 @@ codeunit 110002 "DMTMgt"
         COMMIT();
         DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, FromFieldNo, TargetRef, ToFieldNo);
         IsValidateSuccessful := DMTErrorWrapper.RUN();
-        DMTErrorWrapper.GetRecRefTo(TargetRef);
+        DMTErrorWrapper.GetTargetRef(TargetRef);
     end;
 
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FromFieldno: Integer; ToFieldNo: Integer; VAR TargetRecRef: RecordRef)
@@ -458,6 +458,12 @@ codeunit 110002 "DMTMgt"
         if not (FileBrowser.RunModal() = Action::LookupOK) then
             exit(CopyStr(CurrentPath, 1, 250));
         ResultPath := CopyStr(FileBrowser.GetSelectedPath(), 1, MaxStrLen(ResultPath));
+    end;
+
+    internal procedure AssignFixedValueToFieldRef(var ToFieldRef: FieldRef; FixedValue: Text[250])
+    begin
+        if not EvaluateFieldRef(ToFieldRef, FixedValue, false, false) then
+            Error('Invalid Fixed Value %1', FixedValue);
     end;
 
     var

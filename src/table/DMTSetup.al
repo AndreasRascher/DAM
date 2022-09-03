@@ -170,7 +170,7 @@ table 110008 "DMTSetup"
     procedure CheckSchemaInfoHasBeenImporterd()
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
-        SchemaInfoMissingErr: TextConst ENU = 'The Schema.csv file has not been imported.', DEU = 'Die Schema.csv wurde nicht importiert.';
+        SchemaInfoMissingErr: TextConst ENU = 'The Schema.csv file has not been imported. Please goto the DMT Setup an import the Schema.csv', DEU = 'Die Schema.csv wurde nicht importiert. Öffnen Sie die DMT Einrichtung und importiern Sie die Schema.csv';
     begin
         if DMTFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;

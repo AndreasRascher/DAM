@@ -19,14 +19,14 @@ table 110000 "DMTTable"
             var
                 ObjectMgt: Codeunit DMTObjMgt;
             begin
-                ObjectMgt.LookUpToTable(Rec);
+                ObjectMgt.LookUpTargetTable(Rec);
             end;
 
             trigger OnValidate()
             var
                 ObjectMgt: Codeunit DMTObjMgt;
             begin
-                ObjectMgt.ValidateToTableCaption(Rec, xRec);
+                ObjectMgt.ValidateTargetTableCaption(Rec, xRec);
             end;
         }
         field(21; "No.of Records in Buffer Table"; Integer)
@@ -149,7 +149,6 @@ table 110000 "DMTTable"
         field(102; "Valid Key Fld.Rel. Only"; Boolean)
         {
             Caption = 'Valid Key Field Relations Only', Comment = 'Nur einfügen wenn Schlüsselfeld-Relationen vorhanden (Zeile->Kopf)';
-            InitValue = true;
         }
         field(103; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         field(110; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
@@ -166,9 +165,9 @@ table 110000 "DMTTable"
             TableRelation = User."User Name";
         }
         field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
-        field(300; ImportToBufferIndicator; Text[1]) { Caption = 'ImportToBufferIndicator', Locked = true; }
+        field(300; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; }
         field(301; ImportToBufferIndicatorStyle; Text[15]) { Caption = 'ImportToBufferIndicatorStyle', Locked = true; }
-        field(302; ImportToTargetIndicator; Text[1]) { Caption = 'ImportToTargetIndicator', Locked = true; }
+        field(302; ImportToTargetIndicator; Enum DMTImportIndicator) { Caption = 'ImportToTargetIndicator', Locked = true; }
         field(303; ImportToTargetIndicatorStyle; Text[15]) { Caption = 'ImportToTargetIndicatorStyle', Locked = true; }
         field(304; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; }
         field(305; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; }
@@ -435,32 +434,33 @@ table 110000 "DMTTable"
         // end;
     end;
 
-    procedure TryFindExportDataFile() FileExists: Boolean
+    procedure TryFindExportDataFile(ModifyRec: Boolean) FileExists: Boolean
     var
         DMTSetup: Record "DMTSetup";
+        FileRec: Record File;
         FileMgt: Codeunit "File Management";
         FilePath: Text;
-        FileRec: Record File;
     begin
+        // Search for Datafile
+        DMTSetup.Get();
+        if DMTSetup."Default Export Folder Path" <> '' then
+            //Land/Region -> Land_Region
+            FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
+        if FileMgt.ServerFileExists(FilePath) then begin
+            FileExists := true;
+            Rec.SetDataFilePath(FilePath);
+            if ModifyRec then
+                Rec.Modify();
+        end else begin
+            //Message(FilePath);
+        end;
+
         if (Rec.GetDataFilePath() <> '') and FileMgt.ServerFileExists(Rec.GetDataFilePath()) then begin
             if Rec.FindFileRec(FileRec) then begin
                 Rec."DataFile Size" := FileRec.Size;
                 Rec."DataFile Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+                Rec.Modify()
             end;
-            exit(true);
-        end;
-
-        DMTSetup.Get();
-        if DMTSetup."Default Export Folder Path" = '' then
-            exit(false);
-        //Land/Region -> Land_Region
-        FilePath := FileMgt.CombinePath(DMTSetup."Default Export Folder Path", StrSubstNo('%1.csv', CONVERTSTR(Rec."NAV Src.Table Caption", '<>*\/|"', '_______')));
-        if FileMgt.ServerFileExists(FilePath) then begin
-            FileExists := true;
-            Rec.SetDataFilePath(FilePath);
-            Rec.Modify();
-        end else begin
-            //Message(FilePath);
         end;
     end;
 
@@ -604,6 +604,20 @@ table 110000 "DMTTable"
         end;
     end;
 
+    procedure CopyToTemp(var TempDMTTable: Record DMTTable temporary)
+    var
+        DMTTable: Record DMTTable;
+        TempDMTTable2: Record DMTTable temporary;
+    begin
+        DMTTable.Copy(Rec);
+        if DMTTable.FindSet(false, false) then
+            repeat
+                TempDMTTable2 := DMTTable;
+                TempDMTTable2.Insert(false);
+            until DMTTable.Next() = 0;
+        TempDMTTable.Copy(TempDMTTable2, true);
+    end;
+
     internal procedure RenumberALObjects()
     var
         DMTTable: Record DMTTable;
@@ -718,24 +732,24 @@ table 110000 "DMTTable"
                 Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
         DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-        if Rec.TryFindExportDataFile() then
+        if Rec.TryFindExportDataFile(false) then
             DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
     end;
 
     local procedure UpdateIndicator_ImportToBuffer()
     begin
         Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        Rec.ImportToBufferIndicator := ' ';
+        Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Empty;
         case true of
             (Rec."No.of Records in Buffer Table" = 0):
                 begin
                     Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    Rec.ImportToBufferIndicator := '✘';
+                    Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Cross;
                 end;
             (Rec."No.of Records in Buffer Table" > 0):
                 begin
                     Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    Rec.ImportToBufferIndicator := '✔';
+                    Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::CheckMark;
                 end;
         end;
     end;
@@ -743,17 +757,17 @@ table 110000 "DMTTable"
     local procedure UpdateIndicator_ImportToTarget()
     begin
         Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
-        Rec.ImportToTargetIndicator := ' ';
+        Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
         case true of
             (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-                    Rec.ImportToTargetIndicator := '✘';
+                    Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Cross;
                 end;
             (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-                    Rec.ImportToTargetIndicator := '✔';
+                    Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;
                 end;
         end;
     end;

@@ -28,5 +28,4 @@ codeunit 110006 DMTPageBackgroundTasks
 
     var
         MyResult, MyDictionary : Dictionary of [Text, Text];
-        myInt: Integer;
 }

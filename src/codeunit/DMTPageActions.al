@@ -9,14 +9,19 @@ codeunit 110010 "DMTPageActions"
         ObjMgt.AddSelectedTables();
     end;
 
-    procedure DeleteSelectedTargetTables(var DMTTable_Selected: Record DMTTable)
+    procedure DeleteSelectedTargetTables(var DMTTable_Selected: Record DMTTable temporary)
+    var
+        DMTTable: Record DMTTable;
     begin
-        if not (DMTTable_Selected.MarkedOnly) or not (DMTTable_Selected.FindFirst()) then
+        if not (DMTTable_Selected.FindFirst()) then
             exit;
-        DMTTable_Selected.DeleteAll(true);
+        repeat
+            DMTTable := DMTTable_Selected;
+            DMTTable.Delete(true);
+        until DMTTable_Selected.Next() = 0;
     end;
 
-    procedure ImportSelectedIntoBuffer(var DMTTable_SELECTED: Record DMTTable)
+    procedure ImportSelectedIntoBuffer(var DMTTable_Selected: Record DMTTable temporary)
     var
         DMTTable: Record DMTTable;
         Start: DateTime;
@@ -104,15 +109,13 @@ codeunit 110010 "DMTPageActions"
             until DMTTable.Next() = 0;
     end;
 
-    internal procedure ImportSelectedIntoTarget(var DMTTable_SELECTED: Record DMTTable)
+    internal procedure ImportSelectedIntoTarget(var DMTTable_SELECTED: Record DMTTable temporary)
     var
         DMTTable: Record DMTTable;
         DMTImport: Codeunit "DMTImport";
     begin
-        if not (DMTTable_Selected.MarkedOnly) or not (DMTTable_Selected.FindFirst()) then
-            exit;
         DMTTable_SELECTED.SetCurrentKey("Sort Order");
-        DMTTable_SELECTED.FindSet();
+        if not DMTTable_SELECTED.FindSet() then exit;
         repeat
             DMTTable := DMTTable_SELECTED;
             DMTImport.StartImport(DMTTable, true, false);
@@ -163,13 +166,11 @@ codeunit 110010 "DMTPageActions"
         ProposeMatchingFields(DMTTable);
     end;
 
-    procedure ProposeMatchingFieldsForSelection(var DMTTable_Selected: Record DMTTable)
+    procedure ProposeMatchingFieldsForSelection(var DMTTable_Selected: Record DMTTable temporary)
     var
         DMTField: Record DMTField;
     begin
-        if not (DMTTable_Selected.MarkedOnly) or not (DMTTable_Selected.FindFirst()) then
-            exit;
-        DMTTable_Selected.FindSet();
+        if not DMTTable_Selected.FindSet() then exit;
         repeat
             ProposeMatchingFields(DMTTable_Selected);
             DMTField.AssignSourceToTargetFields(DMTTable_Selected);

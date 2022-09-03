@@ -9,7 +9,7 @@ page 110013 "DMTTableCardPart"
     {
         area(Content)
         {
-            repeater(Lines)
+            repeater(repeater)
             {
                 field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
                 field("To Field No."; Rec."Target Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
@@ -272,8 +272,8 @@ page 110013 "DMTTableCardPart"
     end;
 
     Var
-        PageActions: Codeunit DMTPageActions;
         TempDMTFieldSelected: Record DMTField temporary;
+        PageActions: Codeunit DMTPageActions;
         [InDataSet]
         HideFromFieldInfo: Boolean;
         [InDataSet]

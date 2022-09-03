@@ -41,7 +41,7 @@ page 110011 "DMT Setup"
                             SessionList: List of [Integer];
                             Choices: Text;
                             SessionListID: Integer;
-                            IsDebugging, IsDebugged, IsSQLTracing : Boolean;
+                            // IsDebugging, IsDebugged, IsSQLTracing : Boolean;
                             StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
                         begin
                             if activeSession.FindSet() then
@@ -49,7 +49,7 @@ page 110011 "DMT Setup"
 
                                     // IsDebugging := DEBUGGER.ISACTIVE AND (activeSession."Session ID" = debugger.DebuggingSessionID());
                                     // IsSQLTracing := DEBUGGER.ENABLESQLTRACE(activeSession."Session ID");
-                                    Choices += StrSubstNo('%1 - %2 - %3 - %4 - %5 - %6,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime", IsDebugging, IsDebugged);
+                                    Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
                                     NoOfChoices += 1;
                                     SessionList.Add(activeSession."Session ID");
                                 until activeSession.Next() = 0;

@@ -5,7 +5,7 @@ codeunit 110000 "DMTObjMgt"
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record "DMTSetup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTSelectTables: Page DMTSelectTables;
+        DMTSelectTables: Page "DMTSelectTableList";
     begin
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
         DMTFieldBuffer.FindSet();
@@ -19,7 +19,7 @@ codeunit 110000 "DMTObjMgt"
             end;
         until DMTFieldBuffer.Next() = 0;
         if TempAllObjWithCaption.FindFirst() then;
-        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.Set(TempAllObjWithCaption, false);
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
@@ -28,14 +28,14 @@ codeunit 110000 "DMTObjMgt"
         end;
     end;
 
-    procedure LookUpToTable(var DMTTable: Record DMTTable) OK: Boolean;
+    procedure LookUpTargetTable(var DMTTable: Record DMTTable) OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTSelectTables: Page DMTSelectTables;
+        DMTSelectTables: Page "DMTSelectTableList";
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
-        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.Set(TempAllObjWithCaption, true);
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
@@ -50,11 +50,11 @@ codeunit 110000 "DMTObjMgt"
         DMTField: Record DMTField;
         DMTTable: Record DMTTable;
         File: Record File;
-        DMTSelectTables: Page DMTSelectTables;
+        DMTSelectTables: Page "DMTSelectTableList";
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
-        DMTSelectTables.Set(TempAllObjWithCaption);
+        DMTSelectTables.Set(TempAllObjWithCaption, true);
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
@@ -64,7 +64,7 @@ codeunit 110000 "DMTObjMgt"
                         Clear(DMTTable);
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
-                        if DMTTable.TryFindExportDataFile() then begin
+                        if DMTTable.TryFindExportDataFile(false) then begin
                             if DMTTable.FindFileRec(File) then
                                 // lager than 100KB -> CSV
                                 if ((File.Size / 1024) < 100) then
@@ -83,14 +83,22 @@ codeunit 110000 "DMTObjMgt"
     local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
     var
         AllObjWithCaption: Record AllObjWithCaption;
+        TableMeta: Record "Table Metadata";
         DMTTable: Record DMTTable;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
         AllObjWithCaption.FindSet();
         repeat
             TempAllObjWithCaption := AllObjWithCaption;
+            TempAllObjWithCaption."Object Subtype" := '';
             if DMTTable.Get(TempAllObjWithCaption."Object ID") then
-                TempAllObjWithCaption."Object Subtype" := 'DMTTableExists';
+                TempAllObjWithCaption."Object Subtype" += 'TableExists';
+            if TableMeta.Get(TempAllObjWithCaption."Object ID") then begin
+                if TableMeta.ObsoleteState = TableMeta.ObsoleteState::Pending then
+                    TempAllObjWithCaption."Object Subtype" += 'Pending';
+                if TableMeta.ObsoleteState = TableMeta.ObsoleteState::Pending then
+                    TempAllObjWithCaption."Object Subtype" += 'Removed';
+            end;
             TempAllObjWithCaption.Insert(false);
         until AllObjWithCaption.Next() = 0;
     end;
@@ -120,7 +128,7 @@ codeunit 110000 "DMTObjMgt"
         end;
     end;
 
-    internal procedure ValidateToTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
+    internal procedure ValidateTargetTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
     var
         allObjWithCaption: Record AllObjWithCaption;
     begin

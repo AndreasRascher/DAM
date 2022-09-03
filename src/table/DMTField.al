@@ -215,9 +215,9 @@ table 110003 "DMTField"
         ProdBOMHeader: Record "Production BOM Header";
         ProdBOMVersion: Record "Production BOM Version";
         RoutingHeader: Record "Routing Header";
-        GLSetup: Record "General Ledger Setup";
-        // Vendor: Record Vendor;
-        Customer: Record Customer;
+    // GLSetup: Record "General Ledger Setup";
+    // Vendor: Record Vendor;
+    // Customer: Record Customer;
     // Contact: Record Contact;
     // GLAccount: Record "G/L Account";
     // CustomerPostingGroup: Record "Customer Posting Group";

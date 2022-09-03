@@ -59,7 +59,7 @@ table 110001 "DMTErrorLog"
         key(Key2; "From ID") { }
     }
 
-    procedure AddEntryForLastError(FromRecRef: recordref; ToRecRef: RecordRef; DMTFields: Record "DMTField");
+    procedure AddEntryForLastError(SourceRef: recordref; TargetRef: RecordRef; DMTFields: Record "DMTField");
     var
         _DMTErrorlog: Record DMTErrorLog;
         DMTTable: Record DMTTable;
@@ -68,12 +68,12 @@ table 110001 "DMTErrorLog"
         _DMTErrorlog.DataFileName := DMTTable.DataFileName;
         _DMTErrorlog.DataFileFolderPath := DMTTable.DataFileFolderPath;
 
-        _DMTErrorlog."From ID" := FromRecRef.RecordId;
-        _DMTErrorlog."To ID" := ToRecRef.RecordId;
+        _DMTErrorlog."From ID" := SourceRef.RecordId;
+        _DMTErrorlog."To ID" := TargetRef.RecordId;
         _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
         _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."to ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
 
-        _DMTErrorlog."Import from Table No." := DMTFields."Source Table ID";
+        _DMTErrorlog."Import from Table No." := SourceRef.Number;
         _DMTErrorlog."Import from Field No." := DMTFields."Source Field No.";
         _DMTErrorlog."Import to Table No." := DMTFields."Target Table ID";
         _DMTErrorlog."Import to Field No." := DMTFields."Target Field No.";

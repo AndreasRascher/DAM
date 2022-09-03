@@ -202,55 +202,54 @@ codeunit 110009 DMTImport
         TmpDMTField.findset();
         repeat
             if not IsKnownAutoincrementField(TmpDMTField) then begin
-                if (TmpDMTField."Processing Action" <> TmpDMTField."Processing Action"::FixedValue) then begin
-                    DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."Source Field No.", BufferRef, TmpDMTField."Target Field No.", false);
-                end else begin
-                    ToFieldRef := TmpTargetRef.Field(TmpDMTField."Target Field No.");
-                    if not DMTMgt.EvaluateFieldRef(ToFieldRef, TmpDMTField."Fixed Value", false, false) then
-                        Error('Invalid Fixed Value %1', TmpDMTField."Fixed Value");
-                    DMTMgt.ValidateFieldWithValue(TmpTargetRef, TmpDMTField."Target Field No.",
-                      ToFieldRef.Value,
-                      TmpDMTField."Ignore Validation Error");
+                case TmpDMTField."Processing Action" of
+                    TmpDMTField."Processing Action"::Ignore:
+                        ;
+                    TmpDMTField."Processing Action"::Transfer:
+                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpDMTField."Source Field No.", BufferRef, TmpDMTField."Target Field No.", false);
+                    TmpDMTField."Processing Action"::FixedValue:
+                        begin
+                            ToFieldRef := TmpTargetRef.Field(TmpDMTField."Target Field No.");
+                            DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TmpDMTField."Fixed Value");
+                        end;
                 end;
             end;
         until TmpDMTField.Next() = 0;
     end;
 
-    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempDMTField_COLLECTION: Record "DMTField" temporary)
+    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempDMTField: Record "DMTField" temporary)
     var
         ToFieldRef: FieldRef;
         NonKeyFieldsFilter: Text;
     begin
         NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
-        TempDMTField_COLLECTION.Reset();
-        TempDMTField_COLLECTION.SetFilter("Target Field No.", NonKeyFieldsFilter);
-        TempDMTField_COLLECTION.SetCurrentKey("Validation Order");
-        if not TempDMTField_COLLECTION.findset() then
+        TempDMTField.Reset();
+        TempDMTField.SetFilter("Target Field No.", NonKeyFieldsFilter);
+        TempDMTField.SetCurrentKey("Validation Order");
+        if not TempDMTField.findset() then
             exit; // Required for tables with only key fields
         repeat
-            TempDMTField_COLLECTION.CalcFields("Target Field Caption");
+            //hier: MigrateFieldsaufrufen
+            TempDMTField.CalcFields("Target Field Caption");
             case true of
-                (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::Ignore):
+                (TempDMTField."Processing Action" = TempDMTField."Processing Action"::Ignore):
                     ;
-                (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::Transfer):
-                    if TempDMTField_COLLECTION."Validate Value" then
-                        DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempDMTField_COLLECTION)
+                (TempDMTField."Processing Action" = TempDMTField."Processing Action"::Transfer):
+                    if TempDMTField."Validate Value" then
+                        DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempDMTField)
                     else
-                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDMTField_COLLECTION."Source Field No.", BufferRef, TempDMTField_COLLECTION."Target Field No.", true);
+                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempDMTField."Source Field No.", BufferRef, TempDMTField."Target Field No.", true);
 
-
-                (TempDMTField_COLLECTION."Processing Action" = TempDMTField_COLLECTION."Processing Action"::FixedValue):
+                (TempDMTField."Processing Action" = TempDMTField."Processing Action"::FixedValue):
                     begin
-                        ToFieldRef := TmpTargetRef.Field(TempDMTField_COLLECTION."Target Field No.");
-                        if not DMTMgt.EvaluateFieldRef(ToFieldRef, TempDMTField_COLLECTION."Fixed Value", false, false) then
-                            Error('Invalid Fixed Value %1', TempDMTField_COLLECTION."Fixed Value");
-                        DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempDMTField_COLLECTION."Target Field No.",
-                          ToFieldRef.Value,
-                          TempDMTField_COLLECTION."Ignore Validation Error");
+                        ToFieldRef := TmpTargetRef.Field(TempDMTField."Target Field No.");
+                        DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TempDMTField."Fixed Value");
+                        if TempDMTField."Validate Value" then
+                            DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempDMTField."Target Field No.", ToFieldRef.Value, TempDMTField."Ignore Validation Error");
                     end;
             end
-        until TempDMTField_COLLECTION.Next() = 0;
-        TmpTargetRef.MODIFY(false);
+        until TempDMTField.Next() = 0;
+        TmpTargetRef.Modify(false);
     end;
 
     procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DMTTable: Record DMTTable) Continue: Boolean;
@@ -262,9 +261,9 @@ codeunit 110009 DMTImport
         PrimaryKeyRef: KeyRef;
         KeyFieldsFilter: Text;
     begin
-        FPBuilder.AddTable(BufferRef.CAPTION, BufferRef.NUMBER);// ADD DATAITEM
+        FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
         IF BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SETVIEW(BufferRef.CAPTION, BufferRef.GETVIEW());
+            FPBuilder.SetView(BufferRef.CAPTION, BufferRef.GETVIEW());
 
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
             KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTTable."Target Table ID", true);
@@ -277,9 +276,9 @@ codeunit 110009 DMTImport
             end;
         end else begin
             // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
-            PrimaryKeyRef := BufferRef.KEYINDEX(1);
-            for Index := 1 TO PrimaryKeyRef.FIELDCOUNT DO
-                FPBuilder.ADDFIELDNO(BufferRef.CAPTION, PrimaryKeyRef.FieldIndex(Index).NUMBER);
+            PrimaryKeyRef := BufferRef.KeyIndex(1);
+            for Index := 1 TO PrimaryKeyRef.FieldCount DO
+                FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
         end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
         Continue := FPBuilder.RUNMODAL();
@@ -395,10 +394,10 @@ codeunit 110009 DMTImport
 
     local procedure HasValidKeyFldRelations(var TmpTargetRef: RecordRef): Boolean
     var
-        KeyRef: KeyRef;
+        RelatedRef: RecordRef;
         FldRef: FieldRef;
         KeyFieldIndex: Integer;
-        RelatedRef: RecordRef;
+        KeyRef: KeyRef;
         Debug: List of [Text];
     begin
         KeyRef := TmpTargetRef.KeyIndex(1);

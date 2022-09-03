@@ -300,7 +300,7 @@ page 110012 "DMTTableCard"
     trigger OnAfterGetCurrRecord()
     begin
         Rec.UpdateIndicators();
-        Rec.TryFindExportDataFile();
+        Rec.TryFindExportDataFile(true);
         Rec.UpdateNAVSchemaFileStatus();
         DataFilePathStyleExpr := Rec.DataFilePathStyle;
     end;
@@ -325,10 +325,10 @@ page 110012 "DMTTableCard"
     end;
 
     var
+        PageActions: Codeunit DMTPageActions;
+        [InDataSet]
+        NAVDataSourcePropertiesVisible, UseXMLPortAndBufferTable : Boolean;
         [InDataSet]
         DataFilePathStyleExpr: Text;
-        [InDataSet]
-        UseXMLPortAndBufferTable, NAVDataSourcePropertiesVisible : Boolean;
-        PageActions: Codeunit DMTPageActions;
 
 }
