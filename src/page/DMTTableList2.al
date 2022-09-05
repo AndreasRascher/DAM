@@ -21,6 +21,7 @@ page 110014 "DMTTableList"
         {
             repeater(SetupView)
             {
+                FreezeColumn = "Target Table ID";
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
                 field("Target Table ID"; Rec."Target Table ID")
                 {
@@ -99,8 +100,8 @@ page 110014 "DMTTableList"
                 begin
                     if Rec."Target Table ID" <> 0 then
                         CurrPage.SaveRecord();
-                    DMTSetup.CheckSchemaInfoHasBeenImporterd();
                     Commit();
+                    DMTSetup.CheckSchemaInfoHasBeenImporterd();
                     PageActions.AddSelectedTargetTables();
                 end;
             }
@@ -273,8 +274,8 @@ page 110014 "DMTTableList"
 
     trigger OnAfterGetRecord()
     begin
-        UpdateIndicators();
-        Rec.TryFindExportDataFile(false);
+        Rec.UpdateIndicators();
+        Rec.TryFindExportDataFile();
     end;
 
     trigger OnOpenPage()

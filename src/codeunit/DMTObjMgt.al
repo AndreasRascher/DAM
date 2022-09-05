@@ -64,7 +64,7 @@ codeunit 110000 "DMTObjMgt"
                         Clear(DMTTable);
                         DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
                         DMTTable.Insert();
-                        if DMTTable.TryFindExportDataFile(false) then begin
+                        if DMTTable.TryFindExportDataFile() then begin
                             if DMTTable.FindFileRec(File) then
                                 // lager than 100KB -> CSV
                                 if ((File.Size / 1024) < 100) then

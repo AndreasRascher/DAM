@@ -1723,11 +1723,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastView - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 1217602358 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>NAV Schema File Status</source>
-          <note from="Developer" annotates="general" priority="2">NAV Schema Datei Status</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field NAV Schema File Status - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Source Table Caption</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2318,10 +2313,15 @@
           <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetToTableIDFilter - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2386859515 - Action 2185765369 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Read files into buffer tables (marked lines)</source>
           <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToBuffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 426265410 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to target tables (marked lines)</source>
+          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToTarget - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Popose Matching Fields</source>
@@ -2342,11 +2342,6 @@
           <source>Add Tables</source>
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action SelectTablesToAdd - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 3691651546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import to target tables (marked lines)</source>
-          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action TransferSelectedToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2531305551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Sort Order</source>

@@ -31,6 +31,7 @@ table 110000 "DMTTable"
         }
         field(21; "No.of Records in Buffer Table"; Integer)
         {
+            Editable = false;
             Caption = 'No.of Records in Buffer Table', comment = 'Anz. Datensätze in Puffertabelle';
             trigger OnLookup()
             begin
@@ -157,31 +158,32 @@ table 110000 "DMTTable"
         field(113; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
         field(114; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(200; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
-        field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; }
+        field(201; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; Editable = false; }
         field(202; LastImportBy; Code[50])
         {
             Caption = 'User ID', comment = 'Benutzer-ID';
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = User."User Name";
+            Editable = false;
         }
-        field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; }
-        field(300; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; }
-        field(301; ImportToBufferIndicatorStyle; Text[15]) { Caption = 'ImportToBufferIndicatorStyle', Locked = true; }
-        field(302; ImportToTargetIndicator; Enum DMTImportIndicator) { Caption = 'ImportToTargetIndicator', Locked = true; }
+        field(203; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; Editable = false; }
+        field(300; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; Editable = false; }
+        field(301; ImportToBufferIndicatorStyle; Text[15]) { Caption = 'ImportToBufferIndicatorStyle', Locked = true; Editable = false; }
+        field(302; ImportToTargetIndicator; Enum DMTImportIndicator) { Caption = 'ImportToTargetIndicator', Locked = true; Editable = false; }
         field(303; ImportToTargetIndicatorStyle; Text[15]) { Caption = 'ImportToTargetIndicatorStyle', Locked = true; }
-        field(304; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; }
-        field(305; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; }
-        field(306; DataFilePathStyle; Text[15]) { Caption = 'DataFilePathStyle', Locked = true; }
+        field(304; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; Editable = false; }
+        field(305; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
+        field(306; DataFilePathStyle; Text[15]) { Caption = 'DataFilePathStyle', Locked = true; Editable = false; }
 
         #region NAVDataSourceFields
         field(40; "Data Source Type"; Enum DMTDataSourceType) { Caption = 'Data Source Type'; }
-        field(41; "NAV Schema File Status"; Option)
-        {
-            Caption = 'NAV Schema File Status', Comment = 'NAV Schema Datei Status';
-            Editable = false;
-            OptionMembers = "Import required",Imported;
-            OptionCaptionML = ENU = '"Import required",Imported', DEU = '"Import erforderlich",Importiert';
-        }
+        // field(41; "NAV Schema File Status"; Option)
+        // {
+        //     Caption = 'NAV Schema File Status', Comment = 'NAV Schema Datei Status';
+        //     Editable = false;
+        //     OptionMembers = "Import required",Imported;
+        //     OptionCaptionML = ENU = '"Import required",Imported', DEU = '"Import erforderlich",Importiert';
+        // }
         field(42; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.'; }
         field(43; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; }
         field(44; "NAV Src.Table Caption"; Text[250])
@@ -434,7 +436,7 @@ table 110000 "DMTTable"
         // end;
     end;
 
-    procedure TryFindExportDataFile(ModifyRec: Boolean) FileExists: Boolean
+    procedure TryFindExportDataFile() FileExists: Boolean
     var
         DMTSetup: Record "DMTSetup";
         FileRec: Record File;
@@ -449,8 +451,6 @@ table 110000 "DMTTable"
         if FileMgt.ServerFileExists(FilePath) then begin
             FileExists := true;
             Rec.SetDataFilePath(FilePath);
-            if ModifyRec then
-                Rec.Modify();
         end else begin
             //Message(FilePath);
         end;
@@ -459,7 +459,6 @@ table 110000 "DMTTable"
             if Rec.FindFileRec(FileRec) then begin
                 Rec."DataFile Size" := FileRec.Size;
                 Rec."DataFile Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
-                Rec.Modify()
             end;
         end;
     end;
@@ -566,15 +565,6 @@ table 110000 "DMTTable"
     begin
         if (Rec."Import XMLPort ID" = 0) then exit(false);
         exit(AllObj.Get(AllObj."Object Type"::XMLport, Rec."Import XMLPort ID"));
-    end;
-
-    procedure UpdateNAVSchemaFileStatus()
-    var
-        FieldBuffer: Record DMTFieldBuffer;
-    begin
-        Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::"Import required";
-        if not FieldBuffer.IsEmpty then
-            Rec."NAV Schema File Status" := Rec."NAV Schema File Status"::Imported;
     end;
 
     internal procedure InitOrRefreshFieldSortOrder(): Boolean
@@ -707,7 +697,6 @@ table 110000 "DMTTable"
         TableInformation: Record "Table Information";
     begin
         if TableInformation.Get(CompanyName, Rec."Target Table ID") then;
-        // TableInformation.Calcfields("No. of Records");
         exit(TableInformation."No. of Records");
     end;
 
@@ -720,19 +709,9 @@ table 110000 "DMTTable"
     begin
         UpdateIndicator_ImportToBuffer();
         UpdateIndicator_ImportToTarget();
-        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            clear(Rec.ImportXMLPortIDStyle);
-            clear(Rec.BufferTableIDStyle);
-        end else begin
-            Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-            if Rec.ImportXMLPortExits() then
-                Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-            Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-            if Rec.CustomBufferTableExits() then
-                Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-        end;
+        UpdateStyle_ImportObjectsExist();
         DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-        if Rec.TryFindExportDataFile(false) then
+        if Rec.TryFindExportDataFile() then
             DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
     end;
 
@@ -769,6 +748,21 @@ table 110000 "DMTTable"
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;
                 end;
+        end;
+    end;
+
+    local procedure UpdateStyle_ImportObjectsExist()
+    begin
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            clear(Rec.ImportXMLPortIDStyle);
+            clear(Rec.BufferTableIDStyle);
+        end else begin
+            Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if Rec.ImportXMLPortExits() then
+                Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if Rec.CustomBufferTableExits() then
+                Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
     end;
 

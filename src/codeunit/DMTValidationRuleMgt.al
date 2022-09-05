@@ -1,145 +1,137 @@
-// codeunit 110011 "DMTValidationRuleMgt"
-// {
-//     local procedure AddRule_ValidateValueIsFALSE(TableID: Integer; FieldName: Text)
-//     var
-//         CurrFieldNameList: List of [Text];
-//     begin
-//         if TableField_ValidateValueIsFALSE.ContainsKey(TableID) then begin
-//             CurrFieldNameList := TableField_ValidateValueIsFALSE.Get(TableID);
-//             if not CurrFieldNameList.Contains(FieldName) then begin
-//                 CurrFieldNameList.Add(FieldName);
-//                 TableField_ValidateValueIsFALSE.Set(TableID, CurrFieldNameList);
-//             end;
-//         end else begin
-//             CurrFieldNameList.Add(FieldName);
-//             TableField_ValidateValueIsFALSE.Add(TableID, CurrFieldNameList);
-//         end;
+codeunit 110011 "DMTValidationRuleMgt"
+{
+    procedure SetKnownValidationRules(var DMTField: Record DMTField)
+    var
+        TargetField: Record Field;
+        KnownFixedValue: Text;
+        KnownUseTryFunction, KnownUseValidate : Boolean;
+    begin
+        TargetField.get(DMTField."Target Table ID", DMTField."Target Field No.");
+        if FindKnownUseTryFunction(TargetField, KnownUseTryFunction) then
+            DMTField."Use Try Function" := KnownUseTryFunction;
+        if FindKnownUseValidateValue(TargetField, KnownUseValidate) then
+            DMTField."Validate Value" := KnownUseValidate;
+        if FindKnownFixedValue(TargetField, KnownFixedValue) then
+            DMTField.Validate("Fixed Value", KnownFixedValue);
+    end;
 
-//     end;
+    local procedure FindKnownUseTryFunction(TargetField: Record Field; var KnownUseTryFunction: Boolean) Found: Boolean
+    begin
+        KnownUseTryFunction := true;
+        Found := true;
+        case true of
+            IsMatch(TargetField, 'VAT Registration No.'),
+            IsMatch(TargetField, 'E-Mail'),
 
-//     local procedure AddRule_UseTryFunctionFALSE(TableID: Integer; FieldName: Text)
-//     begin
-
-//     end;
-
-//     local procedure AddRule_DefaultValue(TableID: Integer; FieldName: Text; DefaultValue: Text)
-//     var
-//         DefaultFieldValue: Dictionary of [Text, Text];
-//     begin
-//         DefaultFieldValue.Add(FieldName, DefaultValue);
-//         Field_DefaultValue.Add(TableID, DefaultFieldValue)
-//     end;
-
-//     /// <summary>
-//     /// Set Use Try Functions for all Tables with the given FieldName
-//     /// </summary>
-//     /// <param name="TableID"></param>
-//     /// <param name="FieldName"></param>
-//     /// <param name="DefaultValue"></param>
-//     local procedure AddRule_FieldName_UseTryFunctionFALSE(FieldName: Text)
-//     begin
-//         FieldName_UseTryFunctionFALSE.Add(FieldName);
-//     end;
-
-//     local procedure AddRule_FieldName_ValidateValueIsFALSE(FieldName: Text)
-//     begin
-//         FieldName_ValidateValueIsFALSE.Add(FieldName);
-//     end;
+            IsMatch(TargetField, 'Global Dimension 1 Code'),
+            IsMatch(TargetField, 'Global Dimension 2 Code'),
+            IsMatch(TargetField, Database::Item, 'Costing Method', 'Tariff No.', 'Base Unit of Measure', 'Indirect Cost %', 'Standard Cost'):
+                IsMatch(TargetField, Database::"Fixed Asset", 'Budgeted Asset'),
+            IsMatch(TargetField, Database::"Company Information", 'IC Partner Code', 'IC Inbox Type', 'IC Inbox Details']):
+            IsMatch(TargetField, Database::"General Ledger Setup"):
+            IsMatch(TargetField, Database::"Depreciation Book") and (TargetField.FieldName IN ['Fiscal Year 365 Days']):
+            IsMatch(TargetField, Database::"Sales Header") and (TargetField.FieldName IN ['Sell-to Customer No.', 'Bill-to Customer No.']):
 
 
-//     procedure LoadRules()
-//     var
-//         ProdBOMHeader: Record "Production BOM Header";
-//         ProdBOMVersion: Record "Production BOM Version";
-//         RoutingHEader: Record "Routing Header";
-//     begin
-//         AddRule_FieldName_UseTryFunctionFALSE(Database::"Customer Posting Group",);
-//         //                 (TargetField.TableNo = Database::"Customer Posting Group") and
-//         //                 (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-//         //                     begin
-//         //                         DMTFields2."Use Try Function" := false;
-//         //                     end;
-//         //                 (TargetField.TableNo = Database::"Vendor Posting Group") and
-//         //                 (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-//         //                     begin
-//         //                         DMTFields2."Use Try Function" := false;
-//         //                     end;
-//         //#15      G/L Account
-//         AddRule_ValidateValueIsFALSE(Database::"G/L Account", 'Totaling');
+                KnownUseTryFunction := false;
+            else
+                Found := false;
+        end;
+    end;
 
-//         //#5050    Contact
-//         AddRule_ValidateValueIsFALSE(Database::Contact, 'Company No.');
+    local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownUseValidate: Boolean) Found: Boolean
+    begin
+        KnownUseValidate := true;
+        Found := true;
+        case true of
+            IsMatch(TargetField, 'VAT Registration No.'),
+            IsMatch(TargetField, Database::"Location", 'ESCM In Behalf of Customer No.'),
+            IsMatch(TargetField, Database::"Stockkeeping Unit", 'Phys Invt Counting Period Code', 'Standard Cost'),
+            IsMatch(TargetField, Database::"G/L Account", 'Totaling'),
+            IsMatch(TargetField, Database::Customer, 'Primary Contact No.', 'Contact'),
+            IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance', 'Bill-to Customer No.'),
+            IsMatch(TargetField, Database::Vendor, 'Primary Contact No.', 'Contact'),
+            IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
+            IsMatch(TargetField, Database::Contact, 'Company No.'):
+                KnownUseValidate := false;
+            else
+                Found := false;
+        end;
+    end;
 
-//         //#18      Customer
-//         AddRule_ValidateValueIsFALSE(Database::Customer, 'Primary Contact No.');
-//         AddRule_ValidateValueIsFALSE(Database::Customer, 'Contact');
-//         AddRule_ValidateValueIsFALSE(Database::Customer, 'Block Payment Tolerance');
-//         AddRule_ValidateValueIsFALSE(Database::Customer, 'Bill-to Customer No.');
+    procedure IsMatch(Field: Record Field; Field1: Text) IsMatch: Boolean
+    begin
+        IsMatch := (Field.FieldName = Field1);
+    end;
 
-//         // Vendor
-//         AddRule_ValidateValueIsFALSE(Database::Vendor, 'Primary Contact No.');
-//         AddRule_ValidateValueIsFALSE(Database::Vendor, 'Contact');
-//         AddRule_ValidateValueIsFALSE(Database::Vendor, 'Prices Including VAT');
+    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text) IsMatch: Boolean
+    begin
+        IsMatch := (Field.TableNo = TableNo) and (Field.FieldName = Field1);
+    end;
 
-//         // Item
-//         AddRule_UseTryFunctionFALSE(Database::Item, 'Costing Method');
-//         AddRule_UseTryFunctionFALSE(Database::Item, 'Tariff No.');
-//         AddRule_UseTryFunctionFALSE(Database::Item, 'Base Unit of Measure');
-//         AddRule_UseTryFunctionFALSE(Database::Item, 'Indirect Cost %');
-//         AddRule_UseTryFunctionFALSE(Database::Item, 'Standard Cost');
+    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text; Field2: Text) IsMatch: Boolean
+    begin
+        IsMatch := (Field.TableNo = TableNo) and ((Field.FieldName = Field1) or (Field.FieldName = Field2));
+    end;
 
-//         // Prod. BOM Header
-//         AddRule_DefaultValue(Database::"Production BOM Header", 'Status', Format(Enum::"BOM Status"::"Under Development"));
+    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text; Field2: Text; Field3: Text; Field4: Text; Field5: Text) IsMatch: Boolean
+    begin
+        IsMatch := (Field.TableNo = TableNo) and
+                    ((Field.FieldName = Field1) or
+                     (Field.FieldName = Field2) or
+                     (Field.FieldName = Field3) or
+                     (Field.FieldName = Field4) or
+                     (Field.FieldName = Field5));
+    end;
 
-//         // Prod. BOM Version
-//         AddRule_DefaultValue(Database::"Production BOM Header", 'Status', Format(Enum::"BOM Status"::"Under Development"));
+    local procedure FindKnownFixedValue(TargetField: Record Field; KnownFixedValue: Text) Found: Boolean
+    begin
+        KnownFixedValue := '';
+        Found := true;
+        case true of
+            else
+                Found := false;
+        end;
+    end;
 
-//         // Routing Header
-//         AddRule_DefaultValue(Database::"Routing Header", 'Status', Format(Enum::"Routing Status"::"Under Development"));
-
-//         // Global Rules
-//         AddRule_FieldName_UseTryFunctionFALSE('Global Dimension 1 Code');
-//         AddRule_FieldName_UseTryFunctionFALSE('Global Dimension 2 Code');
-//         AddRule_FieldName_UseTryFunctionFALSE('VAT Registration No.');
-//         AddRule_FieldName_ValidateValueIsFALSE('VAT Registration No.');
-//         AddRule_FieldName_UseTryFunctionFALSE('E-Mail');
-
-//     end;
-
-//     var
-//         TableField_ValidateValueIsFALSE: Dictionary of [Integer, List of [Text]];
-//         FieldName_UseTryFunctionFALSE: List of [Text];
-//         FieldName_ValidateValueIsFALSE: List of [Text];
-//         Field_DefaultValue: Dictionary of [Integer, Dictionary of [Text, Text]];
-//     // repeat
-//     //             TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
-//     // DMTFields2 := DMTFields;
-//     // case true of
+    /*
+    case true of
+ 
 
 
 
+ 
+                    (TargetField.TableNo = Database::"Production BOM Header") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
+                            DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
+                        end;
+                    (TargetField.TableNo = Database::"Production BOM Version") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            ProdBOMVersion.Status := ProdBOMVersion.Status::"Under Development";
+                            DMTFields2.Validate("Fixed Value", Format(ProdBOMVersion.Status));
+                        end;
+                    (TargetField.TableNo = Database::"Routing Header") and
+                    (TargetField.FieldName IN ['Status']):
+                        begin
+                            RoutingHeader.Status := RoutingHeader.Status::"Under Development";
+                            DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
+                        end;
+
+                    (TargetField.TableNo = Database::"Customer Posting Group") and
+                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                    (TargetField.TableNo = Database::"Vendor Posting Group") and
+                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
+                        begin
+                            DMTFields2."Use Try Function" := false;
+                        end;
+                end;
+    */
 
 
-
-//     //                 (TargetField.TableNo = Database::"Fixed Asset") and (TargetField.FieldName in ['Budgeted Asset']):
-//     //                     begin
-//     //                         DMTFields2."Use Try Function" := false;
-//     //                     end;
-//     //                 (TargetField.TableNo = Database::"Company Information") and (TargetField.FieldName in ['IC Partner Code', 'IC Inbox Type', 'IC Inbox Details']):
-//     //                     begin
-//     //                         DMTFields2."Use Try Function" := false;
-//     //                     end;
-//     //                 (TargetField.TableNo = Database::"General Ledger Setup"):
-//     //                     begin
-//     //                         DMTFields2."Use Try Function" := false;
-//     //                     end;
-//     //                 (TargetField.TableNo = Database::"Location") and (TargetField.FieldName IN ['ESCM In Behalf of Customer No.']):
-//     //                     begin
-//     //                         DMTFields2."Validate Value" := false;
-//     //                     end;
-//     //             end;
-
-//     //             if format(DMTFields2) <> Format(DMTFields) then
-//     //                 DMTFields2.Modify()
-//     //         until DMTFields.Next() = 0;
-// }
+}

@@ -90,7 +90,6 @@ page 110012 "DMTTableCard"
                         EnableControls();
                     end;
                 }
-                field("NAV Schema File Status"; Rec."NAV Schema File Status") { ApplicationArea = All; }
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
@@ -300,8 +299,7 @@ page 110012 "DMTTableCard"
     trigger OnAfterGetCurrRecord()
     begin
         Rec.UpdateIndicators();
-        Rec.TryFindExportDataFile(true);
-        Rec.UpdateNAVSchemaFileStatus();
+        Rec.TryFindExportDataFile();
         DataFilePathStyleExpr := Rec.DataFilePathStyle;
     end;
 
