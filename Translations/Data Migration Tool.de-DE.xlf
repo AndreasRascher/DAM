@@ -2067,12 +2067,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field LastView - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 1217602358 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>NAV Schema File Status</source>
-          <target>NAV Schema Datei Status</target>
-          <note from="Developer" annotates="general" priority="2">NAV Schema Datei Status</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field NAV Schema File Status - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 557242229 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Source Table Caption</source>
           <target>NAV Herkunftstabelle Bezeichnung</target>
@@ -2091,11 +2085,12 @@
           <note from="Developer" annotates="general" priority="2">NAV Tabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field NAV Src.Table No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 3496579899 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 557242229 - Field 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Lines in Target Table</source>
-          <target>Anz. Zeilen in Zieltabelle</target>
+          <target>Anz. Datensätze in Zieltabelle</target>
           <note from="Developer" annotates="general" priority="2">Anz. Zeilen in Zieltabelle</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No. of Lines In Trgt. Table - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No. of Records In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
@@ -2637,6 +2632,13 @@
           <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 200127800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not Transfered Records</source>
+          <target>Nicht übertragene Datensätze</target>
+          <note from="Developer" annotates="general" priority="2">Nicht übertragene Datensätze</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action GetListOfNotTransferedRecords - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
           <target>Import in Puffertabelle</target>
@@ -2781,11 +2783,19 @@
           <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action GetToTableIDFilter - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 3863332268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2386859515 - Action 2185765369 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Read files into buffer tables (marked lines)</source>
           <target>Dateien in Puffertabellen einlesen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportBufferTables - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToBuffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 426265410 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to target tables (marked lines)</source>
+          <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
+          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToTarget - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Popose Matching Fields</source>
@@ -2810,12 +2820,6 @@
           <target>Tab. hinzufügen</target>
           <note from="Developer" annotates="general" priority="2">Tab. hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action SelectTablesToAdd - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2386859515 - Action 3691651546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import to target tables (marked lines)</source>
-          <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
-          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action TransferSelectedToTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2531305551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Sort Order</source>

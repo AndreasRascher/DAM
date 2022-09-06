@@ -1738,10 +1738,10 @@
           <note from="Developer" annotates="general" priority="2">NAV Tabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field NAV Src.Table No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 557242229 - Field 3496579899 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 557242229 - Field 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Lines in Target Table</source>
           <note from="Developer" annotates="general" priority="2">Anz. Zeilen in Zieltabelle</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No. of Lines In Trgt. Table - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No. of Records In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
@@ -2192,6 +2192,11 @@
           <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
           <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 200127800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not Transfered Records</source>
+          <note from="Developer" annotates="general" priority="2">Nicht übertragene Datensätze</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action GetListOfNotTransferedRecords - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>

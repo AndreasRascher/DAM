@@ -38,7 +38,7 @@ table 110000 "DMTTable"
                 ShowBufferTable();
             end;
         }
-        field(31; "No. of Lines In Trgt. Table"; Integer)
+        field(31; "No. of Records In Trgt. Table"; Integer)
         {
             Caption = 'No. of Lines in Target Table', Comment = 'Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
@@ -738,12 +738,12 @@ table 110000 "DMTTable"
         Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
         case true of
-            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Lines In Trgt. Table"):
+            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Cross;
                 end;
-            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Lines In Trgt. Table"):
+            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;

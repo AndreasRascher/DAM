@@ -67,7 +67,7 @@ page 110014 "DMTTableList"
                 field(ImportToBufferIndicator; ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = ImportToBufferIndicatorStyle; }
                 field(ImportToTargetIndicator; ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
-                field("No. of Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table") { ApplicationArea = All; }
+                field("No. of Lines In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; }
                 field("No. of Table Relations"; rec."Table Relations")
                 {
                     ApplicationArea = All;

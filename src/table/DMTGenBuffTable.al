@@ -282,7 +282,7 @@ table 110005 "DMTGenBuffTable"
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
-        if not GenBuffTable.FindSetLinesByFileName(FullFilePath) then
+        if not GenBuffTable.FilterByFileName(FullFilePath) then
             Error('No lines found for %1', FullFilePath);
         DMTGenBufferFieldCaptions.DisposeCaptions();
         RecRef.GetTable(GenBuffTable);
@@ -301,8 +301,9 @@ table 110005 "DMTGenBuffTable"
         HasLinesInFilter := not Rec.IsEmpty;
     end;
 
-    internal procedure FindSetLinesByFileName(FullFilePath: Text) FindSetOK: Boolean
+    internal procedure FindSetLinesByFileNameWithoutCaptionLine(FullFilePath: Text) FindSetOK: Boolean
     begin
+        Rec.SetRange(IsCaptionLine, false);
         Rec.FilterByFileName(FullFilePath);
         FindSetOK := Rec.FindSet(false, false);
     end;

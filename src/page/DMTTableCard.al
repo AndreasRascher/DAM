@@ -39,7 +39,7 @@ page 110012 "DMTTableCard"
                         Rec.ShowBufferTable();
                     end;
                 }
-                field("Qty.Lines In Trgt. Table"; Rec."No. of Lines In Trgt. Table")
+                field("Qty.Lines In Trgt. Table"; Rec."No. of Records In Trgt. Table")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -282,6 +282,19 @@ page 110012 "DMTTableCard"
                 trigger OnAction()
                 begin
                     Rec.DownloadALBufferTableFile();
+                end;
+            }
+            action(GetListOfNotTransferedRecords)
+            {
+                ApplicationArea = All;
+                Image = Table;
+                Caption = 'Not Transfered Records', comment = 'Nicht übertragene Datensätze';
+
+                trigger OnAction()
+                var
+                    DMTImport: Codeunit DMTImport;
+                begin
+                    Message('%1', DMTImport.GetListOfNotTransferedRecords(Rec).Count);
                 end;
             }
 
