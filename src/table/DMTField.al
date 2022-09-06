@@ -212,129 +212,14 @@ table 110003 "DMTField"
         TargetField: Record Field;
         DMTFields: Record "DMTField";
         DMTFields2: Record "DMTField";
-        ProdBOMHeader: Record "Production BOM Header";
-        ProdBOMVersion: Record "Production BOM Version";
-        RoutingHeader: Record "Routing Header";
-    // GLSetup: Record "General Ledger Setup";
-    // Vendor: Record Vendor;
-    // Customer: Record Customer;
-    // Contact: Record Contact;
-    // GLAccount: Record "G/L Account";
-    // CustomerPostingGroup: Record "Customer Posting Group";
+        DMTValidationRuleLib: Codeunit DMTValidationRuleLib;
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
         if DMTFields.FindSet(true, false) then
             repeat
-                TargetField.Get(DMTFields."Target Table ID", DMTFields."Target Field No.");
                 DMTFields2 := DMTFields;
-                case true of
-                    TargetField.FieldName IN ['VAT Registration No.']:
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    TargetField.FieldName IN ['Global Dimension 1 Code',
-                                              'Global Dimension 2 Code']:
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::Item) and
-                    (TargetField.FieldName IN ['Costing Method',
-                                               'Tariff No.',
-                                               'Base Unit of Measure',
-                                               'Indirect Cost %',
-                                               'Standard Cost']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Customer, Database::Vendor]) and
-                    (TargetField.FieldName IN ['Primary Contact No.', 'Contact']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Vendor]) and
-                    (TargetField.FieldName IN ['Prices Including VAT']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Customer]) and
-                    (TargetField.FieldName IN ['Block Payment Tolerance', 'Bill-to Customer No.']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo IN [Database::Contact]) and
-                    (TargetField.FieldName IN ['Company No.']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.FieldName IN ['E-Mail']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Production BOM Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
-                        end;
-                    (TargetField.TableNo = Database::"Production BOM Version") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            ProdBOMVersion.Status := ProdBOMVersion.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(ProdBOMVersion.Status));
-                        end;
-                    (TargetField.TableNo = Database::"Routing Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            RoutingHeader.Status := RoutingHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
-                        end;
-                    (TargetField.TableNo = Database::"G/L Account") and
-                    (TargetField.FieldName IN ['Totaling']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Customer Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Vendor Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Fixed Asset") and (TargetField.FieldName in ['Budgeted Asset']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Company Information") and (TargetField.FieldName in ['IC Partner Code', 'IC Inbox Type', 'IC Inbox Details']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"General Ledger Setup"):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Location") and (TargetField.FieldName IN ['ESCM In Behalf of Customer No.']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Depreciation Book") and (TargetField.FieldName IN ['Fiscal Year 365 Days']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Stockkeeping Unit") and (TargetField.FieldName IN ['Phys Invt Counting Period Code', 'Standard Cost']):
-                        begin
-                            DMTFields2."Validate Value" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Sales Header") and (TargetField.FieldName IN ['Sell-to Customer No.', 'Bill-to Customer No.']):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                end;
-
+                DMTValidationRuleLib.SetKnownValidationRules(DMTFields);
                 if format(DMTFields2) <> Format(DMTFields) then
                     DMTFields2.Modify()
             until DMTFields.Next() = 0;

@@ -1,4 +1,4 @@
-codeunit 110011 "DMTValidationRuleMgt"
+codeunit 110011 DMTValidationRuleLib
 {
     procedure SetKnownValidationRules(var DMTField: Record DMTField)
     var
@@ -24,6 +24,8 @@ codeunit 110011 "DMTValidationRuleMgt"
             IsMatch(TargetField, 'E-Mail'),
             IsMatch(TargetField, 'Global Dimension 1 Code'),
             IsMatch(TargetField, 'Global Dimension 2 Code'),
+            HasTableRelation(TargetField, Database::"Customer Posting Group", Database::"G/L Account"),
+            HasTableRelation(TargetField, Database::"Vendor Posting Group", Database::"G/L Account"),
             IsMatch(TargetField, Database::Item, 'Costing Method'),
             IsMatch(TargetField, Database::Item, 'Tariff No.'),
             IsMatch(TargetField, Database::Item, 'Base Unit of Measure'),
@@ -82,54 +84,26 @@ codeunit 110011 "DMTValidationRuleMgt"
         IsMatch := (Field.TableNo = TableNo) and (Field.FieldName = FieldName);
     end;
 
+    procedure HasTableRelation(Field: Record Field; TableNo: Integer; RelatedToTableNo: Integer) HasRelation: Boolean
+    var
+        RecRef: RecordRef;
+    begin
+        RecRef.Open(Field.TableNo, true);
+        HasRelation := RecRef.Field(Field."No.").Relation = RelatedToTableNo;
+    end;
+
     local procedure FindKnownFixedValue(TargetField: Record Field; KnownFixedValue: Text) Found: Boolean
     begin
         KnownFixedValue := '';
         Found := true;
         case true of
+            IsMatch(TargetField, Database::"Production BOM Header", 'Status'),
+            IsMatch(TargetField, Database::"Production BOM Version", 'Status'):
+                KnownFixedValue := Format(Enum::"BOM Status"::"Under Development");
+            IsMatch(TargetField, Database::"Routing Header", 'Status'):
+                KnownFixedValue := Format(Enum::"Routing Status"::"Under Development");
             else
                 Found := false;
         end;
     end;
-
-    /*
-    case true of
- 
-
-
-
- 
-                    (TargetField.TableNo = Database::"Production BOM Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            ProdBOMHeader.Status := ProdBOMHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(ProdBOMHeader.Status));
-                        end;
-                    (TargetField.TableNo = Database::"Production BOM Version") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            ProdBOMVersion.Status := ProdBOMVersion.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(ProdBOMVersion.Status));
-                        end;
-                    (TargetField.TableNo = Database::"Routing Header") and
-                    (TargetField.FieldName IN ['Status']):
-                        begin
-                            RoutingHeader.Status := RoutingHeader.Status::"Under Development";
-                            DMTFields2.Validate("Fixed Value", Format(RoutingHeader.Status));
-                        end;
-
-                    (TargetField.TableNo = Database::"Customer Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                    (TargetField.TableNo = Database::"Vendor Posting Group") and
-                    (TargetField.FieldName.Contains('Account') or TargetField.FieldName.Contains('Acc.')):
-                        begin
-                            DMTFields2."Use Try Function" := false;
-                        end;
-                end;
-    */
-
-
 }

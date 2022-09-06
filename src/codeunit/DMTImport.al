@@ -461,6 +461,7 @@ codeunit 110009 DMTImport
         RecordMapping: Dictionary of [RecordId, RecordId];
         DublicateIndex: Integer;
     begin
+        //ToDo Aufteilen in 2 Funktionen - GetRecordMapping, FindCollationProblems
         LoadFieldMapping(DMTTable, false, TempDMTField);
 
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
