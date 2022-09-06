@@ -35,7 +35,17 @@ page 110014 "DMTTableList"
                         if Rec.get(Rec.RecordId) then;  //Delete from Card Page
                     end;
                 }
-                field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
+                field("Target Table Caption"; Rec."Target Table Caption")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    trigger OnDrillDown()
+                    begin
+                        Commit();
+                        Rec.OpenCardPage();
+                        if Rec.get(Rec.RecordId) then;  //Delete from Card Page
+                    end;
+                }
                 field(Folder; Rec.DataFileFolderPath) { ApplicationArea = All; Visible = false; }
                 field(FileName; Rec.DataFileName)
                 {

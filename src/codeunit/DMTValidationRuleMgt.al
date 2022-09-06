@@ -22,17 +22,21 @@ codeunit 110011 "DMTValidationRuleMgt"
         case true of
             IsMatch(TargetField, 'VAT Registration No.'),
             IsMatch(TargetField, 'E-Mail'),
-
             IsMatch(TargetField, 'Global Dimension 1 Code'),
             IsMatch(TargetField, 'Global Dimension 2 Code'),
-            IsMatch(TargetField, Database::Item, 'Costing Method', 'Tariff No.', 'Base Unit of Measure', 'Indirect Cost %', 'Standard Cost'):
-                IsMatch(TargetField, Database::"Fixed Asset", 'Budgeted Asset'),
-            IsMatch(TargetField, Database::"Company Information", 'IC Partner Code', 'IC Inbox Type', 'IC Inbox Details']):
-            IsMatch(TargetField, Database::"General Ledger Setup"):
-            IsMatch(TargetField, Database::"Depreciation Book") and (TargetField.FieldName IN ['Fiscal Year 365 Days']):
-            IsMatch(TargetField, Database::"Sales Header") and (TargetField.FieldName IN ['Sell-to Customer No.', 'Bill-to Customer No.']):
-
-
+            IsMatch(TargetField, Database::Item, 'Costing Method'),
+            IsMatch(TargetField, Database::Item, 'Tariff No.'),
+            IsMatch(TargetField, Database::Item, 'Base Unit of Measure'),
+            IsMatch(TargetField, Database::Item, 'Indirect Cost %'),
+            IsMatch(TargetField, Database::Item, 'Standard Cost'),
+            IsMatch(TargetField, Database::"Fixed Asset", 'Budgeted Asset'),
+            IsMatch(TargetField, Database::"Company Information", 'IC Partner Code'),
+            IsMatch(TargetField, Database::"Company Information", 'IC Inbox Type'),
+            IsMatch(TargetField, Database::"Company Information", 'IC Inbox Details'),
+            IsMatch(TargetField, Database::"General Ledger Setup"),
+            IsMatch(TargetField, Database::"Depreciation Book", 'Fiscal Year 365 Days'),
+            IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer No.'),
+            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'):
                 KnownUseTryFunction := false;
             else
                 Found := false;
@@ -46,11 +50,15 @@ codeunit 110011 "DMTValidationRuleMgt"
         case true of
             IsMatch(TargetField, 'VAT Registration No.'),
             IsMatch(TargetField, Database::"Location", 'ESCM In Behalf of Customer No.'),
-            IsMatch(TargetField, Database::"Stockkeeping Unit", 'Phys Invt Counting Period Code', 'Standard Cost'),
+            IsMatch(TargetField, Database::"Stockkeeping Unit", 'Phys Invt Counting Period Code'),
+            IsMatch(TargetField, Database::"Stockkeeping Unit", 'Standard Cost'),
             IsMatch(TargetField, Database::"G/L Account", 'Totaling'),
-            IsMatch(TargetField, Database::Customer, 'Primary Contact No.', 'Contact'),
-            IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance', 'Bill-to Customer No.'),
-            IsMatch(TargetField, Database::Vendor, 'Primary Contact No.', 'Contact'),
+            IsMatch(TargetField, Database::Customer, 'Primary Contact No.'),
+            IsMatch(TargetField, Database::Customer, 'Contact'),
+            IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance'),
+            IsMatch(TargetField, Database::Customer, 'Bill-to Customer No.'),
+            IsMatch(TargetField, Database::Vendor, 'Primary Contact No.'),
+            IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
             IsMatch(TargetField, Database::Contact, 'Company No.'):
                 KnownUseValidate := false;
@@ -64,24 +72,14 @@ codeunit 110011 "DMTValidationRuleMgt"
         IsMatch := (Field.FieldName = Field1);
     end;
 
-    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text) IsMatch: Boolean
+    procedure IsMatch(Field: Record Field; TableNo: Integer) IsMatch: Boolean
     begin
-        IsMatch := (Field.TableNo = TableNo) and (Field.FieldName = Field1);
+        IsMatch := (Field.TableNo = TableNo);
     end;
 
-    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text; Field2: Text) IsMatch: Boolean
+    procedure IsMatch(Field: Record Field; TableNo: Integer; FieldName: Text) IsMatch: Boolean
     begin
-        IsMatch := (Field.TableNo = TableNo) and ((Field.FieldName = Field1) or (Field.FieldName = Field2));
-    end;
-
-    procedure IsMatch(Field: Record Field; TableNo: Integer; Field1: Text; Field2: Text; Field3: Text; Field4: Text; Field5: Text) IsMatch: Boolean
-    begin
-        IsMatch := (Field.TableNo = TableNo) and
-                    ((Field.FieldName = Field1) or
-                     (Field.FieldName = Field2) or
-                     (Field.FieldName = Field3) or
-                     (Field.FieldName = Field4) or
-                     (Field.FieldName = Field5));
+        IsMatch := (Field.TableNo = TableNo) and (Field.FieldName = FieldName);
     end;
 
     local procedure FindKnownFixedValue(TargetField: Record Field; KnownFixedValue: Text) Found: Boolean
