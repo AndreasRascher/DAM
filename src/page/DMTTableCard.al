@@ -284,17 +284,23 @@ page 110012 "DMTTableCard"
                     Rec.DownloadALBufferTableFile();
                 end;
             }
-            action(GetListOfNotTransferedRecords)
+            action(CheckTransferedRecords)
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Not Transfered Records', comment = 'Nicht übertragene Datensätze';
+                Caption = 'Check Transfered Records', comment = 'Übertragene Datensätze Prüfen';
 
                 trigger OnAction()
                 var
                     DMTImport: Codeunit DMTImport;
+                    NotTransferedRecords: List of [RecordId];
+                    RecordMapping: Dictionary of [RecordId, RecordId];
+                    CollationProblems: Dictionary of [RecordId, RecordId];
                 begin
-                    Message('%1', DMTImport.GetListOfNotTransferedRecords(Rec).Count);
+                    RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
+                    CollationProblems := DMTImport.FindCollationProblems(RecordMapping);
+                    Message('No. of Records not Transfered: %1\' +
+                            'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
                 end;
             }
 

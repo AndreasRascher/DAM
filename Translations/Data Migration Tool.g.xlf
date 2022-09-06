@@ -2173,6 +2173,11 @@
           <note from="Developer" annotates="general" priority="2">Auto Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action AutoMigration - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 1454049982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Transfered Records</source>
+          <note from="Developer" annotates="general" priority="2">Übertragene Datensätze Prüfen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CheckTransferedRecords - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">Puffertabelle erstellen</note>
@@ -2192,11 +2197,6 @@
           <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
           <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 3331395113 - Action 200127800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Not Transfered Records</source>
-          <note from="Developer" annotates="general" priority="2">Nicht übertragene Datensätze</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action GetListOfNotTransferedRecords - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>

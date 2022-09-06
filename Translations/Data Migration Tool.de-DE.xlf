@@ -2089,7 +2089,6 @@
           <source>No. of Lines in Target Table</source>
           <target>Anz. Datensätze in Zieltabelle</target>
           <note from="Developer" annotates="general" priority="2">Anz. Zeilen in Zieltabelle</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTable - Field No. of Records In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 557242229 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2608,6 +2607,13 @@
           <note from="Developer" annotates="general" priority="2">Auto Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action AutoMigration - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3331395113 - Action 1454049982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Transfered Records</source>
+          <target>Übertragene Datensätze Prüfen</target>
+          <note from="Developer" annotates="general" priority="2">Übertragene Datensätze Prüfen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CheckTransferedRecords - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3331395113 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Buffer Table</source>
           <target>Puffertabelle erstellen</target>
@@ -2631,13 +2637,6 @@
           <target>Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</target>
           <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 3331395113 - Action 200127800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Not Transfered Records</source>
-          <target>Nicht übertragene Datensätze</target>
-          <note from="Developer" annotates="general" priority="2">Nicht übertragene Datensätze</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action GetListOfNotTransferedRecords - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
@@ -2787,14 +2786,12 @@
           <source>Read files into buffer tables (marked lines)</source>
           <target>Dateien in Puffertabellen einlesen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToBuffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 426265410 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to target tables (marked lines)</source>
           <target>In Zieltabellen übernehmen (Markierte Zeilen)</target>
           <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action ImportSelectedToTarget - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

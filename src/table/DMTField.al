@@ -209,7 +209,6 @@ table 110003 "DMTField"
 
     internal procedure ProposeValidationRules(DMTTable: Record DMTTable): Boolean
     var
-        TargetField: Record Field;
         DMTFields: Record "DMTField";
         DMTFields2: Record "DMTField";
         DMTValidationRuleLib: Codeunit DMTValidationRuleLib;

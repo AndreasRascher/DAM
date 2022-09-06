@@ -451,19 +451,18 @@ codeunit 110009 DMTImport
             Error('Tabelle "%1" enthält kein Feldmapping', DMTTable."Target Table Caption");
     end;
 
-    procedure GetListOfNotTransferedRecords(DMTTable: Record DMTTable) NotTransferedRecords: List of [RecordId]
+    procedure CreateSourceToTargetRecIDMapping(DMTTable: Record DMTTable; var NotTransferedRecords: List of [RecordId]) RecordMapping: Dictionary of [RecordId, RecordId]
     var
         TempDMTField: Record DMTField temporary;
         DMTGenBuffTable: Record DMTGenBuffTable;
         SourceRef, TmpTargetRef : RecordRef;
         TargetRef: RecordRef;
-        NoOfRecordsInSource, NoOfRecordsInTarget : Integer;
-        RecordMapping: Dictionary of [RecordId, RecordId];
-        DublicateIndex: Integer;
     begin
-        //ToDo Aufteilen in 2 Funktionen - GetRecordMapping, FindCollationProblems
-        LoadFieldMapping(DMTTable, false, TempDMTField);
+        Clear(NotTransferedRecords);
+        Clear(RecordMapping);
 
+        LoadFieldMapping(DMTTable, false, TempDMTField);
+        // FindSourceRef - GenBuffer
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Generic Buffer Table for all Files" then begin
             if not DMTGenBuffTable.FindSetLinesByFileNameWithoutCaptionLine(DMTTable.GetDataFilePath()) then
                 exit;
@@ -471,16 +470,13 @@ codeunit 110009 DMTImport
             if SourceRef.IsEmpty then
                 exit;
         end;
-
+        // FindSourceRef - CSVBuffer
         if DMTTable.BufferTableType = DMTTable.BufferTableType::"Seperate Buffer Table per CSV" then begin
             SourceRef.Open(DMTTable."Buffer Table ID");
             if SourceRef.IsEmpty then
                 exit;
         end;
-
-        TargetRef.Open(DMTTable."Target Table ID");
-        NoOfRecordsInSource := SourceRef.Count;
-        NoOfRecordsInTarget := TargetRef.Count;
+        // Map RecordIDs
         SourceRef.FindSet(false, false);
         repeat
             Clear(TmpTargetRef);
@@ -489,13 +485,24 @@ codeunit 110009 DMTImport
             if not TargetRef.Get(TmpTargetRef.RecordId) then begin
                 NotTransferedRecords.Add(TmpTargetRef.RecordId)
             end else begin
-                if RecordMapping.Values.Contains(TmpTargetRef.RecordId) then begin
-                    DublicateIndex := RecordMapping.Values.IndexOf(TmpTargetRef.RecordId);
-                    Message('Duplikate: Quelle\%1\%2\\Ziel:\%3', SourceRef.RecordId, RecordMapping.Keys.Get(DublicateIndex), TmpTargetRef.RecordId);
-                end;
                 RecordMapping.Add(SourceRef.RecordId, TmpTargetRef.RecordId);
             end;
         until SourceRef.Next() = 0;
+    end;
+
+    procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
+    var
+        TargetRecID: RecordId;
+        ListIndex, LastIndex : Integer;
+    begin
+        for ListIndex := 1 to RecordMapping.Values.Count do begin
+            TargetRecID := RecordMapping.Values.Get(ListIndex);
+            LastIndex := RecordMapping.Values.LastIndexOf(TargetRecID);
+            if LastIndex <> ListIndex then begin
+                CollationProblems.Add(RecordMapping.Keys.Get(ListIndex), RecordMapping.Values.Get(ListIndex));
+                CollationProblems.Add(RecordMapping.Keys.Get(LastIndex), RecordMapping.Values.Get(LastIndex));
+            end;
+        end;
     end;
 
     var
