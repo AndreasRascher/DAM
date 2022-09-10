@@ -51,6 +51,16 @@
             "id":"AL0424",
             "action":"None",
             "justification":"CaptionML is used for buffer table"
+        },
+        {
+            "id": "AA0233",
+            "action": "None",
+            "justification": "Rule: Use Get(), FindFirst() and FindLast() without Next() method."
+        },
+        {
+            "id": "AA0181",
+            "action": "None",
+            "justification": "The FindSet() or Find() methods must be used only in connection with the Next() method."
         }
     ]
 }
