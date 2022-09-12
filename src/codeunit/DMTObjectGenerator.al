@@ -205,7 +205,7 @@ codeunit 110004 "DMTObjectGenerator"
 
     local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
-        CleanFieldName := DelChr(Field.FieldName, '=', '&-%/\(),. ');
+        CleanFieldName := DelChr(Field.FieldName, '=', '#&-%/\(),. ');
         // XMLPort Fieldelements cannot start with numbers
         if CleanFieldName <> '' then
             if CopyStr(CleanFieldName, 1, 1) IN ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
