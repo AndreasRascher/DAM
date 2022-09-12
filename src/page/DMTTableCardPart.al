@@ -20,6 +20,13 @@ page 110013 "DMTTableCardPart"
                     HideValue = HideFromFieldInfo;
                     ApplicationArea = All;
                 }
+                field("Target Field Name"; Rec."Target Field Name")
+                {
+                    Editable = false;
+                    Visible = false;
+                    HideValue = HideFromFieldInfo;
+                    ApplicationArea = All;
+                }
                 field("From Field No."; Rec."Source Field No.") { LookupPageId = DMTFieldLookup; HideValue = HideFromFieldInfo; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
                 field("Trgt.Field Type"; Rec."Target Field Type") { Visible = false; ApplicationArea = All; }

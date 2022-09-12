@@ -233,6 +233,11 @@
           <note from="Developer" annotates="general" priority="2">Zielfeld Bezeichnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Target Field Caption - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 2561976296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Name</source>
+          <note from="Developer" annotates="general" priority="2">Zielfeld Name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Target Field Name - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
           <note from="Developer" annotates="general" priority="2">Ziel Feldnr.</note>

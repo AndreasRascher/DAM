@@ -279,6 +279,13 @@
           <note from="Developer" annotates="general" priority="2">Zielfeld Bezeichnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Target Field Caption - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 2561976296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Name</source>
+          <target>Zielfeld Name</target>
+          <note from="Developer" annotates="general" priority="2">Zielfeld Name</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Target Field Name - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
           <target>Zielfeldnr.</target>
@@ -2611,7 +2618,6 @@
           <source>Check Transfered Records</source>
           <target>Übertragene Datensätze Prüfen</target>
           <note from="Developer" annotates="general" priority="2">Übertragene Datensätze Prüfen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableCard - Action CheckTransferedRecords - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3331395113 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

@@ -22,14 +22,21 @@ table 110003 "DMTField"
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(23; "Target Field Type"; Text[30])
+        field(23; "Target Field Name"; Text[80])
+        {
+            Caption = 'Target Field Name', comment = 'Zielfeld Name';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(Field."FieldName" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
+        }
+        field(24; "Target Field Type"; Text[30])
         {
             Caption = 'Target Field Type', comment = 'Zielfeld Typ';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Type Name" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(24; "Source Table ID"; Integer)
+        field(30; "Source Table ID"; Integer)
         {
             Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
             DataClassification = SystemMetadata;
