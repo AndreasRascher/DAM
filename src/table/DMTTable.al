@@ -600,7 +600,7 @@ table 110000 "DMTTable"
         TempDMTTable2: Record DMTTable temporary;
     begin
         DMTTable.Copy(Rec);
-        if DMTTable.FindSet(false, false) then
+        if DMTTable.FindSet() then
             repeat
                 TempDMTTable2 := DMTTable;
                 TempDMTTable2.Insert(false);

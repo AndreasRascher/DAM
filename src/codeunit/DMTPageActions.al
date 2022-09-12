@@ -36,7 +36,7 @@ codeunit 110010 "DMTPageActions"
                        ImportFilesProgressMsg + '\' +
                        '==========================================\';
 
-        DMTTable_SELECTED.FindSet(false, false);
+        DMTTable_SELECTED.FindSet();
         REPEAT
             ProgressMsg += '\' + DMTTable_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DMTTable_SELECTED."Target Table ID") + '#';
         UNTIL DMTTable_SELECTED.NEXT() = 0;
@@ -156,6 +156,22 @@ codeunit 110010 "DMTPageActions"
                 DMTField.Modify()
             end;
         until TempDMTFieldSelected.Next() = 0;
+    end;
+
+    internal procedure UpdateIndicators(Rec: Record DMTTable)
+    var
+        DMTTable: Record DMTTable;
+    begin
+        if Format(Rec.RecordId) <> '' then begin
+            DMTTable.Copy(Rec);
+            DMTTable.SetRecFilter();
+        end;
+        if not DMTTable.FindSet() then exit;
+        repeat
+            DMTTable.UpdateIndicators();
+            DMTTable.TryFindExportDataFile();
+            DMTTable.Modify();
+        until DMTTable.Next() = 0;
     end;
 
     procedure ProposeMatchingFields(var DMTField: Record DMTField)

@@ -282,18 +282,13 @@ page 110014 "DMTTableList"
         }
     }
 
-    trigger OnAfterGetRecord()
-    begin
-        Rec.UpdateIndicators();
-        Rec.TryFindExportDataFile();
-    end;
-
     trigger OnOpenPage()
     var
         DMTSetup: Record DMTSetup;
     begin
         Rec.SetDefaultFilters();
         DMTSetup.InsertWhenEmpty();
+        PageActions.UpdateIndicators(Rec);
     end;
 
     procedure GetSelection(var DMTTable_Selected: Record DMTTable temporary) HasLines: Boolean

@@ -310,9 +310,7 @@ page 110012 "DMTTableCard"
     trigger OnOpenPage()
     begin
         Rec.InitOrRefreshFieldSortOrder();
-        Rec.FilterGroup(2);
-        Rec.SetRange(CompanyNameFilter, CompanyName);
-        Rec.FilterGroup(0);
+        Rec.SetDefaultFilters();
     end;
 
     trigger OnAfterGetCurrRecord()
