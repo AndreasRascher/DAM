@@ -1,5 +1,6 @@
 codeunit 110002 "DMTMgt"
 {
+    Permissions = tabledata "Dimension Set Entry" = rimd, tabledata "Dimension Set Tree Node" = rimd;
 
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
     begin

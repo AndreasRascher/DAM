@@ -5,6 +5,7 @@ page 110012 "DMTTableCard"
     UsageCategory = None;
     SourceTable = DMTTable;
     DataCaptionExpression = GetCaption();
+    Permissions = tabledata "Dimension Set Entry" = d, tabledata "Dimension Set Tree Node" = d;
 
     layout
     {
