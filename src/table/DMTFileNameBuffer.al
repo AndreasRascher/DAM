@@ -26,6 +26,11 @@ table 110012 DMTDataFileBuffer
             Editable = false;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
         }
+        field(32; "File is already assigned"; Boolean)
+        {
+            Caption = 'Already assigned', Comment = 'Bereits zugeordnet';
+            Editable = false;
+        }
 
     }
     keys
@@ -50,6 +55,7 @@ table 110012 DMTDataFileBuffer
             Rec.Name := FileRec.Name;
             Rec.Size := FileRec.Size;
             Rec.DateTime := CreateDateTime(FileRec.Date, FileRec.Time);
+            Rec."File is already assigned" := IsFileAlreadyAssigned();
             Rec.Insert();
             FindNAVTableByFileName();
             ProposeTargetTable();
@@ -82,7 +88,7 @@ table 110012 DMTDataFileBuffer
         DMTFieldBufferQry.SetFilter(TableNo, '1..49999|100000..');
         DMTFieldBufferQry.Open();
         while DMTFieldBufferQry.Read() do begin
-            //Land/Region -> Land_Region
+            //Land/Region -> Land_Regsion
             FileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(DMTFieldBufferQry.Table_Caption, '<>*\/|"', '_______'));
             // TODO: Doppelte Captions im Standard
             if not FileNameTableCaptionMapping.ContainsKey(FileNameFromCaption) then
@@ -101,6 +107,16 @@ table 110012 DMTDataFileBuffer
         DMTFieldBufferQry.Close();
     end;
 
+    local procedure IsFileAlreadyAssigned(): Boolean
+    var
+        DMTTable: Record DMTTable;
+    begin
+        if rec.Name = '' then exit;
+        DMTTable.SetRange(DataFileFolderPath, Rec.Path);
+        DMTTable.SetRange(DataFileName, Rec.Name);
+        exit(DMTTable.FindFirst());
+    end;
+
     procedure ProposeTargetTable()
     var
         TableMetadata: Record "Table Metadata";
@@ -112,6 +128,8 @@ table 110012 DMTDataFileBuffer
                 Rec."Target Table ID" := TableMetadata.ID;
             end else begin
                 Case Rec."NAV Src.Table No." of
+                    5105: // Customer Template
+                        Rec."Target Table ID" := Database::"Customer Templ.";
                     5717: //Item Cross Reference
                         Rec."Target Table ID" := Database::"Item Reference";
                     7002,// Sales Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'

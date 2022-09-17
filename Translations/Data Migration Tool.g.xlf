@@ -8,6 +8,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field DateTime - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 37522637 - Field 761744174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Already assigned</source>
+          <note from="Developer" annotates="general" priority="2">Bereits zugeordnet</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field File is already assigned - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 37522637 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2177,6 +2182,11 @@
           <source>Line</source>
           <note from="Developer" annotates="general" priority="2">Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsSub - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1869987933 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select Data Files</source>
+          <note from="Developer" annotates="general" priority="2">Datendateien auswählen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectDataFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1869987933 - Control 3900352901 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Schema Data Found</source>

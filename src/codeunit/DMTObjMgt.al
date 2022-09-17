@@ -1,30 +1,29 @@
 codeunit 110000 "DMTObjMgt"
 {
-    procedure LookUpOldVersionTable(var DMTTable: Record DMTTable) OK: Boolean;
+    procedure LookUpOldVersionTable(var NAVSrcTableNo: Integer; var NAVSrcTableCaption: Text) OK: Boolean;
     var
-        DMTFieldBuffer: Record DMTFieldBuffer;
-        DMTSetup: Record "DMTSetup";
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
+        DMTSetup: Record "DMTSetup";
         DMTSelectTables: Page "DMTSelectTableList";
+        DMTFieldBufferQry: Query DMTFieldBufferQry;
     begin
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
-        DMTFieldBuffer.FindSet();
-        repeat
-            if not TempAllObjWithCaption.Get(TempAllObjWithCaption."Object Type"::Table, DMTFieldBuffer.TableNo) then begin
-                TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
-                TempAllObjWithCaption."Object ID" := DMTFieldBuffer.TableNo;
-                TempAllObjWithCaption."Object Name" := DMTFieldBuffer.TableName;
-                TempAllObjWithCaption."Object Caption" := DMTFieldBuffer."Table Caption";
-                TempAllObjWithCaption.Insert(false);
-            end;
-        until DMTFieldBuffer.Next() = 0;
+        DMTFieldBufferQry.Open();
+        while DMTFieldBufferQry.Read() do begin
+            TempAllObjWithCaption."Object Type" := TempAllObjWithCaption."Object Type"::Table;
+            TempAllObjWithCaption."Object ID" := DMTFieldBufferQry.TableNo;
+            TempAllObjWithCaption."Object Name" := DMTFieldBufferQry.TableName;
+            TempAllObjWithCaption."Object Caption" := DMTFieldBufferQry.Table_Caption;
+            TempAllObjWithCaption.Insert(false);
+        end;
         if TempAllObjWithCaption.FindFirst() then;
         DMTSelectTables.Set(TempAllObjWithCaption, false);
         DMTSelectTables.LookupMode(true);
         if DMTSelectTables.RunModal() = Action::LookupOK then begin
             DMTSelectTables.GetSelection(TempAllObjWithCaption);
-            DMTTable."NAV Src.Table No." := TempAllObjWithCaption."Object ID";
-            DMTTable."NAV Src.Table Caption" := TempAllObjWithCaption."Object Caption";
+            NAVSrcTableNo := TempAllObjWithCaption."Object ID";
+            NAVSrcTableCaption := TempAllObjWithCaption."Object Caption";
+            exit(true);
         end;
     end;
 
@@ -47,9 +46,7 @@ codeunit 110000 "DMTObjMgt"
     procedure AddSelectedTables() OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTField: Record DMTField;
         DMTTable: Record DMTTable;
-        File: Record File;
         DMTSelectTables: Page "DMTSelectTableList";
     begin
         LoadTableList(TempAllObjWithCaption);
@@ -61,20 +58,7 @@ codeunit 110000 "DMTObjMgt"
             if TempAllObjWithCaption.FindSet() then
                 repeat
                     if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
-                        Clear(DMTTable);
-                        DMTTable.Validate("NAV Src.Table Caption", Format(TempAllObjWithCaption."Object ID"));
-                        DMTTable.Insert();
-                        if DMTTable.TryFindExportDataFile() then begin
-                            if DMTTable.FindFileRec(File) then
-                                // lager than 100KB -> CSV
-                                if ((File.Size / 1024) < 100) then
-                                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")
-                                else
-                                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
-                            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
-                            DMTTable.Modify();
-                        end;
-                        DMTField.InitForTargetTable(DMTTable);
+                        AddNewTargetTable(TempAllObjWithCaption."Object ID", DMTTable);
                     end;
                 until TempAllObjWithCaption.Next() = 0;
         end;
@@ -83,8 +67,8 @@ codeunit 110000 "DMTObjMgt"
     local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
     var
         AllObjWithCaption: Record AllObjWithCaption;
-        TableMeta: Record "Table Metadata";
         DMTTable: Record DMTTable;
+        TableMeta: Record "Table Metadata";
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
         AllObjWithCaption.FindSet();
@@ -105,8 +89,8 @@ codeunit 110000 "DMTObjMgt"
 
     internal procedure ValidateFromTableCaption(var Rec: Record DMTTable; xRec: Record DMTTable)
     var
-        DMTFieldBuffer: Record DMTFieldBuffer;
         AllObjWithCaption: Record AllObjWithCaption;
+        DMTFieldBuffer: Record DMTFieldBuffer;
     begin
         if rec."NAV Src.Table Caption" = xRec."NAV Src.Table Caption" then
             exit;
@@ -150,11 +134,11 @@ codeunit 110000 "DMTObjMgt"
         DMTSetup: Record "DMTSetup";
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort DMTFieldBufferImport;
+        FileFound: Boolean;
         ServerFile: File;
         InStr: InStream;
-        FileName: Text;
-        FileFound: Boolean;
         ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
+        FileName: Text;
     begin
         if DMTSetup.Get() and (DMTSetup."Schema.csv File Path" <> '') then
             if ServerFile.Open(DMTSetup."Schema.csv File Path") then begin
@@ -303,6 +287,54 @@ codeunit 110000 "DMTObjMgt"
         NAVAppInstalledApp.SetRange("App ID", mI.Id);
         NAVAppInstalledApp.FindFirst();
         Result := (NAVAppInstalledApp."Package ID" = AllObjWithCaption."App Package ID");
+    end;
+
+    procedure AddNewTargetTable(TableID: Integer; var DMTTable: Record DMTTable)
+    begin
+        AddNewTargetTable(TableID, TableID, '', '', DMTTable);
+    end;
+
+    procedure AddNewTargetTable(SourceTableID: Integer; TargetTableID: Integer; FolderPath: Text; FileName: Text; var DMTTable: Record DMTTable)
+    var
+        DMTField: Record DMTField;
+        File: Record File;
+        TableMeta: Record "Table Metadata";
+        DMTFieldBufferQry: Query DMTFieldBufferQry;
+    begin
+        Clear(DMTTable);
+        if (TargetTableID = 0) and (SourceTableID <> 0) then
+            TargetTableID := SourceTableID;
+        If DMTTable.Get(TargetTableID) then
+            exit;
+
+        // Target Infos
+        DMTTable."Target Table ID" := TargetTableID;
+        TableMeta.Get(TargetTableID);
+        DMTTable."Target Table Caption" := TableMeta.Caption;
+
+        // Find NAV Source Infos   
+        DMTTable."NAV Src.Table No." := SourceTableID;
+        DMTFieldBufferQry.SetRange(TableNo, SourceTableID);
+        DMTFieldBufferQry.Open();
+        if DMTFieldBufferQry.Read() then begin
+            DMTTable."NAV Src.Table Caption" := DMTFieldBufferQry.Table_Caption;
+            DMTTable."NAV Src.Table Name" := DMTFieldBufferQry.TableName;
+        end;
+        DMTTable.Insert();
+
+        if DMTTable.TryFindExportDataFile() then begin
+            if DMTTable.FindFileRec(File) then
+                // lager than 100KB -> CSV
+                if ((File.Size / 1024) < 100) then
+                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Generic Buffer Table for all Files")
+                else
+                    DMTTable.Validate(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
+            DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+        end;
+        DMTTable.ProposeObjectIDs(false);
+        DMTTable.Modify();
+        // Fields
+        DMTField.InitForTargetTable(DMTTable);
     end;
 
 

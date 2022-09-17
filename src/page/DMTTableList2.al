@@ -269,14 +269,8 @@ page 110014 "DMTTableList"
                 PromotedCategory = Category7;
                 PromotedOnly = true;
                 trigger OnAction()
-                var
-                    DMTSelectDataFile: page DMTSelectDataFile;
-                    DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
                 begin
-                    DMTSelectDataFile.LookupMode(true);
-                    if DMTSelectDataFile.RunModal() = Action::LookupOK then
-                        if DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
-                            Message('ToDo'); //TODO
+                    PageActions.AddDataFiles();
                 end;
             }
         }

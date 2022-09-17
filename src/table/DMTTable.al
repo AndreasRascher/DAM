@@ -186,32 +186,7 @@ table 110000 "DMTTable"
         // }
         field(42; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.'; }
         field(43; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; }
-        field(44; "NAV Src.Table Caption"; Text[250])
-        {
-            Caption = 'NAV Source Table Caption';
-            trigger OnLookup()
-            var
-                ObjectMgt: Codeunit DMTObjMgt;
-            begin
-                ObjectMgt.LookUpOldVersionTable(Rec);
-                if "Target Table ID" = 0 then begin
-                    Rec.Validate("Target Table Caption", Format("NAV Src.Table No."));
-                    ProposeObjectIDs(false);
-                    InitTableFieldMapping();
-                end;
-            end;
-
-            trigger OnValidate()
-            var
-                ObjectMgt: Codeunit DMTObjMgt;
-            begin
-                ObjectMgt.ValidateFromTableCaption(Rec, xRec);
-                if ("Target Table ID" = 0) and ("NAV Src.Table No." <> 0) then begin
-                    Rec.Validate("Target Table Caption", Format("NAV Src.Table No."));
-                    ProposeObjectIDs(false);
-                end;
-            end;
-        }
+        field(44; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; }
         #endregion NAVDataSourceFields
     }
 

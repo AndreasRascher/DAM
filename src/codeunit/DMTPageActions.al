@@ -174,6 +174,31 @@ codeunit 110010 "DMTPageActions"
         until DMTTable.Next() = 0;
     end;
 
+    internal procedure AddDataFiles()
+    var
+        DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
+        DMTTable: Record DMTTable;
+        ObjMgt: Codeunit DMTObjMgt;
+        DMTSelectDataFile: page DMTSelectDataFile;
+    begin
+        DMTSelectDataFile.LookupMode(true);
+        if DMTSelectDataFile.RunModal() <> Action::LookupOK then
+            exit;
+        if not DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
+            exit;
+        DataFileBuffer_Selected.SetRange("File is already assigned", false);
+        DataFileBuffer_Selected.SetFilter("Target Table ID", '<>0');
+        if not DataFileBuffer_Selected.FindSet() then
+            exit;
+        repeat
+            ObjMgt.AddNewTargetTable(DataFileBuffer_Selected."NAV Src.Table No.",
+                                     DataFileBuffer_Selected."Target Table ID",
+                                     DataFileBuffer_Selected.Path,
+                                     DataFileBuffer_Selected.Name,
+                                     DMTTable);
+        until DataFileBuffer_Selected.Next() = 0;
+    end;
+
     procedure ProposeMatchingFields(var DMTField: Record DMTField)
     var
         DMTTable: Record DMTTable;

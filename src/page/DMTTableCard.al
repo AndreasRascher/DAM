@@ -91,7 +91,22 @@ page 110012 "DMTTableCard"
                         EnableControls();
                     end;
                 }
-                field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
+                field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption")
+                {
+                    ApplicationArea = All;
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        DMTObjMgt: codeunit DMTObjMgt;
+                        NAVSrcTableNo: Integer;
+                        NAVSrcTableCaption: Text;
+                    begin
+                        if DMTObjMgt.LookUpOldVersionTable(NAVSrcTableNo, NAVSrcTableCaption) then begin
+                            Rec."NAV Src.Table No." := NAVSrcTableNo;
+                            Rec."NAV Src.Table Caption" := copystr(NAVSrcTableCaption, 1, MaxStrLen(Rec."NAV Src.Table Caption"));
+                            Rec.UpdateIndicators();
+                        end;
+                    end;
+                }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
 

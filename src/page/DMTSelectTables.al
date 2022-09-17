@@ -18,7 +18,7 @@ page 110010 "DMTSelectTableList"
                 field("Object ID"; Rec."Object ID") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Caption"; Rec."Object Caption") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Name"; Rec."Object Name") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(ObjectStatus; ObjectStatus) { ApplicationArea = All; Caption = 'Object Status', comment = 'Objektstatus'; StyleExpr = LineStyle; }
+                field(ObjectStatus; format(ObjectStatus)) { ApplicationArea = All; Caption = 'Object Status', comment = 'Objektstatus'; StyleExpr = LineStyle; }
             }
 
         }
