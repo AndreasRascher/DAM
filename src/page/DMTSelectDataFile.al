@@ -11,7 +11,7 @@ page 110025 "DMTSelectDataFile"
     {
         area(Content)
         {
-            field(HasSchema; SchemaIsImported()) { Caption = 'Schema Data Found'; ApplicationArea = All; }
+            field(HasSchema; IsNAVSchemaFileImported()) { Caption = 'Schema Data Found'; ApplicationArea = All; }
             repeater(repeater)
             {
                 field(Name; Rec.Name) { ApplicationArea = All; }
@@ -47,7 +47,20 @@ page 110025 "DMTSelectDataFile"
         Rec.LoadFiles();
     end;
 
-    procedure SchemaIsImported(): Boolean
+    procedure GetSelection(var DataFileBuffer_Selected: Record DMTDataFileBuffer temporary) HasLines: Boolean
+    var
+        DMTDataFileBuffer: Record DMTDataFileBuffer;
+    begin
+        Clear(DataFileBuffer_Selected);
+        if DataFileBuffer_Selected.IsTemporary then
+            DataFileBuffer_Selected.DeleteAll();
+        DMTDataFileBuffer.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CurrPage.SetSelectionFilter(DMTDataFileBuffer);
+        // DMTDataFileBuffer.CopyToTemp(DataFileBuffer_Selected);
+        HasLines := DataFileBuffer_Selected.FindFirst();
+    end;
+
+    procedure IsNAVSchemaFileImported(): Boolean
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
     begin
