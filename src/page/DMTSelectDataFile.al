@@ -49,12 +49,12 @@ page 110025 "DMTSelectDataFile"
 
     procedure GetSelection(var DataFileBuffer_Selected: Record DMTDataFileBuffer temporary) HasLines: Boolean
     var
-        DMTDataFileBuffer: Record DMTDataFileBuffer;
+        DMTDataFileBuffer: Record DMTDataFileBuffer temporary;
     begin
         Clear(DataFileBuffer_Selected);
         if DataFileBuffer_Selected.IsTemporary then
             DataFileBuffer_Selected.DeleteAll();
-        DMTDataFileBuffer.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        DMTDataFileBuffer.Copy(Rec, true);
         CurrPage.SetSelectionFilter(DMTDataFileBuffer);
         // DMTDataFileBuffer.CopyToTemp(DataFileBuffer_Selected);
         HasLines := DataFileBuffer_Selected.FindFirst();

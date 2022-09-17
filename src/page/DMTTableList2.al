@@ -273,6 +273,7 @@ page 110014 "DMTTableList"
                     DMTSelectDataFile: page DMTSelectDataFile;
                     DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
                 begin
+                    DMTSelectDataFile.LookupMode(true);
                     if DMTSelectDataFile.RunModal() = Action::LookupOK then
                         if DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
                             Message('ToDo'); //TODO
