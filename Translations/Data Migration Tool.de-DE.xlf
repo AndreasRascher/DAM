@@ -7,50 +7,55 @@
           <source>DateTime</source>
           <target>Erstellt</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field DateTime - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Name</source>
           <target>Name</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Source Table Caption</source>
           <target>NAV Herkunftstabelle Bezeichnung</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 3239065560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Source Table Name</source>
           <target>Name NAV Herkunftstabelle</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 2211706144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Src.Table No.</source>
           <target>NAV Tabellennr.</target>
           <note from="Developer" annotates="general" priority="2">NAV Tabellennr.</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 2206733951 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Path</source>
           <target>Pfad</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 37522637 - Field 3964473375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Size</source>
           <target>Größe (Byte)</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Size - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table Caption</source>
+          <target>Zieltabelle Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">Zieltabelle Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Target Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <target>Zieltabellen ID</target>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Target Table ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2013700009 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
@@ -2612,7 +2617,6 @@
           <source>Schema Data Found</source>
           <target>Schemadaten vorhanden</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectDataFile - Control HasSchema - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2987975795 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2823,7 +2827,6 @@
           <source>Add Data File</source>
           <target>Datendatei hinzufügen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action AddDataFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

@@ -4,6 +4,8 @@ page 110025 "DMTSelectDataFile"
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = DMTDataFileBuffer;
+    InsertAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
@@ -12,12 +14,14 @@ page 110025 "DMTSelectDataFile"
             field(HasSchema; SchemaIsImported()) { Caption = 'Schema Data Found'; ApplicationArea = All; }
             repeater(repeater)
             {
-                field("DateTime"; Rec."DateTime") { ApplicationArea = All; }
                 field(Name; Rec.Name) { ApplicationArea = All; }
-                field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; }
-                field("NAV Src.Table Name"; Rec."NAV Src.Table Name") { ApplicationArea = All; }
+                field("DateTime"; Rec."DateTime") { ApplicationArea = All; }
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; }
-                field(Path; Rec.Path) { ApplicationArea = All; }
+                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; }
+                field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; }
+                field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; Visible = false; }
+                field("NAV Src.Table Name"; Rec."NAV Src.Table Name") { ApplicationArea = All; Visible = false; }
+                field(Path; Rec.Path) { ApplicationArea = All; Visible = false; }
                 field(Size; Rec.Size) { ApplicationArea = All; }
             }
         }
@@ -47,6 +51,6 @@ page 110025 "DMTSelectDataFile"
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
     begin
-        exit(DMTFieldBuffer.IsEmpty);
+        exit(not DMTFieldBuffer.IsEmpty);
     end;
 }

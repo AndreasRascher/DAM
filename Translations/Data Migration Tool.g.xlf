@@ -38,6 +38,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Size - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 37522637 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table Caption</source>
+          <note from="Developer" annotates="general" priority="2">Zieltabelle Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Target Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <note from="Developer" annotates="general" priority="2">Ziel Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Target Table ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2013700009 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <note from="Developer" annotates="general" priority="2"></note>

@@ -11,8 +11,22 @@ table 110012 DMTDataFileBuffer
         field(10; Size; Integer) { Caption = 'Size'; Editable = false; }
         field(11; "DateTime"; DateTime) { Caption = 'DateTime'; Editable = false; }
         field(20; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.'; }
-        field(21; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; }
-        field(22; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; }
+        field(21; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; Editable = false; }
+        field(22; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; Editable = false; }
+        field(30; "Target Table ID"; Integer)
+        {
+            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
+            DataClassification = SystemMetadata;
+            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+        }
+        field(31; "Target Table Caption"; Text[250])
+        {
+            Caption = 'Target Table Caption', comment = 'Zieltabelle Bezeichnung';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
+        }
+
     }
     keys
     {
@@ -31,12 +45,14 @@ table 110012 DMTDataFileBuffer
         FileRec.SetRange("Is a file", true);
         If not FileRec.FindSet() then exit(false);
         repeat
+            Rec.Init();
             Rec.Path := FileRec.Path;
             Rec.Name := FileRec.Name;
             Rec.Size := FileRec.Size;
             Rec.DateTime := CreateDateTime(FileRec.Date, FileRec.Time);
             Rec.Insert();
             FindNAVTableByFileName();
+            ProposeTargetTable();
         until FileRec.Next() = 0;
     end;
 
@@ -83,6 +99,37 @@ table 110012 DMTDataFileBuffer
                 FileNameTableCaptionMapping.Add(FileNameFromCaption, DMTFieldBufferQry.TableNo);
         end;
         DMTFieldBufferQry.Close();
+    end;
+
+    procedure ProposeTargetTable()
+    var
+        TableMetadata: Record "Table Metadata";
+        FeatureKey: Record "Feature Key";
+    begin
+        // Feature: If Target Table Obsolete, switch to alternative
+        if TableMetadata.Get(rec."NAV Src.Table No.") then begin
+            if not (TableMetadata.ObsoleteState in [TableMetadata.ObsoleteState::Removed, TableMetadata.ObsoleteState::Pending]) then begin
+                Rec."Target Table ID" := TableMetadata.ID;
+            end else begin
+                Case Rec."NAV Src.Table No." of
+                    5717: //Item Cross Reference
+                        Rec."Target Table ID" := Database::"Item Reference";
+                    7002,// Sales Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7004,// Sales Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7012,// Purchase Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7014:// Purchase Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                        begin
+                            if FeatureKey.Get('SalesPrices') and (FeatureKey.Enabled = FeatureKey.Enabled::"All Users") then
+                                Rec."Target Table ID" := Database::"Price List Line"
+                            else
+                                Rec."Target Table ID" := Rec."NAV Src.Table No.";
+                        end;
+                    else
+                        Error('unhandled obsolete Table %1', Rec."NAV Src.Table No.");
+                end;
+            end;
+            Rec.Modify();
+        end;
     end;
 
     var
