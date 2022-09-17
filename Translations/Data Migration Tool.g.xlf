@@ -3,6 +3,41 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="Data Migration Tool">
     <body>
       <group id="body">
+        <trans-unit id="Table 37522637 - Field 2854863747 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DateTime</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field DateTime - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Source Table Caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 3239065560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Source Table Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 2211706144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Src.Table No.</source>
+          <note from="Developer" annotates="general" priority="2">NAV Tabellennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field NAV Src.Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 2206733951 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Path</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 37522637 - Field 3964473375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Size</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFileBuffer - Field Size - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2013700009 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2133,6 +2168,11 @@
           <note from="Developer" annotates="general" priority="2">Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementsSub - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1869987933 - Control 3900352901 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Schema Data Found</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectDataFile - Control HasSchema - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2987975795 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Tables</source>
           <note from="Developer" annotates="general" priority="2">Tabellen</note>
@@ -2302,6 +2342,11 @@
           <source>Source Table ID</source>
           <note from="Developer" annotates="general" priority="2">Zieltab. ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Control Target Table ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2386859515 - Action 3187147809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add Data File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTableList - Action AddDataFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2386859515 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Marked Lines</source>

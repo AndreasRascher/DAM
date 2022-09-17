@@ -11,7 +11,7 @@ page 110014 "DMTTableList"
     DelayedInsert = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,Migration', DEU = '1,2,3,Tabellen,Objekte,Migration';
+    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,Migration,Files', DEU = '1,2,3,Tabellen,Objekte,Migration,Dateien';
     RefreshOnActivate = true;
     // Editable = false;
 
@@ -260,7 +260,19 @@ page 110014 "DMTTableList"
                     Message(Rec.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
                 end;
             }
-
+            action(AddDataFile)
+            {
+                Image = Add;
+                Caption = 'Add Data File';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    Page.RunModal(Page::DMTSelectDataFile);
+                end;
+            }
         }
     }
     views
