@@ -116,7 +116,7 @@ codeunit 110012 "DMTProcessRecord"
         if LastErrorLog.Count = 0 then begin
             DMTMgt.InsertRecFromTmp(TmpTargetRef, DMTTable."Use OnInsert Trigger");
         end else begin
-            DMTErrorLog.AddEntryForLastError();
+            // DMTErrorLog.AddEntryForLastError();
         end;
     end;
 
