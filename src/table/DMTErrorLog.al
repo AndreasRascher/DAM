@@ -147,11 +147,14 @@ table 110001 "DMTErrorLog"
         PAGE.RUN(PAGE::"DMT Error Log List", DMTErrorlog);
     end;
 
-    // procedure OpenListWithWithContextFilter()
-    // var
-    //     DMTErrorlog: Record DMTErrorlog;
-    // begin
-    //     DMTErrorlog.SetRange("DMT Context Descr.", COPYSTR(DMTSessionInfo.GetDMTContext, 1, MAXSTRLEN("DMT Context Descr.")));
-    //     OpenListOnRec(DMTErrorlog);
-    // end;
+    procedure AddErrorEntries(SourceRef: recordref; TargetRef: RecordRef; LastErrorLog: Dictionary of [RecordId, Dictionary of [Text, Text]]);
+    var
+        DMTField: Record DMTField;
+        RecId: RecordId;
+    begin
+        if LastErrorLog.Count = 0 then exit;
+        foreach RecId in LastErrorLog.Keys do begin
+            //TODO : Potokoll schreiben
+        end;
+    end;
 }

@@ -61,6 +61,7 @@ codeunit 110009 DMTImport
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            // TODO Test(BufferRef2, DMTTable, IsUpdateTask, TempDMTField_COLLECTION);
             ProcessSingleBufferRecord(BufferRef2, DMTTable, IsUpdateTask, TempDMTField_COLLECTION);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
@@ -178,7 +179,7 @@ codeunit 110009 DMTImport
 
         ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
         if not ErrorsExists then begin
-            Success := DMTMgt.InsertRecFromTmp(BufferRef, TmpTargetRef, DMTTable."Use OnInsert Trigger");
+            Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DMTTable."Use OnInsert Trigger");
         end;
 
         DMTMgt.UpdateResultQty(Success, TRUE);
@@ -419,6 +420,20 @@ codeunit 110009 DMTImport
                 end;
             end;
         end;
+    end;
+
+    local procedure Test(BufferRef2: RecordRef; var DMTTable: Record DMTTable; IsUpdateTask: Boolean; var TempDMTField_COLLECTION: Record DMTField temporary)
+    var
+        ProcessRecord: Codeunit DMTProcessRecord;
+        Success: Boolean;
+    begin
+        ClearLastError();
+        ProcessRecord.Initialize(DMTTable, BufferRef2);
+        Commit();
+        While not ProcessRecord.Run() do begin
+            ProcessRecord.LogLastError();
+        end;
+        ProcessRecord.SaveRecord();
     end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)

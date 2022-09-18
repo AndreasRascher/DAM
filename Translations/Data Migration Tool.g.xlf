@@ -243,6 +243,11 @@
           <note from="Developer" annotates="general" priority="2">Fehler ignorieren </note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Ignore Validation Error - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1670326073 - Field 3492171417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Key Field</source>
+          <note from="Developer" annotates="general" priority="2">Schlüsselfeld</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTField - Field Is Key Field(Target) - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1670326073 - Field 1564647935 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Action</source>
           <note from="Developer" annotates="general" priority="2">Aktion</note>

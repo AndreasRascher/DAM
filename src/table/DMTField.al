@@ -3,17 +3,22 @@ table 110003 "DMTField"
     DataClassification = SystemMetadata;
     fields
     {
-        field(20; "Target Table ID"; Integer)
+        field(1; "Target Table ID"; Integer)
         {
             Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
         }
-        field(21; "Target Field No."; Integer)
+        field(2; "Target Field No."; Integer)
         {
             Caption = 'Target Field No.', comment = 'Ziel Feldnr.';
             DataClassification = SystemMetadata;
             TableRelation = Field."No." WHERE(TableNo = field("Target Table ID"));
+        }
+        field(21; "Is Key Field(Target)"; Boolean)
+        {
+            Caption = 'Key Field', Comment = 'Schlüsselfeld';
+            Editable = false;
         }
         field(22; "Target Field Caption"; Text[80])
         {
@@ -156,10 +161,13 @@ table 110003 "DMTField"
         DMTFields_NEW: Record "DMTField";
         TargetRecRef: RecordRef;
         i: Integer;
+        DMTmgt: Codeunit DMTMgt;
+        KeyFieldIDsList: List of [Integer];
     begin
         if DMTTable."Target Table ID" = 0 then
             exit(false);
         TargetRecRef.Open(DMTTable."Target Table ID");
+        KeyFieldIDsList := DMTmgt.GetListOfKeyFieldIDs(TargetRecRef);
         for i := 1 to TargetRecRef.FieldCount do begin
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
@@ -171,6 +179,7 @@ table 110003 "DMTField"
                         DMTFields_NEW."Target Table ID" := DMTTable."Target Table ID";
                         DMTFields_NEW."Processing Action" := DMTFields_NEW."Processing Action"::Ignore; //default for fields without action
                         DMTFields_NEW."Validation Order" := i * 10000;
+                        DMTFields_NEW."Is Key Field(Target)" := KeyFieldIDsList.Contains(DMTFields_NEW."Target Field No.");
                         DMTFields_NEW.Insert(true);
                     end;
                 end;
@@ -218,7 +227,7 @@ table 110003 "DMTField"
     var
         DMTFields: Record "DMTField";
         DMTFields2: Record "DMTField";
-        DMTValidationRuleLib: Codeunit DMTValidationRuleLib;
+        DMTValidationRuleLib: Codeunit DMTMigrationLib;
     begin
         DMTFields.FilterBy(DMTTable);
         DMTFields.SetRange("Processing Action", DMTFields."Processing Action"::Transfer);
@@ -227,7 +236,7 @@ table 110003 "DMTField"
                 DMTFields2 := DMTFields;
                 DMTValidationRuleLib.SetKnownValidationRules(DMTFields);
                 if format(DMTFields2) <> Format(DMTFields) then
-                    DMTFields2.Modify()
+                    DMTFields.Modify()
             until DMTFields.Next() = 0;
     end;
 

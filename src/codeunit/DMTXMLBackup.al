@@ -173,7 +173,7 @@ codeunit 110003 "DMTXMLBackup"
                 recordNode := XmlElement.Create('RECORD').AsXmlNode();
                 _XMLNode_Start.AsXmlElement().Add(recordNode);
                 recRef.Get(ID);
-                GetListOfKeyFieldIDs(recRef, fieldIDsList);
+                fieldIDsList := GetListOfKeyFieldIDs(recRef);
                 // Add Key Fields As Attributes
                 foreach keyFieldID in fieldIDsList do begin
                     fldRef := recRef.FIELD(keyFieldID);
@@ -406,17 +406,16 @@ codeunit 110003 "DMTXMLBackup"
         _TagName := CONVERTSTR(_Name, '\/-.()', '______')
     end;
 
-    procedure GetListOfKeyFieldIDs(VAR _RecRef: RecordRef; VAR KeyFieldIDsList: List of [Integer]);
-    VAR
-        _FieldRef: FieldRef;
+    procedure GetListOfKeyFieldIDs(var RecRef: RecordRef) KeyFieldIDsList: List of [Integer];
+    var
+        FieldRef: FieldRef;
         _KeyIndex: Integer;
-        _KeyRef: KeyRef;
+        KeyRef: KeyRef;
     begin
-        Clear(KeyFieldIDsList);
-        _KeyRef := _RecRef.KEYINDEX(1);
-        for _KeyIndex := 1 TO _KeyRef.FIELDCOUNT do begin
-            _FieldRef := _KeyRef.FieldIndex(_KeyIndex);
-            KeyFieldIDsList.Add(_FieldRef.Number);
+        KeyRef := RecRef.KeyIndex(1);
+        for _KeyIndex := 1 to KeyRef.FieldCount do begin
+            FieldRef := KeyRef.FieldIndex(_KeyIndex);
+            KeyFieldIDsList.Add(FieldRef.Number);
         end;
     end;
 

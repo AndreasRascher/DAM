@@ -133,27 +133,38 @@ codeunit 110002 "DMTMgt"
     procedure GetIncludeExcludeKeyFieldFilter(TableNo: Integer; Include: Boolean) KeyFieldNoFilter: Text
     var
         RecRef: RecordRef;
-        KeyField: FieldRef;
-        KeyCountIndex: Integer;
-        KeyRef: KeyRef;
+        KeyFieldIDsList: List of [Integer];
+        FieldID: Integer;
     begin
         IF TableNo = 0 then exit('');
-        RecRef.OPEN(TableNo, TRUE);
-        KeyRef := RecRef.KEYINDEX(1); // Primary Key
-        for KeyCountIndex := 1 TO KeyRef.FIELDCOUNT do begin
-            KeyField := KeyRef.FieldIndex(KeyCountIndex);
-            IF Include then
-                KeyFieldNoFilter += STRSUBSTNO('|%1', KeyField.NUMBER)
-            ELSE
-                KeyFieldNoFilter += STRSUBSTNO('&<>%1', KeyField.NUMBER);
+        RecRef.Open(TableNo, true);
+        KeyFieldIDsList := GetListOfKeyFieldIDs(RecRef);
+        foreach FieldID in KeyFieldIDsList do begin
+            if Include then
+                KeyFieldNoFilter += StrSubstNo('|%1', FieldID)
+            else
+                KeyFieldNoFilter += StrSubstNo('&<>%1', FieldID);
         end;
-        IF COPYSTR(KeyFieldNoFilter, 1, 1) = '|' then
-            KeyFieldNoFilter := COPYSTR(KeyFieldNoFilter, 2);
-        IF COPYSTR(KeyFieldNoFilter, 1, 3) = '&<>' then
-            KeyFieldNoFilter := COPYSTR(KeyFieldNoFilter, 2);
+        IF CopyStr(KeyFieldNoFilter, 1, 1) = '|' then
+            KeyFieldNoFilter := CopyStr(KeyFieldNoFilter, 2);
+        IF CopyStr(KeyFieldNoFilter, 1, 3) = '&<>' then
+            KeyFieldNoFilter := CopyStr(KeyFieldNoFilter, 2);
     end;
 
-    procedure InsertRecFromTmp(VAR BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
+    procedure GetListOfKeyFieldIDs(var RecRef: RecordRef) KeyFieldIDsList: List of [Integer];
+    VAR
+        FieldRef: FieldRef;
+        _KeyIndex: Integer;
+        KeyRef: KeyRef;
+    begin
+        KeyRef := RecRef.KeyIndex(1);
+        for _KeyIndex := 1 to KeyRef.FieldCount do begin
+            FieldRef := KeyRef.FieldIndex(_KeyIndex);
+            KeyFieldIDsList.Add(FieldRef.Number);
+        end;
+    end;
+
+    procedure InsertRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
     var
         TargetRef: RecordRef;
         TargetRef2: RecordRef;

@@ -1,4 +1,4 @@
-codeunit 110011 DMTValidationRuleLib
+codeunit 110011 DMTMigrationLib
 {
     procedure SetKnownValidationRules(var DMTField: Record DMTField)
     var
@@ -38,7 +38,8 @@ codeunit 110011 DMTValidationRuleLib
             IsMatch(TargetField, Database::"General Ledger Setup"),
             IsMatch(TargetField, Database::"Depreciation Book", 'Fiscal Year 365 Days'),
             IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer No.'),
-            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'):
+            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'),
+            IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance'):
                 KnownUseTryFunction := false;
             else
                 Found := false;
