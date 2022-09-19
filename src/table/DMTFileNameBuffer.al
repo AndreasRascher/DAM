@@ -114,7 +114,7 @@ table 110041 DMTDataFileBuffer
         if rec.Name = '' then exit;
         DMTTable.SetRange(DataFileFolderPath, Rec.Path);
         DMTTable.SetRange(DataFileName, Rec.Name);
-        exit(DMTTable.FindFirst());
+        exit(not DMTTable.IsEmpty());
     end;
 
     procedure ProposeTargetTable()

@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=30.08.22;
-    Time=11:33:55;
+    Date=19.09.22;
+    Time=21:58:55;
     Modified=Yes;
     Version List=DMT;
   }
@@ -24,7 +24,7 @@ OBJECT XMLport 50049 DMT Export
                   END;
 
     OnPreXMLport=VAR
-                   NoActionSelectedErr@1000000000 : TextConst 'DEU=Keine Aktion ausgew‚Äûhlt;ENU=No action selected';
+                   NoActionSelectedErr@1000000000 : TextConst 'DEU=Keine Aktion ausgewÑhlt;ENU=No action selected';
                  BEGIN
                    IF ExportTableID = 0 THEN BEGIN
                      ERROR(NoActionSelectedErr);
@@ -2633,6 +2633,7 @@ OBJECT XMLport 50049 DMT Export
       LastFieldNo@1000000008 : Integer;
       MaxNoOfFields@1000000009 : Integer;
       ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
+      TempTableInfo@1000000012 : TEMPORARY Record 2000000028;
 
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text;exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text);
     VAR
@@ -2866,6 +2867,11 @@ OBJECT XMLport 50049 DMT Export
         _exportFieldBuffer.FieldName := 'OptionCaption';
         _exportFieldBuffer."Field Caption" := 'OptionCaption';
         _exportFieldBuffer.INSERT;
+
+        _exportFieldBuffer."No." := 50004;
+        _exportFieldBuffer.FieldName := 'No. of Records';
+        _exportFieldBuffer."Field Caption" := 'Anz. DatensÑtze';
+        _exportFieldBuffer.INSERT;
       END;
 
       _ExportFields_FOUND.COPY(_exportFieldBuffer,TRUE);
@@ -2940,7 +2946,7 @@ OBJECT XMLport 50049 DMT Export
       ExportDuration@1000000003 : Duration;
       TAB@1000000004 : Text[1];
       ObjectNotInLicenseMsg@1000000005 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.;ENU=Warning: Table %1 - %2 is not in license.';
-      EmptyTableMsg@1000000007 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist leer. F¬År leere Tabellen wird keine Exportdatei erstellt.';
+      EmptyTableMsg@1000000007 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist leer. FÅr leere Tabellen wird keine Exportdatei erstellt.';
       IsTableValidForExport@1000000008 : Boolean;
     BEGIN
       CheckFolderPathRTC(ExportToFolderPath);
@@ -3040,6 +3046,11 @@ OBJECT XMLport 50049 DMT Export
             END;
           END;
         END;
+        // No of Records
+        (ExportFieldBuffer.TableNo = DATABASE::Field) AND (ExportFieldBuffer."No."=50004): BEGIN
+          ExportRecRef.SETTABLE(field);
+          valueAsText := GetNoOfRecordsInTable(field);
+        END;
         ELSE valueAsText := GetFormattedFieldValue(ExportRecRef,ExportFieldBuffer."No.");
       END; // END_CASE
 
@@ -3135,6 +3146,23 @@ OBJECT XMLport 50049 DMT Export
 
       IF FilterExpr <> '' THEN
         field.SETFILTER(TableNo,FilterExpr);
+    END;
+
+    PROCEDURE GetNoOfRecordsInTable@1000000008(VAR _ExportFieldBuffer@1000000001 : TEMPORARY Record 2000000041) NoOfRecordsText : Text[30];
+    VAR
+      _TableInfo@1000000000 : Record 2000000028;
+    BEGIN
+      IF TempTableInfo.GET(COMPANYNAME,_ExportFieldBuffer.TableNo) THEN
+        EXIT(FORMAT(TempTableInfo."No. of Records"));
+      IF TempTableInfo.GET('',_ExportFieldBuffer.TableNo) THEN
+        EXIT(FORMAT(TempTableInfo."No. of Records"));
+
+      IF NOT _TableInfo.GET(COMPANYNAME,_ExportFieldBuffer.TableNo) THEN
+        IF NOT _TableInfo.GET('',_ExportFieldBuffer.TableNo)  THEN
+          EXIT('');
+      TempTableInfo := _TableInfo;
+      TempTableInfo.INSERT(FALSE);
+      NoOfRecordsText := FORMAT(TempTableInfo."No. of Records");
     END;
 
     BEGIN
