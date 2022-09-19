@@ -242,18 +242,29 @@ codeunit 110004 "DMTObjectGenerator"
 
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
     var
-        dAMFieldBuffer: Record DMTFieldBuffer;
+        FieldBuffer: Record DMTFieldBuffer;
+        OrderedKeyFieldNos: Text;
+        FieldIds: List of [Text];
+        FieldIDText: Text;
+        FieldID: Integer;
     begin
-        dAMFieldBuffer.SetRange(TableNo, TableIDInNAV);
-        dAMFieldBuffer.FindFirst();
-        dAMFieldBuffer.SetFilter("No.", ConvertStr(dAMFieldBuffer."Primary Key", ',', '|'));
-        dAMFieldBuffer.FindSet();
-        repeat
-            if ContainsLettersOnly(dAMFieldBuffer.FieldName) then
-                KeyString += dAMFieldBuffer.FieldName + ','
+        FieldBuffer.SetRange(TableNo, TableIDInNAV);
+        FieldBuffer.FindFirst();
+        OrderedKeyFieldNos := FieldBuffer."Primary Key";
+        if OrderedKeyFieldNos.Contains(',') then begin
+            FieldIds := OrderedKeyFieldNos.Split(',');
+        end else begin
+            FieldIds.Add(OrderedKeyFieldNos);
+        end;
+
+        foreach FieldIDText in FieldIds do begin
+            Evaluate(FieldID, FieldIDText);
+            FieldBuffer.get(TableIDInNAV, FieldID);
+            if ContainsLettersOnly(FieldBuffer.FieldName) then
+                KeyString += FieldBuffer.FieldName + ','
             else
-                KeyString += '"' + dAMFieldBuffer.FieldName + '",';
-        until dAMFieldBuffer.Next() = 0;
+                KeyString += '"' + FieldBuffer.FieldName + '",';
+        end;
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
