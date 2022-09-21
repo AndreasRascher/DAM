@@ -206,7 +206,8 @@ table 110000 "DMTTable"
         DMTFields: Record "DMTField";
     begin
         if DMTFields.FilterBy(Rec) then
-            DMTFields.DeleteAll(true);
+            if not DMTFields.IsEmpty then
+                DMTFields.DeleteAll(true);
     end;
 
     internal procedure ImportToBufferTable()

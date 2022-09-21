@@ -179,7 +179,8 @@ page 110012 "DMTTableCard"
                     Commit();
                     RecRef.Open(Rec."Target Table ID");
                     if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
-                        RecRef.DeleteAll();
+                        if not RecRef.IsEmpty then
+                            RecRef.DeleteAll();
                     end;
                 end;
             }

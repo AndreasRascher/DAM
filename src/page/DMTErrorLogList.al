@@ -77,7 +77,8 @@ page 110001 "DMT Error Log List"
 
                 trigger OnAction()
                 begin
-                    Rec.DeleteAll();
+                    if not Rec.isempty() then
+                        Rec.DeleteAll();
                 end;
             }
             action(AddTableFilter)
