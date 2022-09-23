@@ -128,6 +128,8 @@ codeunit 110010 "DMTPageActions"
     begin
         DMTTable.TestField("Target Table ID");
         DMTTable.Validate("Data Source Type", DMTTable."Data Source Type"::"NAV CSV Export");
+        DMTTable."Allow Usage of Try Function" := false;
+        DMTTable.Modify();
         // case DMTTable.BufferTableType of
         //   DMTTable.BufferTableType::"Generic Buffer Table for all Files":
         //   DMTTable.BufferTableType::"Seperate Buffer Table per CSV": begin
