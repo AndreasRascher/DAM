@@ -218,7 +218,6 @@ table 110000 "DMTTable"
         Progress: Dialog;
         ImportFileFromPathLbl: Label 'Importing %1';
     begin
-        rec.GetDataFilePathWithError(); //ThrowErrorIfNotSet
         case Rec.BufferTableType of
             Rec.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
@@ -233,7 +232,7 @@ table 110000 "DMTTable"
                     file.Open(Rec.GetDataFilePath(), TextEncoding::MSDos);
                     file.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
-                    GenBuffImport.SetDMTTable(Rec);
+                    GenBuffImport.SetImportFromFile(Rec);
                     Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(file.Name, '\', '/')));
                     GenBuffImport.Import();
                     Progress.Close();
@@ -264,9 +263,9 @@ table 110000 "DMTTable"
     begin
 
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if not GenBuffTable.FilterByFileName(Rec.GetDataFilePathWithError()) then
+            if not GenBuffTable.FilterBy(Rec.RecordId) then
                 exit(false);
-            GenBuffTable.ShowImportDataForFile(Rec.GetDataFilePath());
+            GenBuffTable.ShowImportDataForFile(Rec.RecordId);
         end;
 
         if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
@@ -394,7 +393,7 @@ table 110000 "DMTTable"
         case Rec.BufferTableType of
             Rec.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.FilterByFileName(Rec.GetDataFilePathWithError());
+                    GenBuffTable.FilterBy(Rec.RecordId);
                     GenBuffTable.SetRange(IsCaptionLine, false);
                     QtyLines := GenBuffTable.Count;
                 end;

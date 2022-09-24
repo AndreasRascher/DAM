@@ -1,5 +1,31 @@
-codeunit 110011 DMTMigrationLib
+codeunit 110011 "DMTMigrationLib"
 {
+    procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
+    begin
+        //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
+        CLEAR(OldFieldName);
+        CASE TRUE OF
+            (TargetTableNo = DATABASE::Customer) AND (FieldName = 'Country/Region Code'):
+                OldFieldName := 'Country Code';
+            (TargetTableNo = DATABASE::Vendor) AND (FieldName = 'Country/Region Code'):
+                OldFieldName := 'Country Code';
+            (TargetTableNo = DATABASE::Contact) AND (FieldName = 'Country/Region Code'):
+                OldFieldName := 'Country Code';
+            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Country/Region of Origin Code'):
+                OldFieldName := 'Country of Origin Code';
+            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Time Bucket'):
+                OldFieldName := 'Reorder Cycle';
+            // Item Cross Reference -> Item Reference
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type'):
+                OldFieldName := 'Cross-Reference Type';
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type No.'):
+                OldFieldName := 'Cross-Reference Type No.';
+            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference No.'):
+                OldFieldName := 'Cross-Reference No.';
+        end; // end_CASE
+        Found := OldFieldName <> '';
+    end;
+
     procedure SetKnownValidationRules(var DMTField: Record DMTField)
     var
         TargetField: Record Field;
@@ -13,6 +39,22 @@ codeunit 110011 DMTMigrationLib
             DMTField."Validate Value" := KnownUseValidate;
         if FindKnownFixedValue(TargetField, KnownFixedValue) then
             DMTField.Validate("Fixed Value", KnownFixedValue);
+    end;
+
+    procedure SetKnownValidationRules(var FieldMapping: Record DMTFieldMapping)
+    var
+        TargetField: Record Field;
+        KnownFixedValue: Text;
+        KnownUseTryFunction, KnownUseValidate : Boolean;
+    begin
+        TargetField.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
+        if FindKnownUseTryFunction(TargetField, KnownUseTryFunction) then
+            FieldMapping."Use Try Function" := KnownUseTryFunction;
+        if FindKnownUseValidateValue(TargetField, KnownUseValidate) then
+            if not KnownUseValidate then
+                FieldMapping."Validation Type" := Enum::DMTFieldValidationType::AssignWithoutValidate;
+        if FindKnownFixedValue(TargetField, KnownFixedValue) then
+            FieldMapping.Validate("Fixed Value", KnownFixedValue);
     end;
 
     local procedure FindKnownUseTryFunction(TargetField: Record Field; var KnownUseTryFunction: Boolean) Found: Boolean

@@ -240,6 +240,32 @@ codeunit 110002 "DMTMgt"
         end;
     end;
 
+    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
+    var
+        DMTErrorLog: Record DMTErrorLog;
+        DMTTable: Record DMTTable;
+        IsValidateSuccessful: Boolean;
+    begin
+        if (FieldMapping."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
+        if (FieldMapping."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
+        ClearLastError();
+        DMTTable.Get(FieldMapping."Target Table ID");
+        IF FieldMapping."Use Try Function" and DMTTable."Allow Usage of Try Function" then begin
+            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
+        end else begin
+            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
+        end;
+        // HANDLE VALIDATE RESULT
+        IF not IsValidateSuccessful then begin
+            if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
+                Error(GetLastErrorCode);
+            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, FieldMapping);
+        end else begin
+            // Save Successful changes
+            IF TargetRef.modify() then;
+        end;
+    end;
+
     procedure ValidateFieldWithValue(VAR TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
@@ -470,6 +496,21 @@ codeunit 110002 "DMTMgt"
         if not (FileBrowser.RunModal() = Action::LookupOK) then
             exit(CopyStr(CurrentPath, 1, 250));
         ResultPath := CopyStr(FileBrowser.GetSelectedPath(), 1, MaxStrLen(ResultPath));
+    end;
+
+    procedure LookUpPath(var FileRec: Record File; CurrentPath: Text; LookUpFolder: Boolean) OK: Boolean
+    var
+        FileBrowser: Page FileBrowser;
+    begin
+        DMTSetup.GetRecordOnce();
+        if CurrentPath = '' then
+            CurrentPath := DMTSetup."Default Export Folder Path";
+        FileBrowser.SetupFileBrowser(CurrentPath, LookUpFolder);
+        FileBrowser.LookupMode(true);
+        if not (FileBrowser.RunModal() = Action::LookupOK) then
+            exit(false);
+        FileBrowser.GetRecord(FileRec);
+        exit(true);
     end;
 
     internal procedure AssignFixedValueToFieldRef(var ToFieldRef: FieldRef; FixedValue: Text[250])

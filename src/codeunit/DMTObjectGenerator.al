@@ -1,20 +1,32 @@
 codeunit 110004 "DMTObjectGenerator"
 {
+
     procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
+    begin
+        DMTTable.Testfield("Import XMLPort ID");
+        DMTTable.Testfield("NAV Src.Table No.");
+        C := CreateALXMLPort(DMTTable."Import XMLPort ID", DMTTable."NAV Src.Table No.", DMTTable."NAV Src.Table Caption");
+    end;
+
+    procedure CreateALXMLPort(DataFile: Record DMTDataFile) C: TextBuilder
+    begin
+        DataFile.Testfield("Import XMLPort ID");
+        DataFile.Testfield("NAV Src.Table No.");
+        C := CreateALXMLPort(DataFile."Import XMLPort ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
+    end;
+
+    local procedure CreateALXMLPort(ImportXMLPortID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
     begin
-        DMTTable.Testfield("Import XMLPort ID");
-        DMTTable.Testfield("NAV Src.Table No.");
-
-        C.AppendLine('xmlport ' + format(DMTTable."Import XMLPort ID") + ' T' + format(DMTTable."NAV Src.Table No.") + 'Import');
+        C.AppendLine('xmlport ' + format(ImportXMLPortID) + ' T' + format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
         if DMTSetup."Import with FlowFields" then
-            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ' FlowField' + ''',locked=true;')
+            C.AppendLine('    Caption = ''' + NAVSrcTableCaption + ' FlowField' + ''',locked=true;')
         else
-            C.AppendLine('    Caption = ''' + DMTTable."NAV Src.Table Caption" + ''',locked=true;');
+            C.AppendLine('    Caption = ''' + NAVSrcTableCaption + ''',locked=true;');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -27,8 +39,8 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) then begin
-            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ')');
+        IF FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then begin
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
             DMTFieldBuffer.FINDSET();
@@ -71,18 +83,18 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('');
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ': Record ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ': Record ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + ';');
+        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ': Record ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No.") + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -140,20 +152,32 @@ codeunit 110004 "DMTObjectGenerator"
     end;
 
     procedure CreateALTable(DMTTable: Record DMTTable) C: TextBuilder
+    begin
+        DMTTable.testfield("Buffer Table ID");
+        DMTTable.TestField("NAV Src.Table No.");
+        C := CreateALTable(DMTTable."Buffer Table ID", DMTTable."NAV Src.Table No.", DMTTable."NAV Src.Table Caption");
+    end;
+
+    procedure CreateALTable(DataFile: Record DMTDataFile) C: TextBuilder
+    begin
+        DataFile.testfield("Buffer Table ID");
+        DataFile.TestField("NAV Src.Table No.");
+        C := CreateALTable(DataFile."Buffer Table ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
+    end;
+
+    local procedure CreateALTable(BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
         DMTSetup: Record DMTSetup;
         DMTFieldBuffer: Record DMTFieldBuffer;
         _FieldTypeText: Text;
     begin
         DMTSetup.Get();
-        DMTTable.testfield("Buffer Table ID");
-        DMTTable.TestField("NAV Src.Table No.");
-        FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, true, FALSE);
-        C.AppendLine('table ' + FORMAT(DMTTable."Buffer Table ID") + ' ' + STRSUBSTNO('T%1Buffer', DMTTable."NAV Src.Table No."));
+        FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, true, FALSE);
+        C.AppendLine('table ' + FORMAT(BufferTableID) + ' ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + DMTTable."NAV Src.Table Caption" + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DMTFieldBuffer, DMTTable."NAV Src.Table No.", FALSE, DMTSetup."Import with FlowFields", FALSE) then
+        IF FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then
             repeat
                 CASE DMTFieldBuffer.Type OF
                     DMTFieldBuffer.Type::RecordID:
@@ -179,7 +203,7 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(DMTTable."NAV Src.Table No.") + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(NAVSrcTableNo) + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');

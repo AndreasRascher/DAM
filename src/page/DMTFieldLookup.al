@@ -39,7 +39,7 @@ page 110022 "DMTFieldLookup"
         case DMTTable.BufferTableType of
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
+                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.RecordId, BuffTableCaptions);
                     foreach FieldNo in BuffTableCaptions.Keys do begin
                         TempFieldBuffer.TableNo := GenBuffTable.RecordId.TableNo;
                         TempFieldBuffer."No." := FieldNo + 1000;

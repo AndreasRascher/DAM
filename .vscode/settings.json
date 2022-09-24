@@ -12,7 +12,6 @@
         "editor.formatOnSave": true,
         "editor.semanticHighlighting.enabled": true
     },
-    "alOutline.codeActionsOnSave": ["SortVariables"],
     "CRS.FileNamePattern": "<ObjectNameShort>.al",
     "CRS.ObjectNamePrefix": "DMT",
     "CRS.RenameWithGit": true,

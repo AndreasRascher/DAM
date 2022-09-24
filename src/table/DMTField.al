@@ -189,6 +189,7 @@ table 110003 "DMTField"
     internal procedure AssignSourceToTargetFields(DMTTable: Record DMTTable)
     var
         DMTField: Record DMTField;
+        MigrationLib: Codeunit DMTMigrationLib;
         SourceFieldNames, TargetFieldNames : Dictionary of [Integer, Text];
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
@@ -210,7 +211,7 @@ table 110003 "DMTField"
             FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
             // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
             if FoundAtIndex = 0 then
-                if FindFieldNameInOldVersion(SourceFieldName, DMTTable."Target Table ID", NewFieldName) then
+                if MigrationLib.FindFieldNameInOldVersion(SourceFieldName, DMTTable."Target Table ID", NewFieldName) then
                     FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
             if FoundAtIndex <> 0 then begin
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
@@ -238,32 +239,6 @@ table 110003 "DMTField"
                 if format(DMTFields2) <> Format(DMTFields) then
                     DMTFields.Modify()
             until DMTFields.Next() = 0;
-    end;
-
-    procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
-    begin
-        //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
-        CLEAR(OldFieldName);
-        CASE TRUE OF
-            (TargetTableNo = DATABASE::Customer) AND (FieldName = 'Country/Region Code'):
-                OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Vendor) AND (FieldName = 'Country/Region Code'):
-                OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Contact) AND (FieldName = 'Country/Region Code'):
-                OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Country/Region of Origin Code'):
-                OldFieldName := 'Country of Origin Code';
-            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Time Bucket'):
-                OldFieldName := 'Reorder Cycle';
-            // Item Cross Reference -> Item Reference
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type'):
-                OldFieldName := 'Cross-Reference Type';
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type No.'):
-                OldFieldName := 'Cross-Reference Type No.';
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference No.'):
-                OldFieldName := 'Cross-Reference No.';
-        end; // end_CASE
-        Found := OldFieldName <> '';
     end;
 
     internal procedure UpdateProcessingAction(SrcFieldNo: Integer);
@@ -317,7 +292,7 @@ table 110003 "DMTField"
                 end;
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), SourceFieldNames2);
+                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.RecordId, SourceFieldNames2);
                     foreach FieldID in SourceFieldNames2.Keys do begin
                         SourceFieldNames.Add(FieldID + 1000, SourceFieldNames2.Get(FieldID));
                     end;
@@ -380,7 +355,7 @@ table 110003 "DMTField"
         case DMTTable.BufferTableType of
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable.GetDataFilePath(), BuffTableCaptions);
+                    DMTGenBuffTable.GetColCaptionForImportedFile(DMTTable.RecordId, BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
                         TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));

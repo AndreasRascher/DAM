@@ -25,7 +25,9 @@ xmlport 110001 DMTGenBuffImport
                         If MaxColCount < (CurrColIndex - 1000) then
                             MaxColCount := (CurrColIndex - 1000);
                         RecRef.GetTable(GenBuffTable);
+                        RecRef.Field(GenBuffTable.FieldNo("Import File Path")).Value := CopyStr(CurrPath, 1, Maxstrlen(GenBuffTable."Import File Path"));
                         RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, Maxstrlen(GenBuffTable."Import from Filename"));
+                        RecRef.Field(GenBuffTable.FieldNo(SourceID)).Value := CurrSourceID;
                         RecRef.Field(CurrColIndex).Value := FieldContent;
                         RecRef.SetTable(GenBuffTable);
                     end;
@@ -74,9 +76,9 @@ xmlport 110001 DMTGenBuffImport
     begin
         /* Delete old line on reimport*/
         if CurrFileName <> '' then
-            if GenBuffTable.FilterByFileName(CurrFileName) then begin
+            if GenBuffTable.FilterBy(CurrSourceID) then
                 GenBuffTable.DeleteAll();
-            end;
+
         HeaderLineEntryNo := 1;
 
         GenBuffTable.Reset();
@@ -91,23 +93,30 @@ xmlport 110001 DMTGenBuffImport
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
         GenBuffTable.UpdateMaxColCount(CurrFileName, MaxColCount);
-        CurrDMTTable.UpdateQtyLinesInBufferTable();
         IF currXMLport.FILENAME <> '' then //only for manual excecution
             MESSAGE(LinesProcessedMsg, currXMLport.FILENAME, ReceivedLinesCount);
     end;
 
-    procedure SetDMTTable(DMTTable: Record DMTTable)
+    procedure SetImportFromFile(DMTTable: Record DMTTable)
     begin
-        CurrDMTTable := DMTTable;
-        CurrFileName := CurrDMTTable.DataFileName;
+        CurrFileName := DMTTable.DataFileName;
+        CurrPath := DMTTable.DataFileFolderPath;
+        CurrSourceID := DMTTable.RecordId;
+    end;
+
+    procedure SetImportFromFile(DataFile: Record DMTDataFile)
+    begin
+        CurrFileName := DataFile.Name;
+        CurrPath := DataFile.Path;
+        CurrSourceID := DataFile.RecordId;
     end;
 
     var
-        CurrDMTTable: Record DMTTable;
         CurrColIndex: Integer;
         HeaderLineEntryNo: Integer;
         MaxColCount: Integer;
         NextEntryNo: Integer;
         ReceivedLinesCount: Integer;
-        CurrFileName: Text;
+        CurrFileName, CurrPath : Text;
+        CurrSourceID: RecordId;
 }

@@ -289,6 +289,21 @@ codeunit 110000 "DMTObjMgt"
         Result := (NAVAppInstalledApp."Package ID" = AllObjWithCaption."App Package ID");
     end;
 
+    procedure SetNAVTableCaptionAndTableName(SourceTableID: Integer; var NAVSrcTableCaption: Text[250]; var NAVSrcTableName: Text[250])
+    var
+        DMTFieldBufferQry: Query DMTFieldBufferQry;
+    begin
+        if SourceTableID = 0 then exit;
+        Clear(NAVSrcTableCaption);
+        Clear(NAVSrcTableName);
+        DMTFieldBufferQry.SetRange(TableNo, SourceTableID);
+        DMTFieldBufferQry.Open();
+        if DMTFieldBufferQry.Read() then begin
+            NAVSrcTableCaption := DMTFieldBufferQry.Table_Caption;
+            NAVSrcTableName := DMTFieldBufferQry.TableName;
+        end;
+    end;
+
     procedure AddNewTargetTable(TableID: Integer; var DMTTable: Record DMTTable)
     begin
         AddNewTargetTable(TableID, TableID, '', '', DMTTable);
@@ -299,7 +314,6 @@ codeunit 110000 "DMTObjMgt"
         DMTField: Record DMTField;
         File: Record File;
         TableMeta: Record "Table Metadata";
-        DMTFieldBufferQry: Query DMTFieldBufferQry;
     begin
         Clear(DMTTable);
         if (TargetTableID = 0) and (SourceTableID <> 0) then
@@ -314,12 +328,7 @@ codeunit 110000 "DMTObjMgt"
 
         // Find NAV Source Infos   
         DMTTable."NAV Src.Table No." := SourceTableID;
-        DMTFieldBufferQry.SetRange(TableNo, SourceTableID);
-        DMTFieldBufferQry.Open();
-        if DMTFieldBufferQry.Read() then begin
-            DMTTable."NAV Src.Table Caption" := DMTFieldBufferQry.Table_Caption;
-            DMTTable."NAV Src.Table Name" := DMTFieldBufferQry.TableName;
-        end;
+        SetNAVTableCaptionAndTableName(SourceTableID, DMTTable."NAV Src.Table Caption", DMTTable."NAV Src.Table Name");
         DMTTable.Insert();
 
         if DMTTable.TryFindExportDataFile() then begin

@@ -12,7 +12,7 @@ codeunit 110012 "DMTProcessRecord"
         ProcessNonKeyFields();
     end;
 
-    local procedure AssignField(ValidateSetting: Enum DMTValidateSetting; UseTryFunction: Boolean)
+    local procedure AssignField(ValidateSetting: Enum "DMTFieldValidationType"; UseTryFunction: Boolean)
     var
         SourcceField: FieldRef;
         TargetField: FieldRef;
@@ -62,9 +62,9 @@ codeunit 110012 "DMTProcessRecord"
             if not ProcessedFields.Contains(TempDMTField.RecordID) then begin
                 CurrFieldToProcess := TempDMTField.RecordID;
                 if TempDMTField."Validate Value" then
-                    AssignField(Enum::DMTValidateSetting::ValidateOnlyIfNotEmpty, TempDMTField."Use Try Function")
+                    AssignField(Enum::"DMTFieldValidationType"::ValidateOnlyIfNotEmpty, TempDMTField."Use Try Function")
                 else
-                    AssignField(Enum::DMTValidateSetting::AssignWithoutValidate, TempDMTField."Use Try Function");
+                    AssignField(Enum::"DMTFieldValidationType"::AssignWithoutValidate, TempDMTField."Use Try Function");
                 ProcessedFields.Add(TempDMTField.RecordId);
             end;
         until TempDMTField.Next() = 0;
@@ -79,7 +79,7 @@ codeunit 110012 "DMTProcessRecord"
         repeat
             if not ProcessedFields.Contains(TempDMTField.RecordID) then begin
                 CurrFieldToProcess := TempDMTField.RecordID;
-                AssignField(Enum::DMTValidateSetting::AssignWithoutValidate, TempDMTField."Use Try Function");
+                AssignField(Enum::"DMTFieldValidationType"::AssignWithoutValidate, TempDMTField."Use Try Function");
                 ProcessedFields.Add(TempDMTField.RecordId);
             end;
         until TempDMTField.Next() = 0;
@@ -130,10 +130,4 @@ codeunit 110012 "DMTProcessRecord"
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
 
-}
-enum 110006 DMTValidateSetting
-{
-    value(0; AssignWithoutValidate) { }
-    value(1; ValidateOnlyIfNotEmpty) { }
-    value(2; AlwaysValidate) { }
 }

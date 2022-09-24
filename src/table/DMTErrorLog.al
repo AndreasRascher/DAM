@@ -87,6 +87,34 @@ table 110001 "DMTErrorLog"
         _DMTErrorlog.INSERT(TRUE);
     end;
 
+    procedure AddEntryForLastError(SourceRef: recordref; TargetRef: RecordRef; FieldMapping: Record "DMTFieldMapping");
+    var
+        _DMTErrorlog: Record DMTErrorLog;
+        DMTTable: Record DMTTable;
+    begin
+        DMTTable.Get(FieldMapping."Target Table ID");
+        _DMTErrorlog.DataFileName := DMTTable.DataFileName;
+        _DMTErrorlog.DataFileFolderPath := DMTTable.DataFileFolderPath;
+
+        _DMTErrorlog."From ID" := SourceRef.RecordId;
+        _DMTErrorlog."To ID" := TargetRef.RecordId;
+        _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
+        _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."to ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
+
+        _DMTErrorlog."Import from Table No." := SourceRef.Number;
+        _DMTErrorlog."Import from Field No." := FieldMapping."Source Field No.";
+        _DMTErrorlog."Import to Table No." := FieldMapping."Target Table ID";
+        _DMTErrorlog."Import to Field No." := FieldMapping."Target Field No.";
+        _DMTErrorlog."Ignore Error" := FieldMapping."Ignore Validation Error";
+
+        _DMTErrorlog.Errortext := COPYSTR(GETLASTERRORTEXT, 1, MAXSTRLEN(_DMTErrorlog.Errortext));
+        _DMTErrorlog.ErrorCode := CopyStr(GETLASTERRORCODE, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
+        _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
+        _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
+
+        _DMTErrorlog.INSERT(TRUE);
+    end;
+
     procedure AddEntryForLastError(ToRecRef: RecordRef; ToFieldNo: Integer; IgnoreError: Boolean);
     var
         _DMTErrorlog: Record DMTErrorLog;
@@ -144,7 +172,18 @@ table 110001 "DMTErrorLog"
         if OpenOnlyIfNotEmpty then
             if DMTErrorLog.IsEmpty then
                 exit;
-        PAGE.RUN(PAGE::"DMT Error Log List", DMTErrorlog);
+        Page.Run(Page::"DMT Error Log List", DMTErrorlog);
+    end;
+
+    procedure OpenListWithFilter(DataFile: Record DMTDataFile; OpenOnlyIfNotEmpty: Boolean)
+    var
+        DMTErrorlog: Record DMTErrorLog;
+    begin
+        DMTErrorlog.Setrange("Import to Table No.", DataFile."Target Table ID");
+        if OpenOnlyIfNotEmpty then
+            if DMTErrorLog.IsEmpty then
+                exit;
+        Page.Run(Page::"DMT Error Log List", DMTErrorlog);
     end;
 
     procedure AddErrorEntries(SourceRef: recordref; TargetRef: RecordRef; LastErrorLog: Dictionary of [RecordId, Dictionary of [Text, Text]]);
