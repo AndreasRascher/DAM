@@ -7,6 +7,7 @@ page 110027 "DMTDataFileList"
     SourceTable = DMTDataFile;
     SourceTableView = sorting("Sort Order", "Target Table ID");
     CardPageId = DMTDataFileCard;
+    PromotedActionCategoriesML = ENU = '1,2,3,Tables,Objects,Migration,Files', DEU = '1,2,3,Tabellen,Objekte,Migration,Dateien';
 
     layout
     {
@@ -37,15 +38,200 @@ page 110027 "DMTDataFileList"
     {
         area(Processing)
         {
-            // action(ActionName)
+            #region Tabellen
+            // action(SelectTablesToAdd)
             // {
-            //     ApplicationArea = All;
-
-            //     trigger OnAction();
+            //     Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
+            //     Image = Add;
+            //     ApplicationArea = all;
+            //     Promoted = true;
+            //     PromotedCategory = Category4;
+            //     PromotedOnly = true;
+            //     trigger OnAction()
+            //     var
+            //         DMTSetup: Record DMTSetup;
             //     begin
-
+            //         if Rec."Target Table ID" <> 0 then
+            //             CurrPage.SaveRecord();
+            //         Commit();
+            //         DMTSetup.CheckSchemaInfoHasBeenImporterd();
+            //         PageActions.AddSelectedTargetTables();
             //     end;
             // }
+            #endregion Tabellen
+
+            #region Objekte
+            action(ExportALObjects)
+            {
+                Image = ExportFile;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
+                trigger OnAction()
+                begin
+                    PageActions.DownloadAllALDataMigrationObjects();
+                end;
+            }
+            action(RenumberALObjects)
+            {
+                Image = NumberGroup;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
+                trigger OnAction()
+                begin
+                    PageActions.RenumberALObjects();
+                end;
+            }
+            action(RenewObjectIdAssignments)
+            {
+                Image = NumberGroup;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category5;
+                Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
+                trigger OnAction()
+                begin
+                    PageActions.RenewObjectIdAssignments();
+                end;
+            }
+            #endregion Objekte
+
+            #region Migration
+            action(ImportSelectedToBuffer)
+            {
+                Image = ImportDatabase;
+                Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category6;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.ImportSelectedIntoBuffer(TempDataFile_SELECTED);
+                end;
+            }
+            action(ProposeMatchingFields)
+            {
+                Caption = 'Popose Matching Fields', comment = 'Feldzuordnung vorschlagen';
+                ApplicationArea = All;
+                Image = SuggestField;
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.ProposeMatchingFieldsForSelection(TempDataFile_SELECTED);
+                end;
+            }
+            action(ImportSelectedToTarget)
+            {
+                Image = TransferToLines;
+                ApplicationArea = all;
+                Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.ImportSelectedIntoTarget(TempDataFile_SELECTED);
+                end;
+            }
+            #endregion Migration
+
+            action(UpdateTableRelationInfo)
+            {
+                Image = Relationship;
+                ApplicationArea = All;
+                Caption = 'Update Missing Table Relations', Comment = 'Update der offenen Tabellenrelationen';
+                trigger OnAction()
+                var
+                    DataFile: Record DMTDataFile;
+                    RelationsCheck: Codeunit DMTRelationsCheck;
+                begin
+                    if DataFile.FindSet() then
+                        repeat
+                            DataFile."Table Relations" := RelationsCheck.FindRelatedTableIDs(DataFile).Count;
+                            DataFile."Unhandled Table Rel." := RelationsCheck.FindUnhandledRelatedTableIDs(DataFile).Count;
+                            DataFile.Modify();
+                        until DataFile.Next() = 0;
+                end;
+            }
+            // action(UpdateSortOrder)
+            // {
+            //     Image = BulletList;
+            //     ApplicationArea = All;
+            //     Caption = 'Update Sort Order', Comment = 'Update der Sortierung';
+            //     trigger OnAction()
+            //     var
+            //         RelationsCheck: Codeunit DMTRelationsCheck;
+            //     begin
+            //         RelationsCheck.ProposeSortOrder();
+            //     end;
+            // }
+
+            action(GetToTableIDFilter)
+            {
+                Image = FilterLines;
+                Caption = 'To Table ID Filter', Comment = 'Zieltabellen-ID Filter';
+                ApplicationArea = all;
+                trigger OnAction()
+                begin
+                    Message(PageActions.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
+                end;
+            }
+            action(GetFromTableIDFilter)
+            {
+                Image = FilterLines;
+                Caption = 'From Table ID Filter', Comment = 'Herkunftstabellen-ID Filter';
+                ApplicationArea = all;
+                trigger OnAction()
+                begin
+                    Message(PageActions.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
+                end;
+            }
+            action(AddDataFile)
+            {
+                Image = Add;
+                Caption = 'Add Data File';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    PageActions.AddDataFiles();
+                end;
+            }
+            action(DeleteMarkedLines)
+            {
+                Caption = 'Delete Marked Lines', Comment = 'Markierte Zeilen löschen';
+                Image = DeleteRow;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.DeleteSelectedTargetTables(TempDataFile_SELECTED);
+                end;
+            }
         }
     }
+    procedure GetSelection(var DataFile_Selected: Record DMTDataFile temporary) HasLines: Boolean
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        Clear(DataFile_Selected);
+        if DataFile_Selected.IsTemporary then
+            DataFile_Selected.DeleteAll();
+        DataFile.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CurrPage.SetSelectionFilter(DataFile);
+        DataFile.CopyToTemp(DataFile_Selected);
+        HasLines := DataFile_Selected.FindFirst();
+    end;
+
+    var
+        PageActions: Codeunit DMTDataFilePageAction;
+        TempDataFile_SELECTED: record DMTDataFile temporary;
 }

@@ -21,7 +21,7 @@ page 110026 DMTDataFileCard
                         Importance = Promoted;
                         ShowCaption = false;
                         ShowMandatory = true;
-                        // StyleExpr = DataFilePathStyleExpr;
+                        StyleExpr = CurrDataFilePathStyle;
                         trigger OnAssistEdit()
                         begin
                             SelectDataFilePath();
@@ -60,6 +60,16 @@ page 110026 DMTDataFileCard
                                 Caption = 'Last Import To Buffer At';
                                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
                             }
+                            group(Grid2Line4)
+                            {
+                                Caption = 'No.of Records in Buffer Table';
+                                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
+                            }
+                            group(Grid2Line5)
+                            {
+                                Caption = 'No. of Records In Trgt. Table';
+                                field("No. of Records In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
+                            }
                         }
                     }
                 }
@@ -95,10 +105,9 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 begin
-                    CurrPage.SaveRecord();
-                    Commit();
-                    // PageActions.AutoMigration(Rec);
-                    // EnableControls(); // ShowMappingLines;
+                    SaveAndCommitCurrRecIfNotEmpty();
+                    PageActions.AutoMigration(Rec);
+                    Rec.UpdateIndicators();
                 end;
             }
             action(ImportBufferDataFromFile)
@@ -123,19 +132,8 @@ page 110026 DMTDataFileCard
                 Promoted = false;
 
                 trigger OnAction()
-                var
-                    RecRef: RecordRef;
-                    DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! All Records in table "%1" (company "%2") will be deleted. Continue?',
-                    Comment = 'Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?';
                 begin
-                    Rec.TestField("Target Table ID");
-                    CurrPage.SaveRecord();
-                    Commit();
-                    RecRef.Open(Rec."Target Table ID");
-                    if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
-                        if not RecRef.IsEmpty then
-                            RecRef.DeleteAll();
-                    end;
+                    PageActions.DeleteRecordsInTargetTable(Rec);
                 end;
             }
             action(TransferToTargetTable)
@@ -167,7 +165,7 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    Import: Codeunit DMTImportNEW;
+                    ImportNew: Codeunit DMTImportNEW;
                     UpdateTaskNew: Page DMTUpdateTaskNew;
                 begin
                     // Show only Non-Key Fields for selection
@@ -177,8 +175,7 @@ page 110026 DMTDataFileCard
                         exit;
                     if UpdateTaskNew.RunModal() = Action::LookupOK then begin
                         Rec.WriteLastFieldUpdateSelection(UpdateTaskNew.GetToFieldNoFilter());
-                        Import.StartImport(Rec, false, true);
-
+                        ImportNew.StartImport(Rec, false, true);
                     end;
                 end;
             }
@@ -267,6 +264,8 @@ page 110026 DMTDataFileCard
     trigger OnAfterGetRecord()
     begin
         FullDataFilePathText := Rec.FullDataFilePath();
+        CurrDataFilePathStyle := Rec.DataFilePathStyle;
+        Rec.UpdateIndicators();
     end;
 
     local procedure SelectDataFilePath()
@@ -284,7 +283,16 @@ page 110026 DMTDataFileCard
         end;
     end;
 
+    procedure SaveAndCommitCurrRecIfNotEmpty()
+    begin
+        if Rec.ID <> 0 then
+            CurrPage.SaveRecord();
+        Commit();
+    end;
+
+
     var
         PageActions: Codeunit DMTDataFilePageAction;
         FullDataFilePathText: Text;
+        CurrDataFilePathStyle: Text;
 }

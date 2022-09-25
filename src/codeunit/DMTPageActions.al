@@ -68,9 +68,6 @@ codeunit 110010 "DMTPageActions"
         DefaultTextEncoding: TextEncoding;
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
-        // DefaultTextEncoding := TextEncoding::MSDos;
-        // DefaultTextEncoding := TextEncoding::UTF16;
-        // DefaultTextEncoding := TextEncoding::Windows;
         DMTTable.SetRange(BufferTableType, DMTTable.BufferTableType::"Seperate Buffer Table per CSV");
         if DMTTable.FindSet() then begin
             DataCompression.CreateZipArchive();

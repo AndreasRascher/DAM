@@ -109,13 +109,22 @@ table 110048 DMTDataFileBuffer
 
     local procedure IsFileAlreadyAssigned(): Boolean
     var
-        DMTTable: Record DMTTable;
+        DataFile: Record DMTDataFile;
     begin
         if rec.Name = '' then exit;
-        DMTTable.SetRange(DataFileFolderPath, Rec.Path);
-        DMTTable.SetRange(DataFileName, Rec.Name);
-        exit(not DMTTable.IsEmpty());
+        DataFile.SetRange(Path, Rec.Path);
+        DataFile.SetRange(Name, Rec.Name);
+        exit(not DataFile.IsEmpty());
     end;
+    // local procedure IsFileAlreadyAssigned(): Boolean
+    // var
+    //     DMTTable: Record DMTTable;
+    // begin
+    //     if rec.Name = '' then exit;
+    //     DMTTable.SetRange(DataFileFolderPath, Rec.Path);
+    //     DMTTable.SetRange(DataFileName, Rec.Name);
+    //     exit(not DMTTable.IsEmpty());
+    // end;
 
     procedure ProposeTargetTable()
     var

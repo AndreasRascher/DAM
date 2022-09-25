@@ -307,6 +307,41 @@ codeunit 110013 "DMTDataFilePageAction"
         end
     end;
 
+    procedure ImportSelectedIntoBuffer(var DataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        DataFile: Record DMTDataFile;
+        Start: DateTime;
+        TableStart: DateTime;
+        Progress: Dialog;
+        FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
+        ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
+        ProgressMsg: Text;
+    begin
+        DataFile_SELECTED.SetCurrentKey("Sort Order");
+        ProgressMsg := '==========================================\' +
+                       ImportFilesProgressMsg + '\' +
+                       '==========================================\';
+
+        DataFile_SELECTED.FindSet();
+        REPEAT
+            ProgressMsg += '\' + DataFile_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DataFile_SELECTED."Target Table ID") + '#';
+        UNTIL DataFile_SELECTED.NEXT() = 0;
+
+        DataFile_SELECTED.FindSet();
+        Start := CurrentDateTime;
+        Progress.Open(ProgressMsg);
+        repeat
+            TableStart := CurrentDateTime;
+            DataFile := DataFile_SELECTED;
+            Progress.Update(DataFile_SELECTED."Target Table ID", 'Wird eingelesen');
+            ImportToBufferTable(DataFile);
+            Commit();
+            Progress.Update(DataFile_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
+        until DataFile_SELECTED.Next() = 0;
+        Progress.Close();
+        Message(FinishedMsg, CurrentDateTime - Start);
+    end;
+
     procedure UpdateQtyLinesInBufferTable(DataFile: Record DMTDataFile) QtyLines: Decimal;
     var
         GenBuffTable: Record DMTGenBuffTable;
@@ -444,5 +479,237 @@ codeunit 110013 "DMTDataFilePageAction"
             TryFindBufferTableID(DataFileRec, false);
             TryFindXMLPortID(DataFileRec, false);
         end
+    end;
+
+    internal procedure AutoMigration(var DataFile: Record DMTDataFile)
+    var
+        DMTImportNew: Codeunit "DMTImportNew";
+    begin
+        DataFile.TestField("Target Table ID");
+        DataFile."Allow Usage of Try Function" := false;
+        DataFile.Modify();
+        ImportToBufferTable(DataFile);
+        ProposeMatchingFields(DataFile.ID);
+        DMTImportNew.StartImport(DataFile, true, false);
+    end;
+
+    procedure DeleteRecordsInTargetTable(DMTDataFile: Record DMTDataFile)
+    var
+        RecRef: RecordRef;
+        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! All Records in table "%1" (company "%2") will be deleted. Continue?',
+                    Comment = 'Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?';
+    begin
+        DMTDataFile.TestField("Target Table ID");
+        RecRef.Open(DMTDataFile."Target Table ID");
+        if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
+            if not RecRef.IsEmpty then
+                RecRef.DeleteAll();
+        end;
+    end;
+
+    procedure DeleteSelectedTargetTables(var DataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        if not (DataFile_SELECTED.FindFirst()) then
+            exit;
+        repeat
+            DataFile := DataFile_SELECTED;
+            DataFile.Delete(true);
+        until DataFile_SELECTED.Next() = 0;
+    end;
+
+    procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
+    var
+        DMTTable: Record DMTTable;
+    begin
+        If not DMTTable.FindSet(false, false) then
+            exit('');
+        repeat
+            case FieldNo of
+                DMTTable.FieldNo("Target Table ID"):
+                    begin
+                        if DMTTable."Target Table ID" <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DMTTable."Target Table ID");
+                    end;
+                DMTTable.FieldNo("NAV Src.Table No."):
+                    begin
+                        if DMTTable."NAV Src.Table No." <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DMTTable."Buffer Table ID");
+                    end;
+            end;
+        until DMTTable.Next() = 0;
+        FilterExpr := FilterExpr.TrimEnd('|');
+    end;
+
+    internal procedure ImportSelectedIntoTarget(var DataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        DataFile: Record DMTDataFile;
+        DMTImport: Codeunit "DMTImportNew";
+    begin
+        DataFile_SELECTED.SetCurrentKey("Sort Order");
+        if not DataFile_SELECTED.FindSet() then exit;
+        repeat
+            DataFile := DataFile_SELECTED;
+            DMTImport.StartImport(DataFile, true, false);
+        until DataFile_SELECTED.Next() = 0;
+    end;
+
+    procedure DownloadAllALDataMigrationObjects()
+    var
+        DataFile: Record DMTDataFile;
+        DataCompression: Codeunit "Data Compression";
+        ObjGen: Codeunit DMTObjectGenerator;
+        FileBlob: Codeunit "Temp Blob";
+        IStr: InStream;
+        OStr: OutStream;
+        toFileName: text;
+        DefaultTextEncoding: TextEncoding;
+    begin
+        DefaultTextEncoding := TextEncoding::UTF8;
+        DataFile.SetRange(BufferTableType, DataFile.BufferTableType::"Seperate Buffer Table per CSV");
+        if DataFile.FindSet() then begin
+            DataCompression.CreateZipArchive();
+            repeat
+                //Table
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALTable(DataFile).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALBufferTableName(DataFile));
+                //XMLPort
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALXMLPort(DataFile).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALXMLPortName(DataFile));
+            until DataFile.Next() = 0;
+        end;
+        Clear(FileBlob);
+        FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+        DataCompression.SaveZipArchive(OStr);
+        FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+        toFileName := 'BufferTablesAndXMLPorts.zip';
+        DownloadFromStream(iStr, 'Download', 'ToFolder', format(Enum::DMTFileFilter::ZIP), toFileName);
+    end;
+
+    internal procedure RenumberALObjects()
+    var
+        DataFile: Record DMTDataFile;
+        DMTSetup: Record DMTSetup;
+        SessionStorage: Codeunit DMTSessionStorage;
+        ObjectMgt: Codeunit DMTObjMgt;
+        AvailableTables, AvailableXMLPorts : List of [Integer];
+    begin
+        SessionStorage.DisposeLicenseInfo();
+
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+        if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
+        DMTSetup.Get();
+        DMTSetup.TestField("Obj. ID Range Buffer Tables");
+        DMTSetup.TestField("Obj. ID Range XMLPorts");
+
+
+        DataFile.ModifyAll("Buffer Table ID", 0);
+        DataFile.ModifyAll("Import XMLPort ID", 0);
+
+        DataFile.SetRange(BufferTableType, DataFile.BufferTableType::"Seperate Buffer Table per CSV");
+        if DataFile.FindSet() then
+            repeat
+                if AvailableTables.Count > 0 then begin
+                    DataFile."Buffer Table ID" := AvailableTables.Get(1);
+                    AvailableTables.Remove(DataFile."Buffer Table ID");
+                end;
+                if AvailableXMLPorts.Count > 0 then begin
+                    DataFile."Import XMLPort ID" := AvailableXMLPorts.Get(1);
+                    AvailableXMLPorts.Remove(DataFile."Import XMLPort ID");
+                end;
+                DataFile.Modify();
+            until DataFile.Next() = 0;
+    end;
+
+    internal procedure RenewObjectIdAssignments()
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        DataFile.SetRange(BufferTableType, DataFile.BufferTableType::"Seperate Buffer Table per CSV");
+        if DataFile.FindSet() then
+            repeat
+                TryFindBufferTableID(DataFile, true);
+                TryFindXMLPortID(DataFile, true);
+            until DataFile.Next() = 0;
+    end;
+
+    procedure ProposeMatchingFieldsForSelection(var DataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        FieldMapping: Record DMTFieldMapping;
+    begin
+        if not DataFile_SELECTED.FindSet() then exit;
+        repeat
+            ProposeMatchingFields(DataFile_SELECTED.ID);
+        until DataFile_SELECTED.Next() = 0;
+    end;
+
+    internal procedure AddDataFiles()
+    var
+        DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
+        DataFile: Record DMTDataFile;
+        ObjMgt: Codeunit DMTObjMgt;
+        DMTSelectDataFile: page DMTSelectDataFile;
+    begin
+        DMTSelectDataFile.LookupMode(true);
+        if DMTSelectDataFile.RunModal() <> Action::LookupOK then
+            exit;
+        if not DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
+            exit;
+        DataFileBuffer_Selected.SetRange("File is already assigned", false);
+        DataFileBuffer_Selected.SetFilter("Target Table ID", '<>0');
+        if not DataFileBuffer_Selected.FindSet() then begin
+            Message('Keine neuen Dateien mit Zieltabellennr. gefunden.');
+            exit;
+        end;
+        repeat
+            AddNewTargetTable(DataFileBuffer_Selected);
+        until DataFileBuffer_Selected.Next() = 0;
+    end;
+
+    procedure AddNewTargetTable(DataFileBuffer: Record DMTDataFileBuffer)
+    var
+        File: Record File;
+        TableMeta: Record "Table Metadata";
+        DataFile: Record DMTDataFile;
+        ObjMgt: Codeunit DMTObjMgt;
+    begin
+        // Exists already
+        if DataFile.GetRecByFilePath(DataFileBuffer.Path, DataFileBuffer.Name) then
+            exit;
+
+        DataFile.Path := DataFileBuffer.Path;
+        DataFile.Name := DataFileBuffer.Name;
+        DataFile.Size := DataFileBuffer.Size;
+        DataFile."Created At" := DataFileBuffer.DateTime;
+        DataFile."Target Table ID" := DataFileBuffer."Target Table ID";
+        DataFile."NAV Src.Table No." := DataFileBuffer."NAV Src.Table No.";
+        // Target Infos
+        TableMeta.Get(DataFileBuffer."Target Table ID");
+        DataFileBuffer."Target Table Caption" := TableMeta.Caption;
+        // Find NAV Source Infos
+        if DataFile."NAV Src.Table No." = 0 then
+            DataFile."NAV Src.Table No." := DataFile."Target Table ID";
+        ObjMgt.SetNAVTableCaptionAndTableName(DataFile."NAV Src.Table No.", DataFileBuffer."NAV Src.Table Caption", DataFileBuffer."NAV Src.Table Name");
+        DataFile.Insert(true);
+
+        if DataFile.FindFileRec(File) then
+            // lager than 100KB -> CSV
+            if ((File.Size / 1024) < 100) then
+                DataFile.Validate(BufferTableType, DataFile.BufferTableType::"Generic Buffer Table for all Files")
+            else
+                DataFile.Validate(BufferTableType, DataFile.BufferTableType::"Seperate Buffer Table per CSV");
+        ProposeObjectIDs(DataFile, false);
+        DataFile.Modify();
+        // Fields
+        InitFieldMapping(DataFile.ID);
     end;
 }

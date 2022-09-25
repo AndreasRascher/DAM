@@ -2128,6 +2128,21 @@
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method CreateTargetFieldNamesDict - NamedType ReplaceExistingMatchesQst</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
+          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 2406207420 - NamedType 563229157" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing finished\Duration %1</source>
+          <note from="Developer" annotates="general" priority="2">Vorgang abgeschlossen\Dauer %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method ImportSelectedIntoBuffer - NamedType FinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 2406207420 - NamedType 1757551544" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reading files into buffer tables</source>
+          <note from="Developer" annotates="general" priority="2">Dateien werden eingelesen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method ImportSelectedIntoBuffer - NamedType ImportFilesProgressMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 2202071372 - NamedType 2271755054" size-unit="char" translate="yes" xml:space="preserve">
           <source>Importing %1</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2403,6 +2418,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control Grid2Line3 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 1471311316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of Records in Buffer Table</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control Grid2Line4 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 833614699 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records In Trgt. Table</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control Grid2Line5 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Control 2096082296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Path</source>
           <note from="Developer" annotates="general" priority="2">Datentdatei Pfad</note>
@@ -2438,11 +2463,6 @@
           <note from="Developer" annotates="general" priority="2">Datensätze in Zieltabelle löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action DeleteRecordsInTargetTable - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2874035913 - Action 116037593 - Method 1377591017 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
-          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action DeleteRecordsInTargetTable - Method OnAction - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
-        </trans-unit>
         <trans-unit id="Page 2874035913 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
@@ -2472,6 +2492,61 @@
           <source>DMT Data File List</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 3187147809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add Data File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action AddDataFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Marked Lines</source>
+          <note from="Developer" annotates="general" priority="2">Markierte Zeilen löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action DeleteMarkedLines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download buffer table objects</source>
+          <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ExportALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Table ID Filter</source>
+          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetFromTableIDFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>To Table ID Filter</source>
+          <note from="Developer" annotates="general" priority="2">Zieltabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetToTableIDFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2185765369 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read files into buffer tables (marked lines)</source>
+          <note from="Developer" annotates="general" priority="2">Dateien in Puffertabellen einlesen (markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ImportSelectedToBuffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 426265410 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to target tables (marked lines)</source>
+          <note from="Developer" annotates="general" priority="2">In Zieltabellen übernehmen (Markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ImportSelectedToTarget - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Popose Matching Fields</source>
+          <note from="Developer" annotates="general" priority="2">Feldzuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ProposeMatchingFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 47655189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renew object id assignments</source>
+          <note from="Developer" annotates="general" priority="2">Objekt-IDs neu zuordnen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action RenewObjectIdAssignments - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 3138244177 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renumber AL Objects</source>
+          <note from="Developer" annotates="general" priority="2">AL Objekte neu Nummerieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action RenumberALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 903289417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Missing Table Relations</source>
+          <note from="Developer" annotates="general" priority="2">Update der offenen Tabellenrelationen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action UpdateTableRelationInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields</source>

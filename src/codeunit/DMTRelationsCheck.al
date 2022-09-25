@@ -3,27 +3,27 @@ codeunit 110005 DMTRelationsCheck
     procedure FindRelatedTableIDs(DMTTable: Record DMTTable) RelatedTableIDsList: List of [Integer]
     var
         DMTField: Record DMTField;
-        TargetField: Record Field;
-        TableRelations: record "Table Relations Metadata";
-        ExcludeKnownTableIDsFromSearchFilter: Text;
     begin
         if not DMTField.FilterBy(DMTTable) then
             exit;
+        DMTField.SetLoadFields(DMTField."Target Table ID", DMTField."Target Field No.");
         DMTField.FindSet(false, false);
         repeat
-            if TargetField.Get(DMTField."Target Table ID", DMTField."Target Field No.") then begin
-                TableRelations.SetRange("Table ID", TargetField.TableNo);
-                TableRelations.SetRange("Field No.", TargetField."No.");
-                TableRelations.setfilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
-                if TableRelations.FindSet() then
-                    repeat
-                        if not RelatedTableIDsList.Contains(TableRelations."Related Table ID") then
-                            RelatedTableIDsList.Add(TableRelations."Related Table ID");
-                        ExcludeKnownTableIDsFromSearchFilter += StrSubstNo('&<>%1', TableRelations."Related Table ID");
-                    until TableRelations.Next() = 0;
-                ExcludeKnownTableIDsFromSearchFilter := ExcludeKnownTableIDsFromSearchFilter.TrimStart('&');
-            end;
+            CreateRelatedTableIDsList(DMTField."Target Table ID", DMTField."Target Field No.", RelatedTableIDsList);
         until DMTField.Next() = 0;
+    end;
+
+    procedure FindRelatedTableIDs(DataFile: Record DMTDataFile) RelatedTableIDsList: List of [Integer]
+    var
+        FieldMapping: Record DMTFieldMapping;
+    begin
+        if not DataFile.FilterRelated(FieldMapping) then
+            exit;
+        FieldMapping.SetLoadFields(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
+        FieldMapping.FindSet(false, false);
+        repeat
+            CreateRelatedTableIDsList(FieldMapping."Target Table ID", FieldMapping."Target Field No.", RelatedTableIDsList);
+        until FieldMapping.Next() = 0;
     end;
 
     procedure FindUnhandledRelatedTableIDs(DMTTable: Record DMTTable) UnhandledTableIDs: List of [Integer]
@@ -37,6 +37,21 @@ codeunit 110005 DMTRelationsCheck
         foreach TableID in RelatedTableIDs do
             if not (TableID >= 2000000000) then
                 if not DMTTable2.Get(TableID) then begin
+                    UnhandledTableIDs.Add(TableID);
+                end;
+    end;
+
+    procedure FindUnhandledRelatedTableIDs(DataFile: Record DMTDataFile) UnhandledTableIDs: List of [Integer]
+    var
+        DataFile2: Record DMTDataFile;
+        TableID: Integer;
+        RelatedTableIDs: List of [Integer];
+    begin
+        RelatedTableIDs := FindRelatedTableIDs(DataFile);
+        if RelatedTableIDs.Count = 0 then exit;
+        foreach TableID in RelatedTableIDs do
+            if not (TableID >= 2000000000) then
+                if not DataFile2.Get(TableID) then begin
                     UnhandledTableIDs.Add(TableID);
                 end;
     end;
@@ -129,6 +144,26 @@ codeunit 110005 DMTRelationsCheck
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
 
         Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
+    end;
+
+    local procedure CreateRelatedTableIDsList(TargetTableID: Integer; TargetFieldNo: Integer; var RelatedTableIDsList: List of [Integer])
+    var
+        TargetField: Record Field;
+        TableRelations: record "Table Relations Metadata";
+        ExcludeKnownTableIDsFromSearchFilter: Text;
+    begin
+        if TargetField.Get(TargetTableID, TargetFieldNo) then begin
+            TableRelations.SetRange("Table ID", TargetField.TableNo);
+            TableRelations.SetRange("Field No.", TargetField."No.");
+            TableRelations.setfilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
+            if TableRelations.FindSet() then
+                repeat
+                    if not RelatedTableIDsList.Contains(TableRelations."Related Table ID") then
+                        RelatedTableIDsList.Add(TableRelations."Related Table ID");
+                    ExcludeKnownTableIDsFromSearchFilter += StrSubstNo('&<>%1', TableRelations."Related Table ID");
+                until TableRelations.Next() = 0;
+            ExcludeKnownTableIDsFromSearchFilter := ExcludeKnownTableIDsFromSearchFilter.TrimStart('&');
+        end;
     end;
 
     //     procedure ValidateTableRelation(DMTField: Record DMTField; FieldValue: Text)

@@ -251,4 +251,78 @@ table 110042 "DMTDataFile"
         Rec.Modify();
     end;
 
+    procedure FindFileRec(var File: Record File) Found: Boolean
+    begin
+        File.SetRange(Path, Rec.Path);
+        File.SetRange(Name, Rec.Name);
+        File.SetRange("Is a file", true);
+        Found := File.FindFirst();
+    end;
+
+    procedure UpdateIndicators()
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+        FileRec: Record File;
+    begin
+        DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+        if Rec.FindFileRec(FileRec) then
+            DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+
+        Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Empty;
+
+        case true of
+            (Rec."No.of Records in Buffer Table" = 0):
+                begin
+                    Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Cross;
+                end;
+            (Rec."No.of Records in Buffer Table" > 0):
+                begin
+                    Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::CheckMark;
+                end;
+        end;
+        Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
+        Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
+
+        case true of
+            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
+                begin
+                    Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+                    Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Cross;
+                end;
+            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table"):
+                begin
+                    Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+                    Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;
+                end;
+        end;
+        // Generated Objects exist
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            clear(Rec.ImportXMLPortIDStyle);
+            clear(Rec.BufferTableIDStyle);
+        end else begin
+            if (Rec."Buffer Table ID" <> 0) then
+                if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Buffer Table ID") then
+                    Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            if (Rec."Import XMLPort ID" <> 0) then
+                if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Rec."Import XMLPort ID") then
+                    Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+        end;
+    end;
+
+    procedure CopyToTemp(var TempDataFile: Record DMTDataFile temporary)
+    var
+        DataFile: Record DMTDataFile;
+        TempDataFile2: Record DMTDataFile temporary;
+    begin
+        DataFile.Copy(Rec);
+        if DataFile.FindSet() then
+            repeat
+                TempDataFile2 := DataFile;
+                TempDataFile2.Insert(false);
+            until DataFile.Next() = 0;
+        TempDataFile.Copy(TempDataFile2, true);
+    end;
 }
