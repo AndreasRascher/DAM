@@ -27,7 +27,7 @@ xmlport 110001 DMTGenBuffImport
                         RecRef.GetTable(GenBuffTable);
                         RecRef.Field(GenBuffTable.FieldNo("Import File Path")).Value := CopyStr(CurrPath, 1, Maxstrlen(GenBuffTable."Import File Path"));
                         RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, Maxstrlen(GenBuffTable."Import from Filename"));
-                        RecRef.Field(GenBuffTable.FieldNo(SourceID)).Value := CurrSourceID;
+                        RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrSourceID;
                         RecRef.Field(CurrColIndex).Value := FieldContent;
                         RecRef.SetTable(GenBuffTable);
                     end;
@@ -92,7 +92,7 @@ xmlport 110001 DMTGenBuffImport
     var
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
-        GenBuffTable.UpdateMaxColCount(CurrFileName, MaxColCount);
+        GenBuffTable.UpdateMaxColCount(CurrSourceID, CurrFileName, MaxColCount);
         IF currXMLport.FILENAME <> '' then //only for manual excecution
             MESSAGE(LinesProcessedMsg, currXMLport.FILENAME, ReceivedLinesCount);
     end;

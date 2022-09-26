@@ -9,8 +9,7 @@ codeunit 110014 DMTImportNEW
         CheckBufferTableIsNotEmpty(DataFile);
         CheckMappedFieldsExist(DataFile);
 
-        StartImportForCustomBufferTable(DataFile, IsUpdateTask);
-        StartImportForGenericBufferTable(DataFile, IsUpdateTask);
+        ProcessFullBuffer(DataFile, IsUpdateTask);
 
         UpdateProcessingTime(DataFile, start);
         DataFile.CalcFields("No. of Records In Trgt. Table");
@@ -46,6 +45,7 @@ codeunit 110014 DMTImportNEW
         if not EditView(BufferRef, DMTDataFile) then
             exit;
         BufferRef.findset();
+        DMTDataFile.Calcfields("Target Table Caption");
         ProgressBarTitle := DMTDataFile."Target Table Caption";
         if Strlen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_') +
@@ -61,8 +61,8 @@ codeunit 110014 DMTImportNEW
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            // TODO Test(BufferRef2, DMTDataFile, IsUpdateTask, TempFieldMapping_COLLECTION);
-            ProcessSingleBufferRecord(BufferRef2, DMTDataFile, IsUpdateTask, TempFieldMapping_COLLECTION);
+            Test(BufferRef2, DMTDataFile, IsUpdateTask);
+            //ProcessSingleBufferRecord(BufferRef2, DMTDataFile, IsUpdateTask, TempFieldMapping_COLLECTION);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -137,6 +137,8 @@ codeunit 110014 DMTImportNEW
         FieldMapping.FindSet(false, false);  // raise error if empty
         repeat
             tempDMTFields := FieldMapping;
+            if not DataFile."Allow Usage of Try Function" then
+                tempDMTFields."Use Try Function" := false;
             tempDMTFields.Insert(false);
         until FieldMapping.Next() = 0;
         TempDMTFields_FOUND.Copy(tempDMTFields, true);
@@ -193,13 +195,11 @@ codeunit 110014 DMTImportNEW
     procedure AssignKeyFields(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpFieldMapping: record "DMTFieldMapping" temporary)
     var
         ToFieldRef: FieldRef;
-        KeyFieldsFilter: text;
     begin
-        KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, true);
         IF NOT TmpTargetRef.ISTEMPORARY then
-            ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
+            Error('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpFieldMapping.Reset();
-        TmpFieldMapping.SetFilter("Target Field No.", KeyFieldsFilter);
+        TmpFieldMapping.SetRange("Is Key Field(Target)", true);
         TmpFieldMapping.findset();
         repeat
             if not IsKnownAutoincrementField(TmpFieldMapping."Target Table ID", TmpFieldMapping."Target Field No.") then begin
@@ -221,11 +221,9 @@ codeunit 110014 DMTImportNEW
     procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempFieldMapping: Record "DMTFieldMapping" temporary)
     var
         ToFieldRef: FieldRef;
-        NonKeyFieldsFilter: Text;
     begin
-        NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
         TempFieldMapping.Reset();
-        TempFieldMapping.SetFilter("Target Field No.", NonKeyFieldsFilter);
+        TempFieldMapping.SetRange("Is Key Field(Target)", false);
         TempFieldMapping.SetCurrentKey("Validation Order");
         if not TempFieldMapping.findset() then
             exit; // Required for tables with only key fields
@@ -255,23 +253,26 @@ codeunit 110014 DMTImportNEW
         TmpTargetRef.Modify(false);
     end;
 
-    procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DMTDataFile: Record DMTDataFile) Continue: Boolean;
+    procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DataFile: Record DMTDataFile) Continue: Boolean;
     var
         FieldMapping: Record DMTFieldMapping;
         GenBuffTable: Record DMTGenBuffTable;
         FPBuilder: FilterPageBuilder;
         Index: Integer;
         PrimaryKeyRef: KeyRef;
-        KeyFieldsFilter: Text;
+        Debug: Text;
     begin
         FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
         IF BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
             FPBuilder.SetView(BufferRef.CAPTION, BufferRef.GETVIEW());
 
-        if DMTDataFile.BufferTableType = DMTDataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(DMTDataFile."Target Table ID", true);
-            if DMTDataFile.FilterRelated(FieldMapping) then begin
-                FieldMapping.setfilter("Target Field No.", KeyFieldsFilter);
+        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
+            if DataFile.FilterRelated(FieldMapping) then begin
+                // Init Captions
+                if GenBuffTable.FilterBy(DataFile) then
+                    GenBuffTable.InitFirstLineAsCaptions(DataFile.RecordId);
+                Debug := GenBuffTable.FieldCaption(Fld001);
+                FieldMapping.SetRange("Is Key Field(Target)", true);
                 if FieldMapping.FindSet() then
                     repeat
                         FPBuilder.AddFieldNo(GenBuffTable.TableCaption, FieldMapping."Source Field No.");
@@ -323,17 +324,8 @@ codeunit 110014 DMTImportNEW
         DMTDataFile.Find('=');
     end;
 
-    local procedure StartImportForCustomBufferTable(var DMTDataFile: Record DMTDataFile; UseToFieldFilter_New: Boolean)
+    local procedure StartImport(var DMTDataFile: Record DMTDataFile; UseToFieldFilter_New: Boolean)
     begin
-        if DMTDataFile.BufferTableType <> DMTDataFile.BufferTableType::"Seperate Buffer Table per CSV" then
-            exit;
-        ProcessFullBuffer(DMTDataFile, UseToFieldFilter_New);
-    end;
-
-    local procedure StartImportForGenericBufferTable(var DMTDataFile: Record DMTDataFile; UseToFieldFilter_New: Boolean)
-    begin
-        if DMTDataFile.BufferTableType <> DMTDataFile.BufferTableType::"Generic Buffer Table for all Files" then
-            exit;
         ProcessFullBuffer(DMTDataFile, UseToFieldFilter_New);
     end;
 
@@ -342,8 +334,8 @@ codeunit 110014 DMTImportNEW
         DMTDataFile.Get(DMTDataFile.RecordId);
         DMTDataFile.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DMTDataFile.LastImportBy));
         DMTDataFile.LastImportToTargetAt := CurrentDateTime;
-        if DMTDataFile."Import Duration (Longest)" < (CurrentDateTime - start) then
-            DMTDataFile."Import Duration (Longest)" := (CurrentDateTime - start);
+        if DMTDataFile."Import Duration (Target)" < (CurrentDateTime - start) then
+            DMTDataFile."Import Duration (Target)" := (CurrentDateTime - start);
         DMTDataFile.Modify();
     end;
 
@@ -424,19 +416,18 @@ codeunit 110014 DMTImportNEW
         end;
     end;
 
-    // local procedure Test(BufferRef2: RecordRef; var DMTDataFile: Record DMTDataFile; IsUpdateTask: Boolean; var TempFieldMapping_COLLECTION: Record DMTField temporary)
-    // var
-    //     ProcessRecord: Codeunit DMTProcessRecord;
-    //     Success: Boolean;
-    // begin
-    //     ClearLastError();
-    //     ProcessRecord.Initialize(DMTDataFile, BufferRef2);
-    //     Commit();
-    //     While not ProcessRecord.Run() do begin
-    //         ProcessRecord.LogLastError();
-    //     end;
-    //     ProcessRecord.SaveRecord();
-    // end;
+    local procedure Test(BufferRef2: RecordRef; var DMTDataFile: Record DMTDataFile; IsUpdateTask: Boolean)
+    var
+        ProcessRecord: Codeunit DMTProcessRecord;
+    begin
+        ClearLastError();
+        ProcessRecord.Initialize(DMTDataFile, BufferRef2);
+        Commit();
+        While not ProcessRecord.Run() do begin
+            ProcessRecord.LogLastError();
+        end;
+        ProcessRecord.SaveRecord();
+    end;
 
     procedure CheckBufferTableIsNotEmpty(DataFile: Record DMTDataFile)
     var
@@ -446,14 +437,14 @@ codeunit 110014 DMTImportNEW
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
-                    RecRef.OPEN(DataFile."Buffer Table ID");
+                    RecRef.Open(DataFile."Buffer Table ID");
                     if RecRef.IsEmpty then
-                        ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, DataFile."Buffer Table ID");
+                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, DataFile."Buffer Table ID");
                 end;
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
                     if not GenBuffTable.FilterBy(DataFile) then
-                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DataFile.FullDataFilePath());
+                        Error('Für "%1" wurden keine importierten Daten gefunden', DataFile.FullDataFilePath());
                 end;
         end;
     end;
@@ -461,11 +452,13 @@ codeunit 110014 DMTImportNEW
     procedure CheckMappedFieldsExist(DataFile: Record DMTDataFile)
     var
         FieldMapping: Record DMTFieldMapping;
+        FieldMappingEmptyErr: Label 'No field mapping found for "%1"', comment = 'Kein Feldmapping gefunden für "%1"';
     begin
         DataFile.FilterRelated(FieldMapping);
         FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        DataFile.Calcfields("Target Table Caption");
         if FieldMapping.IsEmpty then
-            Error('Tabelle "%1" enthält kein Feldmapping', DataFile."Target Table Caption");
+            Error(FieldMappingEmptyErr, DataFile.FullDataFilePath());
     end;
 
     procedure CreateSourceToTargetRecIDMapping(DataFile: Record DMTDataFile; var NotTransferedRecords: List of [RecordId]) RecordMapping: Dictionary of [RecordId, RecordId]

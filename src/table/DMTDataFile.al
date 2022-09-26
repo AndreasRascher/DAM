@@ -89,8 +89,9 @@ table 110042 "DMTDataFile"
         field(61; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(62; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
         field(70; LastImportBy; Code[50]) { Caption = 'User ID', comment = 'Benutzer-ID'; TableRelation = User."User Name"; Editable = false; }
-        field(71; "Import Duration (Longest)"; Duration) { Caption = 'Import Duration (Longest)', Comment = 'Import Dauer (Längste)'; Editable = false; }
-        field(72; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; Editable = false; }
+        field(71; "Import Duration (Target)"; Duration) { Caption = 'Import Duration (Target)', Comment = 'Import Dauer (Zieltabelle)'; Editable = false; }
+        field(72; "Import Duration (Buffer)"; Duration) { Caption = 'Import Duration (Buffer)', Comment = 'Import Dauer (Puffertabelle)'; Editable = false; }
+        field(73; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; Editable = false; }
         field(80; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
         field(81; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(100; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; Editable = false; }
@@ -266,7 +267,7 @@ table 110042 "DMTDataFile"
     begin
         DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
         if Rec.FindFileRec(FileRec) then
-            DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
 
         Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Empty;
@@ -303,9 +304,11 @@ table 110042 "DMTDataFile"
             clear(Rec.ImportXMLPortIDStyle);
             clear(Rec.BufferTableIDStyle);
         end else begin
+            Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             if (Rec."Buffer Table ID" <> 0) then
                 if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Buffer Table ID") then
                     Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             if (Rec."Import XMLPort ID" <> 0) then
                 if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Rec."Import XMLPort ID") then
                     Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
@@ -324,5 +327,14 @@ table 110042 "DMTDataFile"
                 TempDataFile2.Insert(false);
             until DataFile.Next() = 0;
         TempDataFile.Copy(TempDataFile2, true);
+    end;
+
+    procedure GetFileSizeInKB() FileSizeInKBText: Text
+    var
+        SizeInKB: Decimal;
+    begin
+        SizeInKB := Rec.Size / 1024;
+        FileSizeInKBText := Format(SizeInKB, 0, '<Integer Thousand>');
+        FileSizeInKBText += ' KB';
     end;
 }

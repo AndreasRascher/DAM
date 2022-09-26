@@ -6,14 +6,19 @@
     "al.enableCodeActions": true,
     "al.enableCodeAnalysis": true,
     "al.ruleSetPath": ".vscode\\CodeAnalyzerRules.json",
+    "al.compilationOptions": {
+        "maxDegreeOfParallelism": 4
+    },
     "[al]": {
         "editor.wordBasedSuggestions": true,
         "editor.suggestSelection": "first",
         "editor.formatOnSave": true,
-        "editor.semanticHighlighting.enabled": true
+        "editor.semanticHighlighting.enabled": true,
+        "editor.folding": true,
     },
     "CRS.FileNamePattern": "<ObjectNameShort>.al",
     "CRS.ObjectNamePrefix": "DMT",
     "CRS.RenameWithGit": true,
-    "alObjectDesigner.disableFileWatcherOnChange": true
+    "alObjectDesigner.disableFileWatcherOnChange": true,
+    "aloutline.disableFileWatcherOnChange":true
  }

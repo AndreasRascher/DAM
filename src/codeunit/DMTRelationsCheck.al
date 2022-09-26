@@ -77,6 +77,27 @@ codeunit 110005 DMTRelationsCheck
         Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
     end;
 
+    procedure ShowUnhandledTableRelations(DataFile: Record DMTDataFile)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+        tempAllObjWithCaption: Record AllObjWithCaption temporary;
+        TableIDs: List of [Integer];
+        TableID: Integer;
+    begin
+        TableIDs := FindUnhandledRelatedTableIDs(DataFile);
+        if TableIDs.Count = 0 then exit;
+        foreach TableID in TableIDs do
+            if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, TableID) then begin
+                tempAllObjWithCaption := AllObjWithCaption;
+                tempAllObjWithCaption.Insert();
+            end;
+        if FindUnhandledRelatedTableIDs(DataFile).count = 0 then
+            exit;
+        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
+
+        Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
+    end;
+
     procedure ProposeSortOrder()
     var
         DMTTable: Record DMTTable;
@@ -140,6 +161,27 @@ codeunit 110005 DMTRelationsCheck
                 tempAllObjWithCaption.Insert();
             end;
         if FindUnhandledRelatedTableIDs(DMTTable).count = 0 then
+            exit;
+        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
+
+        Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
+    end;
+
+    internal procedure ShowTableRelations(DataFile: Record DMTDataFile)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+        tempAllObjWithCaption: Record AllObjWithCaption temporary;
+        TableIDs: List of [Integer];
+        TableID: Integer;
+    begin
+        TableIDs := FindRelatedTableIDs(DataFile);
+        if TableIDs.Count = 0 then exit;
+        foreach TableID in TableIDs do
+            if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, TableID) then begin
+                tempAllObjWithCaption := AllObjWithCaption;
+                tempAllObjWithCaption.Insert();
+            end;
+        if FindUnhandledRelatedTableIDs(DataFile).count = 0 then
             exit;
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
 

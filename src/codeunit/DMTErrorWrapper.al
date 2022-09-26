@@ -52,11 +52,11 @@ codeunit 110008 "DMTErrorWrapper"
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := _RecRef_FROM.FIELD(_FieldNo_FROM);
-        ToField := _RecRef_TO.FIELD(_FieldNo_TO);
+        FromField := _RecRef_FROM.Field(_FieldNo_FROM);
+        ToField := _RecRef_TO.Field(_FieldNo_TO);
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = _RecRef_FROM.Number);
         if ToField.Type = FromField.Type then
-            ToField.VALIDATE(FromField.Value)
+            ToField.Validate(FromField.Value)
         else
             if not DMTMgt.EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
                 Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
@@ -66,7 +66,7 @@ codeunit 110008 "DMTErrorWrapper"
     var
         ToField: FieldRef;
     begin
-        ToField := _RecRef_TO.FIELD(_FieldNo_TO);
+        ToField := _RecRef_TO.Field(_FieldNo_TO);
         ToField.VALIDATE(_NewValue);
     end;
 

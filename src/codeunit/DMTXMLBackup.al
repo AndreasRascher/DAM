@@ -176,7 +176,7 @@ codeunit 110003 "DMTXMLBackup"
                 fieldIDsList := GetListOfKeyFieldIDs(recRef);
                 // Add Key Fields As Attributes
                 foreach keyFieldID in fieldIDsList do begin
-                    fldRef := recRef.FIELD(keyFieldID);
+                    fldRef := recRef.Field(keyFieldID);
                     AddAttribute(recordNode, CreateTagName(fldRef.NAME), GetFldRefValueAsText(fldRef));
                 end;
                 // Add Fields with Value

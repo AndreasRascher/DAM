@@ -15,21 +15,47 @@ page 110027 "DMTDataFileList"
         {
             repeater(Group)
             {
+                FreezeColumn = "Target Table ID";
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; }
-                field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; }
                 field(Name; Rec.Name) { ApplicationArea = All; }
-                field(ID; Rec.ID) { ApplicationArea = All; Visible = false; }
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
-                field("Table Relations"; Rec."Table Relations") { ApplicationArea = All; }
+                field(ID; Rec.ID) { ApplicationArea = All; Visible = false; }
                 field(Size; Rec.Size) { ApplicationArea = All; }
-                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
-                field("No. of Records In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; }
+                field("Created At"; Rec."Created At") { ApplicationArea = All; }
+                field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
+                field("Table Relations"; Rec."Table Relations") { ApplicationArea = All; }
+                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
+                // field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
+                field("Import Duration (Buffer)"; Rec."Import Duration (Buffer)") { ApplicationArea = All; }
+                field("Import Duration (Target)"; Rec."Import Duration (Target)") { ApplicationArea = All; }
+                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
                 field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
                 field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
-                field("Created At"; Rec."Created At") { ApplicationArea = All; }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; }
-                field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
+                field(ImportToBufferIndicator; Rec.ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = Rec.ImportToBufferIndicatorStyle; }
+                field(ImportToTargetIndicator; Rec.ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = Rec.ImportToTargetIndicatorStyle; }
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
+                field("No. of Lines In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; }
+                field("No. of Table Relations"; rec."Table Relations")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowTableRelations(Rec);
+                    end;
+                }
+                field("Unhandled Table Rel."; "Unhandled Table Rel.")
+                {
+                    ApplicationArea = All;
+                    trigger OnDrillDown()
+                    var
+                        RelationsCheck: Codeunit DMTRelationsCheck;
+                    begin
+                        RelationsCheck.ShowUnhandledTableRelations(Rec);
+                    end;
+                }
             }
         }
     }
@@ -231,7 +257,15 @@ page 110027 "DMTDataFileList"
         HasLines := DataFile_Selected.FindFirst();
     end;
 
+    trigger OnAfterGetRecord()
+    begin
+        Rec.UpdateIndicators();
+        // ImportToBufferIndicatorStyleTxt := Rec.ImportToBufferIndicatorStyle;
+        // ImportToTargetIndicatorStyleTxt := Rec.ImportToTargetIndicatorStyle;
+    end;
+
     var
         PageActions: Codeunit DMTDataFilePageAction;
         TempDataFile_SELECTED: record DMTDataFile temporary;
+    // ImportToBufferIndicatorStyleTxt, ImportToTargetIndicatorStyleTxt : Text[15];
 }

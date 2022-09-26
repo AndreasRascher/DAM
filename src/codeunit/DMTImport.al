@@ -123,51 +123,51 @@ codeunit 110009 DMTImport
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure RetryProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
-    var
-        DMTErrorLog: Record DMTErrorLog;
-        FieldMapping_COLLECTION: Record "DMTFieldMapping" temporary;
-        ID: RecordId;
-        BufferRef: RecordRef;
-        BufferRef2: RecordRef;
-        KeyFieldsFilter: Text;
-        NonKeyFieldsFilter: Text;
-    begin
-        if RecIdToProcessList.Count = 0 then
-            Error('Keine Daten zum Verarbeiten');
+    // procedure RetryProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
+    // var
+    //     DMTErrorLog: Record DMTErrorLog;
+    //     FieldMapping_COLLECTION: Record "DMTFieldMapping" temporary;
+    //     ID: RecordId;
+    //     BufferRef: RecordRef;
+    //     BufferRef2: RecordRef;
+    //     KeyFieldsFilter: Text;
+    //     NonKeyFieldsFilter: Text;
+    // begin
+    //     if RecIdToProcessList.Count = 0 then
+    //         Error('Keine Daten zum Verarbeiten');
 
-        InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
-        LoadFieldMapping(DataFile, IsUpdateTask, FieldMapping_COLLECTION);
+    //     InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
+    //     LoadFieldMapping(DataFile, IsUpdateTask, FieldMapping_COLLECTION);
 
-        // Buffer loop
-        BufferRef.OPEN(DataFile."Buffer Table ID");
-        ID := RecIdToProcessList.Get(1);
-        BufferRef.get(ID);
-        DMTMgt.ProgressBar_Open(RecIdToProcessList.Count,
-         StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
-         ProgressBarText_FilterTok +
-         ProgressBarText_RecordTok +
-         ProgressBarText_DurationTok +
-         ProgressBarText_ProgressTok +
-         ProgressBarText_TimeRemainingTok);
-        DMTMgt.ProgressBar_UpdateControl(1, 'Error');
-        foreach ID in RecIdToProcessList do begin
-            BufferRef.get(ID);
-            BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DataFile, IsUpdateTask, FieldMapping_COLLECTION);
-            DMTMgt.ProgressBar_NextStep();
-            DMTMgt.ProgressBar_Update(0, '',
-                                      4, DMTMgt.ProgressBar_GetProgress(),
-                                      2, STRSUBSTNO('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
-                                      3, DMTMgt.ProgressBar_GetTimeElapsed(),
-                                      5, DMTMgt.ProgressBar_GetRemainingTime());
-            IF DMTMgt.ProgressBar_GetStep() MOD 50 = 0 then
-                COMMIT();
-        end;
-        DMTMgt.ProgressBar_Close();
-        DMTErrorLog.OpenListWithFilter(DataFile, true);
-        DMTMgt.GetResultQtyMessage();
-    end;
+    //     // Buffer loop
+    //     BufferRef.OPEN(DataFile."Buffer Table ID");
+    //     ID := RecIdToProcessList.Get(1);
+    //     BufferRef.get(ID);
+    //     DMTMgt.ProgressBar_Open(RecIdToProcessList.Count,
+    //      StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
+    //      ProgressBarText_FilterTok +
+    //      ProgressBarText_RecordTok +
+    //      ProgressBarText_DurationTok +
+    //      ProgressBarText_ProgressTok +
+    //      ProgressBarText_TimeRemainingTok);
+    //     DMTMgt.ProgressBar_UpdateControl(1, 'Error');
+    //     foreach ID in RecIdToProcessList do begin
+    //         BufferRef.get(ID);
+    //         BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
+    //         ProcessSingleBufferRecord(BufferRef2, DataFile, IsUpdateTask, FieldMapping_COLLECTION);
+    //         DMTMgt.ProgressBar_NextStep();
+    //         DMTMgt.ProgressBar_Update(0, '',
+    //                                   4, DMTMgt.ProgressBar_GetProgress(),
+    //                                   2, STRSUBSTNO('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
+    //                                   3, DMTMgt.ProgressBar_GetTimeElapsed(),
+    //                                   5, DMTMgt.ProgressBar_GetRemainingTime());
+    //         IF DMTMgt.ProgressBar_GetStep() MOD 50 = 0 then
+    //             COMMIT();
+    //     end;
+    //     DMTMgt.ProgressBar_Close();
+    //     DMTErrorLog.OpenListWithFilter(DataFile, true);
+    //     DMTMgt.GetResultQtyMessage();
+    // end;
 
     procedure LoadFieldMapping(table: Record DMTTable; UseToFieldFilter: Boolean; var TempDMTFields_FOUND: record "DMTField" temporary) OK: Boolean
     var
@@ -251,47 +251,47 @@ codeunit 110009 DMTImport
         DMTMgt.UpdateResultQty(Success, TRUE);
     end;
 
-    procedure ProcessSingleBufferRecord(BufferRef: RecordRef; DataFile: Record DMTDataFile; IsUpdateTask: Boolean; var TempFieldMapping_COLLECTION: Record "DMTFieldMapping" temporary)
-    var
-        DMTErrorLog: Record DMTErrorLog;
-        TmpTargetRef, TargetRef2 : RecordRef;
-        ErrorsExists: Boolean;
-        Success: Boolean;
-    begin
-        DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        Commit(); // End Transaction to avoid locks when debugging
-        TmpTargetRef.OPEN(DataFile."Target Table ID", TRUE);
+    // procedure ProcessSingleBufferRecord(BufferRef: RecordRef; DataFile: Record DMTDataFile; IsUpdateTask: Boolean; var TempFieldMapping_COLLECTION: Record "DMTFieldMapping" temporary)
+    // var
+    //     DMTErrorLog: Record DMTErrorLog;
+    //     TmpTargetRef, TargetRef2 : RecordRef;
+    //     ErrorsExists: Boolean;
+    //     Success: Boolean;
+    // begin
+    //     DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
+    //     Commit(); // End Transaction to avoid locks when debugging
+    //     TmpTargetRef.OPEN(DataFile."Target Table ID", TRUE);
 
-        ReplaceBufferValuesBeforeProcessing(BufferRef, TempFieldMapping_COLLECTION);
+    //     ReplaceBufferValuesBeforeProcessing(BufferRef, TempFieldMapping_COLLECTION);
 
-        AssignKeyFields(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
-        if TmpTargetRef.Insert(false) then;
+    //     AssignKeyFields(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
+    //     if TmpTargetRef.Insert(false) then;
 
-        if DataFile."Import Only New Records" and not IsUpdateTask then
-            if TargetRef2.Get(TmpTargetRef.RecordId) then begin
-                DMTMgt.UpdateResultQty(true, false);
-                exit;
-            end;
-        // if DataFile."Valid Key Fld.Rel. Only" and not IsUpdateTask then
-        //     if not HasValidKeyFldRelations(TmpTargetRef) then begin
-        //         DMTMgt.UpdateResultQty(true, false);
-        //         exit;
-        //     end;
-        // When Update: Copy Fields from existing record to temp RecRef
-        if IsUpdateTask then begin
-            if TargetRef2.Get(TmpTargetRef.RecordId) then
-                DMTMgt.CopyRecordRef(TargetRef2, TmpTargetRef);
-        end;
+    //     if DataFile."Import Only New Records" and not IsUpdateTask then
+    //         if TargetRef2.Get(TmpTargetRef.RecordId) then begin
+    //             DMTMgt.UpdateResultQty(true, false);
+    //             exit;
+    //         end;
+    //     // if DataFile."Valid Key Fld.Rel. Only" and not IsUpdateTask then
+    //     //     if not HasValidKeyFldRelations(TmpTargetRef) then begin
+    //     //         DMTMgt.UpdateResultQty(true, false);
+    //     //         exit;
+    //     //     end;
+    //     // When Update: Copy Fields from existing record to temp RecRef
+    //     if IsUpdateTask then begin
+    //         if TargetRef2.Get(TmpTargetRef.RecordId) then
+    //             DMTMgt.CopyRecordRef(TargetRef2, TmpTargetRef);
+    //     end;
 
-        ValidateNonKeyFieldsAndModify(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
+    //     ValidateNonKeyFieldsAndModify(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
 
-        ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
-        if not ErrorsExists then begin
-            Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
-        end;
+    //     ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
+    //     if not ErrorsExists then begin
+    //         Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+    //     end;
 
-        DMTMgt.UpdateResultQty(Success, TRUE);
-    end;
+    //     DMTMgt.UpdateResultQty(Success, TRUE);
+    // end;
 
     procedure SetBufferTableView(bufferTableViewNEW: text)
     begin
@@ -305,7 +305,7 @@ codeunit 110009 DMTImport
     begin
         KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, true);
         IF NOT TmpTargetRef.ISTEMPORARY then
-            ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
+            Error('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpDMTField.Reset();
         TmpDMTField.SetFilter("Target Field No.", KeyFieldsFilter);
         TmpDMTField.findset();
@@ -333,7 +333,7 @@ codeunit 110009 DMTImport
     begin
         KeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, true);
         IF NOT TmpTargetRef.ISTEMPORARY then
-            ERROR('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
+            Error('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpFieldMapping.Reset();
         TmpFieldMapping.SetFilter("Target Field No.", KeyFieldsFilter);
         TmpFieldMapping.findset();
@@ -389,42 +389,42 @@ codeunit 110009 DMTImport
         TmpTargetRef.Modify(false);
     end;
 
-    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempFieldMapping: Record "DMTFieldMapping" temporary)
-    var
-        ToFieldRef: FieldRef;
-        NonKeyFieldsFilter: Text;
-    begin
-        NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
-        TempFieldMapping.Reset();
-        TempFieldMapping.SetFilter("Target Field No.", NonKeyFieldsFilter);
-        TempFieldMapping.SetCurrentKey("Validation Order");
-        if not TempFieldMapping.findset() then
-            exit; // Required for tables with only key fields
-        repeat
-            //hier: MigrateFieldsaufrufen
-            TempFieldMapping.CalcFields("Target Field Caption");
-            case true of
-                (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::Ignore):
-                    ;
-                (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::Transfer):
-                    if TempFieldMapping."Validation Type" = Enum::DMTFieldValidationType::AlwaysValidate then
-                        DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempFieldMapping)
-                    else
-                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempFieldMapping."Source Field No.", BufferRef, TempFieldMapping."Target Field No.", true);
+    // procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempFieldMapping: Record "DMTFieldMapping" temporary)
+    // var
+    //     ToFieldRef: FieldRef;
+    //     NonKeyFieldsFilter: Text;
+    // begin
+    //     NonKeyFieldsFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(TmpTargetRef.Number, false);
+    //     TempFieldMapping.Reset();
+    //     TempFieldMapping.SetFilter("Target Field No.", NonKeyFieldsFilter);
+    //     TempFieldMapping.SetCurrentKey("Validation Order");
+    //     if not TempFieldMapping.findset() then
+    //         exit; // Required for tables with only key fields
+    //     repeat
+    //         //hier: MigrateFieldsaufrufen
+    //         TempFieldMapping.CalcFields("Target Field Caption");
+    //         case true of
+    //             (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::Ignore):
+    //                 ;
+    //             (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::Transfer):
+    //                 if TempFieldMapping."Validation Type" = Enum::DMTFieldValidationType::AlwaysValidate then
+    //                     DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempFieldMapping)
+    //                 else
+    //                     DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempFieldMapping."Source Field No.", BufferRef, TempFieldMapping."Target Field No.", true);
 
-                (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::FixedValue):
-                    begin
-                        ToFieldRef := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
-                        DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TempFieldMapping."Fixed Value");
-                        if TempFieldMapping."Validation Type" = TempFieldMapping."Validation Type"::AlwaysValidate then
-                            DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempFieldMapping."Target Field No.", ToFieldRef.Value, TempFieldMapping."Ignore Validation Error")
-                        else
-                            Error('unhandled Type');
-                    end;
-            end
-        until TempFieldMapping.Next() = 0;
-        TmpTargetRef.Modify(false);
-    end;
+    //             (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::FixedValue):
+    //                 begin
+    //                     ToFieldRef := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
+    //                     DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TempFieldMapping."Fixed Value");
+    //                     if TempFieldMapping."Validation Type" = TempFieldMapping."Validation Type"::AlwaysValidate then
+    //                         DMTMgt.ValidateFieldWithValue(TmpTargetRef, TempFieldMapping."Target Field No.", ToFieldRef.Value, TempFieldMapping."Ignore Validation Error")
+    //                     else
+    //                         Error('unhandled Type');
+    //                 end;
+    //         end
+    //     until TempFieldMapping.Next() = 0;
+    //     TmpTargetRef.Modify(false);
+    // end;
 
     procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DMTTable: Record DMTTable) Continue: Boolean;
     var
@@ -617,19 +617,19 @@ codeunit 110009 DMTImport
         end;
     end;
 
-    local procedure Test(BufferRef2: RecordRef; var DMTTable: Record DMTTable; IsUpdateTask: Boolean; var TempDMTField_COLLECTION: Record DMTField temporary)
-    var
-        ProcessRecord: Codeunit DMTProcessRecord;
-        Success: Boolean;
-    begin
-        ClearLastError();
-        ProcessRecord.Initialize(DMTTable, BufferRef2);
-        Commit();
-        While not ProcessRecord.Run() do begin
-            ProcessRecord.LogLastError();
-        end;
-        ProcessRecord.SaveRecord();
-    end;
+    // local procedure Test(BufferRef2: RecordRef; var DMTTable: Record DMTTable; IsUpdateTask: Boolean; var TempDMTField_COLLECTION: Record DMTField temporary)
+    // var
+    //     ProcessRecord: Codeunit DMTProcessRecord;
+    //     Success: Boolean;
+    // begin
+    //     ClearLastError();
+    //     ProcessRecord.Initialize(DMTTable, BufferRef2);
+    //     Commit();
+    //     While not ProcessRecord.Run() do begin
+    //         ProcessRecord.LogLastError();
+    //     end;
+    //     ProcessRecord.SaveRecord();
+    // end;
 
     procedure CheckBufferTableIsNotEmpty(DMTTable: Record DMTTable)
     var
@@ -641,12 +641,12 @@ codeunit 110009 DMTImport
                 begin
                     RecRef.OPEN(DMTTable."Buffer Table ID");
                     if RecRef.IsEmpty then
-                        ERROR('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, DMTTable."Buffer Table ID");
+                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.Caption, DMTTable."Buffer Table ID");
                 end;
             DMTTable.BufferTableType::"Generic Buffer Table for all Files":
                 begin
                     if not GenBuffTable.FilterBy(DMTTable) then
-                        ERROR('Für "%1" wurden keine importierten Daten gefunden', DMTTable.GetDataFilePath());
+                        Error('Für "%1" wurden keine importierten Daten gefunden', DMTTable.GetDataFilePath());
                 end;
         end;
     end;
@@ -657,6 +657,7 @@ codeunit 110009 DMTImport
     begin
         DMTField.FilterBy(DMTTable);
         DMTField.SetFilter("Processing Action", '<>%1', DMTField."Processing Action"::Ignore);
+        DMTTable.Calcfields("Target Table Caption");
         if DMTField.IsEmpty then
             Error('Tabelle "%1" enthält kein Feldmapping', DMTTable."Target Table Caption");
     end;

@@ -43,7 +43,7 @@ page 110026 DMTDataFileCard
                     group(details)
                     {
                         ShowCaption = false;
-                        grid(Line2)
+                        fixed(Line2)
                         {
                             group(Grid2Line1)
                             {
@@ -53,7 +53,7 @@ page 110026 DMTDataFileCard
                             group(Grid2Line2)
                             {
                                 Caption = 'Size';
-                                field("DataFile Size"; Rec."Size") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
+                                field("DataFile Size"; Rec.GetFileSizeInKB()) { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
                             }
                             group(Grid2Line3)
                             {
@@ -121,7 +121,7 @@ page 110026 DMTDataFileCard
                 PromotedCategory = Process;
                 trigger OnAction()
                 begin
-                    PageActions.ImportToBufferTable(Rec);
+                    PageActions.ImportToBufferTable(Rec, false);
                 end;
             }
             action(DeleteRecordsInTargetTable)

@@ -243,14 +243,12 @@ codeunit 110002 "DMTMgt"
     procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
     var
         DMTErrorLog: Record DMTErrorLog;
-        DMTTable: Record DMTTable;
         IsValidateSuccessful: Boolean;
     begin
         if (FieldMapping."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
         if (FieldMapping."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
         ClearLastError();
-        DMTTable.Get(FieldMapping."Target Table ID");
-        IF FieldMapping."Use Try Function" and DMTTable."Allow Usage of Try Function" then begin
+        IF FieldMapping."Use Try Function" then begin
             IsValidateSuccessful := DoTryFunctionValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
         end else begin
             IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);

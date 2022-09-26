@@ -274,14 +274,16 @@ codeunit 110013 "DMTDataFilePageAction"
         Name := StrSubstNo('XMLPORT %1 - T%2Import.al', DataFile."Import XMLPort ID", DataFile."NAV Src.Table No.");
     end;
 
-    procedure ImportToBufferTable(DataFile: Record DMTDataFile)
+    procedure ImportToBufferTable(DataFile: Record DMTDataFile; HideDialog: Boolean)
     var
         GenBuffImport: XmlPort DMTGenBuffImport;
         File: File;
         InStr: InStream;
         Progress: Dialog;
         ImportFileFromPathLbl: Label 'Importing %1';
+        Start: DateTime;
     begin
+        Start := CurrentDateTime;
         DataFile.TestField("Target Table ID");
         Commit();
         case DataFile.BufferTableType of
@@ -299,12 +301,17 @@ codeunit 110013 "DMTDataFilePageAction"
                     file.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
                     GenBuffImport.SetImportFromFile(DataFile);
-                    Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(file.Name, '\', '/')));
+                    if not HideDialog then
+                        Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(file.Name, '\', '/')));
                     GenBuffImport.Import();
-                    Progress.Close();
+                    if not HideDialog then
+                        Progress.Close();
                     UpdateQtyLinesInBufferTable(DataFile);
                 end;
-        end
+        end;
+        DataFile.Get(DataFile.RecordID);
+        DataFile."Import Duration (Buffer)" := CurrentDateTime - Start;
+        DataFile.Modify();
     end;
 
     procedure ImportSelectedIntoBuffer(var DataFile_SELECTED: Record DMTDataFile temporary)
@@ -321,7 +328,7 @@ codeunit 110013 "DMTDataFilePageAction"
         ProgressMsg := '==========================================\' +
                        ImportFilesProgressMsg + '\' +
                        '==========================================\';
-
+        DataFile_SELECTED.SetAutoCalcFields("Target Table Caption");
         DataFile_SELECTED.FindSet();
         REPEAT
             ProgressMsg += '\' + DataFile_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DataFile_SELECTED."Target Table ID") + '#';
@@ -334,7 +341,7 @@ codeunit 110013 "DMTDataFilePageAction"
             TableStart := CurrentDateTime;
             DataFile := DataFile_SELECTED;
             Progress.Update(DataFile_SELECTED."Target Table ID", 'Wird eingelesen');
-            ImportToBufferTable(DataFile);
+            ImportToBufferTable(DataFile, true);
             Commit();
             Progress.Update(DataFile_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
         until DataFile_SELECTED.Next() = 0;
@@ -373,7 +380,7 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure RetryBufferRecordsWithError(DataFile: Record DMTDataFile)
     var
-        DMTImport: Codeunit DMTImport;
+        DMTImportNew: Codeunit DMTImportNEW;
         DMTErrorLogQry: Query DMTErrorLogQry;
         RecIdList: list of [RecordID];
     begin
@@ -388,7 +395,7 @@ codeunit 110013 "DMTDataFilePageAction"
         while DMTErrorLogQry.Read() do begin
             RecIdList.Add(DMTErrorLogQry.FromID);
         end;
-        DMTImport.RetryProcessFullBuffer(RecIdList, DataFile, false);
+        DMTImportNew.RetryProcessFullBuffer(RecIdList, DataFile, false);
         DataFile.Get(DataFile.RecordId);
         DataFile.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DataFile.LastImportBy));
         DataFile.LastImportToTargetAt := CurrentDateTime;
@@ -488,7 +495,7 @@ codeunit 110013 "DMTDataFilePageAction"
         DataFile.TestField("Target Table ID");
         DataFile."Allow Usage of Try Function" := false;
         DataFile.Modify();
-        ImportToBufferTable(DataFile);
+        ImportToBufferTable(DataFile, false);
         ProposeMatchingFields(DataFile.ID);
         DMTImportNew.StartImport(DataFile, true, false);
     end;

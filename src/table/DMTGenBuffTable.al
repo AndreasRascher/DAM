@@ -7,7 +7,7 @@ table 110005 "DMTGenBuffTable"
         field(1; "Entry No."; Integer) { }
         field(10; "Import from Filename"; Text[250]) { }
         field(11; "Import File Path"; Text[250]) { }
-        field(12; SourceID; RecordId) { }
+        field(12; "Source ID"; RecordId) { }
         field(13; IsCaptionLine; Boolean) { }
         field(14; "Column Count"; Integer) { }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
@@ -268,13 +268,13 @@ table 110005 "DMTGenBuffTable"
         key(Key1; "Entry No.") { Clustered = true; }
     }
 
-    internal procedure UpdateMaxColCount(FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
+    internal procedure UpdateMaxColCount(CurrSourceID: RecordID; FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;
     begin
         if (FileName = '') or (MaxColCount = 0) then
             exit(false);
-        if GenBuffTable.FilterBy(SourceID) then
+        if GenBuffTable.FilterBy(CurrSourceID) then
             GenBuffTable.ModifyAll("Column Count", MaxColCount);
     end;
 
@@ -284,8 +284,11 @@ table 110005 "DMTGenBuffTable"
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
+        GenBuffTable.SetRange(IsCaptionLine, true);
         if not GenBuffTable.FilterBy(SourceID) then
             Error('No lines found for %1', SourceID);
+        GenBuffTable.FindFirst();
+
         DMTGenBufferFieldCaptions.DisposeCaptions();
         RecRef.GetTable(GenBuffTable);
         for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin

@@ -23,10 +23,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Created At - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1485543381 - Field 739200694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import Duration (Longest)</source>
-          <note from="Developer" annotates="general" priority="2">Import Dauer (Längste)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Import Duration (Longest) - Property Caption</note>
+        <trans-unit id="Table 1485543381 - Field 3454343918 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Duration (Buffer)</source>
+          <note from="Developer" annotates="general" priority="2">Import Dauer (Puffertabelle)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Import Duration (Buffer) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1485543381 - Field 1453023453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Duration (Target)</source>
+          <note from="Developer" annotates="general" priority="2">Import Dauer (Zieltabelle)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Import Duration (Target) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1485543381 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Only New Records</source>
@@ -1813,10 +1818,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1296439604 - Field 1176780756 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SourceID</source>
+        <trans-unit id="Table 1296439604 - Field 345314420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field SourceID - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4252255481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Replacements Header</source>
@@ -2203,6 +2208,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportNEW - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3430244144 - Method 1507708651 - NamedType 3471974442" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No field mapping found for "%1"</source>
+          <note from="Developer" annotates="general" priority="2">Kein Feldmapping gefunden für "%1"</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportNEW - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
           <note from="Developer" annotates="general" priority="2">"%1" ist kein gültiger %2 Wert</note>
@@ -2492,6 +2502,16 @@
           <source>DMT Data File List</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Control 4225240329 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Import</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Control ImportToBufferIndicator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Control 109950602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Import</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Control ImportToTargetIndicator - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 3187147809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Data File</source>

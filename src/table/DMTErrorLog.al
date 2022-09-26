@@ -135,16 +135,10 @@ table 110001 "DMTErrorLog"
     procedure DeleteExistingLogForBufferRec(BufferRef: RecordRef)
     var
         DMTErrorlog: Record DMTErrorLog;
-        DMTErrorlog2: Record DMTErrorLog;
     begin
         DMTErrorlog.SetRange("From ID", BufferRef.RecordId);
-        // DMTErrorlog.DeleteAll(); // Results in Tablelocks
-        if DMTErrorlog.FindSet() then begin
-            repeat
-                DMTErrorlog2 := DMTErrorlog;
-                DMTErrorlog2.Delete(true);
-            until DMTErrorlog.Next() = 0;
-        end;
+        if not DMTErrorlog.IsEmpty then // Avoid Tablelocks
+            DMTErrorlog.DeleteAll();
     end;
 
     procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean

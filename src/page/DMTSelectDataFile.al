@@ -2,8 +2,7 @@ page 110025 "DMTSelectDataFile"
 {
     Caption = 'Select Data Files', Comment = 'Datendateien auswählen';
     PageType = List;
-    ApplicationArea = All;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = DMTDataFileBuffer;
     InsertAllowed = false;
     DeleteAllowed = false;
