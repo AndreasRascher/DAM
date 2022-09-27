@@ -265,7 +265,7 @@ page 110027 "DMTDataFileList"
     end;
 
     var
-        PageActions: Codeunit DMTDataFilePageAction;
         TempDataFile_SELECTED: record DMTDataFile temporary;
+        PageActions: Codeunit DMTDataFilePageAction;
     // ImportToBufferIndicatorStyleTxt, ImportToTargetIndicatorStyleTxt : Text[15];
 }

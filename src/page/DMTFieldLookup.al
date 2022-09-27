@@ -29,17 +29,17 @@ page 110022 "DMTFieldLookup"
     var
         Field: Record Field;
         TempFieldBuffer: Record DMTFieldBuffer temporary;
-        DMTTable: Record DMTTable;
+        DataFile: Record DMTDataFile;
         GenBuffTable: Record DMTGenBuffTable;
         BuffTableCaptions: Dictionary of [Integer, Text];
         FieldNo: Integer;
     begin
         if IsLoaded then exit;
-        DMTTable.Get(Rec.GetRangeMin("To Table No. Filter"));
-        case DMTTable.BufferTableType of
-            DMTTable.BufferTableType::"Generic Buffer Table for all Files":
+        DataFile.Get(Rec.GetRangeMin("To Table No. Filter"));
+        case DataFile.BufferTableType of
+            DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.GetColCaptionForImportedFile(DMTTable.RecordId, BuffTableCaptions);
+                    GenBuffTable.GetColCaptionForImportedFile(DataFile, BuffTableCaptions);
                     foreach FieldNo in BuffTableCaptions.Keys do begin
                         TempFieldBuffer.TableNo := GenBuffTable.RecordId.TableNo;
                         TempFieldBuffer."No." := FieldNo + 1000;
@@ -49,9 +49,9 @@ page 110022 "DMTFieldLookup"
                     IsLoaded := true;
                 end;
 
-            DMTTable.BufferTableType::"Seperate Buffer Table per CSV":
+            DataFile.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
-                    Field.SetRange(TableNo, DMTTable."Buffer Table ID");
+                    Field.SetRange(TableNo, DataFile."Buffer Table ID");
                     Field.SetFilter("No.", '<2000000000'); // no system fields
                     Field.FindSet(false, false);
                     repeat

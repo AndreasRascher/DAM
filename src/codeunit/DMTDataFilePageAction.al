@@ -140,7 +140,7 @@ codeunit 110013 "DMTDataFilePageAction"
                 end;
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    GenBuffTable.GetColCaptionForImportedFile(DataFile.RecordId, SourceFieldNames2);
+                    GenBuffTable.GetColCaptionForImportedFile(DataFile, SourceFieldNames2);
                     foreach FieldID in SourceFieldNames2.Keys do begin
                         SourceFieldNames.Add(FieldID + 1000, SourceFieldNames2.Get(FieldID));
                     end;
@@ -380,7 +380,7 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure RetryBufferRecordsWithError(DataFile: Record DMTDataFile)
     var
-        DMTImportNew: Codeunit DMTImportNEW;
+        DMTImportNew: Codeunit DMTImport;
         DMTErrorLogQry: Query DMTErrorLogQry;
         RecIdList: list of [RecordID];
     begin
@@ -490,10 +490,9 @@ codeunit 110013 "DMTDataFilePageAction"
 
     internal procedure AutoMigration(var DataFile: Record DMTDataFile)
     var
-        DMTImportNew: Codeunit "DMTImportNew";
+        DMTImportNew: Codeunit DMTImport;
     begin
         DataFile.TestField("Target Table ID");
-        DataFile."Allow Usage of Try Function" := false;
         DataFile.Modify();
         ImportToBufferTable(DataFile, false);
         ProposeMatchingFields(DataFile.ID);
@@ -528,31 +527,31 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
     var
-        DMTTable: Record DMTTable;
+        DataFile: Record DMTDataFile;
     begin
-        If not DMTTable.FindSet(false, false) then
+        If not DataFile.FindSet(false, false) then
             exit('');
         repeat
             case FieldNo of
-                DMTTable.FieldNo("Target Table ID"):
+                DataFile.FieldNo("Target Table ID"):
                     begin
-                        if DMTTable."Target Table ID" <> 0 then
-                            FilterExpr += StrSubstNo('%1|', DMTTable."Target Table ID");
+                        if DataFile."Target Table ID" <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DataFile."Target Table ID");
                     end;
-                DMTTable.FieldNo("NAV Src.Table No."):
+                DataFile.FieldNo("NAV Src.Table No."):
                     begin
-                        if DMTTable."NAV Src.Table No." <> 0 then
-                            FilterExpr += StrSubstNo('%1|', DMTTable."Buffer Table ID");
+                        if DataFile."NAV Src.Table No." <> 0 then
+                            FilterExpr += StrSubstNo('%1|', DataFile."Buffer Table ID");
                     end;
             end;
-        until DMTTable.Next() = 0;
+        until DataFile.Next() = 0;
         FilterExpr := FilterExpr.TrimEnd('|');
     end;
 
     internal procedure ImportSelectedIntoTarget(var DataFile_SELECTED: Record DMTDataFile temporary)
     var
         DataFile: Record DMTDataFile;
-        DMTImport: Codeunit "DMTImportNew";
+        DMTImport: Codeunit DMTImport;
     begin
         DataFile_SELECTED.SetCurrentKey("Sort Order");
         if not DataFile_SELECTED.FindSet() then exit;
@@ -650,8 +649,6 @@ codeunit 110013 "DMTDataFilePageAction"
     end;
 
     procedure ProposeMatchingFieldsForSelection(var DataFile_SELECTED: Record DMTDataFile temporary)
-    var
-        FieldMapping: Record DMTFieldMapping;
     begin
         if not DataFile_SELECTED.FindSet() then exit;
         repeat
@@ -662,8 +659,6 @@ codeunit 110013 "DMTDataFilePageAction"
     internal procedure AddDataFiles()
     var
         DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
-        DataFile: Record DMTDataFile;
-        ObjMgt: Codeunit DMTObjMgt;
         DMTSelectDataFile: page DMTSelectDataFile;
     begin
         DMTSelectDataFile.LookupMode(true);
@@ -678,11 +673,11 @@ codeunit 110013 "DMTDataFilePageAction"
             exit;
         end;
         repeat
-            AddNewTargetTable(DataFileBuffer_Selected);
+            AddNewDataFile(DataFileBuffer_Selected);
         until DataFileBuffer_Selected.Next() = 0;
     end;
 
-    procedure AddNewTargetTable(DataFileBuffer: Record DMTDataFileBuffer)
+    procedure AddNewDataFile(DataFileBuffer: Record DMTDataFileBuffer)
     var
         File: Record File;
         TableMeta: Record "Table Metadata";
@@ -705,7 +700,7 @@ codeunit 110013 "DMTDataFilePageAction"
         // Find NAV Source Infos
         if DataFile."NAV Src.Table No." = 0 then
             DataFile."NAV Src.Table No." := DataFile."Target Table ID";
-        ObjMgt.SetNAVTableCaptionAndTableName(DataFile."NAV Src.Table No.", DataFileBuffer."NAV Src.Table Caption", DataFileBuffer."NAV Src.Table Name");
+        ObjMgt.SetNAVTableCaptionAndTableName(DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption", DataFile."NAV Src.Table Name");
         DataFile.Insert(true);
 
         if DataFile.FindFileRec(File) then

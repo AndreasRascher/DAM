@@ -104,9 +104,9 @@ page 110001 "DMT Error Log List"
                     allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6&<>%7',
                         Database::DMTSetup,
                         Database::DMTErrorLog,
-                        Database::DMTField,
+                        Database::DMTFieldMapping,
                         Database::DMTFieldBuffer,
-                        Database::DMTTable,
+                        Database::DMTDataFile,
                         Database::DMTGenBuffTable,
                         Database::DMTReplacementsHeader,
                         Database::DMTReplacementsLine);

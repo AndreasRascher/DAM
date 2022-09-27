@@ -66,6 +66,8 @@ page 110025 "DMTSelectDataFile"
     begin
         LineStyle := Format(Enum::DMTFieldStyle::None);
         if Rec."File is already assigned" then
+            LineStyle := Format(Enum::DMTFieldStyle::Grey)
+        else
             LineStyle := Format(Enum::DMTFieldStyle::Bold);
     end;
 

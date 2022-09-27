@@ -425,10 +425,9 @@ codeunit 110003 "DMTXMLBackup"
         TableID: Integer;
         TablesToExport: List of [Integer];
     begin
-        TablesToExport.Add(Database::"DMTSetup");
-        TablesToExport.Add(Database::DMTTable);
-        TablesToExport.Add(Database::"DMTField");
-        TablesToExport.Add(Database::DMTTask);
+        TablesToExport.Add(Database::DMTSetup);
+        TablesToExport.Add(Database::DMTDataFile);
+        TablesToExport.Add(Database::DMTFieldMapping);
         TablesToExport.Add(Database::DMTReplacementsHeader);
         TablesToExport.Add(Database::DMTReplacementsLine);
         foreach TableID in TablesToExport do begin

@@ -82,7 +82,6 @@ table 110042 "DMTDataFile"
         #endregion Buffer Table Data
         #region Import and Processing Options
         field(50; "Use OnInsert Trigger"; boolean) { Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden'; InitValue = true; }
-        field(51; "Allow Usage of Try Function"; Boolean) { Caption = 'Allow Usage of Try Function', Comment = 'Verwendung von Try Funktion zulassen'; InitValue = true; }
         field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         #endregion Import and Processing Options
         field(60; LastView; Blob) { }
@@ -155,7 +154,8 @@ table 110042 "DMTDataFile"
         DataFile.Setrange("Path", FilePath);
         DataFile.Setrange("Name", FileName);
         OK := DataFile.FindFirst();
-        Rec.Copy(DataFile);
+        if OK then
+            Rec.Copy(DataFile);
     end;
 
     procedure GetRecByFilePath(FullFilePath: Text) OK: Boolean
@@ -179,7 +179,7 @@ table 110042 "DMTDataFile"
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
             if not GenBuffTable.FilterBy(Rec) then
                 exit(false);
-            GenBuffTable.ShowImportDataForFile(Rec.RecordId);
+            GenBuffTable.ShowImportDataForFile(Rec);
         end;
 
         if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin

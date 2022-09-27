@@ -165,25 +165,14 @@ page 110011 "DMT Setup"
             }
             action(TableList)
             {
-                Caption = 'Table List', Comment = 'Tabellenübersicht';
+                Caption = 'Data File List', Comment = 'Datendateien Übersicht';
                 ApplicationArea = All;
                 Image = Table;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Report;
-                RunObject = page DMTTableList;
-            }
-            action(TaskList)
-            {
-                Caption = 'Task List', Comment = 'Aufgabenliste';
-                ApplicationArea = All;
-                Image = TaskList;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
-                RunObject = page DMTTaskList;
+                RunObject = page DMTDataFileList;
             }
             action(ErrorLog)
             {
@@ -263,15 +252,16 @@ page 110011 "DMT Setup"
 
                 trigger OnAction()
                 var
-                    DMTTable: Record DMTTable;
+                    DataFile: Record DMTDataFile;
                     XMLBackup: Codeunit DMTXMLBackup;
+                    PageActions: Codeunit DMTDataFilePageAction;
                 begin
                     XMLBackup.Import();
-                    // Update imported DMTTable."Qty.Lines In Trgt. Table" with actual values
-                    if DMTTable.FindSet() then
+                    // Update imported "Qty.Lines In Trgt. Table" with actual values
+                    if DataFile.FindSet() then
                         repeat
-                            DMTTable.UpdateQtyLinesInBufferTable();
-                        until DMTTable.Next() = 0;
+                            PageActions.UpdateQtyLinesInBufferTable(DataFile);
+                        until DataFile.Next() = 0;
                 end;
             }
             // action(FileExport)

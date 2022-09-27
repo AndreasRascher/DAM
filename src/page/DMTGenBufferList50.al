@@ -76,7 +76,7 @@ page 110002 "DMTGenBufferList50"
     begin
         if not Rec.HasFilter then
             if Rec.FindFirst() then
-                Rec.InitFirstLineAsCaptions(Rec.RecordId);
+                Rec.InitFirstLineAsCaptions(Rec);
         InitVisibility();
         InitEditable();
     end;
