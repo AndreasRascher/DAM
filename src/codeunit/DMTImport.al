@@ -62,7 +62,7 @@ codeunit 110014 DMTImport
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTDataFile, IsUpdateTask, TempFieldMapping);
+            ProcessSingleBufferRecord(BufferRef2, DMTDataFile, TempFieldMapping, IsUpdateTask);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -80,7 +80,7 @@ codeunit 110014 DMTImport
     procedure RetryProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
-        FieldMapping_COLLECTION: Record "DMTFieldMapping" temporary;
+        TempFieldMapping: Record "DMTFieldMapping" temporary;
         ID: RecordId;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
@@ -91,7 +91,7 @@ codeunit 110014 DMTImport
             Error('Keine Daten zum Verarbeiten');
 
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
-        LoadFieldMapping(DataFile, IsUpdateTask, FieldMapping_COLLECTION);
+        LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);
 
         // Buffer loop
         BufferRef.OPEN(DataFile."Buffer Table ID");
@@ -108,7 +108,7 @@ codeunit 110014 DMTImport
         foreach ID in RecIdToProcessList do begin
             BufferRef.get(ID);
             BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DataFile, IsUpdateTask, FieldMapping_COLLECTION);
+            ProcessSingleBufferRecord(BufferRef2, DataFile, TempFieldMapping, IsUpdateTask);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -135,48 +135,6 @@ codeunit 110014 DMTImport
             FieldMapping.Setfilter("Target Field No.", DataFile.ReadLastFieldUpdateSelection());
         FieldMapping.CopyToTemp(TempFieldMapping);
         OK := TempFieldMapping.FindFirst();
-    end;
-
-    procedure ProcessSingleBufferRecord(BufferRef: RecordRef; DataFile: Record DMTDataFile; IsUpdateTask: Boolean; var TempFieldMapping_COLLECTION: Record "DMTFieldMapping" temporary)
-    var
-        DMTErrorLog: Record DMTErrorLog;
-        TmpTargetRef, TargetRef2 : RecordRef;
-        ErrorsExists: Boolean;
-        Success: Boolean;
-    begin
-        DMTErrorLog.DeleteExistingLogForBufferRec(BufferRef);
-        Commit(); // End Transaction to avoid locks when debugging
-        TmpTargetRef.OPEN(DataFile."Target Table ID", TRUE);
-
-        ReplaceBufferValuesBeforeProcessing(BufferRef, TempFieldMapping_COLLECTION);
-
-        AssignKeyFields(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
-        if TmpTargetRef.Insert(false) then;
-
-        if DataFile."Import Only New Records" and not IsUpdateTask then
-            if TargetRef2.Get(TmpTargetRef.RecordId) then begin
-                DMTMgt.UpdateResultQty(true, false);
-                exit;
-            end;
-        // if DataFile."Valid Key Fld.Rel. Only" and not IsUpdateTask then
-        //     if not HasValidKeyFldRelations(TmpTargetRef) then begin
-        //         DMTMgt.UpdateResultQty(true, false);
-        //         exit;
-        //     end;
-        // When Update: Copy Fields from existing record to temp RecRef
-        if IsUpdateTask then begin
-            if TargetRef2.Get(TmpTargetRef.RecordId) then
-                DMTMgt.CopyRecordRef(TargetRef2, TmpTargetRef);
-        end;
-
-        ValidateNonKeyFieldsAndModify(BufferRef, TmpTargetRef, TempFieldMapping_COLLECTION);
-
-        ErrorsExists := DMTErrorLog.ErrorsExistFor(BufferRef, TRUE);
-        if not ErrorsExists then begin
-            Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
-        end;
-
-        DMTMgt.UpdateResultQty(Success, TRUE);
     end;
 
     procedure SetBufferTableView(bufferTableViewNEW: text)
