@@ -662,8 +662,6 @@ codeunit 110013 "DMTDataFilePageAction"
     internal procedure AddDataFiles()
     var
         DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
-        DataFile: Record DMTDataFile;
-        ObjMgt: Codeunit DMTObjMgt;
         DMTSelectDataFile: page DMTSelectDataFile;
     begin
         DMTSelectDataFile.LookupMode(true);

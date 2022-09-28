@@ -36,27 +36,29 @@ codeunit 110012 "DMTProcessRecord"
         end;
     end;
 
-    local procedure LoadFieldSetup(DMTTable: Record DMTTable; var TempDMTField: Record DMTField temporary) OK: Boolean
-    var
-        DMTField: Record DMTField;
-    begin
-        if TempDMTField.FindFirst() then exit(true);
-        if not DMTField.FilterBy(DMTTable) then
-            exit(false);
-        DMTField.FindSet();
-        repeat
-            TempDMTField := DMTField;
-            //TODO: Nachversorgung
-            if TargetKeyFieldIDs.Contains(TempDMTField."Target Field No.") then
-                TempDMTField."Is Key Field(Target)" := true;
-            TempDMTField.Insert(false);
-        until DMTField.Next() = 0;
-    end;
+    // local procedure LoadFieldSetup(DMTTable: Record DMTTable; var TempDMTField: Record DMTField temporary) OK: Boolean
+    // var
+    //     DMTField: Record DMTField;
+    // begin
+    //     OK := false;
+    //     if TempDMTField.FindFirst() then exit(true);
+    //     if not DMTField.FilterBy(DMTTable) then
+    //         exit(false);
+    //     DMTField.FindSet();
+    //     repeat
+    //         TempDMTField := DMTField;
+    //         //TODO: Nachversorgung
+    //         if TargetKeyFieldIDs.Contains(TempDMTField."Target Field No.") then
+    //             TempDMTField."Is Key Field(Target)" := true;
+    //         TempDMTField.Insert(false);
+    //     until DMTField.Next() = 0;
+    // end;
 
     local procedure LoadFieldSetup(DataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
     var
         FieldMapping: Record DMTFieldMapping;
     begin
+        OK := false;
         if TempFieldMapping.FindFirst() then exit(true);
         if not DataFile.FilterRelated(FieldMapping) then
             exit(false);
