@@ -4,7 +4,13 @@ codeunit 110003 "DMTXMLBackup"
     procedure Export();
     begin
         MarkAll();
-        ExportXML();
+        ExportXML('');
+    end;
+
+    procedure Export(TablesToExport: List of [Integer]; exportFileBaseName: Text);
+    begin
+        MarkSelected(TablesToExport);
+        ExportXML(exportFileBaseName);
     end;
 
     procedure Import();
@@ -91,14 +97,13 @@ codeunit 110003 "DMTXMLBackup"
             exit(XAttribute.Value());
     end;
 
-    local procedure ExportXML();
+    local procedure ExportXML(exportFileBaseName: Text);
     var
         allObj: Record AllObj;
         Company: record Company;
         tempTenantMedia: Record "Tenant Media" temporary;
         tableID: Integer;
         oStr: OutStream;
-        exportFileName: Text;
         fieldDefinitionNode: XmlNode;
         rootNode: XMLNode;
         tableNode: XMLNode;
@@ -130,16 +135,17 @@ codeunit 110003 "DMTXMLBackup"
         tempTenantMedia.Content.CreateOutStream(oStr);
         XDoc.WriteTo(oStr);
         // Compose Export Filename
-        exportFileName := 'Backup_';
+        if exportFileBaseName <> '' then
+            exportFileBaseName := 'Backup_';
         Company.Get(CompanyName);
         if Company."Display Name" <> '' then
-            exportFileName += Company."Display Name"
+            exportFileBaseName += Company."Display Name"
         else
-            exportFileName += Company.Name;
-        exportFileName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
-        exportFileName += '.xml';
-        exportFileName := ConvertStr(exportFileName, '<>*\/|"', '_______');
-        DownloadBlobContent(tempTenantMedia, exportFileName, TextEncoding::UTF8);
+            exportFileBaseName += Company.Name;
+        exportFileBaseName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
+        exportFileBaseName += '.xml';
+        exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
+        DownloadBlobContent(tempTenantMedia, exportFileBaseName, TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);
@@ -439,6 +445,22 @@ codeunit 110003 "DMTXMLBackup"
                 until _RecRef.Next() = 0;
             _RecRef.close();
 
+        end;
+    end;
+
+    procedure MarkSelected(TablesToExport: List of [Integer]);
+    VAR
+        _RecRef: RecordRef;
+        TableID: Integer;
+    begin
+        foreach TableID in TablesToExport do begin
+            _RecRef.OPEN(TableID);
+            if _RecRef.FINDSET(false, false) then
+                repeat
+                    if not RecordIDList.Contains(_RecRef.RecordId) then
+                        RecordIDList.Add(_RecRef.RecordId);
+                until _RecRef.Next() = 0;
+            _RecRef.close();
         end;
     end;
 
