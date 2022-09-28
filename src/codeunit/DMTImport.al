@@ -285,29 +285,6 @@ codeunit 110014 DMTImport
         DMTDataFile.Modify();
     end;
 
-    local procedure ReplaceBufferValuesBeforeProcessing(var BufferRef: RecordRef; var TempFieldMapping_COLLECTION: Record "DMTFieldMapping" temporary)
-    var
-        TempFieldWithReplacementCode: Record "DMTFieldMapping" temporary;
-        ReplacementsHeader: Record DMTReplacementsHeader;
-        ToFieldRef: FieldRef;
-        ReplaceValueDictionary: Dictionary of [Text, Text];
-        NewValue: Text;
-    begin
-        Error('ToDo: Werte Puffern, Werte im Ziel ersetzen,Bug im Moment wenn neuer Wert breiter ist als Quellfeld Code10->Code20');
-        TempFieldWithReplacementCode.Copy(TempFieldMapping_COLLECTION, true);
-        TempFieldWithReplacementCode.Reset();
-        TempFieldWithReplacementCode.SetFilter("Replacements Code", '<>''''');
-        if not TempFieldWithReplacementCode.FindSet() then exit;
-        repeat
-            ReplacementsHeader.Get(TempFieldWithReplacementCode."Replacements Code");
-            ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
-            ToFieldRef := BufferRef.Field(TempFieldWithReplacementCode."Source Field No.");
-            if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
-                if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
-                    Error('ReplaceBufferValuesBeforeProcessing EvaluateFieldRef Error "%1"', NewValue);
-        until TempFieldWithReplacementCode.Next() = 0;
-    end;
-
     local procedure IsKnownAutoincrementField(TargetTableID: Integer; TargetFieldNo: Integer) IsAutoincrement: Boolean
     var
         RecordLink: Record "Record Link";

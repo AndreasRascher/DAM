@@ -3002,7 +3002,7 @@
         </trans-unit>
         <trans-unit id="Page 1929500315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data File List</source>
-          <target>Datendateien Übersicht</target>
+          <target>DMT Datendateien Übersicht</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Property Caption</note>
         </trans-unit>

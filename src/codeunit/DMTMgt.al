@@ -193,23 +193,24 @@ codeunit 110002 "DMTMgt"
         end;
     end;
 
-    procedure AssignFieldWithoutValidate(VAR TargetRef: RecordRef; FromFieldNo: Integer; SourceRef: RecordRef; ToFieldNo: Integer; DoModify: Boolean)
+    procedure AssignFieldWithoutValidate(VAR TargetRef: RecordRef; SourceRef: RecordRef; var FieldMapping: Record DMTFieldMapping; DoModify: Boolean)
     var
         FromField: FieldRef;
         ToField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
         // Check - Don't copy from or to timestamp
-        if (FromFieldNo = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter FromFieldNo = 0');
-        if (ToFieldNo = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter ToFieldNo = 0');
+        if (FieldMapping."Source Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter FromFieldNo = 0');
+        if (FieldMapping."Target Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter ToFieldNo = 0');
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRef.Number);
-        FromField := SourceRef.field(FromFieldNo);
-        ToField := TargetRef.field(ToFieldNo);
+        FromField := SourceRef.field(FieldMapping."Source Field No.");
+        ToField := TargetRef.field(FieldMapping."Target Field No.");
         if ToField.Type = FromField.Type then
             ToField.Value := FromField.Value
         else
             if not EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
                 Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
+        ApplyReplacements(FieldMapping, ToField);
         IF DoModify then
             TargetRef.modify();
     end;
@@ -222,7 +223,7 @@ codeunit 110002 "DMTMgt"
         if (FieldMapping."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
         if (FieldMapping."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
         ClearLastError();
-        IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
+        IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, TargetRef, FieldMapping);
 
         // HANDLE VALIDATE RESULT
         IF not IsValidateSuccessful then begin
@@ -402,36 +403,57 @@ codeunit 110002 "DMTMgt"
         end;  // end_CASE
     end;
 
-    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef) IsValidateSuccessful: Boolean
+    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; VAR TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping) IsValidateSuccessful: Boolean
     var
         DMTErrorWrapper: Codeunit DMTErrorWrapper;
     begin
         COMMIT();
-        DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, FromFieldNo, TargetRef, ToFieldNo);
+        DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, TargetRef, FieldMapping);
         IsValidateSuccessful := DMTErrorWrapper.RUN();
         DMTErrorWrapper.GetTargetRef(TargetRef);
     end;
 
-    procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FromFieldno: Integer; ToFieldNo: Integer; VAR TargetRecRef: RecordRef)
+    procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; VAR TargetRecRef: RecordRef)
     var
         FromField: FieldRef;
         ToField, FieldWithTypeCorrectValueToValidate : FieldRef;
+        EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := SourceRecRef.field(FromFieldno);
-        ToField := TargetRecRef.field(ToFieldNo);
-        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(ToFieldNo);
+        FromField := SourceRecRef.field(FieldMapping."Source Field No.");
+        ToField := TargetRecRef.field(FieldMapping."Target Field No.");
+        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
+
+        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(FieldMapping."Target Field No.");
         case true of
             (ToField.Type = FromField.Type):
-                FieldWithTypeCorrectValueToValidate.Value := FromField.VALUE; // Same Type -> no conversion needed
+                FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
-                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), true, true) then
+                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
                     Error('TODO');
             else
                 Error('unhandled TODO %1', FromField.Type);
         end;
-
+        ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
         ToField.VALIDATE(FieldWithTypeCorrectValueToValidate.Value);
         TargetRecRef.modify();
+    end;
+
+    local procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
+    var
+        // TempFieldWithReplacementCode: Record "DMTField" temporary;
+        ReplacementsHeader: Record DMTReplacementsHeader;
+        DMTMgt: Codeunit DMTMgt;
+        ReplaceValueDictionary: Dictionary of [Text, Text];
+        NewValue: Text;
+    begin
+        if FieldMapping."Replacements Code" = '' then
+            exit;
+
+        ReplacementsHeader.Get(FieldMapping."Replacements Code");
+        ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
+        if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
+            if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
+                Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
     end;
 
     [TryFunction]
@@ -485,6 +507,7 @@ codeunit 110002 "DMTMgt"
 
     var
         DMTSetup: Record "DMTSetup";
+        // FieldMapping: Record DMTFieldMapping;
         ProgressBar_IsOpen: Boolean;
         ProgressBar_LastUpdate: DateTime;
         ProgressBar_StartTime: DateTime;
