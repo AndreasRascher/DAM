@@ -85,7 +85,14 @@ codeunit 110012 DMTProcessRecordOnly
             UpdateExistingRecordsOnly:
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
-                        DMTMgt.CopyRecordRef(ExistingRef, TmpTargetRef);
+                        DMTMgt.CopyRecordRef(ExistingRef, TmpTargetRef)
+                    else
+                        SkipRecord := true; // only update, do not insert record when updating records
+                end;
+            DataFile."Import Only New Records" and not UpdateExistingRecordsOnly:
+                begin
+                    if ExistingRef.Get(TmpTargetRef.RecordId) then
+                        SkipRecord := true;
                 end;
             DataFile."Import Only New Records":
                 begin
