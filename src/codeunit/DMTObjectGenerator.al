@@ -1,17 +1,11 @@
 codeunit 110004 "DMTObjectGenerator"
 {
 
-    procedure CreateALXMLPort(DMTTable: Record DMTTable) C: TextBuilder
-    begin
-        DMTTable.Testfield("Import XMLPort ID");
-        DMTTable.Testfield("NAV Src.Table No.");
-        C := CreateALXMLPort(DMTTable."Import XMLPort ID", DMTTable."NAV Src.Table No.", DMTTable."NAV Src.Table Caption");
-    end;
-
     procedure CreateALXMLPort(DataFile: Record DMTDataFile) C: TextBuilder
     begin
         DataFile.Testfield("Import XMLPort ID");
         DataFile.Testfield("NAV Src.Table No.");
+        DataFile.TestField("NAV Src.Table Caption");
         C := CreateALXMLPort(DataFile."Import XMLPort ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
     end;
 
@@ -24,9 +18,9 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('{');
         DMTSetup.Get();
         if DMTSetup."Import with FlowFields" then
-            C.AppendLine('    Caption = ''' + NAVSrcTableCaption + ' FlowField' + ''',locked=true;')
+            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + 'FlowField' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';')
         else
-            C.AppendLine('    Caption = ''' + NAVSrcTableCaption + ''',locked=true;');
+            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -151,17 +145,11 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('}');
     end;
 
-    procedure CreateALTable(DMTTable: Record DMTTable) C: TextBuilder
-    begin
-        DMTTable.testfield("Buffer Table ID");
-        DMTTable.TestField("NAV Src.Table No.");
-        C := CreateALTable(DMTTable."Buffer Table ID", DMTTable."NAV Src.Table No.", DMTTable."NAV Src.Table Caption");
-    end;
-
     procedure CreateALTable(DataFile: Record DMTDataFile) C: TextBuilder
     begin
         DataFile.testfield("Buffer Table ID");
         DataFile.TestField("NAV Src.Table No.");
+        DataFile.TestField("NAV Src.Table Caption");
         C := CreateALTable(DataFile."Buffer Table ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
     end;
 

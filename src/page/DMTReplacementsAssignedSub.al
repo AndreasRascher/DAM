@@ -3,7 +3,7 @@ page 110007 "DMTReplacementsAssignedSub"
     Caption = 'Lines', Comment = 'Zeilen';
     PageType = ListPart;
     UsageCategory = None;
-    SourceTable = DMTField;
+    SourceTable = DMTFieldMapping;
     DeleteAllowed = false;
     InsertAllowed = false;
 

@@ -53,7 +53,6 @@ table 110041 DMTFieldMapping
         field(32; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
         field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeader.Code; }
         field(50; "Validation Type"; Enum "DMTFieldValidationType") { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
-        field(51; "Use Try Function"; Boolean) { Caption = 'Use Try Function', comment = 'Try Function verwenden'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
         field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
         field(101; "Fixed Value"; Text[250])
@@ -85,6 +84,7 @@ table 110041 DMTFieldMapping
     keys
     {
         key(Key1; "Data File ID", "Target Field No.") { Clustered = true; }
+        key(ValidationOrder; "Validation Order") { }
     }
     procedure CopyToTemp(var TempFieldMapping: Record DMTFieldMapping temporary)
     var
@@ -118,7 +118,7 @@ table 110041 DMTFieldMapping
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    DMTGenBuffTable.GetColCaptionForImportedFile(DataFile.RecordId, BuffTableCaptions);
+                    DMTGenBuffTable.GetColCaptionForImportedFile(DataFile, BuffTableCaptions);
                     if BuffTableCaptions.Get(Rec."Source Field No." - 1000, BuffTableCaption) then begin
                         TargetField.SetRange(TableNo, Rec."Target Table ID");
                         TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));

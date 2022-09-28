@@ -268,47 +268,38 @@ table 110005 "DMTGenBuffTable"
         key(Key1; "Entry No.") { Clustered = true; }
     }
 
-    internal procedure UpdateMaxColCount(CurrSourceID: RecordID; FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
+    internal procedure UpdateMaxColCount(DataFile: Record DMTDataFile; FileName: Text; MaxColCount: Integer) UpdateDone: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;
     begin
         if (FileName = '') or (MaxColCount = 0) then
             exit(false);
-        if GenBuffTable.FilterBy(CurrSourceID) then
+        if GenBuffTable.FilterBy(DataFile) then
             GenBuffTable.ModifyAll("Column Count", MaxColCount);
     end;
 
-    procedure InitFirstLineAsCaptions(SourceID: RecordId) NoOfCols: Integer
+    procedure InitFirstLineAsCaptions(GenBuffTable_First: Record DMTGenBuffTable) NoOfCols: Integer
     var
-        GenBuffTable: Record DMTGenBuffTable;
+        GenBuffTable_CaptionLine: Record DMTGenBuffTable;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
-        GenBuffTable.SetRange(IsCaptionLine, true);
-        if not GenBuffTable.FilterBy(SourceID) then
-            Error('No lines found for %1', SourceID);
-        GenBuffTable.FindFirst();
+        GenBuffTable_CaptionLine.SetRange(IsCaptionLine, true);
+        GenBuffTable_CaptionLine.SetRange("Import File Path", GenBuffTable_First."Import File Path");
+        GenBuffTable_CaptionLine.SetRange("Import from Filename", GenBuffTable_First."Import from Filename");
+        if not GenBuffTable_CaptionLine.FindFirst() then
+            Error('No lines found for %1', GenBuffTable_First."Import from Filename");
+
 
         DMTGenBufferFieldCaptions.DisposeCaptions();
-        RecRef.GetTable(GenBuffTable);
-        for FieldIndex := 1001 to (1001 + GenBuffTable."Column Count") do begin
+        RecRef.GetTable(GenBuffTable_CaptionLine);
+        for FieldIndex := 1001 to (1001 + GenBuffTable_CaptionLine."Column Count") do begin
             DMTGenBufferFieldCaptions.AddCaption(FieldIndex, RecRef.Field(FieldIndex).Value);
         end;
         NoOfCols := DMTGenBufferFieldCaptions.GetNoOfCaptions();
     end;
 
-    internal procedure FilterBy(DMTTable: Record DMTTable) HasLinesInFilter: Boolean
-    var
-        FileMgt: Codeunit "File Management";
-    begin
-        Rec.SetRange("Import from Filename", DMTTable.DataFileName);
-        Rec.SetRange("Import File Path", DMTTable.DataFileFolderPath);
-        HasLinesInFilter := not Rec.IsEmpty;
-    end;
-
     internal procedure FilterBy(DataFile: Record DMTDataFile) HasLinesInFilter: Boolean
-    var
-        FileMgt: Codeunit "File Management";
     begin
         DataFile.TestField(Name);
         DataFile.TestField(Path);
@@ -317,29 +308,10 @@ table 110005 "DMTGenBuffTable"
         HasLinesInFilter := not Rec.IsEmpty;
     end;
 
-    internal procedure FilterBy(SourceID: RecordId) HasLinesInFilter: Boolean
-    var
-        DMTTable: Record DMTTable;
-        DMTDataFile: Record DMTDataFile;
-    begin
-        case SourceID.TableNo of
-            Database::DMTTable:
-                begin
-                    DMTTable.get(SourceID);
-                    HasLinesInFilter := Rec.FilterBy(DMTTable);
-                end;
-            Database::DMTDataFile:
-                begin
-                    DMTDataFile.Get(SourceID);
-                    HasLinesInFilter := Rec.FilterBy(DMTDataFile);
-                end;
-        end;
-    end;
-
-    internal procedure FindSetLinesByFileNameWithoutCaptionLine(SourceID: RecordId) FindSetOK: Boolean
+    internal procedure FindSetLinesByFileNameWithoutCaptionLine(DataFile: Record DMTDataFile) FindSetOK: Boolean
     begin
         Rec.SetRange(IsCaptionLine, false);
-        Rec.FilterBy(SourceID);
+        Rec.FilterBy(DataFile);
         FindSetOK := Rec.FindSet(false, false);
     end;
 
@@ -369,20 +341,20 @@ table 110005 "DMTGenBuffTable"
             exit(Choices.Split(',').Get(Choice));
     end;
 
-    internal procedure GetColCaptionForImportedFile(SourceID: RecordId; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
+    internal procedure GetColCaptionForImportedFile(DataFile: Record DMTDataFile; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
         OK := true;
-        if not GenBuffTable.FilterBy(SourceID) then begin
-            Message('Keine Zeilen in der Puffertabelle gefunden für %1', SourceID);
+        if not GenBuffTable.FilterBy(DataFile) then begin
+            Message('Keine Zeilen in der Puffertabelle gefunden für %1', DataFile.FullDataFilePath());
             exit(false);
         end;
         GenBuffTable.SetRange(IsCaptionLine, true);
         if not GenBuffTable.FindFirst() then begin
-            Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', SourceID);
+            Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', DataFile.FullDataFilePath());
             exit(false);
         end;
         RecRef.GetTable(GenBuffTable);
@@ -398,27 +370,29 @@ table 110005 "DMTGenBuffTable"
         FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
     end;
 
-    procedure ShowImportDataForFile(SourceID: RecordId)
+    procedure ShowImportDataForFile(DataFile: Record DMTDataFile)
     var
-        DMTGenBuffTable: Record DMTGenBuffTable;
+        GenBuffTable: Record DMTGenBuffTable;
         NoOfCols: Integer;
     begin
         DMTGenBufferFieldCaptions.DisposeCaptions();
-        NoOfCols := DMTGenBuffTable.InitFirstLineAsCaptions(SourceID);
+        GenBuffTable.FilterBy(DataFile);
+        GenBuffTable.FindFirst();
+        NoOfCols := GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
 
-        DMTGenBuffTable.reset();
-        DMTGenBuffTable.FilterBy(SourceID);
-        DMTGenBuffTable.SetRange(IsCaptionLine, false);
+        GenBuffTable.reset();
+        GenBuffTable.FilterBy(DataFile);
+        GenBuffTable.SetRange(IsCaptionLine, false);
         // less Columns is faster
         case NoOfCols of
             0 .. 50:
-                Page.Run(Page::DMTGenBufferList50, DMTGenBuffTable);
+                Page.Run(Page::DMTGenBufferList50, GenBuffTable);
             51 .. 100:
-                Page.Run(Page::DMTGenBufferList100, DMTGenBuffTable);
+                Page.Run(Page::DMTGenBufferList100, GenBuffTable);
             101 .. 150:
-                Page.Run(Page::DMTGenBufferList150, DMTGenBuffTable);
+                Page.Run(Page::DMTGenBufferList150, GenBuffTable);
             else
-                Page.Run(Page::"DMTGenBufferList250", DMTGenBuffTable);
+                Page.Run(Page::"DMTGenBufferList250", GenBuffTable);
         end;
     end;
 

@@ -1,18 +1,5 @@
 codeunit 110005 DMTRelationsCheck
 {
-    procedure FindRelatedTableIDs(DMTTable: Record DMTTable) RelatedTableIDsList: List of [Integer]
-    var
-        DMTField: Record DMTField;
-    begin
-        if not DMTField.FilterBy(DMTTable) then
-            exit;
-        DMTField.SetLoadFields(DMTField."Target Table ID", DMTField."Target Field No.");
-        DMTField.FindSet(false, false);
-        repeat
-            CreateRelatedTableIDsList(DMTField."Target Table ID", DMTField."Target Field No.", RelatedTableIDsList);
-        until DMTField.Next() = 0;
-    end;
-
     procedure FindRelatedTableIDs(DataFile: Record DMTDataFile) RelatedTableIDsList: List of [Integer]
     var
         FieldMapping: Record DMTFieldMapping;
@@ -24,21 +11,6 @@ codeunit 110005 DMTRelationsCheck
         repeat
             CreateRelatedTableIDsList(FieldMapping."Target Table ID", FieldMapping."Target Field No.", RelatedTableIDsList);
         until FieldMapping.Next() = 0;
-    end;
-
-    procedure FindUnhandledRelatedTableIDs(DMTTable: Record DMTTable) UnhandledTableIDs: List of [Integer]
-    var
-        DMTTable2: Record DMTTable;
-        TableID: Integer;
-        RelatedTableIDs: List of [Integer];
-    begin
-        RelatedTableIDs := FindRelatedTableIDs(DMTTable);
-        if RelatedTableIDs.Count = 0 then exit;
-        foreach TableID in RelatedTableIDs do
-            if not (TableID >= 2000000000) then
-                if not DMTTable2.Get(TableID) then begin
-                    UnhandledTableIDs.Add(TableID);
-                end;
     end;
 
     procedure FindUnhandledRelatedTableIDs(DataFile: Record DMTDataFile) UnhandledTableIDs: List of [Integer]
@@ -54,27 +26,6 @@ codeunit 110005 DMTRelationsCheck
                 if not DataFile2.Get(TableID) then begin
                     UnhandledTableIDs.Add(TableID);
                 end;
-    end;
-
-    procedure ShowUnhandledTableRelations(DMTTable: Record DMTTable)
-    var
-        AllObjWithCaption: Record AllObjWithCaption;
-        tempAllObjWithCaption: Record AllObjWithCaption temporary;
-        TableIDs: List of [Integer];
-        TableID: Integer;
-    begin
-        TableIDs := FindUnhandledRelatedTableIDs(DMTTable);
-        if TableIDs.Count = 0 then exit;
-        foreach TableID in TableIDs do
-            if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, TableID) then begin
-                tempAllObjWithCaption := AllObjWithCaption;
-                tempAllObjWithCaption.Insert();
-            end;
-        if FindUnhandledRelatedTableIDs(DMTTable).count = 0 then
-            exit;
-        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-
-        Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
     end;
 
     procedure ShowUnhandledTableRelations(DataFile: Record DMTDataFile)
@@ -98,74 +49,53 @@ codeunit 110005 DMTRelationsCheck
         Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
     end;
 
-    procedure ProposeSortOrder()
-    var
-        DMTTable: Record DMTTable;
-        Relations: Dictionary of [Integer, List of [Integer]];
-        TableID, RelatedTableID : Integer;
-        TableSorting: Dictionary of [Integer, Integer];
-        RequiredTablesExist: Boolean;
-        Level: Integer;
-    begin
-        DMTTable.ModifyAll("Sort Order", 0);
-        if DMTTable.FindSet() then
-            repeat
-                Relations.Add(DMTTable."Target Table ID", FindRelatedTableIDs(DMTTable));
-            until DMTTable.Next() = 0;
-        for Level := 1 to 10 do begin
-            // 1. Tables Without Relations
-            if Level = 1 then
-                foreach TableID in Relations.Keys do
-                    if Relations.Get(TableID).Count = 0 then begin
-                        TableSorting.Add(TableID, Level);
-                        Relations.Remove(TableID);
-                    end;
-            // 2. Tables on Top of Sorted Tables 
-            if Level > 1 then
-                foreach TableID in Relations.Keys do begin
-                    RequiredTablesExist := true;
-                    foreach RelatedTableID in Relations.get(TableID) do begin
-                        if not TableSorting.ContainsKey(RelatedTableID) then begin
-                            RequiredTablesExist := false;
-                            break;
-                        end;
-                    end;
-                    if RequiredTablesExist then begin
-                        TableSorting.Add(TableID, Level);
-                        Relations.Remove(TableID);
-                    end;
-                end;
-        end;
-        // store Sort info
-        foreach TableID in TableSorting.Keys do begin
-            DMTTable.Get(TableID);
-            DMTTable."Sort Order" := TableSorting.Get(TableID);
-            DMTTable.Modify();
-        end;
+    // procedure ProposeSortOrder()
+    // var
+    //     DMTTable: Record DMTTable;
+    //     Relations: Dictionary of [Integer, List of [Integer]];
+    //     TableID, RelatedTableID : Integer;
+    //     TableSorting: Dictionary of [Integer, Integer];
+    //     RequiredTablesExist: Boolean;
+    //     Level: Integer;
+    // begin
+    //     DMTTable.ModifyAll("Sort Order", 0);
+    //     if DMTTable.FindSet() then
+    //         repeat
+    //             Relations.Add(DMTTable."Target Table ID", FindRelatedTableIDs(DMTTable));
+    //         until DMTTable.Next() = 0;
+    //     for Level := 1 to 10 do begin
+    //         // 1. Tables Without Relations
+    //         if Level = 1 then
+    //             foreach TableID in Relations.Keys do
+    //                 if Relations.Get(TableID).Count = 0 then begin
+    //                     TableSorting.Add(TableID, Level);
+    //                     Relations.Remove(TableID);
+    //                 end;
+    //         // 2. Tables on Top of Sorted Tables 
+    //         if Level > 1 then
+    //             foreach TableID in Relations.Keys do begin
+    //                 RequiredTablesExist := true;
+    //                 foreach RelatedTableID in Relations.get(TableID) do begin
+    //                     if not TableSorting.ContainsKey(RelatedTableID) then begin
+    //                         RequiredTablesExist := false;
+    //                         break;
+    //                     end;
+    //                 end;
+    //                 if RequiredTablesExist then begin
+    //                     TableSorting.Add(TableID, Level);
+    //                     Relations.Remove(TableID);
+    //                 end;
+    //             end;
+    //     end;
+    //     // store Sort info
+    //     foreach TableID in TableSorting.Keys do begin
+    //         DMTTable.Get(TableID);
+    //         DMTTable."Sort Order" := TableSorting.Get(TableID);
+    //         DMTTable.Modify();
+    //     end;
 
 
-    end;
-
-    internal procedure ShowTableRelations(DMTTable: Record DMTTable)
-    var
-        AllObjWithCaption: Record AllObjWithCaption;
-        tempAllObjWithCaption: Record AllObjWithCaption temporary;
-        TableIDs: List of [Integer];
-        TableID: Integer;
-    begin
-        TableIDs := FindRelatedTableIDs(DMTTable);
-        if TableIDs.Count = 0 then exit;
-        foreach TableID in TableIDs do
-            if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, TableID) then begin
-                tempAllObjWithCaption := AllObjWithCaption;
-                tempAllObjWithCaption.Insert();
-            end;
-        if FindUnhandledRelatedTableIDs(DMTTable).count = 0 then
-            exit;
-        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-
-        Page.RunModal(Page::"All Objects with Caption", tempAllObjWithCaption);
-    end;
+    // end;
 
     internal procedure ShowTableRelations(DataFile: Record DMTDataFile)
     var

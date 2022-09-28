@@ -214,50 +214,22 @@ codeunit 110002 "DMTMgt"
             TargetRef.modify();
     end;
 
-    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; DMTField: Record "DMTField")
-    var
-        DMTErrorLog: Record DMTErrorLog;
-        DMTTable: Record DMTTable;
-        IsValidateSuccessful: Boolean;
-    begin
-        if (DMTField."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
-        if (DMTField."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
-        ClearLastError();
-        DMTTable.Get(DMTField."Target Table ID");
-        IF DMTField."Use Try Function" and DMTTable."Allow Usage of Try Function" then begin
-            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, DMTField."Source Field No.", DMTField."Target Field No.", TargetRef);
-        end else begin
-            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, DMTField."Source Field No.", DMTField."Target Field No.", TargetRef);
-        end;
-        // HANDLE VALIDATE RESULT
-        IF not IsValidateSuccessful then begin
-            if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
-                Error(GetLastErrorCode);
-            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, DMTField);
-        end else begin
-            // Save Successful changes
-            IF TargetRef.modify() then;
-        end;
-    end;
-
     procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
     var
-        DMTErrorLog: Record DMTErrorLog;
+        // DMTErrorLog: Record DMTErrorLog;
         IsValidateSuccessful: Boolean;
     begin
         if (FieldMapping."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
         if (FieldMapping."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
         ClearLastError();
-        IF FieldMapping."Use Try Function" then begin
-            IsValidateSuccessful := DoTryFunctionValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
-        end else begin
-            IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
-        end;
+        IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, FieldMapping."Source Field No.", FieldMapping."Target Field No.", TargetRef);
+
         // HANDLE VALIDATE RESULT
         IF not IsValidateSuccessful then begin
             if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
                 Error(GetLastErrorCode);
-            DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, FieldMapping);
+            // DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, FieldMapping);
+            Error('TODO');
         end else begin
             // Save Successful changes
             IF TargetRef.modify() then;
@@ -428,12 +400,6 @@ codeunit 110002 "DMTMgt"
             ELSE
                 MESSAGE('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', FORMAT(FieldRef_TO.TYPE));
         end;  // end_CASE
-    end;
-
-    [TryFunction]
-    procedure DoTryFunctionValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef)
-    begin
-        ValidateFieldImplementation(SourceRef, FromFieldNo, ToFieldNo, TargetRef);
     end;
 
     procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; FromFieldNo: Integer; ToFieldNo: Integer; VAR TargetRef: RecordRef) IsValidateSuccessful: Boolean

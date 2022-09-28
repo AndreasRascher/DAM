@@ -34,50 +34,9 @@ page 110026 DMTDataFileCard
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
             }
-            group(DataFile)
-            {
-                Caption = 'DataFile', Comment = 'Datei';
-                group(DisplayAmongEachOtherGroup)
-                {
-                    ShowCaption = false;
-                    group(details)
-                    {
-                        ShowCaption = false;
-                        fixed(Line2)
-                        {
-                            group(Grid2Line1)
-                            {
-                                Caption = 'Created At';
-                                field("DataFile Created At"; Rec."Created At") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
-                            }
-                            group(Grid2Line2)
-                            {
-                                Caption = 'Size';
-                                field("DataFile Size"; Rec.GetFileSizeInKB()) { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
-                            }
-                            group(Grid2Line3)
-                            {
-                                Caption = 'Last Import To Buffer At';
-                                field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
-                            }
-                            group(Grid2Line4)
-                            {
-                                Caption = 'No.of Records in Buffer Table';
-                                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
-                            }
-                            group(Grid2Line5)
-                            {
-                                Caption = 'No. of Records In Trgt. Table';
-                                field("No. of Records In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; ShowCaption = false; Importance = Additional; }
-                            }
-                        }
-                    }
-                }
-            }
             group(ProcessingOptions)
             {
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
-                field("Allow Usage of Try Function"; Rec."Allow Usage of Try Function") { ApplicationArea = All; }
                 field("Import Only New Records"; Rec."Import Only New Records") { ApplicationArea = All; }
             }
             part(Lines; DMTFieldMapping)
@@ -85,6 +44,14 @@ page 110026 DMTDataFileCard
                 ApplicationArea = all;
                 Caption = 'Field Mapping', Comment = 'Feldzuordnung';
                 SubPageLink = "Data File ID" = Field(ID), "Target Table ID" = field("Target Table ID");
+            }
+        }
+        area(FactBoxes)
+        {
+            part(DMTDataFileFactBox; DMTDataFileFactBox)
+            {
+                ApplicationArea = All;
+                SubPageLink = ID = field(ID);
             }
         }
     }
@@ -148,7 +115,7 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    DMTImportNew: Codeunit DMTImportNEW;
+                    DMTImportNew: Codeunit DMTImport;
                 begin
                     DMTImportNew.StartImport(Rec, false, false);
                 end;
@@ -165,7 +132,7 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    ImportNew: Codeunit DMTImportNEW;
+                    ImportNew: Codeunit DMTImport;
                     UpdateTaskNew: Page DMTUpdateTaskNew;
                 begin
                     // Show only Non-Key Fields for selection

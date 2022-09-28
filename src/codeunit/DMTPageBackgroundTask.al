@@ -15,13 +15,13 @@ codeunit 110006 DMTPageBackgroundTasks
 
     local procedure ReadTableRelations()
     var
-        DMTTable: Record DMTTable;
+        DataFile: Record DMTDataFile;
         RelationsCheck: Codeunit DMTRelationsCheck;
     begin
-        if DMTTable.FindSet(false, false) then begin
+        if DataFile.FindSet(false, false) then begin
             repeat
-                MyResult.Add(format(DMTTable.RecordId), Format(RelationsCheck.FindUnhandledRelatedTableIDs(DMTTable).Count));
-            until DMTTable.Next() = 0;
+                MyResult.Add(format(DataFile.RecordId), Format(RelationsCheck.FindUnhandledRelatedTableIDs(DataFile).Count));
+            until DataFile.Next() = 0;
         end;
         Message('test');
     end;

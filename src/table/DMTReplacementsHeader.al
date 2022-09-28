@@ -71,16 +71,16 @@ table 110006 "DMTReplacementsHeader"
 
     internal procedure proposeAssignments()
     var
-        DMTTable: Record DMTTable;
-        DMTField: Record DMTField;
+        DataFile: Record DMTDataFile;
+        FieldMapping: Record DMTFieldMapping;
         TableRelationsMetadata: Record "Table Relations Metadata";
         TableNoFilter: Text;
     begin
         TestField("Source Table ID");
-        if DMTTable.FindSet(false, false) then
+        if DataFile.FindSet(false, false) then
             repeat
-                TableNoFilter += StrSubstNo('%1|', DMTTable."Target Table ID");
-            until DMTTable.Next() = 0;
+                TableNoFilter += StrSubstNo('%1|', DataFile."Target Table ID");
+            until DataFile.Next() = 0;
         TableNoFilter := TableNoFilter.TrimEnd('|');
         // TableRelationsMetadata.SetRange("Table ID", DMTField."To Table No.");
         // TableRelationsMetadata.SetRange("Field No.", DMTField."To Field No.");
@@ -91,10 +91,10 @@ table 110006 "DMTReplacementsHeader"
         TableRelationsMetadata.Setrange("Related Field No.", 1);
         if not TableRelationsMetadata.FindSet() then exit;
         repeat
-            if DMTField.Get(TableRelationsMetadata."Table ID", TableRelationsMetadata."Field No.") then begin
-                if DMTField."Replacements Code" = '' then begin
-                    DMTField.Validate("Replacements Code", Rec.Code);
-                    DMTField.Modify();
+            if FieldMapping.Get(TableRelationsMetadata."Table ID", TableRelationsMetadata."Field No.") then begin
+                if FieldMapping."Replacements Code" = '' then begin
+                    FieldMapping.Validate("Replacements Code", Rec.Code);
+                    FieldMapping.Modify();
                 end;
             end;
         until TableRelationsMetadata.Next() = 0;
