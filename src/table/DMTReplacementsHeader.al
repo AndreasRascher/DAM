@@ -82,22 +82,22 @@ table 110006 "DMTReplacementsHeader"
                 TableNoFilter += StrSubstNo('%1|', DataFile."Target Table ID");
             until DataFile.Next() = 0;
         TableNoFilter := TableNoFilter.TrimEnd('|');
-        // TableRelationsMetadata.SetRange("Table ID", DMTField."To Table No.");
-        // TableRelationsMetadata.SetRange("Field No.", DMTField."To Field No.");
-        // if TableRelationsMetadata.FindFirst() then
-        //     if (TableRelationsMetadata.Next() = 0) then begin
         TableRelationsMetadata.setfilter("Table ID", TableNoFilter);
         TableRelationsMetadata.Setrange("Related Table ID", Rec."Source Table ID");
         TableRelationsMetadata.Setrange("Related Field No.", 1);
         if not TableRelationsMetadata.FindSet() then exit;
         repeat
-            if FieldMapping.Get(TableRelationsMetadata."Table ID", TableRelationsMetadata."Field No.") then begin
-                if FieldMapping."Replacements Code" = '' then begin
-                    FieldMapping.Validate("Replacements Code", Rec.Code);
-                    FieldMapping.Modify();
-                end;
-            end;
-        until TableRelationsMetadata.Next() = 0;
 
+            FieldMapping.SetRange("Target Table ID", TableRelationsMetadata."Table ID");
+            FieldMapping.SetRange("Target Field No.", TableRelationsMetadata."Field No.");
+            if FieldMapping.FindSet() then
+                repeat
+                    if FieldMapping."Replacements Code" = '' then begin
+                        FieldMapping.Validate("Replacements Code", Rec.Code);
+                        FieldMapping.Modify();
+                    end;
+                until FieldMapping.Next() = 0;
+
+        until TableRelationsMetadata.Next() = 0;
     end;
 }

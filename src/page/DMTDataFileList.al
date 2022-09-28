@@ -23,7 +23,6 @@ page 110027 "DMTDataFileList"
                 field(Size; Rec.Size) { ApplicationArea = All; }
                 field("Created At"; Rec."Created At") { ApplicationArea = All; }
                 field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
-                field("Table Relations"; Rec."Table Relations") { ApplicationArea = All; }
                 field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
                 // field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }

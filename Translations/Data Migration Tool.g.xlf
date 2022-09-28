@@ -2149,12 +2149,12 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control TableInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Buffer</source>
+          <source>Target</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No. of Records In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Target</source>
+          <source>Buffer</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>

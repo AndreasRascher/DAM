@@ -31,8 +31,24 @@ page 110023 "DMTDataFileFactBox"
             group(TableInfo)
             {
                 Caption = 'No. of Records in';
-                field("No. of Records In Trgt. Table"; Rec."No. of Records In Trgt. Table") { Caption = 'Buffer'; ApplicationArea = All; }
-                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { Caption = 'Target'; ApplicationArea = All; }
+                field("No. of Records In Trgt. Table"; Rec."No. of Records In Trgt. Table")
+                {
+                    Caption = 'Target';
+                    ApplicationArea = All;
+                    trigger OnAssistEdit()
+                    begin
+                        Rec.ShowTableContent(Rec."Target Table ID");
+                    end;
+                }
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table")
+                {
+                    Caption = 'Buffer';
+                    ApplicationArea = All;
+                    trigger OnAssistEdit()
+                    begin
+                        Rec.ShowBufferTable();
+                    end;
+                }
             }
         }
     }

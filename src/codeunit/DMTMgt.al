@@ -415,24 +415,10 @@ codeunit 110002 "DMTMgt"
 
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; VAR TargetRecRef: RecordRef)
     var
-        FromField: FieldRef;
         ToField, FieldWithTypeCorrectValueToValidate : FieldRef;
-        EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := SourceRecRef.field(FieldMapping."Source Field No.");
         ToField := TargetRecRef.field(FieldMapping."Target Field No.");
-        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
-
-        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(FieldMapping."Target Field No.");
-        case true of
-            (ToField.Type = FromField.Type):
-                FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
-            (FromField.Type in [FieldType::Text, FieldType::Code]):
-                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
-                    Error('TODO');
-            else
-                Error('unhandled TODO %1', FromField.Type);
-        end;
+        AssignValueToFieldRef(SourceRecRef, FieldMapping, TargetRecRef, FieldWithTypeCorrectValueToValidate);
         ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
         ToField.VALIDATE(FieldWithTypeCorrectValueToValidate.Value);
         TargetRecRef.modify();
@@ -454,6 +440,27 @@ codeunit 110002 "DMTMgt"
         if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
             if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
                 Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
+    end;
+
+    procedure AssignValueToFieldRef(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
+    var
+        FromField: FieldRef;
+        EvaluateOptionValueAsNumber: Boolean;
+    begin
+        FromField := SourceRecRef.field(FieldMapping."Source Field No.");
+
+        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
+
+        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(FieldMapping."Target Field No.");
+        case true of
+            (TargetRecRef.field(FieldMapping."Target Field No.").Type = FromField.Type):
+                FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
+            (FromField.Type in [FieldType::Text, FieldType::Code]):
+                if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
+                    Error('TODO');
+            else
+                Error('unhandled TODO %1', FromField.Type);
+        end;
     end;
 
     [TryFunction]

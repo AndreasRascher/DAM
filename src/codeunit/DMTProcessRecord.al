@@ -15,37 +15,28 @@ codeunit 110012 DMTProcessRecordOnly
 
     local procedure AssignField(ValidateSetting: Enum "DMTFieldValidationType")
     var
-        SourcceField: FieldRef;
-        TargetField: FieldRef;
+        DMTMgt: Codeunit DMTMgt;
+        FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
+        SourceField: FieldRef;
     begin
-        SourcceField := SourceRef.Field(TempFieldMapping."Source Field No.");
+        SourceField := SourceRef.Field(TempFieldMapping."Source Field No.");
         TargetField := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
+        DMTMgt.AssignValueToFieldRef(SourceRef, TempFieldMapping, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin
-                    TargetField.Value := SourcceField.Value;
+                    TargetField.Value := FieldWithTypeCorrectValueToValidate.Value;
                 end;
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
-                    if Format(SourcceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then
-                        TargetField.Validate(SourcceField.Value);
+                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then
+                        TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
                 end;
             ValidateSetting::AlwaysValidate:
                 begin
-                    TargetField.Validate(SourcceField.Value);
+                    TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
                 end;
         end;
-    end;
-
-    local procedure LoadFieldSetup(DataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
-    var
-        FieldMapping: Record DMTFieldMapping;
-    begin
-        OK := false;
-        if TempFieldMapping.FindFirst() then exit(true);
-        if not DataFile.FilterRelated(FieldMapping) then
-            exit(false);
-        FieldMapping.CopyToTemp(TempFieldMapping);
     end;
 
     local procedure ProcessNonKeyFields()
@@ -104,7 +95,7 @@ codeunit 110012 DMTProcessRecordOnly
         DataFile := _DataFile;
         SourceRef := _SourceRef;
         UpdateExistingRecordsOnly := _UpdateExistingRecordsOnly;
-        _TempFieldMapping.Copy(_TempFieldMapping, true);
+        TempFieldMapping.Copy(_TempFieldMapping, true);
         TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
         TargetRef_INIT.Open(TmpTargetRef.Number, false, TmpTargetRef.CurrentCompany);
@@ -123,14 +114,16 @@ codeunit 110012 DMTProcessRecordOnly
         ClearLastError();
     end;
 
-    internal procedure SaveRecord()
+    internal procedure SaveRecord() Success: Boolean
     begin
+        Success := true;
         if SkipRecord then
-            exit;
+            exit(false);
         if ErrorLogDict.Count = 0 then begin
             DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
         end else begin
             SaveErrorLog();
+            Success := false;
         end;
     end;
 

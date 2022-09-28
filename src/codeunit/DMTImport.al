@@ -142,7 +142,7 @@ codeunit 110014 DMTImport
         BufferTableView := bufferTableViewNEW;
     end;
 
-    procedure AssignKeyFields(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpFieldMapping: record "DMTFieldMapping" temporary)
+    procedure AssignKeyFields(SourceRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpFieldMapping: record "DMTFieldMapping" temporary)
     var
         ToFieldRef: FieldRef;
     begin
@@ -157,7 +157,7 @@ codeunit 110014 DMTImport
                     TmpFieldMapping."Processing Action"::Ignore:
                         ;
                     TmpFieldMapping."Processing Action"::Transfer:
-                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TmpFieldMapping."Source Field No.", BufferRef, TmpFieldMapping."Target Field No.", false);
+                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, SourceRef, TmpFieldMapping, false);
                     TmpFieldMapping."Processing Action"::FixedValue:
                         begin
                             ToFieldRef := TmpTargetRef.Field(TmpFieldMapping."Target Field No.");
@@ -187,7 +187,7 @@ codeunit 110014 DMTImport
                     if TempFieldMapping."Validation Type" = Enum::DMTFieldValidationType::AlwaysValidate then
                         DMTMgt.ValidateField(TmpTargetRef, BufferRef, TempFieldMapping)
                     else
-                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, TempFieldMapping."Source Field No.", BufferRef, TempFieldMapping."Target Field No.", true);
+                        DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, BufferRef, TempFieldMapping, true);
 
                 (TempFieldMapping."Processing Action" = TempFieldMapping."Processing Action"::FixedValue):
                     begin
@@ -350,7 +350,10 @@ codeunit 110014 DMTImport
         While not ProcessRecord.Run() do begin
             ProcessRecord.LogLastError();
         end;
-        ProcessRecord.SaveRecord();
+        if ProcessRecord.SaveRecord() then
+            DMTMgt.UpdateResultQty(true, true)
+        else
+            DMTMgt.UpdateResultQty(false, true);
     end;
 
     procedure CheckBufferTableIsNotEmpty(DataFile: Record DMTDataFile)
