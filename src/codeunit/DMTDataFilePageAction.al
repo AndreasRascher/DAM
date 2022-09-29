@@ -528,6 +528,7 @@ codeunit 110013 "DMTDataFilePageAction"
     procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
     var
         DataFile: Record DMTDataFile;
+        Integer: Record integer;
     begin
         If not DataFile.FindSet(false, false) then
             exit('');
@@ -545,6 +546,14 @@ codeunit 110013 "DMTDataFilePageAction"
                     end;
             end;
         until DataFile.Next() = 0;
+        FilterExpr := FilterExpr.TrimEnd('|');
+        //Sort
+        Integer.setfilter(Number, FilterExpr);
+        Clear(FilterExpr);
+        if Integer.FindSet() then
+            repeat
+                FilterExpr += StrSubstNo('%1|', Integer.Number);
+            until Integer.Next() = 0;
         FilterExpr := FilterExpr.TrimEnd('|');
     end;
 
