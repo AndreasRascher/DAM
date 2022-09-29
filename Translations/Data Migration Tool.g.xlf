@@ -2188,10 +2188,10 @@
           <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ExportALObjects - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1929500315 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Table ID Filter</source>
-          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetFromTableIDFilter - Property Caption</note>
+        <trans-unit id="Page 1929500315 - Action 3778679344 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Table ID Filter</source>
+          <note from="Developer" annotates="general" priority="2">NAV-Tabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetNAVTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>To Table ID Filter</source>

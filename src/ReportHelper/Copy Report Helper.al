@@ -13,8 +13,8 @@ page 110021 "Copy Report Helper"
             group(Options)
             {
                 Caption = 'Options';
-                field(RemoveALReportWhiteSpaceOption; removeALWhitespaceOption) { Caption = 'Remove al whitespace', Comment = 'Nicht benötigte Leerzeichen entfernen.'; }
-                field(addSetDataGetDataCustomCodeOption; addSetDataGetDataCustomCodeOption) { Caption = 'Add SetData GetData CustomCode'; }
+                field(RemoveALReportWhiteSpaceOption; removeALWhitespaceOption) { ApplicationArea=All;Caption = 'Remove al whitespace', Comment = 'Nicht benötigte Leerzeichen entfernen.'; }
+                field(addSetDataGetDataCustomCodeOption; addSetDataGetDataCustomCodeOption) { ApplicationArea=All;Caption = 'Add SetData GetData CustomCode'; }
             }
             repeater(Repeater)
             {

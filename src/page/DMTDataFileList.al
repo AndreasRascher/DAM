@@ -204,10 +204,10 @@ page 110027 "DMTDataFileList"
                     Message(PageActions.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
                 end;
             }
-            action(GetFromTableIDFilter)
+            action(GetNAVTableIDFilter)
             {
                 Image = FilterLines;
-                Caption = 'From Table ID Filter', Comment = 'Herkunftstabellen-ID Filter';
+                Caption = 'NAV Table ID Filter', Comment = 'NAV-Tabellen-ID Filter';
                 ApplicationArea = all;
                 trigger OnAction()
                 begin

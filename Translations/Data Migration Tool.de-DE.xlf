@@ -2049,7 +2049,6 @@
           <source>Source ID</source>
           <target>Herkunfts-ID</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4252255481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2230,7 +2229,6 @@
           <source>No field mapping found for "%1"</source>
           <target>Kein Feldmapping gefunden für "%1"</target>
           <note from="Developer" annotates="general" priority="2">Kein Feldmapping gefunden für "%1"</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImport - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
@@ -2441,7 +2439,6 @@
           <source>Data File List</source>
           <target>Tabellenübersicht</target>
           <note from="Developer" annotates="general" priority="2">Datendateien Übersicht</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TableList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2559415762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2526,84 +2523,72 @@
           <source>DataFile FactBox</source>
           <target>Datendatei FactBox</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 2680992964 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Properties</source>
           <target>Datei Eigenschaften</target>
           <note from="Developer" annotates="general" priority="2">Datendatei Eigenschaften</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control FileInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1859521773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Size(KB)</source>
           <target>Größe(KB)</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control GetFileSizeInKB - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 82817901 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Duration</source>
           <target>Import Dauer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Import Duration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 3454343918 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer</source>
           <target>Puffer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Import Duration (Buffer) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1453023453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target</source>
           <target>Ziel</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Import Duration (Target) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 2611066689 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Import</source>
           <target>Letzter Import</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Last Import - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 4071015267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer</source>
           <target>Puffer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control LastImportToBufferAt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1370377676 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target</source>
           <target>Ziel</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control LastImportToTargetAt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 3451064716 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Records in</source>
           <target>Anz. Datensätze in</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control TableInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target</source>
           <target>Ziel</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No. of Records In Trgt. Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer</source>
           <target>Puffer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2642,11 +2627,12 @@
           <note from="Developer" annotates="general" priority="2">Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ExportALObjects - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1929500315 - Action 2387367045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Table ID Filter</source>
-          <target>Herkunftstabellen-ID Filter</target>
-          <note from="Developer" annotates="general" priority="2">Herkunftstabellen-ID Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetFromTableIDFilter - Property Caption</note>
+        <trans-unit id="Page 1929500315 - Action 3778679344 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Table ID Filter</source>
+          <target>NAV-Tabellen-ID Filter</target>
+          <note from="Developer" annotates="general" priority="2">NAV-Tabellen-ID Filter</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetNAVTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>To Table ID Filter</source>

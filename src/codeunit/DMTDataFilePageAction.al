@@ -541,7 +541,7 @@ codeunit 110013 "DMTDataFilePageAction"
                 DataFile.FieldNo("NAV Src.Table No."):
                     begin
                         if DataFile."NAV Src.Table No." <> 0 then
-                            FilterExpr += StrSubstNo('%1|', DataFile."Buffer Table ID");
+                            FilterExpr += StrSubstNo('%1|', DataFile."NAV Src.Table No.");
                     end;
             end;
         until DataFile.Next() = 0;
