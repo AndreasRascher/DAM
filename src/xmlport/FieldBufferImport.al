@@ -69,7 +69,7 @@ xmlport 110000 DMTFieldBufferImport
     var
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
-        IF currXMLport.FILENAME <> '' then //only for manual excecution
+        IF currXMLport.Filename <> '' then //only for manual excecution
             MESSAGE(LinesProcessedMsg, Field.TABLECAPTION, ReceivedLinesCount);
     end;
 

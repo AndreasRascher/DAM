@@ -71,8 +71,8 @@
 //     var
 //         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
 //     begin
-//         IF currXMLport.FILENAME <> '' then //only for manual excecution
-//             MESSAGE(LinesProcessedMsg, currXMLport.FILENAME, ReceivedLinesCount);
+//         IF currXMLport.Filename <> '' then //only for manual excecution
+//             MESSAGE(LinesProcessedMsg, currXMLport.Filename, ReceivedLinesCount);
 //     end;
 
 //     procedure SetDMTTable(DMTTable: Record DMTTable)

@@ -80,7 +80,7 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ': Record ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
-        C.AppendLine('        IF currXMLport.FILENAME <> '''' then //only for manual excecution');
+        C.AppendLine('        IF currXMLport.Filename <> '''' then //only for manual excecution');
         C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');

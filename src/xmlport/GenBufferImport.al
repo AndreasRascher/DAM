@@ -93,8 +93,8 @@ xmlport 110001 DMTGenBuffImport
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
         GenBuffTable.UpdateMaxColCount(CurrDataFile, CurrFileName, MaxColCount);
-        IF currXMLport.FILENAME <> '' then //only for manual excecution
-            MESSAGE(LinesProcessedMsg, currXMLport.FILENAME, ReceivedLinesCount);
+        IF currXMLport.Filename <> '' then //only for manual excecution
+            MESSAGE(LinesProcessedMsg, currXMLport.Filename, ReceivedLinesCount);
     end;
 
     procedure SetImportFromFile(DataFile: Record DMTDataFile)
