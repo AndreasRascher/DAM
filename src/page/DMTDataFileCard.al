@@ -1,5 +1,6 @@
 page 110026 DMTDataFileCard
 {
+    Caption = 'File Card', comment = 'Datei Karte';
     PageType = Card;
     UsageCategory = None;
     SourceTable = DMTDataFile;

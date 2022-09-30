@@ -427,7 +427,7 @@
         </trans-unit>
         <trans-unit id="Table 1173227997 - Field 251744797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Datafile ID</source>
-          <target>Datendatei ID</target>
+          <target>Datei ID</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldMapping - Field Data File ID - Property Caption</note>
         </trans-unit>
@@ -2438,7 +2438,7 @@
         <trans-unit id="Page 425834526 - Action 4113627632 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File List</source>
           <target>Tabellenübersicht</target>
-          <note from="Developer" annotates="general" priority="2">Datendateien Übersicht</note>
+          <note from="Developer" annotates="general" priority="2">Dateien Übersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TableList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2559415762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2447,9 +2447,16 @@
           <note from="Developer" annotates="general" priority="2">Schema Daten anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action Table_DMTFieldBuffer - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>File Card</source>
+          <target>Datei Karte</target>
+          <note from="Developer" annotates="general" priority="2">Datei Karte</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Control 2096082296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Path</source>
-          <target>Datendatei Pfad</target>
+          <target>Datei Pfad</target>
           <note from="Developer" annotates="general" priority="2">Datentdatei Pfad</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control DataFilePathGroup - Property Caption</note>
         </trans-unit>
@@ -2521,14 +2528,14 @@
         </trans-unit>
         <trans-unit id="Page 1841337754 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DataFile FactBox</source>
-          <target>Datendatei FactBox</target>
+          <target>Datei FactBox</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 2680992964 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Properties</source>
           <target>Datei Eigenschaften</target>
-          <note from="Developer" annotates="general" priority="2">Datendatei Eigenschaften</note>
+          <note from="Developer" annotates="general" priority="2">Datei Eigenschaften</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control FileInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1859521773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2593,7 +2600,7 @@
         </trans-unit>
         <trans-unit id="Page 1929500315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data File List</source>
-          <target>DMT Datendateien Übersicht</target>
+          <target>DMT Dateien Übersicht</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Property Caption</note>
         </trans-unit>
@@ -2611,7 +2618,7 @@
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 3187147809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Data File</source>
-          <target>Datendatei hinzufügen</target>
+          <target>Datei hinzufügen</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action AddDataFile - Property Caption</note>
         </trans-unit>
@@ -2631,7 +2638,6 @@
           <source>NAV Table ID Filter</source>
           <target>NAV-Tabellen-ID Filter</target>
           <note from="Developer" annotates="general" priority="2">NAV-Tabellen-ID Filter</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action GetNAVTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 2894714962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2816,8 +2822,8 @@
         </trans-unit>
         <trans-unit id="Page 1869987933 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select Data Files</source>
-          <target>Datendateien auswählen</target>
-          <note from="Developer" annotates="general" priority="2">Datendateien auswählen</note>
+          <target>Dateien auswählen</target>
+          <note from="Developer" annotates="general" priority="2">Dateien auswählen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectDataFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1869987933 - Control 3900352901 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

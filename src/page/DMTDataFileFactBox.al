@@ -10,7 +10,7 @@ page 110023 "DMTDataFileFactBox"
         {
             group(FileInfo)
             {
-                Caption = 'Data File Properties', Comment = 'Datendatei Eigenschaften';
+                Caption = 'Data File Properties', Comment = 'Datei Eigenschaften';
                 field(GetFileSizeInKB; Rec.GetFileSizeInKB()) { Caption = 'Size(KB)'; ApplicationArea = All; }
                 field("Created At"; Rec."Created At") { ApplicationArea = All; }
             }

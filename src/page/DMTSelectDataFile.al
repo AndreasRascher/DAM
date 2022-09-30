@@ -1,6 +1,6 @@
 page 110025 "DMTSelectDataFile"
 {
-    Caption = 'Select Data Files', Comment = 'Datendateien auswählen';
+    Caption = 'Select Data Files', Comment = 'Dateien auswählen';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTDataFileBuffer;

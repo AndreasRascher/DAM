@@ -165,7 +165,7 @@ page 110011 "DMT Setup"
             }
             action(TableList)
             {
-                Caption = 'Data File List', Comment = 'Datendateien Übersicht';
+                Caption = 'Data File List', Comment = 'Dateien Übersicht';
                 ApplicationArea = All;
                 Image = Table;
                 Promoted = true;
