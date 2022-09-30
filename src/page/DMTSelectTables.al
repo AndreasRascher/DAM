@@ -75,8 +75,8 @@ page 110010 "DMTSelectTableList"
 
     var
         [InDataSet]
-        LineStyle: Text[15];
+        ObjectPendingStatusVisible: Boolean;
         ObjectStatus: Option " ","ObsoleteState:Pending","ObsoleteState:Removed";
         [InDataSet]
-        ObjectPendingStatusVisible: Boolean;
+        LineStyle: Text[15];
 }

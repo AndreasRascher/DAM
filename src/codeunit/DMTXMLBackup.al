@@ -15,24 +15,24 @@ codeunit 110003 "DMTXMLBackup"
 
     procedure Import();
     var
-        DMTSetup: Record "DMTSetup";
         allObj: Record AllObj;
+        DMTSetup: Record "DMTSetup";
         TargetRef: RecordRef;
         FldRef: FieldRef;
+        FileFound: Boolean;
+        Start: DateTime;
         serverFile: file;
         InStr: InStream;
         FieldNodeID: Integer;
         TableNodeID: Integer;
-        TableNodeName: Text;
         FileName: Text;
+        TableNodeName: Text;
         XFieldNode: XmlNode;
         XRecordNode: XmlNode;
         XTableNode: XmlNode;
         XFieldList: XmlNodeList;
         XRecordList: XmlNodeList;
         XTableList: XmlNodeList;
-        FileFound: Boolean;
-        Start: DateTime;
     begin
         if DMTSetup.Get() and (DMTSetup."Backup.xml File Path" <> '') then
             if ServerFile.Open(DMTSetup."Backup.xml File Path") then begin
@@ -469,8 +469,8 @@ codeunit 110003 "DMTXMLBackup"
         FileMgt: Codeunit "File Management";
         IsDownloaded: Boolean;
         InStr: InStream;
-        Path: text;
         OutExt: text;
+        Path: text;
         AllFilesDescriptionTxt: TextConst DEU = 'Alle Dateien (*.*)|*.*', ENU = 'All Files (*.*)|*.*';
         ExcelFileTypeTok: TextConst DEU = 'Excel-Dateien (*.xlsx)|*.xlsx', ENU = 'Excel Files (*.xlsx)|*.xlsx';
         ExportLbl: TextConst DEU = 'Export', ENU = 'Export';
@@ -548,7 +548,7 @@ codeunit 110003 "DMTXMLBackup"
     end;
 
     var
-        RecordIDList: List of [RecordId];
         TablesList: List of [Integer];
+        RecordIDList: List of [RecordId];
         XDoc: XmlDocument;
 }

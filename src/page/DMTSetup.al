@@ -38,11 +38,11 @@ page 110011 "DMT Setup"
                             activeSession: Record "Active Session";
                             Choice: Integer;
                             NoOfChoices: Integer;
-                            SessionList: List of [Integer];
-                            Choices: Text;
                             SessionListID: Integer;
                             // IsDebugging, IsDebugged, IsSQLTracing : Boolean;
                             StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                            SessionList: List of [Integer];
+                            Choices: Text;
                         begin
                             if activeSession.FindSet() then
                                 repeat
@@ -253,8 +253,8 @@ page 110011 "DMT Setup"
                 trigger OnAction()
                 var
                     DataFile: Record DMTDataFile;
-                    XMLBackup: Codeunit DMTXMLBackup;
                     PageActions: Codeunit DMTDataFilePageAction;
+                    XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
                     // Update imported "Qty.Lines In Trgt. Table" with actual values

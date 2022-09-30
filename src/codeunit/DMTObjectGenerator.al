@@ -155,8 +155,8 @@ codeunit 110004 "DMTObjectGenerator"
 
     local procedure CreateALTable(BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
-        DMTSetup: Record DMTSetup;
         DMTFieldBuffer: Record DMTFieldBuffer;
+        DMTSetup: Record DMTSetup;
         _FieldTypeText: Text;
     begin
         DMTSetup.Get();
@@ -255,10 +255,10 @@ codeunit 110004 "DMTObjectGenerator"
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
     var
         FieldBuffer: Record DMTFieldBuffer;
-        OrderedKeyFieldNos: Text;
+        FieldID: Integer;
         FieldIds: List of [Text];
         FieldIDText: Text;
-        FieldID: Integer;
+        OrderedKeyFieldNos: Text;
     begin
         FieldBuffer.SetRange(TableNo, TableIDInNAV);
         FieldBuffer.FindFirst();

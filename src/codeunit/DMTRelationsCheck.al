@@ -32,8 +32,8 @@ codeunit 110005 DMTRelationsCheck
     var
         AllObjWithCaption: Record AllObjWithCaption;
         tempAllObjWithCaption: Record AllObjWithCaption temporary;
-        TableIDs: List of [Integer];
         TableID: Integer;
+        TableIDs: List of [Integer];
     begin
         TableIDs := FindUnhandledRelatedTableIDs(DataFile);
         if TableIDs.Count = 0 then exit;
@@ -101,8 +101,8 @@ codeunit 110005 DMTRelationsCheck
     var
         AllObjWithCaption: Record AllObjWithCaption;
         tempAllObjWithCaption: Record AllObjWithCaption temporary;
-        TableIDs: List of [Integer];
         TableID: Integer;
+        TableIDs: List of [Integer];
     begin
         TableIDs := FindRelatedTableIDs(DataFile);
         if TableIDs.Count = 0 then exit;

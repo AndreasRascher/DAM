@@ -29,8 +29,8 @@ codeunit 110011 "DMTMigrationLib"
     procedure SetKnownValidationRules(var FieldMapping: Record DMTFieldMapping)
     var
         TargetField: Record Field;
-        KnownFixedValue: Text;
         KnownUseValidate: Boolean;
+        KnownFixedValue: Text;
     begin
         TargetField.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
         if FindKnownUseValidateValue(TargetField, KnownUseValidate) then

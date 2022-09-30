@@ -277,11 +277,11 @@ codeunit 110013 "DMTDataFilePageAction"
     procedure ImportToBufferTable(DataFile: Record DMTDataFile; HideDialog: Boolean)
     var
         GenBuffImport: XmlPort DMTGenBuffImport;
+        Start: DateTime;
+        Progress: Dialog;
         File: File;
         InStr: InStream;
-        Progress: Dialog;
         ImportFileFromPathLbl: Label 'Importing %1';
-        Start: DateTime;
     begin
         Start := CurrentDateTime;
         DataFile.TestField("Target Table ID");
@@ -440,13 +440,13 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure ProposeObjectIDs(var DataFileRec: record DMTDataFile; IsRenumberObjectsIntent: Boolean)
     var
-        DMTSetup: Record "DMTSetup";
         DataFile: Record DMTDataFile;
+        DMTSetup: Record "DMTSetup";
         ObjectMgt: Codeunit DMTObjMgt;
-        AvailableTables: List of [Integer];
-        AvailableXMLPorts: List of [Integer];
         NoAvailableObjectIDsErr: Label 'No free object IDs of type %1 could be found. Defined ID range in setup: %2',
                                 comment = 'Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
+        AvailableTables: List of [Integer];
+        AvailableXMLPorts: List of [Integer];
     begin
         if DataFileRec.BufferTableType = DataFileRec.BufferTableType::"Generic Buffer Table for all Files" then
             exit;
@@ -612,8 +612,8 @@ codeunit 110013 "DMTDataFilePageAction"
     var
         DataFile: Record DMTDataFile;
         DMTSetup: Record DMTSetup;
-        SessionStorage: Codeunit DMTSessionStorage;
         ObjectMgt: Codeunit DMTObjMgt;
+        SessionStorage: Codeunit DMTSessionStorage;
         AvailableTables, AvailableXMLPorts : List of [Integer];
     begin
         SessionStorage.DisposeLicenseInfo();
@@ -688,9 +688,9 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure AddNewDataFile(DataFileBuffer: Record DMTDataFileBuffer)
     var
+        DataFile: Record DMTDataFile;
         File: Record File;
         TableMeta: Record "Table Metadata";
-        DataFile: Record DMTDataFile;
         ObjMgt: Codeunit DMTObjMgt;
     begin
         // Exists already

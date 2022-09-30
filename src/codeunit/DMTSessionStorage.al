@@ -51,6 +51,6 @@ codeunit 110001 "DMTSessionStorage"
     end;
 
     var
-        Captions: Dictionary of [Integer, Text];
         ObjIDsInLicenseDict: Dictionary of [Enum DMTObjTypes, List of [Integer]];
+        Captions: Dictionary of [Integer, Text];
 }

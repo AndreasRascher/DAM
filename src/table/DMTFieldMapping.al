@@ -102,9 +102,9 @@ table 110041 DMTFieldMapping
 
     procedure UpdateSourceFieldCaption()
     var
-        DMTGenBuffTable: Record DMTGenBuffTable;
         DataFile: Record DMTDataFile;
         FieldMapping: Record DMTFieldMapping;
+        DMTGenBuffTable: Record DMTGenBuffTable;
         SourceField, TargetField : Record Field;
         BuffTableCaptions: Dictionary of [Integer, Text];
         BuffTableCaption: Text;

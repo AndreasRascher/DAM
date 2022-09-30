@@ -41,8 +41,8 @@ table 110048 DMTDataFileBuffer
 
     procedure LoadFiles() OK: Boolean
     var
-        FileRec: Record File;
         DMTSetup: Record DMTSetup;
+        FileRec: Record File;
     begin
         DMTSetup.GetRecordOnce();
         DMTSetup.TestField("Default Export Folder Path");
@@ -128,8 +128,8 @@ table 110048 DMTDataFileBuffer
 
     procedure ProposeTargetTable()
     var
-        TableMetadata: Record "Table Metadata";
         FeatureKey: Record "Feature Key";
+        TableMetadata: Record "Table Metadata";
     begin
         // Feature: If Target Table Obsolete, switch to alternative
         if TableMetadata.Get(rec."NAV Src.Table No.") then begin

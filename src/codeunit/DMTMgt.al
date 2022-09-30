@@ -76,10 +76,10 @@ codeunit 110002 "DMTMgt"
 
     procedure ProgressBar_GetRemainingTime() TimeLeft: Text
     var
-        ElapsedTime: Duration;
         RemainingMins: Decimal;
-        RoundedRemainingMins: Integer;
         RemainingSeconds: Decimal;
+        ElapsedTime: Duration;
+        RoundedRemainingMins: Integer;
     begin
         ElapsedTime := ROUND(((CURRENTDATETIME - ProgressBar_StartTime) / 1000), 1);
         RemainingMins := ROUND((((ElapsedTime / ((ProgressBar_GetStep() / ProgressBar_GetTotal()) * 100) * 100) - ElapsedTime) / 60), 0.1);
@@ -106,10 +106,10 @@ codeunit 110002 "DMTMgt"
                 'Verarbeitungsdauer: %4', GetResultQty_QtyProcessed(), GetResultQty_QtySuccess(), GetResultQty_QtyFailed(), ProgressBar_GetTimeElapsed());
     end;
 
-    procedure UpdateResultQty(IsSuccess: Boolean; IsProcessed: Boolean)
+    procedure UpdateResultQty(IncreaseSuccessCount: Boolean; IncreaseProcessedCount: Boolean)
     begin
         Result_QtyProcessed += 1;
-        IF IsSuccess then
+        IF IncreaseSuccessCount then
             Result_QtySuccess += 1
         ELSE
             Result_QtyFailed += 1;
@@ -133,8 +133,8 @@ codeunit 110002 "DMTMgt"
     procedure GetIncludeExcludeKeyFieldFilter(TableNo: Integer; Include: Boolean) KeyFieldNoFilter: Text
     var
         RecRef: RecordRef;
-        KeyFieldIDsList: List of [Integer];
         FieldID: Integer;
+        KeyFieldIDsList: List of [Integer];
     begin
         IF TableNo = 0 then exit('');
         RecRef.Open(TableNo, true);
@@ -267,14 +267,14 @@ codeunit 110002 "DMTMgt"
         _Boolean: Boolean;
         _Date: Date;
         _DateTime: DateTime;
-        _Time: Time;
         _Decimal: Decimal;
         _Integer: Integer;
         NoOfOptions: Integer;
         OptionIndex: Integer;
+        InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = '"%1" ist kein gültiger %2 Wert';
         _OutStream: OutStream;
         OptionElement: text;
-        InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = '"%1" ist kein gültiger %2 Wert';
+        _Time: Time;
     begin
         if FromText = '' then
             case UpperCase(Format(FieldRef_TO.TYPE)) of
@@ -415,7 +415,7 @@ codeunit 110002 "DMTMgt"
 
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; VAR TargetRecRef: RecordRef)
     var
-        ToField, FieldWithTypeCorrectValueToValidate : FieldRef;
+        FieldWithTypeCorrectValueToValidate, ToField : FieldRef;
     begin
         ToField := TargetRecRef.field(FieldMapping."Target Field No.");
         AssignValueToFieldRef(SourceRecRef, FieldMapping, TargetRecRef, FieldWithTypeCorrectValueToValidate);
@@ -521,8 +521,8 @@ codeunit 110002 "DMTMgt"
         ProgressBar: Dialog;
         ProgressBar_Step: integer;
         ProgressBar_Total: Integer;
+        Result_QtyFailed: Integer;
         Result_QtyProcessed: Integer;
         Result_QtySuccess: Integer;
-        Result_QtyFailed: Integer;
 
 }

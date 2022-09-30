@@ -27,10 +27,10 @@ page 110022 "DMTFieldLookup"
 
     procedure LoadLines()
     var
-        Field: Record Field;
-        TempFieldBuffer: Record DMTFieldBuffer temporary;
         DataFile: Record DMTDataFile;
+        TempFieldBuffer: Record DMTFieldBuffer temporary;
         GenBuffTable: Record DMTGenBuffTable;
+        Field: Record Field;
         BuffTableCaptions: Dictionary of [Integer, Text];
         FieldNo: Integer;
     begin

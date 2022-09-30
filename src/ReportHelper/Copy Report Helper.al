@@ -13,8 +13,8 @@ page 110021 "Copy Report Helper"
             group(Options)
             {
                 Caption = 'Options';
-                field(RemoveALReportWhiteSpaceOption; removeALWhitespaceOption) { ApplicationArea=All;Caption = 'Remove al whitespace', Comment = 'Nicht benötigte Leerzeichen entfernen.'; }
-                field(addSetDataGetDataCustomCodeOption; addSetDataGetDataCustomCodeOption) { ApplicationArea=All;Caption = 'Add SetData GetData CustomCode'; }
+                field(RemoveALReportWhiteSpaceOption; removeALWhitespaceOption) { ApplicationArea = All; Caption = 'Remove al whitespace', Comment = 'Nicht benötigte Leerzeichen entfernen.'; }
+                field(addSetDataGetDataCustomCodeOption; addSetDataGetDataCustomCodeOption) { ApplicationArea = All; Caption = 'Add SetData GetData CustomCode'; }
             }
             repeater(Repeater)
             {
@@ -43,8 +43,8 @@ page 110021 "Copy Report Helper"
                     ReportMetadata_SELECTED: Record "Report Metadata";
                     FileContents: List of [Text];
                     FileNames: List of [Text];
-                    ReportALCode, ReportRDLCLayout : text;
                     FileNameBase: text;
+                    ReportALCode, ReportRDLCLayout : text;
                 begin
                     if not GetSelection(ReportMetadata_SELECTED) then exit;
                     ReportMetadata_SELECTED.FindSet();
@@ -281,10 +281,10 @@ page 110021 "Copy Report Helper"
 
     procedure SetRDLCFilenameProperty(var ReportALCode: Text; RDLCFileName: Text)
     var
+        Index: Integer;
         Lines: List of [Text];
         CRLF: Text[2];
         ReportALCodeNew: TextBuilder;
-        Index: Integer;
     begin
         if not ReportALCode.Contains('RDLCLayout = ') then exit;
         CRLF[1] := 13;
@@ -301,11 +301,11 @@ page 110021 "Copy Report Helper"
 
     procedure RemoveALReportWhiteSpace(var ReportALCode: Text)
     var
+        Index: Integer;
+        PropertyLineCount: Integer;
         Lines: List of [Text];
         CRLF: Text[2];
         ReportALCodeNew: TextBuilder;
-        Index: Integer;
-        PropertyLineCount: Integer;
     begin
         CRLF[1] := 13;
         CRLF[2] := 10;
@@ -353,9 +353,9 @@ page 110021 "Copy Report Helper"
 
     procedure AddCustomCode(var ReportRDLCLayout: Text);
     var
+        CustomCodeFirstLineTok: Label 'Source: https://github.com/AndreasRascher/RDLCReport_CustomCode', Locked = true;
         NewCustomCode: text;
         RDLXML: XmlDocument;
-        CustomCodeFirstLineTok: Label 'Source: https://github.com/AndreasRascher/RDLCReport_CustomCode', Locked = true;
     begin
         if ReportRDLCLayout.Contains(CustomCodeFirstLineTok) then exit;
         XmlDocument.ReadFrom(ReportRDLCLayout, RDLXml);
@@ -366,9 +366,9 @@ page 110021 "Copy Report Helper"
 
     procedure AppendCustomCode(var RDLXml: XmlDocument; NewCustomCode: text)
     var
+        NewLine: Text[2];
         XmlNsMgr: XmlNamespaceManager;
         XCustomCode: XmlNode;
-        NewLine: Text[2];
     begin
         AddNamespaces(XmlNsMgr, RDLXml); // adds default namespace with ns prefix
         if not RDLXml.SelectSingleNode('//ns:Report/ns:Code/text()', XmlNsMgr, XCustomCode) then
@@ -382,8 +382,8 @@ page 110021 "Copy Report Helper"
 
     procedure AddNamespaces(var _XmlNsMgr: XmlNamespaceManager; _XMLDoc: XmlDocument)
     var
-        _XmlAttributeCollection: XmlAttributeCollection;
         _XmlAttribute: XmlAttribute;
+        _XmlAttributeCollection: XmlAttributeCollection;
         _XMLElement: XmlElement;
     begin
         _XmlNsMgr.NameTable(_XMLDoc.NameTable());
@@ -399,5 +399,5 @@ page 110021 "Copy Report Helper"
 
     var
         [InDataSet]
-        removeALWhitespaceOption, addSetDataGetDataCustomCodeOption : Boolean;
+        addSetDataGetDataCustomCodeOption, removeALWhitespaceOption : Boolean;
 }

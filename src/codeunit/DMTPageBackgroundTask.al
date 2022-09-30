@@ -27,5 +27,5 @@ codeunit 110006 DMTPageBackgroundTasks
     end;
 
     var
-        MyResult, MyDictionary : Dictionary of [Text, Text];
+        MyDictionary, MyResult : Dictionary of [Text, Text];
 }

@@ -85,11 +85,11 @@ page 110018 "Data Source Card"
 
     var
         [InDataSet]
-        NAVGroupVisible: Boolean;
-        [InDataSet]
         CSVGroupVisible: Boolean;
+        [InDataSet]
+        IsSchemaFileImported: Boolean;
         [InDataSet]
         LinesVisible: Boolean;
         [InDataSet]
-        IsSchemaFileImported: Boolean;
+        NAVGroupVisible: Boolean;
 }

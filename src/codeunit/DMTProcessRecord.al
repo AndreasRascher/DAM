@@ -1,4 +1,4 @@
-codeunit 110012 DMTProcessRecordOnly
+codeunit 110012 DMTProcessRecord
 {
     trigger OnRun()
     begin
@@ -7,10 +7,16 @@ codeunit 110012 DMTProcessRecordOnly
 
     procedure Start()
     begin
-        If ProcessedFields.Count < TargetKeyFieldIDs.Count then
-            ProcessKeyFields();
-        if not SkipRecord then
-            ProcessNonKeyFields();
+        if RunMode = RunMode::FieldTransfer then begin
+            If ProcessedFields.Count < TargetKeyFieldIDs.Count then
+                ProcessKeyFields();
+            if not SkipRecord then
+                ProcessNonKeyFields();
+        end;
+
+        if RunMode = RunMode::InsertRecord then begin
+            SaveRecord();
+        end;
     end;
 
     local procedure AssignField(ValidateSetting: Enum "DMTFieldValidationType")
@@ -90,7 +96,7 @@ codeunit 110012 DMTProcessRecordOnly
         end;
     end;
 
-    procedure Initialize(_DataFile: Record DMTDataFile; var _TempFieldMapping: Record DMTFieldMapping temporary; _SourceRef: RecordRef; _UpdateExistingRecordsOnly: Boolean)
+    procedure InitFieldTransfer(_DataFile: Record DMTDataFile; var _TempFieldMapping: Record DMTFieldMapping temporary; _SourceRef: RecordRef; _UpdateExistingRecordsOnly: Boolean)
     begin
         DataFile := _DataFile;
         SourceRef := _SourceRef;
@@ -100,6 +106,12 @@ codeunit 110012 DMTProcessRecordOnly
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
         TargetRef_INIT.Open(TmpTargetRef.Number, false, TmpTargetRef.CurrentCompany);
         TargetRef_INIT.Init();
+        RunMode := RunMode::FieldTransfer;
+    end;
+
+    procedure InitInsert()
+    begin
+        RunMode := RunMode::InsertRecord;
     end;
 
     procedure LogLastError()
@@ -114,24 +126,23 @@ codeunit 110012 DMTProcessRecordOnly
         ClearLastError();
     end;
 
-    internal procedure SaveRecord() Success: Boolean
+    local procedure SaveRecord() Success: Boolean
     begin
         Success := true;
         if SkipRecord then
             exit(false);
-        if ErrorLogDict.Count = 0 then begin
-            DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
-        end else begin
-            SaveErrorLog();
-            Success := false;
-        end;
+        if ErrorLogDict.Count > 0 then
+            exit(false);
+        Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+        LogLastError();
     end;
 
-    local procedure SaveErrorLog()
+    procedure SaveErrorLog() ErrorsExist: Boolean
     var
         FieldMappingID: RecordId;
         ErrorItem: Dictionary of [Text, Text];
     begin
+        ErrorsExist := ErrorLogDict.Count > 0;
         foreach FieldMappingID in ErrorLogDict.Keys do begin
             ErrorItem := ErrorLogDict.Get(FieldMappingID);
             TempFieldMapping.Get(FieldMappingID);
@@ -177,4 +188,5 @@ codeunit 110012 DMTProcessRecordOnly
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
+        RunMode: Option FieldTransfer,InsertRecord;
 }

@@ -65,8 +65,8 @@ page 110000 FreeObjectsInLicense
 
     procedure Load()
     var
-        permissionRange: Record "Permission Range";
         AllObjWithCaption: Record AllObjWithCaption;
+        permissionRange: Record "Permission Range";
     begin
 
         AllObjWithCaption := Rec;
@@ -185,11 +185,11 @@ page 110000 FreeObjectsInLicense
     var
         dgDialog: Dialog;
         iQtyCodeunits: Integer;
+        iQtyPages: Integer;
+        iQtyQueries: Integer;
         iQtyReport: Integer;
         iQtyTable: Integer;
         iQtyXMLport: Integer;
-        iQtyPages: Integer;
-        iQtyQueries: Integer;
         iTotal: Integer;
 
 }

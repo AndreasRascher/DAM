@@ -21,10 +21,10 @@ codeunit 110014 DMTImport
         TempFieldMapping: Record "DMTFieldMapping" temporary;
         GenBuffTable: Record DMTGenBuffTable;
         BufferRef, BufferRef2 : RecordRef;
+        MaxWith: Integer;
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
         ProgressBarTitle: Text;
-        MaxWith: Integer;
     begin
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTDataFile."Target Table ID");
         LoadFieldMapping(DMTDataFile, IsUpdateTask, TempFieldMapping);
@@ -287,11 +287,11 @@ codeunit 110014 DMTImport
 
     local procedure IsKnownAutoincrementField(TargetTableID: Integer; TargetFieldNo: Integer) IsAutoincrement: Boolean
     var
-        RecordLink: Record "Record Link";
-        ReservationEntry: Record "Reservation Entry";
+        ActivityLog: Record "Activity Log";
         ChangeLogEntry: Record "Change Log Entry";
         JobQueueLogEntry: Record "Job Queue Log Entry";
-        ActivityLog: Record "Activity Log";
+        RecordLink: Record "Record Link";
+        ReservationEntry: Record "Reservation Entry";
     begin
         IsAutoincrement := false;
         case true of
@@ -342,18 +342,21 @@ codeunit 110014 DMTImport
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTDataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping; UpdateExistingRecordsOnly: Boolean)
     var
-        ProcessRecord: Codeunit DMTProcessRecordOnly;
+        ProcessRecord: Codeunit DMTProcessRecord;
+        HasErrors: Boolean;
     begin
         ClearLastError();
-        ProcessRecord.Initialize(DMTDataFile, TempFieldMapping, BufferRef2, UpdateExistingRecordsOnly);
+        ProcessRecord.InitFieldTransfer(DMTDataFile, TempFieldMapping, BufferRef2, UpdateExistingRecordsOnly);
         Commit();
         While not ProcessRecord.Run() do begin
             ProcessRecord.LogLastError();
         end;
-        if ProcessRecord.SaveRecord() then
-            DMTMgt.UpdateResultQty(true, true)
-        else
-            DMTMgt.UpdateResultQty(false, true);
+        ProcessRecord.InitInsert();
+        Commit();
+        if not ProcessRecord.Run() then
+            ProcessRecord.LogLastError();
+        HasErrors := ProcessRecord.SaveErrorLog();
+        DMTMgt.UpdateResultQty(not HasErrors, true);
     end;
 
     procedure CheckBufferTableIsNotEmpty(DataFile: Record DMTDataFile)
@@ -430,7 +433,7 @@ codeunit 110014 DMTImport
     procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
     var
         TargetRecID: RecordId;
-        ListIndex, LastIndex : Integer;
+        LastIndex, ListIndex : Integer;
     begin
         for ListIndex := 1 to RecordMapping.Values.Count do begin
             TargetRecID := RecordMapping.Values.Get(ListIndex);
@@ -444,12 +447,12 @@ codeunit 110014 DMTImport
 
     var
         DMTMgt: Codeunit DMTMgt;
-        BufferTableView: Text;
         NoUserInteraction: Boolean;
-        ProgressBarText_TitleTok: label '_________________________%1_________________________', Locked = true;
-        ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
-        ProgressBarText_RecordTok: label '\Record:    ########################################2#';
         ProgressBarText_DurationTok: label '\Duration:        ########################################3#';
+        ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
         ProgressBarText_ProgressTok: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
+        ProgressBarText_RecordTok: label '\Record:    ########################################2#';
         ProgressBarText_TimeRemainingTok: label '\Time Remaining: ########################################5#';
+        ProgressBarText_TitleTok: label '_________________________%1_________________________', Locked = true;
+        BufferTableView: Text;
 }

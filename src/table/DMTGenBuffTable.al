@@ -318,10 +318,10 @@ table 110005 "DMTGenBuffTable"
     internal procedure LookUpFileNameFromGenBuffTable(CurrFileName: Text): Text
     var
         GenBuffTableQry: Query DMTGenBuffTableQry;
-        FileList: List of [Text];
-        FileName: text;
-        Choices: text;
         Choice: Integer;
+        FileList: List of [Text];
+        Choices: text;
+        FileName: text;
         GenBufferTableIsEmptyErr: TextConst DEU = 'Die generische Puffertabelle ist leer',
                                             ENU = 'the generic Buffer Table is empty';
     begin

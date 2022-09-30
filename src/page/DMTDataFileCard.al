@@ -209,9 +209,9 @@ page 110026 DMTDataFileCard
                 trigger OnAction()
                 var
                     DMTImport: Codeunit DMTImport;
-                    NotTransferedRecords: List of [RecordId];
-                    RecordMapping: Dictionary of [RecordId, RecordId];
                     CollationProblems: Dictionary of [RecordId, RecordId];
+                    RecordMapping: Dictionary of [RecordId, RecordId];
+                    NotTransferedRecords: List of [RecordId];
                 begin
                     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
                     CollationProblems := DMTImport.FindCollationProblems(RecordMapping);
@@ -260,6 +260,6 @@ page 110026 DMTDataFileCard
 
     var
         PageActions: Codeunit DMTDataFilePageAction;
-        FullDataFilePathText: Text;
         CurrDataFilePathStyle: Text;
+        FullDataFilePathText: Text;
 }

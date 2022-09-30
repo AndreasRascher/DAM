@@ -92,6 +92,6 @@ page 110016 FileBrowser
     end;
 
     var
-        CurrFolder: Text;
         BrowseForFolder: Boolean;
+        CurrFolder: Text;
 }
