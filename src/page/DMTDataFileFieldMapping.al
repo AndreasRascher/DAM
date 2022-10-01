@@ -18,17 +18,19 @@ page 110028 DMTFieldMapping
                 {
                     HideValue = IsFixedValue;
                     ApplicationArea = All;
+                    StyleExpr = LineStyleExpr;
                 }
                 field("Target Field Name"; Rec."Target Field Name")
                 {
                     Visible = false;
                     ApplicationArea = All;
+                    StyleExpr = LineStyleExpr;
                 }
                 field("From Field No."; Rec."Source Field No.") { LookupPageId = DMTFieldLookup; HideValue = IsFixedValue; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
                 field("Validation Type"; "Validation Type") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
-                field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; }
+                field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; StyleExpr = LineStyleExpr; }
                 field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; Visible = false; }
                 field(Comment; Rec.Comment) { ApplicationArea = All; }
             }
@@ -152,6 +154,10 @@ page 110028 DMTFieldMapping
     trigger OnAfterGetRecord()
     begin
         IsFixedValue := Rec."Processing Action" = Rec."Processing Action"::FixedValue;
+        if Rec."Processing Action" = Rec."Processing Action"::Ignore then
+            LineStyleExpr := Format(Enum::DMTFieldStyle::Grey);
+        if FieldErrorsExist(Rec) then
+            LineStyleExpr := Format(Enum::DMTFieldStyle::"Red + Italic");
     end;
 
     procedure GetSelection(var FieldMapping_SELCTED: Record DMTFieldMapping temporary) HasLines: Boolean
@@ -169,6 +175,17 @@ page 110028 DMTFieldMapping
         HasLines := FieldMapping_SELCTED.FindFirst();
     end;
 
+    procedure FieldErrorsExist(var FieldMapping: Record DMTFieldMapping) ErrExist: Boolean
+    var
+        DataFile: Record DMTDataFile;
+        ErrorLog: Record DMTErrorLog;
+    begin
+        DataFile.get(FieldMapping.GetRangeMin("Data File ID"));
+        ErrorLog.SetRange(DataFileName, DataFile.Name);
+        ErrorLog.SetRange(DataFilePath, DataFile.Path);
+        ErrorLog.SetRange("Import to Field No.", FieldMapping."Target Field No.");
+        ErrExist := not ErrorLog.IsEmpty;
+    end;
 
     var
         TempFieldMapping_Selected: Record DMTFieldMapping temporary;

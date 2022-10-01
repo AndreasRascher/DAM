@@ -6,11 +6,10 @@ query 110000 "DMTErrorLogQry"
     {
         dataitem(DataItemName; DMTErrorLog)
         {
-            column(FromID; "From ID") { }
-            column(Import_from_Table_No_; "Import from Table No.") { }
-            column(DataFileFolderPath; DataFileFolderPath) { }
+            column(DataFileFolderPath; DataFilePath) { }
             column(DataFileName; DataFileName) { }
             column(QtyRecordID) { Method = Count; }
+            column(FromID; "From ID") { }
         }
     }
 

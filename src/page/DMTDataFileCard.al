@@ -100,8 +100,11 @@ page 110026 DMTDataFileCard
                 Promoted = false;
 
                 trigger OnAction()
+                var
+                    ChangeRecordWithPerm: Codeunit ChangeRecordWithPerm;
                 begin
-                    PageActions.DeleteRecordsInTargetTable(Rec);
+                    ChangeRecordWithPerm.DeleteRecordsInTargetTable(Rec);
+                    PageActions.UpdateQtyLinesInBufferTable(Rec);
                 end;
             }
             action(TransferToTargetTable)

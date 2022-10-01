@@ -137,8 +137,8 @@ codeunit 110004 "DMTObjectGenerator"
         C.AppendLine('    var');
         C.AppendLine('        ActiveSession: Record "Active Session";');
         C.AppendLine('    begin');
-        C.AppendLine('        ActiveSession.SETRANGE("Server Instance ID", SERVICEINSTANCEID());');
-        C.AppendLine('        ActiveSession.SETRANGE("Session ID", SESSIONID());');
+        C.AppendLine('        ActiveSession.SetRange("Server Instance ID", SERVICEINSTANCEID());');
+        C.AppendLine('        ActiveSession.SetRange("Session ID", SESSIONID());');
         C.AppendLine('        ActiveSession.findfirst();');
         C.AppendLine('        exit(ActiveSession."Database Name");');
         C.AppendLine('    end;');
@@ -235,20 +235,20 @@ codeunit 110004 "DMTObjectGenerator"
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
         CLEAR(DMTFieldBuffer_FOUND);
-        DMTFieldBuffer_FOUND.SETRANGE(TableNo, TableNo);
+        DMTFieldBuffer_FOUND.SetRange(TableNo, TableNo);
         Debug := DMTFieldBuffer_FOUND.Count;
         IF NOT IncludeDisabled then
-            DMTFieldBuffer_FOUND.SETRANGE(Enabled, TRUE);
+            DMTFieldBuffer_FOUND.SetRange(Enabled, TRUE);
         Debug := DMTFieldBuffer_FOUND.Count;
         DMTFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DMTFieldBuffer_FOUND.Class::Normal, DMTFieldBuffer_FOUND.Class::FlowField);
         IF NOT IncludeFlowFields then
-            DMTFieldBuffer_FOUND.SETRANGE(Class, DMTFieldBuffer_FOUND.Class::Normal);
+            DMTFieldBuffer_FOUND.SetRange(Class, DMTFieldBuffer_FOUND.Class::Normal);
         IF NOT IncludeBlob then
             DMTFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
-        // Fields_Found.Setrange(FieldName, 'Picture');
+        // Fields_Found.SetRange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
         Debug := DMTFieldBuffer_FOUND.Count;
-        DMTFieldBuffer_FOUND.Setrange(FieldName);
+        DMTFieldBuffer_FOUND.SetRange(FieldName);
         HasFields := DMTFieldBuffer_FOUND.FindFirst();
     end;
 
