@@ -1,4 +1,4 @@
-codeunit 110004 "DMTObjectGenerator"
+codeunit 110004 "DMTCodeGenerator"
 {
 
     procedure CreateALXMLPort(DataFile: Record DMTDataFile) C: TextBuilder
@@ -39,7 +39,7 @@ codeunit 110004 "DMTObjectGenerator"
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
             DMTFieldBuffer.FINDSET();
             repeat
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName) + '") { FieldValidate = No; MinOccurs = Zero; }');
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
             UNTIL DMTFieldBuffer.NEXT() = 0;
         end;
 
@@ -175,14 +175,14 @@ codeunit 110004 "DMTObjectGenerator"
                     ELSE
                         _FieldTypeText := FORMAT(DMTFieldBuffer.Type);
                 end;
-                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName), _FieldTypeText));
+                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
                 // field(1; "No."; Code[20])
                 C.AppendLine('        {');
-                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', ReplaceNonUTF8Chars(DMTFieldBuffer.FieldName), ReplaceNonUTF8Chars(DMTFieldBuffer."Field Caption")));
+                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
 
                 IF DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option then begin
-                    C.AppendLine('            OptionMembers = ' + ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONSTRING) + ';');
-                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONSTRING), '=', '"'), DelChr(ReplaceNonUTF8Chars(DMTFieldBuffer.OPTIONCAPTION), '=', '"')));
+                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OPTIONSTRING + ';');
+                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OPTIONSTRING, '=', '"'), DelChr(DMTFieldBuffer.OPTIONCAPTION, '=', '"')));
                 end;
 
                 C.AppendLine('        }');
@@ -272,33 +272,18 @@ codeunit 110004 "DMTObjectGenerator"
         foreach FieldIDText in FieldIds do begin
             Evaluate(FieldID, FieldIDText);
             FieldBuffer.get(TableIDInNAV, FieldID);
-            if ContainsLettersOnly(FieldBuffer.FieldName) then
-                KeyString += FieldBuffer.FieldName + ','
-            else
-                KeyString += '"' + FieldBuffer.FieldName + '",';
+            KeyString += GetALFieldNameWithMasking(FieldBuffer.FieldName) + ',';
         end;
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure ContainsLettersOnly(String: text): Boolean
+    procedure GetALFieldNameWithMasking(FieldName: Text) MaskedFieldName: Text
     var
         LettersTok: Label 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', Locked = true;
     begin
-        exit(DELCHR(String, '=', LettersTok) = '');
-    end;
-
-    local procedure ReplaceNonUTF8Chars(FieldCaption: Text) result: Text
-    begin
-        result := FieldCaption;
-        // if DelChr(Uppercase(FieldCaption), '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ()') = '' then
-        //     exit(FieldCaption);
-        // result := FieldCaption;
-        // result := result.Replace('ä', 'ae');
-        // result := result.Replace('Ä', 'AE');
-        // result := result.Replace('Ö', 'OE');
-        // result := result.Replace('ö', 'oe');
-        // result := result.Replace('Ü', 'UE');
-        // result := result.Replace('ü', 'ue');
-        // result := result.Replace('ß', 'ss');
+        if DelChr(FieldName, '=', LettersTok) = '' then
+            MaskedFieldName := FieldName
+        else
+            MaskedFieldName := '"' + FieldName + '"';
     end;
 }

@@ -251,14 +251,14 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure DownloadALXMLPort(DataFile: Record DMTDataFile)
     var
-        DMTObjectGenerator: Codeunit DMTObjectGenerator;
+        DMTObjectGenerator: Codeunit "DMTCodeGenerator";
     begin
         DMTObjectGenerator.DownloadFile(DMTObjectGenerator.CreateALXMLPort(DataFile), GetALXMLPortName(DataFile));
     end;
 
     procedure DownloadALBufferTableFile(DataFile: Record DMTDataFile)
     var
-        DMTObjectGenerator: Codeunit DMTObjectGenerator;
+        DMTObjectGenerator: Codeunit "DMTCodeGenerator";
     begin
         DMTObjectGenerator.DownloadFile(
         DMTObjectGenerator.CreateALTable(DataFile), GetALBufferTableName(DataFile));
@@ -574,7 +574,7 @@ codeunit 110013 "DMTDataFilePageAction"
     var
         DataFile: Record DMTDataFile;
         DataCompression: Codeunit "Data Compression";
-        ObjGen: Codeunit DMTObjectGenerator;
+        ObjGen: Codeunit "DMTCodeGenerator";
         FileBlob: Codeunit "Temp Blob";
         IStr: InStream;
         OStr: OutStream;

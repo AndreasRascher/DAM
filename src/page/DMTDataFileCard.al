@@ -220,6 +220,19 @@ page 110026 DMTDataFileCard
                             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
                 end;
             }
+            action(CreateCode)
+            {
+                Caption = 'Create Mapping Code';
+                ApplicationArea = all;
+                Image = CodesList;
+                trigger OnAction()
+                var
+                    DMTCode: Page DMTCode;
+                begin
+                    DMTCode.InitForFieldMapping(Rec);
+                    DMTCode.Run();
+                end;
+            }
 
         }
     }

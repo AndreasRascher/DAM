@@ -2038,6 +2038,16 @@
           <note from="Developer" annotates="general" priority="2">Schema Daten anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action Table_DMTFieldBuffer - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2911572108 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control Line - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>File Card</source>
           <note from="Developer" annotates="general" priority="2">Datei Karte</note>
@@ -2067,6 +2077,11 @@
           <source>Create Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">Puffertabelle erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action CreateBufferTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2874035913 - Action 3448018027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Mapping Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action CreateCode - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 2778232640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create XMLPort</source>
