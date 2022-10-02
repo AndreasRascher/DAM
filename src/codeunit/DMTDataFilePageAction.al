@@ -19,7 +19,7 @@ codeunit 110013 "DMTDataFilePageAction"
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
                     DataFile.FilterRelated(FieldMapping);
-                    FieldMapping.setrange("Target Field No.", TargetRecRef.FieldIndex(i).Number);
+                    FieldMapping.SetRange("Target Field No.", TargetRecRef.FieldIndex(i).Number);
                     if FieldMapping.IsEmpty then begin
                         FieldMapping_NEW."Data File ID" := DataFileID;
                         FieldMapping_NEW."Source Table ID" := DataFile."Buffer Table ID";
@@ -384,13 +384,8 @@ codeunit 110013 "DMTDataFilePageAction"
         DMTErrorLogQry: Query DMTErrorLogQry;
         RecIdList: list of [RecordID];
     begin
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then
-            DMTErrorLogQry.setrange(Import_from_Table_No_, DataFile."Buffer Table ID");
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            DMTErrorLogQry.setrange(Import_from_Table_No_, Database::DMTGenBuffTable);
-            DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileFolderPath, DataFile.Path);
-            DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileName, DataFile.Name);
-        end;
+        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileFolderPath, DataFile.Path);
+        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileName, DataFile.Name);
         DMTErrorLogQry.Open();
         while DMTErrorLogQry.Read() do begin
             RecIdList.Add(DMTErrorLogQry.FromID);
@@ -497,20 +492,6 @@ codeunit 110013 "DMTDataFilePageAction"
         ImportToBufferTable(DataFile, false);
         ProposeMatchingFields(DataFile.ID);
         DMTImportNew.StartImport(DataFile, true, false);
-    end;
-
-    procedure DeleteRecordsInTargetTable(DMTDataFile: Record DMTDataFile)
-    var
-        RecRef: RecordRef;
-        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! All Records in table "%1" (company "%2") will be deleted. Continue?',
-                    Comment = 'Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?';
-    begin
-        DMTDataFile.TestField("Target Table ID");
-        RecRef.Open(DMTDataFile."Target Table ID");
-        if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany), false) then begin
-            if not RecRef.IsEmpty then
-                RecRef.DeleteAll();
-        end;
     end;
 
     procedure DeleteSelectedTargetTables(var DataFile_SELECTED: Record DMTDataFile temporary)

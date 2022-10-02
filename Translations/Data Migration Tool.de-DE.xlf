@@ -293,17 +293,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataSourceLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2600471051 - Field 527249511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data File Folder Path</source>
-          <target>Ordnerpfad Exportdatei</target>
-          <note from="Developer" annotates="general" priority="2">Ordnerpfad Exportdatei</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field DataFileFolderPath - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 2600471051 - Field 2474578035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Name</source>
           <target>Dateiname Exportdatei</target>
           <note from="Developer" annotates="general" priority="2">Dateiname Exportdatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field DataFileName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 2480536789 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Folder Path</source>
+          <target>Ordnerpfad Exportdatei</target>
+          <note from="Developer" annotates="general" priority="2">Ordnerpfad Exportdatei</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field DataFilePath - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2600471051 - Field 3113114552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Errorlog Created At</source>
@@ -2159,17 +2160,18 @@
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
+          <target>Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</target>
+          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <target>Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method CreateTargetFieldNamesDict - NamedType ReplaceExistingMatchesQst</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2980531674 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
-          <target>Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</target>
-          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 2406207420 - NamedType 563229157" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing finished\Duration %1</source>

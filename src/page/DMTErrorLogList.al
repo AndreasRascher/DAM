@@ -100,7 +100,7 @@ page 110001 "DMT Error Log List"
                     NAVAppInstalledApp.SetRange("App ID", mI.Id);
                     NAVAppInstalledApp.FindFirst();
                     allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
-                    allObjWithCaption.Setrange("Object Type", allObjWithCaption."Object Type"::Table);
+                    allObjWithCaption.SetRange("Object Type", allObjWithCaption."Object Type"::Table);
                     allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6&<>%7',
                         Database::DMTSetup,
                         Database::DMTErrorLog,
@@ -137,7 +137,7 @@ page 110001 "DMT Error Log List"
                     //                     Object.FIND('-');
                     //                     IF Selection > 1 then
                     //                         Object.NEXT(Selection - 1);
-                    //                     SETRANGE("Import from Buffertable No.", Object.ID);
+                    //                     SetRange("Import from Buffertable No.", Object.ID);
                     //                     CurrPage.UPDATE(FALSE);
 
                     //                     AddContextFilter - OnAction()
@@ -155,7 +155,7 @@ page 110001 "DMT Error Log List"
                     //                         EXIT;
 
                     //                     IF Selection > 1 then
-                    //                         SETRANGE("DMT Context Descr.", ResultTextArr[Selection]);
+                    //                         SetRange("DMT Context Descr.", ResultTextArr[Selection]);
                     //                     CurrPage.UPDATE(FALSE);
 
                 end;

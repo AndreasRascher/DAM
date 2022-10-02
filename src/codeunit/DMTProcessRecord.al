@@ -107,6 +107,7 @@ codeunit 110012 DMTProcessRecord
         TargetRef_INIT.Open(TmpTargetRef.Number, false, TmpTargetRef.CurrentCompany);
         TargetRef_INIT.Init();
         RunMode := RunMode::FieldTransfer;
+        Clear(ErrorLogDict);
     end;
 
     procedure InitInsert()
@@ -118,6 +119,8 @@ codeunit 110012 DMTProcessRecord
     var
         ErrorItem: Dictionary of [Text, Text];
     begin
+        if GetLastErrorText() = '' then
+            exit;
         ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
         ErrorItem.Add('GetLastErrorCode', GetLastErrorCode);
         ErrorItem.Add('GetLastErrorText', GetLastErrorText);
@@ -133,8 +136,9 @@ codeunit 110012 DMTProcessRecord
             exit(false);
         if ErrorLogDict.Count > 0 then
             exit(false);
-        Success := DMTMgt.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
-        LogLastError();
+        Success := ChangeRecordWithPerm.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+        if not Success then
+            LogLastError();
     end;
 
     procedure SaveErrorLog() ErrorsExist: Boolean
@@ -155,7 +159,7 @@ codeunit 110012 DMTProcessRecord
         _DMTErrorlog: Record DMTErrorLog;
     begin
         _DMTErrorlog.DataFileName := DataFile.Name;
-        _DMTErrorlog.DataFileFolderPath := DataFile.Path;
+        _DMTErrorlog.DataFilePath := DataFile.Path;
 
         _DMTErrorlog."From ID" := SourceRef.RecordId;
         _DMTErrorlog."To ID" := TargetRef.RecordId;
@@ -178,6 +182,7 @@ codeunit 110012 DMTProcessRecord
         DataFile: Record DMTDataFile;
         TempFieldMapping: Record DMTFieldMapping temporary;
         DMTMgt: Codeunit DMTMgt;
+        ChangeRecordWithPerm: Codeunit ChangeRecordWithPerm;
         CurrFieldToProcess: RecordId;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         SkipRecord: Boolean;

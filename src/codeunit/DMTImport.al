@@ -15,9 +15,9 @@ codeunit 110014 DMTImport
         DataFile.CalcFields("No. of Records In Trgt. Table");
     end;
 
-    procedure ProcessFullBuffer(var DMTDataFile: Record DMTDataFile; IsUpdateTask: Boolean)
+    procedure ProcessFullBuffer(var DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
     var
-        DMTErrorLog: Record DMTErrorLog;
+        ErrorLog: Record DMTErrorLog;
         TempFieldMapping: Record "DMTFieldMapping" temporary;
         GenBuffTable: Record DMTGenBuffTable;
         BufferRef, BufferRef2 : RecordRef;
@@ -26,28 +26,29 @@ codeunit 110014 DMTImport
         NonKeyFieldsFilter: Text;
         ProgressBarTitle: Text;
     begin
-        InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DMTDataFile."Target Table ID");
-        LoadFieldMapping(DMTDataFile, IsUpdateTask, TempFieldMapping);
+        InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
+        LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);
 
 
         // Buffer loop
-        if DMTDataFile.BufferTableType = DMTDataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
+        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
             // GenBuffTable.InitFirstLineAsCaptions(DMTDataFile);
             GenBuffTable.FilterGroup(2);
             GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterBy(DMTDataFile);
+            GenBuffTable.FilterBy(DataFile);
             GenBuffTable.FilterGroup(0);
             BufferRef.GetTable(GenBuffTable);
         end else
-            if DMTDataFile.BufferTableType = DMTDataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
-                BufferRef.Open(DMTDataFile."Buffer Table ID");
+            if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
+                BufferRef.Open(DataFile."Buffer Table ID");
             end;
         Commit(); // Runmodal Dialog in Edit View
-        if not EditView(BufferRef, DMTDataFile) then
+        if not EditView(BufferRef, DataFile) then
             exit;
+        ErrorLog.DeleteExistingLogFor(DataFile);
         BufferRef.findset();
-        DMTDataFile.Calcfields("Target Table Caption");
-        ProgressBarTitle := DMTDataFile."Target Table Caption";
+        DataFile.Calcfields("Target Table Caption");
+        ProgressBarTitle := DataFile."Target Table Caption";
         if Strlen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_') +
                                 ProgressBarTitle +
@@ -62,7 +63,7 @@ codeunit 110014 DMTImport
         DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTDataFile, TempFieldMapping, IsUpdateTask);
+            ProcessSingleBufferRecord(BufferRef2, DataFile, TempFieldMapping, IsUpdateTask);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
@@ -73,7 +74,7 @@ codeunit 110014 DMTImport
                 COMMIT();
         until BufferRef.Next() = 0;
         DMTMgt.ProgressBar_Close();
-        DMTErrorLog.OpenListWithFilter(DMTDataFile, true);
+        ErrorLog.OpenListWithFilter(DataFile, true);
         DMTMgt.GetResultQtyMessage();
     end;
 
@@ -342,10 +343,13 @@ codeunit 110014 DMTImport
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTDataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping; UpdateExistingRecordsOnly: Boolean)
     var
+        ErrorLog: Record DMTErrorLog;
         ProcessRecord: Codeunit DMTProcessRecord;
         HasErrors: Boolean;
     begin
         ClearLastError();
+        if UpdateExistingRecordsOnly then
+            ErrorLog.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(DMTDataFile, TempFieldMapping, BufferRef2, UpdateExistingRecordsOnly);
         Commit();
         While not ProcessRecord.Run() do begin

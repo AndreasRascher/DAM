@@ -1,7 +1,5 @@
 codeunit 110002 "DMTMgt"
 {
-    Permissions = tabledata "Dimension Set Entry" = rimd, tabledata "Dimension Set Tree Node" = rimd;
-
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
     begin
         ProgressBar.Open(ProgressBarContent);
@@ -162,22 +160,6 @@ codeunit 110002 "DMTMgt"
             FieldRef := KeyRef.FieldIndex(_KeyIndex);
             KeyFieldIDsList.Add(FieldRef.Number);
         end;
-    end;
-
-    procedure InsertRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
-    var
-        TargetRef: RecordRef;
-        TargetRef2: RecordRef;
-    begin
-        TargetRef.Open(TmpTargetRef.Number, FALSE);
-        CopyRecordRef(TmpTargetRef, TargetRef);
-
-        IF TargetRef2.Get(TargetRef.RecordId) then begin
-            InsertOK := TargetRef.Modify(InsertTrue);
-        end else begin
-            InsertOK := TargetRef.Insert(InsertTrue);
-        end;
-
     end;
 
     procedure CopyRecordRef(VAR RecRefSource: RecordRef; VAR RecRefTarget: RecordRef)

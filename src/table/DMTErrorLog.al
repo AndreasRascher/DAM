@@ -46,7 +46,7 @@ table 110001 "DMTErrorLog"
         field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
         field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
         field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
-        field(52; DataFileFolderPath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
+        field(52; DataFilePath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
         field(53; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
     }
 
@@ -76,7 +76,7 @@ table 110001 "DMTErrorLog"
         _DMTErrorlog.modify(true);
     end;
 
-    procedure DeleteExistingLogForBufferRec(BufferRef: RecordRef)
+    procedure DeleteExistingLogFor(BufferRef: RecordRef)
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
@@ -85,12 +85,16 @@ table 110001 "DMTErrorLog"
             DMTErrorlog.DeleteAll();
     end;
 
-    procedure ErrorsExistFor(BufferRef: RecordRef; ExcludeIgnoreErrorRecords: Boolean): Boolean
+    procedure DeleteExistingLogFor(DataFile: Record DMTDataFile)
+    var
+        DMTErrorlog: Record DMTErrorLog;
     begin
-        SETRANGE("From ID", BufferRef.RecordId);
-        IF ExcludeIgnoreErrorRecords then
-            SETRANGE("Ignore Error", FALSE);
-        exit(not Rec.IsEmpty);
+        DataFile.Testfield(Name);
+        DataFile.TestField(Path);
+        DMTErrorlog.SetRange(DataFileName, DataFile.Name);
+        DMTErrorlog.SetRange(DataFilePath, DataFile.Path);
+        if not DMTErrorlog.IsEmpty then // Avoid Tablelocks
+            DMTErrorlog.DeleteAll();
     end;
 
     procedure OpenListWithFilter(DataFile: Record DMTDataFile; OpenOnlyIfNotEmpty: Boolean)

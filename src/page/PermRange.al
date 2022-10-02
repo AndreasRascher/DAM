@@ -91,23 +91,23 @@ page 110000 FreeObjectsInLicense
     procedure SetFilter_RIMDX(var PermRange: Record "Permission Range") LinesFound: Integer;
     begin
         PermRange.RESET();
-        PermRange.SETRANGE("Object Type", 1, GetMaxObjectType());
-        PermRange.SETRANGE("Read Permission", PermRange."Read Permission"::Yes);
-        PermRange.SETRANGE("Insert Permission", PermRange."Insert Permission"::Yes);
-        PermRange.SETRANGE("Modify Permission", PermRange."Modify Permission"::Yes);
-        PermRange.SETRANGE("Delete Permission", PermRange."Delete Permission"::Yes);
-        PermRange.SETRANGE("Execute Permission", PermRange."Execute Permission"::Yes);
+        PermRange.SetRange("Object Type", 1, GetMaxObjectType());
+        PermRange.SetRange("Read Permission", PermRange."Read Permission"::Yes);
+        PermRange.SetRange("Insert Permission", PermRange."Insert Permission"::Yes);
+        PermRange.SetRange("Modify Permission", PermRange."Modify Permission"::Yes);
+        PermRange.SetRange("Delete Permission", PermRange."Delete Permission"::Yes);
+        PermRange.SetRange("Execute Permission", PermRange."Execute Permission"::Yes);
 
         // CASE oFilterRangeSet OF
         //     oFilterRangeSet::"50000..99999":
         //         begin
-        PermRange.SETRANGE(From, 50000, 99999);
-        //             PermRange.SETRANGE("To", 50000, 99999);
+        PermRange.SetRange(From, 50000, 99999);
+        //             PermRange.SetRange("To", 50000, 99999);
         //         end;
         //     oFilterRangeSet::"1..":
         //         begin
-        //             PermRange.SETRANGE(From);
-        //             PermRange.SETRANGE(Index);
+        //             PermRange.SetRange(From);
+        //             PermRange.SetRange(Index);
         //         end
         // end;
         LinesFound := PermRange.Count;
@@ -127,7 +127,7 @@ page 110000 FreeObjectsInLicense
         iTotal := rec.Count;
         FOR i := 1 TO GetMaxObjectType() DO begin
             permissionRange."Object Type" := i;
-            rec.SETRANGE("Object Type", i);
+            rec.SetRange("Object Type", i);
             CASE permissionRange."Object Type" OF
                 permissionRange."Object Type"::Table:
                     iQtyTable := rec.Count;
@@ -151,7 +151,7 @@ page 110000 FreeObjectsInLicense
         AllObjWithCaption: Record AllObjWithCaption;
         Int: Record Integer;
     begin
-        Int.SETRANGE(Number, r_PermissionRange.From, r_PermissionRange."To");
+        Int.SetRange(Number, r_PermissionRange.From, r_PermissionRange."To");
         IF Int.FindSet() THEN
             REPEAT
                 IF NOT AllObjWithCaption.GET(r_PermissionRange."Object Type", Int.Number) THEN
@@ -171,9 +171,9 @@ page 110000 FreeObjectsInLicense
     procedure ApplyObjectTypeFilter(i_TypeIndex: Integer)
     begin
         Rec.FilterGroup(2);
-        rec.SETRANGE("Object Type", i_TypeIndex);
+        rec.SetRange("Object Type", i_TypeIndex);
         IF i_TypeIndex = 0 THEN
-            rec.SETRANGE("Object Type");
+            rec.SetRange("Object Type");
         Rec.FilterGroup(2);
         CurrPage.UPDATE(FALSE);
         IF rec.FINDFIRST() THEN;
