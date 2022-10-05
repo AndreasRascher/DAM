@@ -220,9 +220,7 @@ codeunit 110000 "DMTObjMgt"
                                                                       Database::DMTExportObject,
                                                                       Database::DMTFieldBuffer,
                                                                       Database::DMTDataFileBuffer,
-                                                                      Database::DMTDataSourceHeader,
                                                                       Database::DMTGenBuffTable,
-                                                                      Database::DMTDataSourceLine,
                                                                       Database::DMTReplacementsHeader,
                                                                       Database::DMTReplacementsLine];
                 end;

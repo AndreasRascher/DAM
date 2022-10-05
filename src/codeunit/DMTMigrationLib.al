@@ -104,8 +104,6 @@ codeunit 110011 "DMTMigrationLib"
     end;
 
     local procedure FindKnownFieldsToIgnore(TargetField: Record Field) Found: Boolean
-    var
-        SH: Record "Sales Header";
     begin
         case true of
             // Sales Header
