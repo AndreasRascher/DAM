@@ -26,23 +26,24 @@ codeunit 110011 "DMTMigrationLib"
         Found := OldFieldName <> '';
     end;
 
-    procedure SetKnownValidationRules(var FieldMapping: Record DMTFieldMapping)
+    procedure ApplyKnownValidationRules(var FieldMapping: Record DMTFieldMapping)
     var
         TargetField: Record Field;
-        KnownUseValidate: Boolean;
         KnownFixedValue: Text;
+        ValidationType: Enum DMTFieldValidationType;
     begin
         TargetField.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
-        if FindKnownUseValidateValue(TargetField, KnownUseValidate) then
-            if not KnownUseValidate then
-                FieldMapping."Validation Type" := Enum::DMTFieldValidationType::AssignWithoutValidate;
+        if FindKnownUseValidateValue(TargetField, ValidationType) then
+            FieldMapping."Validation Type" := ValidationType;
         if FindKnownFixedValue(TargetField, KnownFixedValue) then
             FieldMapping.Validate("Fixed Value", KnownFixedValue);
+        if FindKnownFieldsToIgnore(TargetField) then
+            FieldMapping."Processing Action" := FieldMapping."Processing Action"::Ignore;
     end;
 
-    local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownUseValidate: Boolean) Found: Boolean
+    local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
     begin
-        KnownUseValidate := true;
+        KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
         case true of
             IsMatch(TargetField, 'VAT Registration No.'),
@@ -58,7 +59,7 @@ codeunit 110011 "DMTMigrationLib"
             IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
             IsMatch(TargetField, Database::Contact, 'Company No.'):
-                KnownUseValidate := false;
+                KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;
         end;
@@ -97,6 +98,37 @@ codeunit 110011 "DMTMigrationLib"
                 KnownFixedValue := Format(Enum::"BOM Status"::"Under Development");
             IsMatch(TargetField, Database::"Routing Header", 'Status'):
                 KnownFixedValue := Format(Enum::"Routing Status"::"Under Development");
+            else
+                Found := false;
+        end;
+    end;
+
+    local procedure FindKnownFieldsToIgnore(TargetField: Record Field) Found: Boolean
+    var
+        SH: Record "Sales Header";
+    begin
+        case true of
+            // Sales Header
+            IsMatch(TargetField, Database::"Sales Header", 'Invoice'),
+            IsMatch(TargetField, Database::"Sales Header", 'Ship'),
+            IsMatch(TargetField, Database::"Sales Header", 'Receive'),
+            // Testsfields on Recreate SalesLine
+            IsMatch(TargetField, Database::"Sales Line", 'Job No.'),
+            IsMatch(TargetField, Database::"Sales Line", 'Job Contract Entry No.'),
+            IsMatch(TargetField, Database::"Sales Line", 'Quantity Invoiced'),
+            IsMatch(TargetField, Database::"Sales Line", 'Return Qty. Received'),
+            IsMatch(TargetField, Database::"Sales Line", 'Shipment No.'),
+            IsMatch(TargetField, Database::"Sales Line", 'Return Receipt No.'),
+            IsMatch(TargetField, Database::"Sales Line", 'Blanket Order No.'),
+            IsMatch(TargetField, Database::"Sales Line", 'Prepmt. Amt. Inv.'),
+            // Testfields on Recreate PurchLine
+            IsMatch(TargetField, Database::"Purchase Line", 'Quantity Received'),
+            IsMatch(TargetField, Database::"Purchase Line", 'Quantity Invoiced'),
+            IsMatch(TargetField, Database::"Purchase Line", 'Return Qty. Shipped'),
+            IsMatch(TargetField, Database::"Purchase Line", 'Receipt No.'),
+            IsMatch(TargetField, Database::"Purchase Line", 'Return Shipment No.'),
+            IsMatch(TargetField, Database::"Purchase Line", 'Blanket Order No.'):
+                Found := true;
             else
                 Found := false;
         end;

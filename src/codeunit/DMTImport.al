@@ -41,6 +41,10 @@ codeunit 110014 DMTImport
         end else
             if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
                 BufferRef.Open(DataFile."Buffer Table ID");
+                // TempFieldMapping.FindSet();
+                // repeat
+                //     BufferRef.SetLoadFields(TempFieldMapping."Source Field No.");
+                // until TempFieldMapping.Next() = 0;
             end;
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DataFile) then
