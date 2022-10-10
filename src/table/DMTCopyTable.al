@@ -20,18 +20,19 @@ table 110000 "DMTCopyTable"
             FieldClass = FlowField;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Table No.")));
         }
-        field(11; SourceCompany; Text[30])
+        field(11; SourceCompanyName; Text[30])
         {
             Caption = 'Copy from Company', Comment = 'Kopieren aus Mandant';
             TableRelation = Company.Name where(Name = field(ExcludeSourceCompanyFilter));
         }
-        field(13; "Context Description"; text[250]) { CaptionML = DEU = 'Kontext Beschreibung', ENU = 'Context Description'; }
+        field(13; "Description"; text[250]) { CaptionML = DEU = 'Beschreibung', ENU = 'Description'; }
         field(14; ExcludeSourceCompanyFilter; Text[250]) { FieldClass = FlowFilter; Caption = 'ExcludeSourceCompanyFilter', Locked = true; }
+        field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         field(50; TableView; Blob) { }
-        field(100; "Processing Time"; Duration) { CaptionML = DEU = 'Bearbeitungzeit', ENU = 'Processing Time'; }
-        field(101; "No. of Records"; Integer) { CaptionML = DEU = 'Anz. Datensätze', ENU = 'No. of Records'; }
-        field(102; "No. of Records failed"; Integer) { CaptionML = DEU = 'Anz. fehlgeschlagen', ENU = 'No. of Records failed'; }
-        field(103; "No. of Records imported"; Integer) { CaptionML = DEU = 'Anz. importiert', ENU = 'No. of Records imported'; }
+        field(51; FilterText; Text[250]) { Caption = 'Filter', Comment = 'Filter'; Editable = false; }
+        field(100; "Processing Time"; Duration) { CaptionML = DEU = 'Bearbeitungzeit', ENU = 'Processing Time'; Editable = false; }
+        field(101; "No. of Records(Target)"; Integer) { CaptionML = DEU = 'Anz. Datensätze', ENU = 'No. of Records'; Editable = false; }
+        field(102; "No. of Records inserted"; Integer) { CaptionML = DEU = 'Anz. importiert', ENU = 'No. of Records imported'; Editable = false; }
     }
 
     keys
@@ -62,6 +63,27 @@ table 110000 "DMTCopyTable"
         IStr.ReadText(TableViewAsText);
     end;
 
+    procedure EditSavedFilters() Continue: Boolean
+    var
+        SourceRef: RecordRef;
+    begin
+        Continue := true; // Canceling the dialog should stop th process
+        SourceRef.Open(Rec."Table No.", false, Rec.SourceCompanyName);
+        if Rec.LoadTableView() <> '' then
+            SourceRef.SetView(Rec.LoadTableView());
+        if not ShowRequestPageFilterDialog(SourceRef) then
+            exit(false);
+        if SourceRef.HasFilter then begin
+            Rec.SaveTableView(SourceRef.GetView());
+            Rec.FilterText := SourceRef.GetFilters();
+        end else begin
+            Rec.SaveTableView('');
+            Rec.FilterText := '';
+        end;
+        Rec.Modify();
+    end;
+
+
     procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef) Continue: Boolean;
     var
         FPBuilder: FilterPageBuilder;
@@ -79,5 +101,19 @@ table 110000 "DMTCopyTable"
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
         Continue := FPBuilder.RUNMODAL();
         BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
+    end;
+
+    procedure CopyToTemp(var TempCopyTable: Record DMTCopyTable temporary)
+    var
+        CopyTable: Record DMTCopyTable;
+        TempCopyTable2: Record DMTCopyTable temporary;
+    begin
+        CopyTable.Copy(Rec);
+        if CopyTable.FindSet(false, false) then
+            repeat
+                TempCopyTable2 := CopyTable;
+                TempCopyTable2.Insert(false);
+            until CopyTable.Next() = 0;
+        TempCopyTable.Copy(TempCopyTable2, true);
     end;
 }

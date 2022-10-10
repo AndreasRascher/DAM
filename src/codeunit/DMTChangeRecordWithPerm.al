@@ -19,9 +19,9 @@ codeunit 110009 ChangeRecordWithPerm
 
     procedure InsertRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
     var
+        DMTMgt: Codeunit DMTMgt;
         TargetRef: RecordRef;
         TargetRef2: RecordRef;
-        DMTMgt: Codeunit DMTMgt;
     begin
         TargetRef.Open(TmpTargetRef.Number, FALSE);
         DMTMgt.CopyRecordRef(TmpTargetRef, TargetRef);

@@ -14,8 +14,8 @@ page 110012 DMTCode
         {
             group(Settings)
             {
-                field(SourceRecVarName; SourceRecVarName) { ApplicationArea = All; }
-                field(TargetRecVarName; TargetRecVarName) { ApplicationArea = All; }
+                field(SourceRecVarName; SourceRecVarName) { Caption = 'Variable Name (Source Record)'; ApplicationArea = All; }
+                field(TargetRecVarName; TargetRecVarName) { Caption = 'Variable Name (Target Record)'; ApplicationArea = All; }
             }
             repeater(GroupName)
             {

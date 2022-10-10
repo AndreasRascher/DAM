@@ -160,19 +160,19 @@ page 110028 DMTFieldMapping
             LineStyleExpr := Format(Enum::DMTFieldStyle::"Red + Italic");
     end;
 
-    procedure GetSelection(var FieldMapping_SELCTED: Record DMTFieldMapping temporary) HasLines: Boolean
+    procedure GetSelection(var FieldMapping_SELECTED: Record DMTFieldMapping temporary) HasLines: Boolean
     var
         FieldMapping: Record DMTFieldMapping;
         Debug: Integer;
     begin
-        Clear(FieldMapping_SELCTED);
-        if FieldMapping_SELCTED.IsTemporary then FieldMapping_SELCTED.DeleteAll();
+        Clear(FieldMapping_SELECTED);
+        if FieldMapping_SELECTED.IsTemporary then FieldMapping_SELECTED.DeleteAll();
         Debug := Rec.Count;
         FieldMapping.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(FieldMapping);
         Debug := FieldMapping.Count;
-        FieldMapping.CopyToTemp(FieldMapping_SELCTED);
-        HasLines := FieldMapping_SELCTED.FindFirst();
+        FieldMapping.CopyToTemp(FieldMapping_SELECTED);
+        HasLines := FieldMapping_SELECTED.FindFirst();
     end;
 
     procedure FieldErrorsExist(var FieldMapping: Record DMTFieldMapping) ErrExist: Boolean

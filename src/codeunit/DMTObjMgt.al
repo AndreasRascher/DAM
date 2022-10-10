@@ -240,8 +240,7 @@ codeunit 110000 "DMTObjMgt"
         if IsCoreAppObject(AllObjWithCaption) then exit(false);
 
         NavApp.GetCurrentModuleInfo(mI);
-        NAVAppInstalledApp.SetRange("App ID", mI.Id);
-        NAVAppInstalledApp.FindFirst();
+        NAVAppInstalledApp.Get(mI.Id);
         Result := (NAVAppInstalledApp."Package ID" = AllObjWithCaption."App Package ID");
     end;
 
