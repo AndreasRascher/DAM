@@ -169,9 +169,13 @@ codeunit 110002 "DMTMgt"
         i: Integer;
     begin
         for i := 1 TO RecRefSource.FieldCount do begin
-            FieldRefTarget := RecRefTarget.FieldIndex(i);
-            FieldRefSource := RecRefSource.FieldIndex(i);
-            FieldRefTarget.Value := FieldRefSource.Value;
+            if RecRefTarget.FieldIndex(i).Class = FieldClass::Normal then begin
+                FieldRefSource := RecRefSource.FieldIndex(i);
+                if FieldRefSource.Type in [FieldType::Blob] then
+                    FieldRefSource.CalcField();
+                FieldRefTarget := RecRefTarget.FieldIndex(i);
+                FieldRefTarget.Value := FieldRefSource.Value;
+            end;
         end;
     end;
 

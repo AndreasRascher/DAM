@@ -220,9 +220,7 @@ codeunit 110000 "DMTObjMgt"
                                                                       Database::DMTExportObject,
                                                                       Database::DMTFieldBuffer,
                                                                       Database::DMTDataFileBuffer,
-                                                                      Database::DMTDataSourceHeader,
                                                                       Database::DMTGenBuffTable,
-                                                                      Database::DMTDataSourceLine,
                                                                       Database::DMTReplacementsHeader,
                                                                       Database::DMTReplacementsLine];
                 end;
@@ -242,8 +240,7 @@ codeunit 110000 "DMTObjMgt"
         if IsCoreAppObject(AllObjWithCaption) then exit(false);
 
         NavApp.GetCurrentModuleInfo(mI);
-        NAVAppInstalledApp.SetRange("App ID", mI.Id);
-        NAVAppInstalledApp.FindFirst();
+        NAVAppInstalledApp.Get(mI.Id);
         Result := (NAVAppInstalledApp."Package ID" = AllObjWithCaption."App Package ID");
     end;
 

@@ -91,7 +91,7 @@ codeunit 110013 "DMTDataFilePageAction"
         if FieldMapping.FindSet(true, false) then
             repeat
                 FieldMapping2 := FieldMapping;
-                MigrationLib.SetKnownValidationRules(FieldMapping);
+                MigrationLib.ApplyKnownValidationRules(FieldMapping);
                 if format(FieldMapping2) <> Format(FieldMapping) then
                     FieldMapping.Modify()
             until FieldMapping.Next() = 0;
