@@ -20,5 +20,7 @@
     "CRS.ObjectNamePrefix": "DMT",
     "CRS.RenameWithGit": true,
     "alObjectDesigner.disableFileWatcherOnChange": true,
-    "aloutline.disableFileWatcherOnChange":true
+    "alOutline.completionProviders": [
+        "VariableNamesWithType"
+    ],
  }
