@@ -35,6 +35,7 @@ page 110012 DMTCode
             action(CreateCode)
             {
                 ApplicationArea = All;
+                Image = Create;
 
                 trigger OnAction()
                 begin

@@ -101,17 +101,6 @@ page 110011 "DMT Setup"
     {
         area(Creation)
         {
-            action(CreateNAVExportObject)
-            {
-                Caption = 'Creeate NAV Export Object', comment = 'NAV Export Objekt erstellen';
-                ApplicationArea = All;
-                Image = DataEntry;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = New;
-                RunObject = page NAVObjects;
-            }
             action(ImportNAVSchema)
             {
                 Caption = 'Import Schema.csv', comment = 'NAV Schema.csv importieren';

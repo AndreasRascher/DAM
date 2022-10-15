@@ -122,26 +122,21 @@ page 110021 "Copy Report Helper"
         Content: TextBuilder;
     begin
         Content.AppendLine(''' Source: https://github.com/AndreasRascher/RDLCReport_CustomCode');
+        Content.AppendLine(''' Hidden Tablecell Property Hidden=Code.SetGlobalData(Fields!GlobalData.Value)');
         Content.AppendLine(''' =================');
         Content.AppendLine(''' Global variables');
         Content.AppendLine(''' =================');
-        Content.AppendLine('Shared HeaderData As Microsoft.VisualBasic.Collection');
-        Content.AppendLine('Shared FooterData As Microsoft.VisualBasic.Collection');
-        Content.AppendLine('');
+        Content.AppendLine('Shared GlobalDict As Microsoft.VisualBasic.Collection');
         Content.AppendLine(''' ==========================');
-        Content.AppendLine(''' Get Header or Footer Value ');
+        Content.AppendLine(''' Get value by name or number');
         Content.AppendLine(''' ==========================');
         Content.AppendLine('');
         Content.AppendLine(''' Key = position number or name');
-        Content.AppendLine('Public Function HeaderVal(Key as Object)');
-        Content.AppendLine('  Return GetValue(HeaderData,Key)');
+        Content.AppendLine('Public Function GetVal(Key as Object)');
+        Content.AppendLine('  Return GetVal2(GlobalDict,Key)');
         Content.AppendLine('End Function');
         Content.AppendLine('');
-        Content.AppendLine('Public Function FooterVal(Key as Object)');
-        Content.AppendLine('  Return GetValue(FooterData,Key)');
-        Content.AppendLine('End Function');
-        Content.AppendLine('');
-        Content.AppendLine('Public Function GetValue(ByRef Data as Object,Key as Object)');
+        Content.AppendLine('Public Function GetVal2(ByRef Data as Object,Key as Object)');
         Content.AppendLine('  ''if Key As Number');
         Content.AppendLine('  If IsNumeric(Key) then');
         Content.AppendLine('    Dim i as Long');
@@ -149,7 +144,7 @@ page 110021 "Copy Report Helper"
         Content.AppendLine('    if (i=0) then');
         Content.AppendLine('    return "Index starts at 1"');
         Content.AppendLine('    end if');
-        Content.AppendLine('    if (Data.Count = 0) OR (i = 0) OR (i >Data.Count) then');
+        Content.AppendLine('    if (Data.Count = 0) OR (i = 0) OR (i > Data.Count) then');
         Content.AppendLine('      Return "Invalid Index: ''"+CStr(i)+"''! Collection Count = "+ CStr(Data.Count)');
         Content.AppendLine('    end if  ');
         Content.AppendLine('    Return Data.Item(i)');
@@ -163,7 +158,7 @@ page 110021 "Copy Report Helper"
         Content.AppendLine('    Case IsNothing(Key)');
         Content.AppendLine('      Return "KeyEmpty"');
         Content.AppendLine('    Case (not Data.Contains(Key))');
-        Content.AppendLine('      Return "Key not found: ''"+CStr(Key)+"''!"');
+        Content.AppendLine('      Return "?"+CStr(Key)+"?"  '' Not found');
         Content.AppendLine('    Case Data.Contains(Key)');
         Content.AppendLine('      Return Data.Item(Key)');
         Content.AppendLine('    Case else');
@@ -173,17 +168,11 @@ page 110021 "Copy Report Helper"
         Content.AppendLine('End Function');
         Content.AppendLine('');
         Content.AppendLine(''' ===========================================');
-        Content.AppendLine(''' Set Header and Footer values from the body ');
+        Content.AppendLine(''' Set global values from the body ');
         Content.AppendLine(''' ===========================================');
         Content.AppendLine('');
-        Content.AppendLine('Public Function SetHeaderDataAsKeyValueList(NewData as Object)');
-        Content.AppendLine('  SetDataAsKeyValueList(HeaderData,NewData)');
-        Content.AppendLine('  Return True ''Set Control to Hidden=true');
-        Content.AppendLine('End Function');
-        Content.AppendLine('');
-        Content.AppendLine('Public Function SetFooterDataAsKeyValueList(NewData as Object)');
-        Content.AppendLine('  FooterData = New Microsoft.VisualBasic.Collection ');
-        Content.AppendLine('  SetDataAsKeyValueList(FooterData,NewData)');
+        Content.AppendLine('Public Function SetGlobalData(KeyValueList as Object)');
+        Content.AppendLine('  SetDataAsKeyValueList(GlobalDict,KeyValueList)');
         Content.AppendLine('  Return True ''Set Control to Hidden=true');
         Content.AppendLine('End Function');
         Content.AppendLine('');
@@ -207,14 +196,6 @@ page 110021 "Copy Report Helper"
         Content.AppendLine('  Next ');
         Content.AppendLine('End Function');
         Content.AppendLine('');
-        Content.AppendLine('Public Function AddValue(ByRef Data as Object,Value as Object)');
-        Content.AppendLine('  if IsNothing(Data) then');
-        Content.AppendLine('     Data = New Microsoft.VisualBasic.Collection');
-        Content.AppendLine('  End if');
-        Content.AppendLine('  Data.Add(Value,Data.Count +1)');
-        Content.AppendLine('  Return Data.Count  ');
-        Content.AppendLine('End Function');
-        Content.AppendLine('');
         Content.AppendLine('Public Function AddKeyValue(ByRef Data as Object, Key as Object,Value as Object)');
         Content.AppendLine('  if IsNothing(Data) then');
         Content.AppendLine('     Data = New Microsoft.VisualBasic.Collection');
@@ -235,7 +216,6 @@ page 110021 "Copy Report Helper"
         Content.AppendLine('');
         Content.AppendLine('  Return Data.Count');
         Content.AppendLine('End Function');
-
         CustomCode := Content.ToText();
     end;
 

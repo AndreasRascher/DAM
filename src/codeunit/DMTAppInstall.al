@@ -18,14 +18,12 @@ codeunit 110007 "DMT App Install"
     begin
         if Not CheckIfThisIsFirstInstallOfApp() then
             exit;
-        PopulateAppWithDefaultData();
     end;
 
     local procedure HandleReInstall();
     begin
         if CheckIfThisIsFirstInstallOfApp() then
             exit;
-        PopulateAppWithDefaultData();
     end;
 
     local procedure CheckIfThisIsFirstInstallOfApp(): Boolean
@@ -34,13 +32,5 @@ codeunit 110007 "DMT App Install"
     begin
         NavApp.GetCurrentModuleInfo(AppInfo);
         exit(AppInfo.DataVersion() = Version.Create(0, 0, 0, 0));
-    end;
-
-    local procedure PopulateAppWithDefaultData()
-    var
-        DMTExportObject: Record DMTExportObject;
-    begin
-        DMTExportObject.DeleteAll();
-        NavApp.LoadPackageData(Database::DMTExportObject);
     end;
 }

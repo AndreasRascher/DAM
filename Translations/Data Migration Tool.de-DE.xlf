@@ -13,7 +13,6 @@
           <source>Filter</source>
           <target>Filter</target>
           <note from="Developer" annotates="general" priority="2">Filter</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field FilterText - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2465824826 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -377,24 +376,6 @@
           <target>Import nach Record ID</target>
           <note from="Developer" annotates="general" priority="2">Import nach Record ID (Text)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field To ID (Text) - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1959578464 - Field 350833111 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ExportDataPort</source>
-          <target>Datenexport Dataport</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field ExportDataPort - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1959578464 - Field 677778696 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ExportXMLPort</source>
-          <target>Datenexport XMLPort</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field ExportXMLPort - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1959578464 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Primary Key</source>
-          <target>Primärschlüssel</target>
-          <note from="Developer" annotates="general" priority="2">Primärschlüssel</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTExportObject - Field Primary Key - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1173227997 - Field 2790486453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Comment</source>
@@ -2358,12 +2339,6 @@
           <note from="Developer" annotates="general" priority="2">Pfade</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Paths - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4118238928 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Creeate NAV Export Object</source>
-          <target>NAV Export Objekt erstellen</target>
-          <note from="Developer" annotates="general" priority="2">NAV Export Objekt erstellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action CreateNAVExportObject - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 425834526 - Action 434455383 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Find available Object ID ranges</source>
           <target>Verfügbare Objekt-ID Bereiche ermitteln</target>
@@ -2855,18 +2830,6 @@
           <target>Aktualisieren</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTUpdateTaskNew - Control Selected - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1775030313 - Control 1522235459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dataport (until NAV2009)</source>
-          <target>Dataport (NAV Versionen bis NAV2009)</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control Dataport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1775030313 - Control 1979631940 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>XMLPort (NAV2013 - BC14)</source>
-          <target>XMLPort (NAV2013 - BC14)</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page NAVObjects - Control XMLPort - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 242798494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

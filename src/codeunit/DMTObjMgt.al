@@ -217,7 +217,7 @@ codeunit 110000 "DMTObjMgt"
                                                                       Database::DMTDataFile,
                                                                       Database::DMTFieldMapping,
                                                                       Database::DMTErrorLog,
-                                                                      Database::DMTExportObject,
+                                                                      Database::DMTCopyTable,
                                                                       Database::DMTFieldBuffer,
                                                                       Database::DMTDataFileBuffer,
                                                                       Database::DMTGenBuffTable,

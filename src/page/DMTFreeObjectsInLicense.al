@@ -140,6 +140,7 @@ page 110000 "DMTFreeObjectsInLicense"
             action(AppFilter)
             {
                 ApplicationArea = All;
+                Image = Filter;
                 trigger OnAction()
                 begin
                     LoadAppObj();
@@ -148,10 +149,35 @@ page 110000 "DMTFreeObjectsInLicense"
         }
     }
     trigger OnOpenPage()
+    var
+        Choice: Integer;
     begin
-        ObjectRangeFilter := '50000..99999';
+        Choice := StrMenu('Bereich 50000..99999,' +
+                          'Bereich 50000..99999 & 110000..149999 (Solution Developer),' +
+                          'Sind App Objekte in der Lizenz',
+                          0, 'Was soll untersucht werden?');
+        case Choice of
+            1:
+                begin
+                    Clear(ObjInLicenseFilters);
+                    GlobalObjectRangeFilter := '50000..99999';
+                    GlobalAppFilter := '';
+                end;
+            2:
+                begin
+                    Clear(ObjInLicenseFilters);
+                    GlobalObjectRangeFilter := '50000..99999|110000..149999';
+                    GlobalAppFilter := '';
+                end;
+            3:
+                begin
+                    Clear(ObjInLicenseFilters);
+                    GlobalObjectRangeFilter := '';
+                    GlobalAppFilter := SelectAppFilter();
+                end;
+        end;
+        LoadFreeObjInLicense();
         LoadAppObj();
-        // LoadFreeObjInLicense();
     end;
 
     procedure LoadFreeObjInLicense()
@@ -172,13 +198,13 @@ page 110000 "DMTFreeObjectsInLicense"
 
         Progress.Open('Gefundene Objekte #######1#');
 
-        FindObjectRange();
+        FindObjectRangesOfRIMDXObjects();
 
         foreach TypeNo in ObjInLicenseFilters.Keys do begin
             Int.SetFilter(Number, ObjInLicenseFilters.Get(TypeNo));
             if Int.FindSet() then
                 repeat
-                    IF not AllObjWithCaption.Get(TypeNo, Int.Number) THEN
+                    if not AllObjWithCaption.Get(TypeNo, Int.Number) THEN
                         AddObjectToCollection(TypeNo, Int.Number);
                 until Int.Next() = 0;
             if (CurrentDateTime - LastUpdate) > 500 then begin
@@ -187,10 +213,9 @@ page 110000 "DMTFreeObjectsInLicense"
             end;
         end;
         Progress.Close();
+        CountObjectsFound();
 
-        GetQtyObjetstByType();
-
-        IF rec.FindFirst() THEN;
+        if rec.FindFirst() THEN;
         IsLoaded := true;
     end;
 
@@ -200,18 +225,17 @@ page 110000 "DMTFreeObjectsInLicense"
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         AppPackageIDFilter: Text;
     begin
-        // if RunMode <> RunMode::AppIDs then
-        //     exit;
-        begin
-            AppPackageIDFilter := SelectAppFilter();
-            AllObjWithCaption.SetRange("App Package ID", AppPackageIDFilter);
-            AllObjWithCaption.FindSet();
-            repeat
-                TempAllObjWithCaption := AllObjWithCaption;
-                TempAllObjWithCaption.Insert();
-            until AllObjWithCaption.Next() = 0;
-            Rec.Copy(TempAllObjWithCaption, true);
-        end;
+        if AppPackageIDFilter = '' then
+            exit;
+        AllObjWithCaption.SetRange("App Package ID", AppPackageIDFilter);
+        AllObjWithCaption.FindSet();
+        repeat
+            TempAllObjWithCaption := AllObjWithCaption;
+            if not IsObjectInLicense(TempAllObjWithCaption) then
+                TempAllObjWithCaption."Object Subtype" := 'NotInLicense';
+            TempAllObjWithCaption.Insert();
+        until AllObjWithCaption.Next() = 0;
+        Rec.Copy(TempAllObjWithCaption, true);
     end;
 
     procedure GetMaxObjectType(): Integer
@@ -219,30 +243,29 @@ page 110000 "DMTFreeObjectsInLicense"
         exit(10);
     end;
 
-    procedure GetQtyObjetstByType();
+    procedure CountObjectsFound();
     var
-        permissionRange: Record "Permission Range";
+        TempAllObjWithCaption: Record AllObjWithCaption temporary;
         i: Integer;
     begin
-        rec.reset();
-        iTotal := rec.Count;
+        TempAllObjWithCaption.Copy(Rec, true);
         for i := 1 to GetMaxObjectType() do begin
-            permissionRange."Object Type" := i;
+            TempAllObjWithCaption."Object Type" := i;
             rec.SetRange("Object Type", i);
-            case permissionRange."Object Type" of
-                permissionRange."Object Type"::Table:
+            case TempAllObjWithCaption."Object Type" of
+                TempAllObjWithCaption."Object Type"::Table:
                     NoOfTables := rec.Count;
-                permissionRange."Object Type"::Page:
+                TempAllObjWithCaption."Object Type"::Page:
                     NoOfPages := rec.Count;
-                permissionRange."Object Type"::Report:
+                TempAllObjWithCaption."Object Type"::Report:
                     NoOfReports := rec.Count;
-                permissionRange."Object Type"::Codeunit:
+                TempAllObjWithCaption."Object Type"::Codeunit:
                     NoOfCodeunits := rec.Count;
-                permissionRange."Object Type"::Query:
+                TempAllObjWithCaption."Object Type"::Query:
                     NoOfQueries := rec.Count;
-                permissionRange."Object Type"::XMLport:
+                TempAllObjWithCaption."Object Type"::XMLport:
                     NoOfXMLports := rec.Count;
-                permissionRange."Object Type"::Enum:
+                TempAllObjWithCaption."Object Type"::Enum:
                     NoOfEnums := rec.Count;
             end; // end_CASE
         end;
@@ -258,7 +281,19 @@ page 110000 "DMTFreeObjectsInLicense"
         rec.Insert();
     end;
 
-    local procedure FindObjectRange()
+    procedure IsObjectInLicense(AllObjWithCpt: Record AllObjWithCaption) RIMDX: Boolean
+    var
+        LicPerm: Record "License Permission";
+    begin
+        LicPerm.Get(AllObjWithCpt."Object Type", AllObjWithCpt."Object ID");
+        RIMDX := (LicPerm."Read Permission" = LicPerm."Read Permission"::Yes) and
+                 (LicPerm."Insert Permission" = LicPerm."Insert Permission"::Yes) and
+                 (LicPerm."Modify Permission" = LicPerm."Modify Permission"::Yes) and
+                 (LicPerm."Delete Permission" = LicPerm."Delete Permission"::Yes) and
+                 (LicPerm."Execute Permission" = LicPerm."Execute Permission"::Yes);
+    end;
+
+    local procedure FindObjectRangesOfRIMDXObjects()
     var
         PermRange: Record "Permission Range";
     begin
@@ -271,6 +306,10 @@ page 110000 "DMTFreeObjectsInLicense"
         PermRange.SetRange("Modify Permission", PermRange."Modify Permission"::Yes);
         PermRange.SetRange("Delete Permission", PermRange."Delete Permission"::Yes);
         PermRange.SetRange("Execute Permission", PermRange."Execute Permission"::Yes);
+        if GlobalObjectRangeFilter <> '' then begin
+            PermRange.SetFilter(From, GlobalObjectRangeFilter);
+            PermRange.SetFilter("To", GlobalObjectRangeFilter);
+        end;
         PermRange.FindSet();
         repeat
             if not ObjInLicenseFilters.ContainsKey(PermRange."Object Type") then begin
@@ -313,10 +352,8 @@ page 110000 "DMTFreeObjectsInLicense"
         iTotal: Integer;
         [InDataSet]
         IsLoaded: Boolean;
-        ObjectRangeFilter: Text;
+        GlobalObjectRangeFilter, GlobalAppFilter : Text;
         LastUpdate: DateTime;
         ObjInLicenseFilters: Dictionary of [Integer, Text];
         RunMode: Option FreeIDs,AppIDs;
-
-
 }
