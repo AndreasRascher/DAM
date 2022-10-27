@@ -201,7 +201,7 @@ page 110027 "DMTDataFileList"
                 ApplicationArea = all;
                 trigger OnAction()
                 begin
-                    Message(PageActions.CreateTableIDFilter(Rec.FieldNo("Target Table ID")));
+                    Message(PageActions.CreateTableIDFilter(Rec, Rec.FieldNo("Target Table ID")));
                 end;
             }
             action(GetNAVTableIDFilter)
@@ -211,7 +211,7 @@ page 110027 "DMTDataFileList"
                 ApplicationArea = all;
                 trigger OnAction()
                 begin
-                    Message(PageActions.CreateTableIDFilter(Rec.FieldNo("NAV Src.Table No.")));
+                    Message(PageActions.CreateTableIDFilter(Rec,Rec.FieldNo("NAV Src.Table No.")));
                 end;
             }
             action(AddDataFile)

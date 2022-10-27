@@ -1,4 +1,4 @@
-table 110000 "DMTCopyTable"
+table 110002 "DMTCopyTable"
 {
     DataClassification = SystemMetadata;
     Caption = 'DMT Copy Table', comment = 'DMT Tabellen kopieren';

@@ -506,11 +506,13 @@ codeunit 110013 "DMTDataFilePageAction"
         until DataFile_SELECTED.Next() = 0;
     end;
 
-    procedure CreateTableIDFilter(FieldNo: Integer) FilterExpr: Text;
+    procedure CreateTableIDFilter(var DataFileRec: record DMTDataFile; FieldNo: Integer) FilterExpr: Text;
     var
         DataFile: Record DMTDataFile;
         Integer: Record integer;
     begin
+        if DataFileRec.HasFilter then
+            DataFile.CopyFilters(DataFileRec);
         If not DataFile.FindSet(false, false) then
             exit('');
         repeat
