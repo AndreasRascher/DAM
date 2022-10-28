@@ -5,7 +5,13 @@ codeunit 110002 "DMTMgt"
         ProgressBar.Open(ProgressBarContent);
         ProgressBar_Total := BufferRef.COUNT;
         ProgressBar_StartTime := CURRENTDATETIME;
-        ProgressBar_IsOpen := TRUE;
+        ProgressBar_IsOpen := true;
+        // clear old
+        Clear(ProgressBar_Step);
+        Clear(ProgressBar_Total);
+        Clear(Result_QtyFailed);
+        Clear(Result_QtyProcessed);
+        Clear(Result_QtySuccess);
     end;
 
     procedure ProgressBar_Open(TotalLineCount: Integer; ProgressBarContent: Text)
@@ -13,7 +19,7 @@ codeunit 110002 "DMTMgt"
         ProgressBar.Open(ProgressBarContent);
         ProgressBar_Total := TotalLineCount;
         ProgressBar_StartTime := CURRENTDATETIME;
-        ProgressBar_IsOpen := TRUE;
+        ProgressBar_IsOpen := true;
     end;
 
     procedure ProgressBar_UpdateControl(Number: Integer; Value: Variant)
