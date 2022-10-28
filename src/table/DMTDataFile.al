@@ -337,4 +337,21 @@ table 110042 "DMTDataFile"
         FileSizeInKBText := Format(SizeInKB, 0, '<Integer Thousand>');
         FileSizeInKBText += ' KB';
     end;
+
+    procedure ClearProcessingInfo(DoModify: Boolean)
+    begin
+        Clear(ImportToBufferIndicator);
+        Clear(ImportToBufferIndicatorStyle);
+        Clear("Import Duration (Buffer)");
+        Clear(BufferTableIDStyle);
+        Clear(ImportToTargetIndicator);
+        Clear(ImportToTargetIndicatorStyle);
+        Clear("Import Duration (Target)");
+        Clear(ImportXMLPortIDStyle);
+        Clear(DataFilePathStyle);
+        Clear(LastImportBy);
+        Clear(LastImportToBufferAt);
+        Clear(LastImportToTargetAt);
+        Clear("No.of Records in Buffer Table");
+    end;
 }

@@ -2603,6 +2603,19 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action AddDataFile - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2049456290 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assign Files to New Default Folder</source>
+          <target>Dateien dem neuen Standardordner zuordnen</target>
+          <note from="Developer" annotates="general" priority="2">Dateien dem neuen Standardordner zuordnen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action AssignFilesToNewDefaultFolder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2992765192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Clear Processing Info</source>
+          <target>Verarbeitungsinformationen zurücksetzen</target>
+          <note from="Developer" annotates="general" priority="2">Verarbeitungsinformationen zurücksetzen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ClearProcessingInfo - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1929500315 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Marked Lines</source>
           <target>Markiert Zeilen löschen</target>

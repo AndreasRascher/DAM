@@ -706,4 +706,45 @@ codeunit 110013 "DMTDataFilePageAction"
         // Fields
         InitFieldMapping(DataFile.ID);
     end;
+
+    internal procedure AssignFilesToNewDefaultFolder(var TempDataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        DMTSetup: Record DMTSetup;
+        DataFile: Record DMTDataFile;
+        FileRec: Record File;
+        FileMgt: Codeunit "File Management";
+    begin
+        DMTSetup.Get();
+        TempDataFile_SELECTED.SetCurrentKey("Sort Order");
+        if not TempDataFile_SELECTED.FindSet() then exit;
+        repeat
+            DataFile := TempDataFile_SELECTED;
+            if DataFile.Path <> DMTSetup."Default Export Folder Path" then
+                if FileMgt.ServerFileExists(FileMgt.CombinePath(DMTSetup."Default Export Folder Path", DataFile.Name)) then begin
+                    DataFile.Path := CopyStr(DMTSetup."Default Export Folder Path", 1, MaxStrLen(DataFile.Path));
+                    if DataFile.FindFileRec(FileRec) then begin
+                        DataFile.Size := FileRec.Size;
+                        DataFile.Path := FileRec.Path;
+                        DataFile.Name := FileRec.Name;
+                        DataFile."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+                        DataFile.ClearProcessingInfo(false);
+                    end;
+                    DataFile.Modify();
+                end;
+
+        until TempDataFile_SELECTED.Next() = 0;
+    end;
+
+    internal procedure ClearProcessingInfo(var TempDataFile_SELECTED: Record DMTDataFile temporary)
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        if not TempDataFile_SELECTED.FindSet() then exit;
+        repeat
+            DataFile := TempDataFile_SELECTED;
+            DataFile.ClearProcessingInfo(false);
+            DataFile.Modify();
+        until TempDataFile_SELECTED.Next() = 0;
+    end;
+
 }

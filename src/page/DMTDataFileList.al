@@ -154,6 +154,9 @@ page 110027 "DMTDataFileList"
             {
                 Image = TransferToLines;
                 ApplicationArea = all;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedCategory = Category6;
                 Caption = 'Import to target tables (marked lines)', comment = 'In Zieltabellen übernehmen (Markierte Zeilen)';
                 trigger OnAction()
                 begin
@@ -211,7 +214,7 @@ page 110027 "DMTDataFileList"
                 ApplicationArea = all;
                 trigger OnAction()
                 begin
-                    Message(PageActions.CreateTableIDFilter(Rec,Rec.FieldNo("NAV Src.Table No.")));
+                    Message(PageActions.CreateTableIDFilter(Rec, Rec.FieldNo("NAV Src.Table No.")));
                 end;
             }
             action(AddDataFile)
@@ -239,6 +242,34 @@ page 110027 "DMTDataFileList"
                 begin
                     GetSelection(TempDataFile_SELECTED);
                     PageActions.DeleteSelectedTargetTables(TempDataFile_SELECTED);
+                end;
+            }
+            action(AssignFilesToNewDefaultFolder)
+            {
+                Caption = 'Assign Files to New Default Folder', Comment = 'Dateien dem neuen Standardordner zuordnen';
+                Image = DeleteRow;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.AssignFilesToNewDefaultFolder(TempDataFile_SELECTED);
+                end;
+            }
+            action(ClearProcessingInfo)
+            {
+                Caption = 'Clear Processing Info', Comment = 'Verarbeitungsinformationen zurücksetzen';
+                Image = DeleteRow;
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    GetSelection(TempDataFile_SELECTED);
+                    PageActions.ClearProcessingInfo(TempDataFile_SELECTED);
                 end;
             }
         }
