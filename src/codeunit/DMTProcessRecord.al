@@ -21,7 +21,6 @@ codeunit 110012 DMTProcessRecord
 
     local procedure AssignField(ValidateSetting: Enum "DMTFieldValidationType")
     var
-        DMTMgt: Codeunit DMTMgt;
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
         SourceField: FieldRef;
     begin
@@ -29,6 +28,7 @@ codeunit 110012 DMTProcessRecord
         TargetField := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
         DMTMgt.AssignValueToFieldRef(SourceRef, TempFieldMapping, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         DMTMgt.ApplyReplacements(TempFieldMapping, FieldWithTypeCorrectValueToValidate);
+        CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin
@@ -125,6 +125,7 @@ codeunit 110012 DMTProcessRecord
         ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
         ErrorItem.Add('GetLastErrorCode', GetLastErrorCode);
         ErrorItem.Add('GetLastErrorText', GetLastErrorText);
+        ErrorItem.Add('ErrorValue', Format(CurrValueToAssign.Value));
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
         ClearLastError();
@@ -174,6 +175,7 @@ codeunit 110012 DMTProcessRecord
         _DMTErrorlog."Ignore Error" := FieldMapping."Ignore Validation Error";
         _DMTErrorlog.Errortext := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
         _DMTErrorlog.ErrorCode := CopyStr(ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
+        _DMTErrorlog."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
         _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
         _DMTErrorlog.Insert();
@@ -185,6 +187,7 @@ codeunit 110012 DMTProcessRecord
         DMTMgt: Codeunit DMTMgt;
         ChangeRecordWithPerm: Codeunit ChangeRecordWithPerm;
         CurrFieldToProcess: RecordId;
+        CurrValueToAssign: FieldRef;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         SkipRecord: Boolean;
         // DMTTable: Record DMTTable;

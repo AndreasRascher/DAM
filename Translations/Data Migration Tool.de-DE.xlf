@@ -299,6 +299,12 @@
           <note from="Developer" annotates="general" priority="2">Lfd.Nr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field Entry No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 854394179 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Field Value</source>
+          <target>Fehler für Feldwert</target>
+          <note from="Developer" annotates="general" priority="2">Fehler für Feldwert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field Error Field Value - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2600471051 - Field 4082874751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Code</source>
           <target>Fehlercode</target>
@@ -310,6 +316,12 @@
           <target>Fehlertext</target>
           <note from="Developer" annotates="general" priority="2">Fehlertext</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field Errortext - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 65764099 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Frequency</source>
+          <target>Häufigkeit</target>
+          <note from="Developer" annotates="general" priority="2">Häufigkeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field Frequency (Summary) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2600471051 - Field 190389838 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>From Field Caption</source>
@@ -2273,6 +2285,12 @@
           <note from="Developer" annotates="general" priority="2">Ignorierte Fehler anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Error Log List - Action ShowIgnored - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3126398325 - Action 3597963681 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Summary</source>
+          <target>Zusammenfassung</target>
+          <note from="Developer" annotates="general" priority="2">Zusammenfassung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Error Log List - Action ShowSummary - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV,Backup,Lists,,</source>
           <target>NAV,Backup,Listen,,</target>
@@ -2613,7 +2631,6 @@
           <source>Clear Processing Info</source>
           <target>Verarbeitungsinformationen zurücksetzen</target>
           <note from="Developer" annotates="general" priority="2">Verarbeitungsinformationen zurücksetzen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action ClearProcessingInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Action 2014949764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2675,6 +2692,12 @@
           <target>Update der offenen Tabellenrelationen</target>
           <note from="Developer" annotates="general" priority="2">Update der offenen Tabellenrelationen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action UpdateTableRelationInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 97409727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ErrorLog Summary</source>
+          <target>Fehlerprotokoll Zusammenfassung</target>
+          <note from="Developer" annotates="general" priority="2">Fehlerprotokoll Zusammenfassung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTErrorLogSummary - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields</source>

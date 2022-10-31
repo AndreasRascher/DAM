@@ -39,15 +39,17 @@ table 110001 "DMTErrorLog"
         {
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = Lookup(Field."Field Caption" WHERE(TableNo = FIELD("Import from Table No."), "No." = FIELD("Import from Field No.")));
+            CalcFormula = Lookup(Field."Field Caption" WHERE(TableNo = FIELD("Import to Table No."), "No." = FIELD("Import to Field No.")));
         }
         field(40; Errortext; Text[2048]) { Caption = 'Error Text', Comment = 'Fehlertext'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
         field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
-        field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
-        field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
+        field(43; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'Fehler für Feldwert'; }
         field(52; DataFilePath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
         field(53; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
+        field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
+        field(70; "DMT Errorlog Created At"; DateTime) { Caption = 'Errorlog Created At', comment = 'Datum der Protokollierung'; }
+        field(80; "Frequency (Summary)"; Integer) { Caption = 'Frequency', Comment = 'Häufigkeit'; }
     }
 
     keys
@@ -106,5 +108,42 @@ table 110001 "DMTErrorLog"
             if DMTErrorLog.IsEmpty then
                 exit;
         Page.Run(Page::"DMT Error Log List", DMTErrorlog);
+    end;
+
+    procedure ShowSummary()
+    var
+        DataFile: Record DMTDataFile;
+        ErrorLog: Record DMTErrorLog;
+        TempErrorLog: Record DMTErrorLog temporary;
+        FieldMapping: Record DMTFieldMapping;
+        ErrorSummary: Query DMTErrorSummary;
+        TableRelationErrors: Dictionary of [RecordId, List of [Text]];
+        EntryNo: Integer;
+    begin
+
+        ErrorLog.Copy(Rec);
+        if ErrorLog.FindSet() then begin
+            DataFile.GetRecByFilePath(ErrorLog.DataFilePath, ErrorLog.DataFileName);
+            ErrorSummary.SetRange(DataFileName, DataFile.Name);
+            ErrorSummary.SetRange(DataFileFolderPath, DataFile.Path);
+            ErrorSummary.Open();
+            while ErrorSummary.Read() do begin
+                EntryNo += 1;
+                // if FieldMapping.get(DataFile.ID, ErrorSummary.ImportToFieldNo) then begin
+                //     FieldMapping.CalcFields("Target Field Caption");
+                //     TempErrorLog."To Field Caption" := FieldMapping."Target Field Caption";
+                // end;
+                TempErrorLog."Entry No." := EntryNo;
+                TempErrorLog.DataFilePath := ErrorSummary.DataFileFolderPath;
+                TempErrorLog.DataFileName := ErrorSummary.DataFileName;
+                TempErrorLog."Import to Table No." := ErrorSummary.ImporttoTableNo;
+                TempErrorLog."Import to Field No." := ErrorSummary.ImportToFieldNo;
+                TempErrorLog."Frequency (Summary)" := ErrorSummary.NoOfErrorsByValue;
+                TempErrorLog."Error Field Value" := ErrorSummary.ErrorFieldValue;
+                TempErrorLog.ErrorCode := ErrorSummary.ErrorCode;
+                TempErrorLog.Insert();
+            end;
+        end;
+        Page.Run(Page::DMTErrorLogSummary, TempErrorLog);
     end;
 }

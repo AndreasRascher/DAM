@@ -154,6 +154,7 @@ page 110028 DMTFieldMapping
     trigger OnAfterGetRecord()
     begin
         IsFixedValue := Rec."Processing Action" = Rec."Processing Action"::FixedValue;
+        LineStyleExpr := '';
         if Rec."Processing Action" = Rec."Processing Action"::Ignore then
             LineStyleExpr := Format(Enum::DMTFieldStyle::Grey);
         if FieldErrorsExist(Rec) then

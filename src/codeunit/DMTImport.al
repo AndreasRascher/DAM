@@ -354,8 +354,8 @@ codeunit 110014 DMTImport
         HasErrors: Boolean;
     begin
         ClearLastError();
-        if UpdateExistingRecordsOnly then
-            ErrorLog.DeleteExistingLogFor(BufferRef2);
+        // if UpdateExistingRecordsOnly then  // auskommentiert, da sonst die Fehler nicht gelöscht werden
+        ErrorLog.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(DMTDataFile, TempFieldMapping, BufferRef2, UpdateExistingRecordsOnly);
         Commit();
         While not ProcessRecord.Run() do begin

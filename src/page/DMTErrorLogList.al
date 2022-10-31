@@ -161,6 +161,18 @@ page 110001 "DMT Error Log List"
                 end;
 
             }
+            action(ShowSummary)
+            {
+                Caption = 'Summary', Comment = 'Zusammenfassung';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedOnly = true;
+                Image = Statistics;
+                trigger OnAction()
+                begin
+                    Rec.ShowSummary();
+                end;
+            }
         }
     }
 
