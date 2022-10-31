@@ -25,6 +25,7 @@ codeunit 110014 DMTImport
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
         ProgressBarTitle: Text;
+        MigrationLib: Codeunit DMTMigrationLib;
     begin
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
         LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);
@@ -77,6 +78,7 @@ codeunit 110014 DMTImport
             IF DMTMgt.ProgressBar_GetStep() MOD 50 = 0 then
                 COMMIT();
         until BufferRef.Next() = 0;
+        MigrationLib.RunPostProcessingFor(DataFile);
         DMTMgt.ProgressBar_Close();
         ErrorLog.OpenListWithFilter(DataFile, true);
         DMTMgt.GetResultQtyMessage();

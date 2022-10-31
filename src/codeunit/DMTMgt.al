@@ -8,7 +8,6 @@ codeunit 110002 "DMTMgt"
         ProgressBar_IsOpen := true;
         // clear old
         Clear(ProgressBar_Step);
-        Clear(ProgressBar_Total);
         Clear(Result_QtyFailed);
         Clear(Result_QtyProcessed);
         Clear(Result_QtySuccess);
@@ -416,7 +415,7 @@ codeunit 110002 "DMTMgt"
         TargetRecRef.modify();
     end;
 
-    local procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
+    procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
     var
         // TempFieldWithReplacementCode: Record "DMTField" temporary;
         ReplacementsHeader: Record DMTReplacementsHeader;

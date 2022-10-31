@@ -28,6 +28,7 @@ codeunit 110012 DMTProcessRecord
         SourceField := SourceRef.Field(TempFieldMapping."Source Field No.");
         TargetField := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
         DMTMgt.AssignValueToFieldRef(SourceRef, TempFieldMapping, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
+        DMTMgt.ApplyReplacements(TempFieldMapping, FieldWithTypeCorrectValueToValidate);
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin

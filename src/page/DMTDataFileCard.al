@@ -247,9 +247,9 @@ page 110026 DMTDataFileCard
 
     trigger OnAfterGetRecord()
     begin
-        FullDataFilePathText := Rec.FullDataFilePath();
-        CurrDataFilePathStyle := Rec.DataFilePathStyle;
         Rec.UpdateIndicators();
+        FullDataFilePathText := Rec.FullDataFilePath();
+        CurrDataFilePathStyle := Rec.DataFileExistsStyle;
     end;
 
     local procedure SelectDataFilePath()

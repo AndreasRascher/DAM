@@ -99,7 +99,7 @@ table 110042 "DMTDataFile"
         field(103; ImportToTargetIndicatorStyle; Text[15]) { Caption = 'ImportToTargetIndicatorStyle', Locked = true; }
         field(104; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; Editable = false; }
         field(105; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
-        field(106; DataFilePathStyle; Text[15]) { Caption = 'DataFilePathStyle', Locked = true; Editable = false; }
+        field(106; DataFileExistsStyle; Text[15]) { Caption = 'DataFilePathStyle', Locked = true; Editable = false; }
 
     }
     keys
@@ -196,7 +196,9 @@ table 110042 "DMTDataFile"
         if ok then
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
-
+    /// <summary>
+    /// Init App and Company FlowFilters for Company / App specific Counts and TableRelations
+    /// </summary>
     internal procedure InitFlowFilters()
     var
         NAVAppInstalledApp: Record "NAV App Installed App";
@@ -265,9 +267,9 @@ table 110042 "DMTDataFile"
         AllObjWithCaption: Record AllObjWithCaption;
         FileRec: Record File;
     begin
-        DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+        DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
         if Rec.FindFileRec(FileRec) then
-            Rec.DataFilePathStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
 
         Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Empty;
@@ -348,7 +350,7 @@ table 110042 "DMTDataFile"
         Clear(ImportToTargetIndicatorStyle);
         Clear("Import Duration (Target)");
         Clear(ImportXMLPortIDStyle);
-        Clear(DataFilePathStyle);
+        Clear(DataFileExistsStyle);
         Clear(LastImportBy);
         Clear(LastImportToBufferAt);
         Clear(LastImportToTargetAt);

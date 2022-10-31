@@ -17,7 +17,7 @@ page 110027 "DMTDataFileList"
             {
                 FreezeColumn = "Target Table ID";
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; }
-                field(Name; Rec.Name) { ApplicationArea = All; }
+                field(Name; Rec.Name) { ApplicationArea = All; StyleExpr = Rec.DataFileExistsStyle; }
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
                 field(ID; Rec.ID) { ApplicationArea = All; Visible = false; }
                 field(Size; Rec.Size) { ApplicationArea = All; }

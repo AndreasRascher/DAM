@@ -35,7 +35,7 @@ page 110023 "DMTDataFileFactBox"
                 {
                     Caption = 'Target';
                     ApplicationArea = All;
-                    trigger OnAssistEdit()
+                    trigger OnDrillDown()
                     begin
                         Rec.ShowTableContent(Rec."Target Table ID");
                     end;
@@ -44,7 +44,7 @@ page 110023 "DMTDataFileFactBox"
                 {
                     Caption = 'Buffer';
                     ApplicationArea = All;
-                    trigger OnAssistEdit()
+                    trigger OnDrillDown()
                     begin
                         Rec.ShowBufferTable();
                     end;
@@ -52,5 +52,9 @@ page 110023 "DMTDataFileFactBox"
             }
         }
     }
+    trigger OnOpenPage()
+    begin
+        Rec.InitFlowFilters();
+    end;
 }
 

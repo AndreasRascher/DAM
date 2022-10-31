@@ -42,6 +42,8 @@ codeunit 110011 "DMTMigrationLib"
     end;
 
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
+    var
+        Item: Record Item;
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -58,7 +60,13 @@ codeunit 110011 "DMTMigrationLib"
             IsMatch(TargetField, Database::Vendor, 'Primary Contact No.'),
             IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
-            IsMatch(TargetField, Database::Contact, 'Company No.'):
+            IsMatch(TargetField, Database::Contact, 'Company No.'),
+            IsMatch(TargetField, Database::Item, 'Sales Unit of Measure'),
+            IsMatch(TargetField, Database::Item, 'Purch. Unit of Measure'),
+            IsMatch(TargetField, Database::Item, 'Unit Cost'),
+            IsMatch(TargetField, Database::Item, 'Rounding Precision'),
+            IsMatch(TargetField, Database::Item, 'Standard Cost'),
+            IsMatch(TargetField, Database::Item, 'Indirect Cost %'):
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;
@@ -130,5 +138,29 @@ codeunit 110011 "DMTMigrationLib"
             else
                 Found := false;
         end;
+    end;
+
+    procedure UpdateGlobalDimNoInDimensionValues()
+    var
+        GLSetup: Record "General Ledger Setup";
+        DimValue: Record "Dimension Value";
+    begin
+        GLSetup.Get();
+
+        If GLSetup."Global Dimension 1 Code" <> '' then begin
+            DimValue.SetRange("Dimension Code", GLSetup."Global Dimension 1 Code");
+            DimValue.ModifyAll("Global Dimension No.", 1);
+        end;
+
+        if GLSetup."Global Dimension 2 Code" <> '' then begin
+            DimValue.SetRange("Dimension Code", GLSetup."Global Dimension 2 Code");
+            DimValue.ModifyAll("Global Dimension No.", 2);
+        end;
+    end;
+
+    internal procedure RunPostProcessingFor(var DataFile: Record DMTDataFile)
+    begin
+        if DataFile."Target Table ID" = Database::"Dimension Value" then
+            UpdateGlobalDimNoInDimensionValues();
     end;
 }

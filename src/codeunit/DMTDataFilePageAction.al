@@ -719,18 +719,20 @@ codeunit 110013 "DMTDataFilePageAction"
         if not TempDataFile_SELECTED.FindSet() then exit;
         repeat
             DataFile := TempDataFile_SELECTED;
-            if DataFile.Path <> DMTSetup."Default Export Folder Path" then
-                if FileMgt.ServerFileExists(FileMgt.CombinePath(DMTSetup."Default Export Folder Path", DataFile.Name)) then begin
-                    DataFile.Path := CopyStr(DMTSetup."Default Export Folder Path", 1, MaxStrLen(DataFile.Path));
-                    if DataFile.FindFileRec(FileRec) then begin
-                        DataFile.Size := FileRec.Size;
-                        DataFile.Path := FileRec.Path;
-                        DataFile.Name := FileRec.Name;
-                        DataFile."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
-                        DataFile.ClearProcessingInfo(false);
-                    end;
-                    DataFile.Modify();
+            if DataFile.Path <> DMTSetup."Default Export Folder Path" then begin
+                DataFile.Path := CopyStr(DMTSetup."Default Export Folder Path", 1, MaxStrLen(DataFile.Path));
+                DataFile.ClearProcessingInfo(false);
+                DataFile.UpdateIndicators();
+            end;
+            if FileMgt.ServerFileExists(FileMgt.CombinePath(DMTSetup."Default Export Folder Path", DataFile.Name)) then begin
+                if DataFile.FindFileRec(FileRec) then begin
+                    DataFile.Size := FileRec.Size;
+                    DataFile.Path := FileRec.Path;
+                    DataFile.Name := FileRec.Name;
+                    DataFile."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
                 end;
+            end;
+            DataFile.Modify();
 
         until TempDataFile_SELECTED.Next() = 0;
     end;
