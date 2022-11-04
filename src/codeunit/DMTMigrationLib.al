@@ -49,7 +49,7 @@ codeunit 110011 "DMTMigrationLib"
     /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
     var
-        Vendor: Record Vendor;
+        RoutingHeader: Record "Routing Header";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -74,7 +74,9 @@ codeunit 110011 "DMTMigrationLib"
             IsMatch(TargetField, Database::Item, 'Rounding Precision'),
             IsMatch(TargetField, Database::Item, 'Standard Cost'),
             IsMatch(TargetField, Database::Item, 'Indirect Cost %'),
-            IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'):
+            IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'),
+            IsMatch(TargetField, Database::"Routing Header", 'Status')
+            :
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

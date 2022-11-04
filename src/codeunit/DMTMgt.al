@@ -437,13 +437,15 @@ codeunit 110002 "DMTMgt"
     var
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
+        DMTMgt: Codeunit DMTMgt;
     begin
         FromField := SourceRecRef.field(FieldMapping."Source Field No.");
-
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
-
         FieldWithTypeCorrectValueToValidate := TargetRecRef.field(FieldMapping."Target Field No.");
+
         case true of
+            (FieldMapping."Processing Action" = FieldMapping."Processing Action"::FixedValue):
+                DMTMgt.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, FieldMapping."Fixed Value");
             (TargetRecRef.field(FieldMapping."Target Field No.").Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
