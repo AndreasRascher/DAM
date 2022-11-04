@@ -8,7 +8,7 @@ codeunit 110012 DMTProcessRecord
     procedure Start()
     begin
         if RunMode = RunMode::FieldTransfer then begin
-            If ProcessedFields.Count < TargetKeyFieldIDs.Count then
+            if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
             if not SkipRecord then
                 ProcessNonKeyFields();
@@ -148,10 +148,10 @@ codeunit 110012 DMTProcessRecord
         FieldMappingID: RecordId;
         ErrorItem: Dictionary of [Text, Text];
     begin
-        ErrorsExist := ErrorLogDict.Count > 0;
         foreach FieldMappingID in ErrorLogDict.Keys do begin
             ErrorItem := ErrorLogDict.Get(FieldMappingID);
             TempFieldMapping.Get(FieldMappingID);
+            ErrorsExist := ErrorsExist or not TempFieldMapping."Ignore Validation Error";
             AddEntryForLastError(SourceRef, TmpTargetRef, TempFieldMapping, ErrorItem);
         end;
     end;
@@ -192,7 +192,6 @@ codeunit 110012 DMTProcessRecord
         SkipRecord: Boolean;
         // DMTTable: Record DMTTable;
         // TempDMTField: Record DMTField temporary;
-
         UpdateExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];

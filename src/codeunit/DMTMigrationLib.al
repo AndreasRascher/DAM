@@ -41,9 +41,15 @@ codeunit 110011 "DMTMigrationLib"
             FieldMapping."Processing Action" := FieldMapping."Processing Action"::Ignore;
     end;
 
+    /// <summary>
+    /// List of known fields with blocking logic(ValidateCode / Self references in Table Telations). Validation type is set to AssignWithoutValidate.
+    /// </summary>
+    /// <param name="TargetField"></param>
+    /// <param name="KnownValidationType"></param>
+    /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
     var
-        Item: Record Item;
+        Vendor: Record Vendor;
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -60,13 +66,15 @@ codeunit 110011 "DMTMigrationLib"
             IsMatch(TargetField, Database::Vendor, 'Primary Contact No.'),
             IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
+            IsMatch(TargetField, Database::Vendor, 'Pay-to Vendor No.'),
             IsMatch(TargetField, Database::Contact, 'Company No.'),
             IsMatch(TargetField, Database::Item, 'Sales Unit of Measure'),
             IsMatch(TargetField, Database::Item, 'Purch. Unit of Measure'),
             IsMatch(TargetField, Database::Item, 'Unit Cost'),
             IsMatch(TargetField, Database::Item, 'Rounding Precision'),
             IsMatch(TargetField, Database::Item, 'Standard Cost'),
-            IsMatch(TargetField, Database::Item, 'Indirect Cost %'):
+            IsMatch(TargetField, Database::Item, 'Indirect Cost %'),
+            IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'):
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

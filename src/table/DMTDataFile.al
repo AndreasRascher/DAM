@@ -288,7 +288,7 @@ table 110042 "DMTDataFile"
         end;
         Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
-
+        Calcfields(Rec."No. of Records In Trgt. Table");
         case true of
             (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
                 begin
