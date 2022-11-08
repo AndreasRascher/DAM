@@ -19,6 +19,7 @@ page 110027 "DMTDataFileList"
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; }
                 field(Name; Rec.Name) { ApplicationArea = All; StyleExpr = Rec.DataFileExistsStyle; }
                 field("Sort Order"; Rec."Sort Order") { ApplicationArea = All; }
+                field(ImportGroup; Rec.ImportGroup) { ApplicationArea = All; }
                 field(ID; Rec.ID) { ApplicationArea = All; Visible = false; }
                 field(Size; Rec.Size) { ApplicationArea = All; }
                 field("Created At"; Rec."Created At") { ApplicationArea = All; }
@@ -63,28 +64,6 @@ page 110027 "DMTDataFileList"
     {
         area(Processing)
         {
-            #region Tabellen
-            // action(SelectTablesToAdd)
-            // {
-            //     Caption = 'Add Tables', Comment = 'Tab. hinzufügen';
-            //     Image = Add;
-            //     ApplicationArea = all;
-            //     Promoted = true;
-            //     PromotedCategory = Category4;
-            //     PromotedOnly = true;
-            //     trigger OnAction()
-            //     var
-            //         DMTSetup: Record DMTSetup;
-            //     begin
-            //         if Rec."Target Table ID" <> 0 then
-            //             CurrPage.SaveRecord();
-            //         Commit();
-            //         DMTSetup.CheckSchemaInfoHasBeenImporterd();
-            //         PageActions.AddSelectedTargetTables();
-            //     end;
-            // }
-            #endregion Tabellen
-
             #region Objekte
             action(ExportALObjects)
             {

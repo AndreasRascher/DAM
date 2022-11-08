@@ -173,4 +173,14 @@ codeunit 110011 "DMTMigrationLib"
         if DataFile."Target Table ID" = Database::"Dimension Value" then
             UpdateGlobalDimNoInDimensionValues();
     end;
+
+    internal procedure ApplyKnownProcessingRules(var DataFile: Record DMTDataFile)
+    begin
+        case DataFile."Target Table ID" of
+            Database::"Item Vendor",
+          Database::Customer,
+          Database::Vendor:
+                DataFile."Use OnInsert Trigger" := false;
+        end;
+    end;
 }

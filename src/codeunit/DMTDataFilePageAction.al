@@ -675,6 +675,7 @@ codeunit 110013 "DMTDataFilePageAction"
         File: Record File;
         TableMeta: Record "Table Metadata";
         ObjMgt: Codeunit DMTObjMgt;
+        DMTMigrationLib: Codeunit DMTMigrationLib;
     begin
         // Exists already
         if DataFile.GetRecByFilePath(DataFileBuffer.Path, DataFileBuffer.Name) then
@@ -693,6 +694,7 @@ codeunit 110013 "DMTDataFilePageAction"
         if DataFile."NAV Src.Table No." = 0 then
             DataFile."NAV Src.Table No." := DataFile."Target Table ID";
         ObjMgt.SetNAVTableCaptionAndTableName(DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption", DataFile."NAV Src.Table Name");
+        DMTMigrationLib.ApplyKnownProcessingRules(DataFile);
         DataFile.Insert(true);
 
         if DataFile.FindFileRec(File) then
@@ -711,7 +713,6 @@ codeunit 110013 "DMTDataFilePageAction"
     var
         DMTSetup: Record DMTSetup;
         DataFile: Record DMTDataFile;
-        FileRec: Record File;
         FileMgt: Codeunit "File Management";
     begin
         DMTSetup.Get();
@@ -725,12 +726,7 @@ codeunit 110013 "DMTDataFilePageAction"
                 DataFile.UpdateIndicators();
             end;
             if FileMgt.ServerFileExists(FileMgt.CombinePath(DMTSetup."Default Export Folder Path", DataFile.Name)) then begin
-                if DataFile.FindFileRec(FileRec) then begin
-                    DataFile.Size := FileRec.Size;
-                    DataFile.Path := FileRec.Path;
-                    DataFile.Name := FileRec.Name;
-                    DataFile."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
-                end;
+                DataFile.UpdateFileRecProperties(false);
             end;
             DataFile.Modify();
 

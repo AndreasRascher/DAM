@@ -250,6 +250,7 @@ page 110026 DMTDataFileCard
         Rec.UpdateIndicators();
         FullDataFilePathText := Rec.FullDataFilePath();
         CurrDataFilePathStyle := Rec.DataFileExistsStyle;
+        Rec.UpdateFileRecProperties(false);
     end;
 
     local procedure SelectDataFilePath()

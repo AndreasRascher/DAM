@@ -78,6 +78,16 @@
           <note from="Developer" annotates="general" priority="2">XMLPort ID für Import</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Import XMLPort ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1485543381 - Field 1867730703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Filter</source>
+          <note from="Developer" annotates="general" priority="2">Import Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field ImportFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1485543381 - Field 4129953958 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Group</source>
+          <note from="Developer" annotates="general" priority="2">Import Gruppe</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field ImportGroup - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1485543381 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Field Update Selection</source>
           <note from="Developer" annotates="general" priority="2">Auswahl letzes Feldupdate</note>

@@ -83,6 +83,8 @@ table 110042 "DMTDataFile"
         #region Import and Processing Options
         field(50; "Use OnInsert Trigger"; boolean) { Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden'; InitValue = true; }
         field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+        field(53; ImportFilter; TableFilter) { Caption = 'Import Filter', Comment = 'Import Filter'; }
+        field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'Import Gruppe'; }
         #endregion Import and Processing Options
         field(60; LastView; Blob) { }
         field(61; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
@@ -210,6 +212,20 @@ table 110042 "DMTDataFile"
         Rec.SetRange("Current App Package ID Filter", NAVAppInstalledApp."Package ID");
         Rec.SetFilter("Other App Packages ID Filter", '<>%1', NAVAppInstalledApp."Package ID");
         Rec.SetRange("CompanyName Filter", CompanyName); // Required for Table Information Record Count
+    end;
+
+    procedure UpdateFileRecProperties(DoModify: boolean)
+    var
+        FileRec: Record File;
+    begin
+        if Rec.FindFileRec(FileRec) then begin
+            Rec.Size := FileRec.Size;
+            Rec.Path := FileRec.Path;
+            Rec.Name := FileRec.Name;
+            Rec."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+            if DoModify then
+                Rec.Modify();
+        end;
     end;
 
     procedure ReadLastFieldUpdateSelection() LastFieldUpdateSelectionAsText: Text
