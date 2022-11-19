@@ -275,24 +275,24 @@ codeunit 110002 "DMTMgt"
                         exit(true);
                     end;
             end;
-        case UpperCase(Format(FieldRef_TO.TYPE)) OF
+        case UpperCase(Format(FieldRef_TO.TYPE)) of
 
             'INTEGER':
                 begin
-                    IF Evaluate(_Integer, FromText) then begin
+                    IF Evaluate(_Integer, FromText, 9) then begin
                         FieldRef_TO.Value := _Integer;
                         exit(TRUE);
                     end else
                         if ThrowError then
-                            Evaluate(_Integer, FromText)
+                            Evaluate(_Integer, FromText, 9)
                 end;
             'BIGINTEGER':
-                IF Evaluate(_BigInteger, FromText) then begin
+                IF Evaluate(_BigInteger, FromText, 9) then begin
                     FieldRef_TO.Value := _BigInteger;
                     exit(TRUE);
                 end else
                     if ThrowError then
-                        Evaluate(_BigInteger, FromText);
+                        Evaluate(_BigInteger, FromText, 9);
             'TEXT', 'TABLEFILTER':
                 begin
                     FieldRef_TO.Value := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
@@ -304,28 +304,28 @@ codeunit 110002 "DMTMgt"
                     exit(TRUE);
                 end;
             'DECIMAL':
-                IF Evaluate(_Decimal, FromText) then begin
+                IF Evaluate(_Decimal, FromText, 9) then begin
                     FieldRef_TO.Value := _Decimal;
                     exit(TRUE);
                 end else
                     if ThrowError then
-                        Evaluate(_Decimal, FromText);
+                        Evaluate(_Decimal, FromText, 9);
             'BOOLEAN':
-                IF Evaluate(_Boolean, FromText) then begin
+                IF Evaluate(_Boolean, FromText, 9) then begin
                     FieldRef_TO.Value := _Boolean;
                     exit(TRUE);
                 end else
                     if ThrowError then
-                        Evaluate(_Boolean, FromText);
+                        Evaluate(_Boolean, FromText, 9);
             'RECORDID':
-                IF Evaluate(_RecordID, FromText) then begin
+                if Evaluate(_RecordID, FromText) then begin
                     FieldRef_TO.Value := _RecordID;
                     exit(TRUE);
                 end else
                     if ThrowError then
                         Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
             'OPTION':
-                IF EvaluateOptionValueAsNumber then begin
+                if EvaluateOptionValueAsNumber then begin
                     //Optionswert wird als Zahl übergeben
                     if Evaluate(_Integer, FromText) then begin
                         FieldRef_TO.Value := _Integer;
@@ -347,30 +347,30 @@ codeunit 110002 "DMTMgt"
             'DATE':
                 begin
                     //ApplicationMgt.MakeDateText(FromText);
-                    IF Evaluate(_Date, FromText) then begin
+                    IF Evaluate(_Date, FromText, 9) then begin
                         FieldRef_TO.Value := _Date;
-                        exit(TRUE);
+                        exit(true);
                     end else
                         if ThrowError then
-                            Evaluate(_Date, FromText);
+                            Evaluate(_Date, FromText, 9);
                 end;
 
             'DATETIME':
                 begin
                     //ApplicationMgt.MakeDateTimeText(FromText);
-                    IF Evaluate(_DateTime, FromText) then begin
+                    IF Evaluate(_DateTime, FromText, 9) then begin
                         FieldRef_TO.Value := _DateTime;
                         exit(TRUE);
                     end else
-                        if ThrowError then Evaluate(_DateTime, FromText);
+                        if ThrowError then Evaluate(_DateTime, FromText, 9);
                 end;
             'TIME':
                 begin
-                    IF Evaluate(_Time, FromText) then begin
+                    IF Evaluate(_Time, FromText, 9) then begin
                         FieldRef_TO.Value := _Time;
                         exit(TRUE);
                     end else
-                        if ThrowError then Evaluate(_Time, FromText);
+                        if ThrowError then Evaluate(_Time, FromText, 9);
                 end;
             'BLOB':
                 begin
@@ -387,7 +387,7 @@ codeunit 110002 "DMTMgt"
                         FieldRef_TO.Value := _DateFormula;
                         exit(TRUE);
                     end else
-                        if ThrowError then Evaluate(_DateFormula, FromText);
+                        if ThrowError then Evaluate(_DateFormula, FromText, 9);
                 end;
             ELSE
                 MESSAGE('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', FORMAT(FieldRef_TO.TYPE));
