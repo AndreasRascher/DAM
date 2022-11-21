@@ -19,7 +19,6 @@ codeunit 110014 DMTImport
     var
         ErrorLog: Record DMTErrorLog;
         TempFieldMapping: Record "DMTFieldMapping" temporary;
-        GenBuffTable: Record DMTGenBuffTable;
         BufferRef, BufferRef2 : RecordRef;
         MaxWith: Integer;
         KeyFieldsFilter: Text;
@@ -30,23 +29,7 @@ codeunit 110014 DMTImport
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
         LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);
 
-
-        // Buffer loop
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            // GenBuffTable.InitFirstLineAsCaptions(DMTDataFile);
-            GenBuffTable.FilterGroup(2);
-            GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterBy(DataFile);
-            GenBuffTable.FilterGroup(0);
-            BufferRef.GetTable(GenBuffTable);
-        end else
-            if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
-                BufferRef.Open(DataFile."Buffer Table ID");
-                // TempFieldMapping.FindSet();
-                // repeat
-                //     BufferRef.SetLoadFields(TempFieldMapping."Source Field No.");
-                // until TempFieldMapping.Next() = 0;
-            end;
+        InitBufferRef(DataFile, BufferRef);
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DataFile) then
             exit;
@@ -367,6 +350,23 @@ codeunit 110014 DMTImport
             ProcessRecord.LogLastError();
         HasErrors := ProcessRecord.SaveErrorLog();
         DMTMgt.UpdateResultQty(not HasErrors, true);
+    end;
+
+    procedure InitBufferRef(var DataFile: Record DMTDataFile; var BufferRef: RecordRef)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+    begin
+        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
+            // GenBuffTable.InitFirstLineAsCaptions(DMTDataFile);
+            GenBuffTable.FilterGroup(2);
+            GenBuffTable.SetRange(IsCaptionLine, false);
+            GenBuffTable.FilterBy(DataFile);
+            GenBuffTable.FilterGroup(0);
+            BufferRef.GetTable(GenBuffTable);
+        end else
+            if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
+                BufferRef.Open(DataFile."Buffer Table ID");
+            end;
     end;
 
     procedure CheckBufferTableIsNotEmpty(DataFile: Record DMTDataFile)

@@ -338,7 +338,7 @@ codeunit 110002 "DMTMgt"
                     NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
                     FOR OptionIndex := 0 TO NoOfOptions DO begin
                         OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
-                        IF OptionElement = FromText then begin
+                        IF OptionElement.ToLower() = FromText.ToLower() then begin
                             FieldRef_TO.Value := OptionIndex;
                             exit(TRUE);
                         end;

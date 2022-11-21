@@ -71,8 +71,11 @@ table 110041 DMTFieldMapping
                     RecRef.Open(Rec."Target Table ID");
                     FldRef := RecRef.Field(Rec."Target Field No.");
                     ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
-                    if ErrorMsg <> '' then
+                    if ErrorMsg <> '' then begin
                         Error(ErrorMsg);
+                    end else begin
+                        "Fixed Value" := Format(FldRef.Value);
+                    end;
                 end;
                 // UpdateProcessingAction(Rec.FieldNo("Fixed Value"));
             end;

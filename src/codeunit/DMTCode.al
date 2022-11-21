@@ -52,7 +52,7 @@ page 110012 DMTCode
         ResetLines();
     end;
 
-    local procedure CreateFieldMappingCodeBlock(DataFile: Record DMTDataFile; SourceRecVarName: text; TargetRecVarName: text) CodeLines: List of [Text]
+    local procedure CreateFieldMappingCodeBlock(DataFile: Record DMTDataFile; _SourceRecVarName: text; _TargetRecVarName: text) CodeLines: List of [Text]
     var
         FieldMapping: Record DMTFieldMapping;
         CodeGenerator: Codeunit DMTCodeGenerator;
@@ -68,15 +68,15 @@ page 110012 DMTCode
             case FieldMapping."Processing Action" of
                 DMTFieldProcessingType::FixedValue:
                     begin
-                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', TargetRecVarName, TargetFieldName, FieldMapping."Fixed Value"));
+                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', _TargetRecVarName, TargetFieldName, FieldMapping."Fixed Value"));
                     end;
                 DMTFieldProcessingType::Ignore:
                     begin
-                        CodeLines.Add(StrSubstNo('//%1.Validate(%2,%3.%4);', TargetRecVarName, TargetFieldName, SourceRecVarName, SourceFieldName));
+                        CodeLines.Add(StrSubstNo('//%1.Validate(%2,%3.%4);', _TargetRecVarName, TargetFieldName, _SourceRecVarName, SourceFieldName));
                     end;
                 DMTFieldProcessingType::Transfer:
                     begin
-                        CodeLines.Add(StrSubstNo('%1.Validate(%2,%3.%4);', TargetRecVarName, TargetFieldName, SourceRecVarName, SourceFieldName));
+                        CodeLines.Add(StrSubstNo('%1.Validate(%2,%3.%4);', _TargetRecVarName, TargetFieldName, _SourceRecVarName, SourceFieldName));
                     end;
             end;
 
