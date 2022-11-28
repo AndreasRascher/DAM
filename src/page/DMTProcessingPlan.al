@@ -19,16 +19,17 @@ page 110015 DMTProcessingPlan
                 field("Action"; Rec."Action") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(DataFileID; Rec.DataFileID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
                 field(Description; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("Source Table Filter"; Rec."Source Table Filter")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                    StyleExpr = LineStyle;
-                    trigger OnAssistEdit()
-                    begin
-                        Rec.EditSourceTableFilter();
-                    end;
-                }
+            }
+        }
+        area(FactBoxes)
+        {
+            part(SourceTableFilter; DMTProcessingInstructions)
+            {
+                Caption = 'Source Table Filter';
+            }
+            part(FixedValues; DMTProcessingInstructions)
+            {
+                Caption = 'Fields';
             }
         }
     }
@@ -37,15 +38,15 @@ page 110015 DMTProcessingPlan
     {
         area(Processing)
         {
-            action(ActionName)
-            {
-                ApplicationArea = All;
+            // action(ActionName)
+            // {
+            //     ApplicationArea = All;
 
-                trigger OnAction();
-                begin
+            //     trigger OnAction();
+            //     begin
 
-                end;
-            }
+            //     end;
+            // }
         }
     }
 
@@ -54,6 +55,17 @@ page 110015 DMTProcessingPlan
         LineStyle := '';
         if Rec."Line Type" = Rec."Line Type"::Group then
             LineStyle := format(Enum::DMTFieldStyle::Bold);
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
+        CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
+    end;
+
+    internal procedure GetSourceTableFilter(): Text
+    begin
+        Error('Procedure GetSourceTableFilter not implemented.');
     end;
 
     var

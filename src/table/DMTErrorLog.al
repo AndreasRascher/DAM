@@ -115,9 +115,7 @@ table 110001 "DMTErrorLog"
         DataFile: Record DMTDataFile;
         ErrorLog: Record DMTErrorLog;
         TempErrorLog: Record DMTErrorLog temporary;
-        FieldMapping: Record DMTFieldMapping;
         ErrorSummary: Query DMTErrorSummary;
-        TableRelationErrors: Dictionary of [RecordId, List of [Text]];
         EntryNo: Integer;
     begin
 

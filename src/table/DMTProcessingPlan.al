@@ -91,7 +91,7 @@ table 110010 DMTProcessingPlan
         exit('');
     end;
 
-    local procedure QuoteValue(TextValue: Text[250]; TextCausingQuotes: Text): Text
+    local procedure QuoteValue(TextValue: Text; TextCausingQuotes: Text): Text
     var
         InnerQuotePosition: Integer;
         TextValue2: Text;
@@ -131,5 +131,26 @@ table 110010 DMTProcessingPlan
         if Import.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
             SaveViewToFilterText(DataFile, BufferRef);
         end;
+    end;
+
+    procedure ReadSourceTableView() SourceTableView: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields("Source Table Filter");
+        if not rec."Source Table Filter".HasValue then exit('');
+        rec."Source Table Filter".CreateInStream(IStr);
+        IStr.ReadText(SourceTableView);
+    end;
+
+    procedure SaveSourceTableFilter(SourceTableView: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec."Source Table Filter");
+        Rec.Modify();
+        rec."Source Table Filter".CreateOutStream(Ostr);
+        OStr.WriteText(SourceTableView);
+        Rec.Modify();
     end;
 }

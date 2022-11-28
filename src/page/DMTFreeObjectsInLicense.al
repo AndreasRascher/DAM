@@ -349,7 +349,6 @@ page 110000 "DMTFreeObjectsInLicense"
     var
         Progress: Dialog;
         NoOfCodeunits, NoOfPages, NoOfQueries, NoOfReports, NoOfTables, NoOfXMLports, NoOfEnums : Integer;
-        iTotal: Integer;
         [InDataSet]
         IsLoaded: Boolean;
         GlobalObjectRangeFilter, GlobalAppFilter : Text;

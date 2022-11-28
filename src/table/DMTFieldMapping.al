@@ -89,7 +89,7 @@ table 110041 DMTFieldMapping
         key(Key1; "Data File ID", "Target Field No.") { Clustered = true; }
         key(ValidationOrder; "Validation Order") { }
     }
-    procedure CopyToTemp(var TempFieldMapping: Record DMTFieldMapping temporary)
+    procedure CopyToTemp(var TempFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
     var
         FieldMapping: Record DMTFieldMapping;
         TempFieldMapping2: Record DMTFieldMapping temporary;
@@ -97,6 +97,7 @@ table 110041 DMTFieldMapping
         FieldMapping.Copy(Rec);
         if FieldMapping.FindSet(false, false) then
             repeat
+                LineCount += 1;
                 TempFieldMapping2 := FieldMapping;
                 TempFieldMapping2.Insert(false);
             until FieldMapping.Next() = 0;

@@ -2,15 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker BC20",
+            "name": "Docker BC21",
             "type": "al",
             "request": "launch",
             "environmentType": "OnPrem",
-            "server": "http://bc20",
+            "server": "http://bc21",
             "serverInstance": "BC",
             "authentication": "UserPassword",
             "startupObjectType": "Page",
-            "startupObjectId": 110027,
+            "startupObjectId": 110015,
             "breakOnError": true,
             "breakOnRecordWrite": false,
             "launchBrowser": true,
