@@ -222,7 +222,8 @@ codeunit 110000 "DMTObjMgt"
                                                                       Database::DMTDataFileBuffer,
                                                                       Database::DMTGenBuffTable,
                                                                       Database::DMTReplacementsHeader,
-                                                                      Database::DMTReplacementsLine];
+                                                                      Database::DMTReplacementsLine,
+                                                                      Database::DMTProcessingPlan];
                 end;
             allObjWithCaption."Object Type"::XMLport:
                 begin

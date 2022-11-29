@@ -1,4 +1,4 @@
-page 110017 "DMTProcessingInstructions"
+page 110017 "DMTProcessInstructionFactBox"
 {
     Caption = 'Processing Instructions';
     PageType = ListPart;
@@ -24,15 +24,15 @@ page 110017 "DMTProcessingInstructions"
                 Caption = 'Filter', Comment = 'Filter';
                 Visible = IsSourceTableFilterView;
                 field("FieldCaption"; Rec."Source Field Caption") { ApplicationArea = All; }
-                field("FixedValue"; Rec.Comment) { ApplicationArea = All; }
+                field(FixedValue; Rec.Comment) { ApplicationArea = All; }
             }
 
             repeater("FixedValuesList")
             {
                 Caption = 'Fixed Values';
                 Visible = IsFixedValueView;
-                field("FilterFieldCaption"; Rec."Source Field Caption") { ApplicationArea = All; }
-                field("FilterValue"; Rec.Comment) { ApplicationArea = All; Caption = 'Filter'; }
+                field(FilterFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
+                field(FilterValue; Rec.Comment) { ApplicationArea = All; Caption = 'Filter'; }
 
             }
         }
@@ -41,7 +41,6 @@ page 110017 "DMTProcessingInstructions"
     internal procedure InitFactBoxAsSourceTableFilter(ProcessingPlan: Record DMTProcessingPlan)
     var
         DMTFieldMapping: Record DMTFieldMapping;
-
     begin
         if ProcessingPlan."Line Type" = ProcessingPlan."Line Type"::Group then begin
             IsSourceTableFilterView := false;
@@ -67,6 +66,20 @@ page 110017 "DMTProcessingInstructions"
         DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.DataFileID);
         DMTFieldMapping.CopyToTemp(Rec);
         CurrPage.Update(false);
+    end;
+
+    procedure SaveDefaultValuesToJSONBlob(ProcessingPlan: Record DMTProcessingPlan; var FieldMapping: Record DMTFieldMapping temporary)
+    var
+        JSONTools: Codeunit DMTJSONTools;
+        JArray: JsonArray;
+        JText: Text;
+    begin
+        if FieldMapping.FindSet then
+            repeat
+                JArray.Add(JSONTools.Rec2Json(FieldMapping));
+            until FieldMapping.Next() = 0;
+        JArray.WriteTo(JText);
+        ProcessingPlan.SaveDefaultValuesConfig(JText);
     end;
 
     var

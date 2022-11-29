@@ -143,14 +143,39 @@ table 110010 DMTProcessingPlan
         IStr.ReadText(SourceTableView);
     end;
 
+    procedure ReadDefaultValuesConfig() JSONArrayAsText: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields("Default Field Values");
+        if not rec."Default Field Values".HasValue then exit('');
+        rec."Default Field Values".CreateInStream(IStr);
+        IStr.ReadText(JSONArrayAsText);
+    end;
+
     procedure SaveSourceTableFilter(SourceTableView: Text)
     var
         OStr: OutStream;
     begin
         Clear(Rec."Source Table Filter");
         Rec.Modify();
+        if SourceTableView = '' then
+            exit;
         rec."Source Table Filter".CreateOutStream(Ostr);
         OStr.WriteText(SourceTableView);
+        Rec.Modify();
+    end;
+
+    procedure SaveDefaultValuesConfig(JSONArrayAsText: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec."Default Field Values");
+        Rec.Modify();
+        if JSONArrayAsText = '' then
+            exit;
+        rec."Default Field Values".CreateOutStream(Ostr);
+        OStr.WriteText(JSONArrayAsText);
         Rec.Modify();
     end;
 }

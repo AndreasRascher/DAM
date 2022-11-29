@@ -23,11 +23,11 @@ page 110015 DMTProcessingPlan
         }
         area(FactBoxes)
         {
-            part(SourceTableFilter; DMTProcessingInstructions)
+            part(SourceTableFilter; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Source Table Filter';
             }
-            part(FixedValues; DMTProcessingInstructions)
+            part(FixedValues; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Fields';
             }
