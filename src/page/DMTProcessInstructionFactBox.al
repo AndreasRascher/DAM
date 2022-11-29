@@ -88,8 +88,8 @@ page 110017 "DMTProcessInstructionFactBox"
     end;
 
     var
-        [InDataSet]
-        IsSourceTableFilterView, IsFixedValueView : Boolean;
         CurrProcessingPlan: Record DMTProcessingPlan;
+        [InDataSet]
+        IsFixedValueView, IsSourceTableFilterView : Boolean;
 }
 

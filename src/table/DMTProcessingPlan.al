@@ -35,8 +35,8 @@ table 110010 DMTProcessingPlan
             if (Type = const("Update Field")) DMTDataFile.ID;
             trigger OnValidate()
             var
-                DMTDataFile: Record DMTDataFile;
                 CodeUnitMetadata: Record "CodeUnit Metadata";
+                DMTDataFile: Record DMTDataFile;
             begin
                 case true of
                     (xRec.ID <> 0) and (Rec.ID = 0):

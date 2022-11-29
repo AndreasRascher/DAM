@@ -14,9 +14,9 @@ codeunit 110015 DMTJSONTools
         FR: FieldRef;
         FieldHash: Dictionary of [Text, Integer];
         i: Integer;
-        JsonKey: Text;
         T: JsonToken;
         JsonKeyValue: JsonValue;
+        JsonKey: Text;
         RecVar: Variant;
     begin
         Ref.OPEN(TableNo);
@@ -41,9 +41,9 @@ codeunit 110015 DMTJSONTools
     procedure Rec2Json(Rec: Variant): JsonObject
     var
         Ref: RecordRef;
-        Out: JsonObject;
         FRef: FieldRef;
         i: Integer;
+        Out: JsonObject;
     begin
         if not Rec.IsRecord then
             error('Parameter Rec is not a record');
@@ -65,9 +65,9 @@ codeunit 110015 DMTJSONTools
 
     local procedure FieldRef2JsonValue(FRef: FieldRef): JsonValue
     var
-        V: JsonValue;
         D: Date;
         DT: DateTime;
+        V: JsonValue;
         T: Time;
     begin
         case FRef.Type() of
@@ -94,8 +94,8 @@ codeunit 110015 DMTJSONTools
 
     local procedure GetJsonFieldName(FRef: FieldRef): Text
     var
-        Name: Text;
         i: Integer;
+        Name: Text;
     begin
         Name := FRef.Name();
         for i := 1 to Strlen(Name) do begin

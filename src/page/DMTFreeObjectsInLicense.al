@@ -324,9 +324,9 @@ page 110000 "DMTFreeObjectsInLicense"
     var
         Apps: Record "NAV App Installed App";
         AppList: Dictionary of [Text, Guid];
-        Choices: Text;
         Choice: Integer;
         AppText: Text;
+        Choices: Text;
     begin
         Apps.setfilter(Publisher, '<>Microsoft');
         Apps.FindSet();
@@ -347,12 +347,12 @@ page 110000 "DMTFreeObjectsInLicense"
     end;
 
     var
-        Progress: Dialog;
-        NoOfCodeunits, NoOfPages, NoOfQueries, NoOfReports, NoOfTables, NoOfXMLports, NoOfEnums : Integer;
         [InDataSet]
         IsLoaded: Boolean;
-        GlobalObjectRangeFilter, GlobalAppFilter : Text;
         LastUpdate: DateTime;
+        Progress: Dialog;
         ObjInLicenseFilters: Dictionary of [Integer, Text];
+        NoOfCodeunits, NoOfEnums, NoOfPages, NoOfQueries, NoOfReports, NoOfTables, NoOfXMLports : Integer;
         RunMode: Option FreeIDs,AppIDs;
+        GlobalAppFilter, GlobalObjectRangeFilter : Text;
 }

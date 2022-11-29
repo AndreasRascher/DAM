@@ -674,8 +674,8 @@ codeunit 110013 "DMTDataFilePageAction"
         DataFile: Record DMTDataFile;
         File: Record File;
         TableMeta: Record "Table Metadata";
-        ObjMgt: Codeunit DMTObjMgt;
         DMTMigrationLib: Codeunit DMTMigrationLib;
+        ObjMgt: Codeunit DMTObjMgt;
     begin
         // Exists already
         if DataFile.GetRecByFilePath(DataFileBuffer.Path, DataFileBuffer.Name) then
@@ -711,8 +711,8 @@ codeunit 110013 "DMTDataFilePageAction"
 
     internal procedure AssignFilesToNewDefaultFolder(var TempDataFile_SELECTED: Record DMTDataFile temporary)
     var
-        DMTSetup: Record DMTSetup;
         DataFile: Record DMTDataFile;
+        DMTSetup: Record DMTSetup;
         FileMgt: Codeunit "File Management";
     begin
         DMTSetup.Get();

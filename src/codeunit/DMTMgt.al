@@ -435,9 +435,9 @@ codeunit 110002 "DMTMgt"
 
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
+        DMTMgt: Codeunit DMTMgt;
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
-        DMTMgt: Codeunit DMTMgt;
     begin
         FromField := SourceRecRef.field(FieldMapping."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);

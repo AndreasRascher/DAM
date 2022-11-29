@@ -97,13 +97,13 @@ codeunit 110010 "DMTProgressDialog"
     end;
 
     var
-        ProgressMsg: TextBuilder;
         IsProgressOpen: Boolean;
-        Progress: Dialog;
-        UpdateThresholdInMS: Integer;
-        Start: DateTime;
-        CustomStart: Dictionary of [Integer, DateTime];
         LastUpdate: DateTime;
-        TotalStepValuesDict, CurrStepValuesDict : Dictionary of [Integer, Integer];
+        Start: DateTime;
+        Progress: Dialog;
+        CustomStart: Dictionary of [Integer, DateTime];
+        CurrStepValuesDict, TotalStepValuesDict : Dictionary of [Integer, Integer];
         ControlValuesDict: Dictionary of [Integer, Text];
+        UpdateThresholdInMS: Integer;
+        ProgressMsg: TextBuilder;
 }

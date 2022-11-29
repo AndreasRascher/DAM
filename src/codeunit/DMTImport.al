@@ -19,12 +19,12 @@ codeunit 110014 DMTImport
     var
         ErrorLog: Record DMTErrorLog;
         TempFieldMapping: Record "DMTFieldMapping" temporary;
+        MigrationLib: Codeunit DMTMigrationLib;
         BufferRef, BufferRef2 : RecordRef;
         MaxWith: Integer;
         KeyFieldsFilter: Text;
         NonKeyFieldsFilter: Text;
         ProgressBarTitle: Text;
-        MigrationLib: Codeunit DMTMigrationLib;
     begin
         InitFieldFilter(KeyFieldsFilter, NonKeyFieldsFilter, DataFile."Target Table ID");
         LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);

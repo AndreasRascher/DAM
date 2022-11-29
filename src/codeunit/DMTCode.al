@@ -108,7 +108,7 @@ page 110012 DMTCode
     end;
 
     var
+        CurrDataFile: record DMTDataFile;
         CodeLines: List of [Text];
         SourceRecVarName, TargetRecVarName : Text;
-        CurrDataFile: record DMTDataFile;
 }

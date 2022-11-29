@@ -184,11 +184,11 @@ codeunit 110012 DMTProcessRecord
     var
         DataFile: Record DMTDataFile;
         TempFieldMapping: Record DMTFieldMapping temporary;
-        DMTMgt: Codeunit DMTMgt;
         ChangeRecordWithPerm: Codeunit ChangeRecordWithPerm;
+        DMTMgt: Codeunit DMTMgt;
         CurrFieldToProcess: RecordId;
-        CurrValueToAssign: FieldRef;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
+        CurrValueToAssign: FieldRef;
         SkipRecord: Boolean;
         // DMTTable: Record DMTTable;
         // TempDMTField: Record DMTField temporary;

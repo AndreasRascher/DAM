@@ -92,6 +92,22 @@ page 110015 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
+            action(ResetLines)
+            {
+                Caption = 'Reset Lines', comment = 'Zeilen zurücksetzen';
+                ApplicationArea = All;
+                Image = NextRecord;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    GetSelection(ProcessingPlan_SELECTED);
+                    ResetLines(ProcessingPlan_SELECTED);
+                    CurrPage.Update(false);
+                end;
+            }
         }
     }
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -120,9 +136,9 @@ page 110015 DMTProcessingPlan
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
     var
-        ProcessingPlan: record DMTProcessingPlan;
-        DMTDataFile: Record DMTDataFile;
         CodeUnitMetadata: Record "CodeUnit Metadata";
+        DMTDataFile: Record DMTDataFile;
+        ProcessingPlan: record DMTProcessingPlan;
         PageAction: Codeunit DMTDataFilePageAction;
         Success: Boolean;
     begin
@@ -167,6 +183,21 @@ page 110015 DMTProcessingPlan
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;
+            ProcessingPlan.Modify();
+            Commit();
+        until ProcessingPlan_SELECTED.Next() = 0;
+    end;
+
+    local procedure ResetLines(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
+    var
+        ProcessingPlan: record DMTProcessingPlan;
+    begin
+        if not ProcessingPlan_SELECTED.FindSet then exit;
+        repeat
+            ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
+            Clear(ProcessingPlan.Status);
+            Clear(ProcessingPlan.StartTime);
+            Clear(ProcessingPlan."Processing Duration");
             ProcessingPlan.Modify();
             Commit();
         until ProcessingPlan_SELECTED.Next() = 0;

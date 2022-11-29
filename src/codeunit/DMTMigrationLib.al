@@ -29,8 +29,8 @@ codeunit 110011 "DMTMigrationLib"
     procedure ApplyKnownValidationRules(var FieldMapping: Record DMTFieldMapping)
     var
         TargetField: Record Field;
-        KnownFixedValue: Text;
         ValidationType: Enum DMTFieldValidationType;
+        KnownFixedValue: Text;
     begin
         TargetField.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
         if FindKnownUseValidateValue(TargetField, ValidationType) then
@@ -152,8 +152,8 @@ codeunit 110011 "DMTMigrationLib"
 
     procedure UpdateGlobalDimNoInDimensionValues()
     var
-        GLSetup: Record "General Ledger Setup";
         DimValue: Record "Dimension Value";
+        GLSetup: Record "General Ledger Setup";
     begin
         GLSetup.Get();
 
