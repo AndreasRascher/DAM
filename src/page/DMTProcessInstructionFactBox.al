@@ -15,7 +15,9 @@ page 110017 "DMTProcessInstructionFactBox"
                 ShowCaption = false;
                 trigger OnDrillDown()
                 begin
-                    Message('ToDo');
+                    if IsSourceTableFilterView then
+                        CurrProcessingPlan.EditSourceTableFilter();
+                    CurrPage.Update(false);
                 end;
             }
             repeater("FilterList")
@@ -51,6 +53,7 @@ page 110017 "DMTProcessInstructionFactBox"
         DMTFieldMapping.CopyToTemp(Rec);
         Rec.SetFilter(Comment, '<>''''');
         CurrPage.Update(false);
+        CurrProcessingPlan := ProcessingPlan;
     end;
 
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
@@ -67,6 +70,7 @@ page 110017 "DMTProcessInstructionFactBox"
         DMTFieldMapping.CopyToTemp(Rec);
         Rec.SetFilter(Comment, '<>''''');
         CurrPage.Update(false);
+        CurrProcessingPlan := ProcessingPlan;
     end;
 
     procedure SaveDefaultValuesToJSONBlob(ProcessingPlan: Record DMTProcessingPlan; var FieldMapping: Record DMTFieldMapping temporary)
@@ -86,5 +90,6 @@ page 110017 "DMTProcessInstructionFactBox"
     var
         [InDataSet]
         IsSourceTableFilterView, IsFixedValueView : Boolean;
+        CurrProcessingPlan: Record DMTProcessingPlan;
 }
 

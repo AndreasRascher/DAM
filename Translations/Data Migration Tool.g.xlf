@@ -2383,6 +2383,21 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1042755249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indent Left</source>
+          <note from="Developer" annotates="general" priority="2">Links einrücken</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentLeft - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 242972736 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indent Right</source>
+          <note from="Developer" annotates="general" priority="2">Rechts einrücken</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start</source>
+          <note from="Developer" annotates="general" priority="2">de-DE Ausführen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action Start - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>
           <note from="Developer" annotates="general" priority="2"></note>

@@ -36,14 +36,20 @@ table 110010 DMTProcessingPlan
             trigger OnValidate()
             var
                 DMTDataFile: Record DMTDataFile;
+                CodeUnitMetadata: Record "CodeUnit Metadata";
             begin
                 case true of
                     (xRec.ID <> 0) and (Rec.ID = 0):
                         Description := '';
-                    (Rec.ID <> 0):
+                    (Rec.ID <> 0) and (Type in [Type::"Import To Buffer", Type::"Import To Target", Type::"Update Field"]):
                         begin
                             DMTDataFile.Get(Rec.ID);
                             Description := DMTDataFile.Name;
+                        end;
+                    (Rec.ID <> 0) and (Type in [Type::"Run Codeunit"]):
+                        begin
+                            CodeUnitMetadata.Get(Rec.ID);
+                            Description := CodeUnitMetadata.Name;
                         end;
                 end;
             end;
@@ -66,70 +72,6 @@ table 110010 DMTProcessingPlan
         }
     }
 
-    local procedure SaveViewToFilterText(DataFile: record DmtDataFile; var RecRef: RecordRef)
-    var
-        TableFilterPage: Page "Table Filter";
-        FldRef: FieldRef;
-        FldIndex: Integer;
-        TextFieldFilter: Text;
-        FirstFieldIDWithFilter: Integer;
-        TextTableFilter: Text;
-    begin
-        for FldIndex := 1 to RecRef.FieldCount do begin
-            FldRef := RecRef.FieldIndex(FldIndex);
-            if FldRef.GetFilter <> '' then begin
-                if FirstFieldIDWithFilter = 0 then
-                    FirstFieldIDWithFilter := FldRef.Number;
-                TextFieldFilter := CreateTextFieldFilter(FldRef);
-                if StrLen(TextFieldFilter) > 0 then begin
-                    if (FirstFieldIDWithFilter <> 0) and (FirstFieldIDWithFilter < FldRef.Number) then
-                        TextTableFilter += ',';
-                    AppendFieldFilter(TextTableFilter, TextFieldFilter);
-                end;
-            end;
-        end;
-        if StrLen(TextFieldFilter) > 0 then
-            TextTableFilter := QuoteValue('Filter:', ':') + ': ' + TextFieldFilter;
-        if TextTableFilter <> '' then
-            Evaluate(Rec."Source Table Filter", TextTableFilter);
-    end;
-
-    local procedure CreateTextFieldFilter(var FldRef: FieldRef): Text
-    begin
-        if (FldRef.Number > 0) and (StrLen(FldRef.GetFilter()) > 0) then
-            exit(QuoteValue(FldRef.Caption, '=') + '=' + QuoteValue(FldRef.GetFilter(), ','));
-        exit('');
-    end;
-
-    local procedure QuoteValue(TextValue: Text; TextCausingQuotes: Text): Text
-    var
-        InnerQuotePosition: Integer;
-        TextValue2: Text;
-    begin
-        // If quotes are not needed return initial value:
-        if not TextValue.Contains(TextCausingQuotes) then
-            exit(TextValue);
-
-        // Escape possible double quote characters:
-        InnerQuotePosition := StrPos(TextValue, '"');
-        while InnerQuotePosition > 0 do begin
-            TextValue2 += CopyStr(TextValue, 1, InnerQuotePosition) + '"';
-            TextValue := CopyStr(TextValue, InnerQuotePosition + 1, StrLen(TextValue));
-            InnerQuotePosition := StrPos(TextValue, '"');
-        end;
-
-        // Surround by double quotes:
-        TextValue2 += TextValue;
-        TextValue2 := '"' + TextValue2 + '"';
-
-        exit(TextValue2);
-    end;
-
-    local procedure AppendFieldFilter(var TextTableFilter: Text; TextFieldFilter: Text)
-    begin
-        TextTableFilter += TextFieldFilter;
-    end;
-
     procedure EditSourceTableFilter()
     var
         DataFile: Record DMTDataFile;
@@ -139,7 +81,7 @@ table 110010 DMTProcessingPlan
         DataFile.Get(Rec.ID);
         Import.InitBufferRef(DataFile, BufferRef);
         if Import.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
-            SaveViewToFilterText(DataFile, BufferRef);
+            SaveSourceTableFilter(BufferRef.GetView());
         end;
     end;
 

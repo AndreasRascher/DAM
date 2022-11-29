@@ -29,10 +29,12 @@ page 110015 DMTProcessingPlan
             part(SourceTableFilter; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Source Table Filter';
+                UpdatePropagation = Both;
             }
             part(FixedValues; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Fields';
+                UpdatePropagation = Both;
             }
         }
     }
@@ -42,9 +44,14 @@ page 110015 DMTProcessingPlan
     {
         area(Processing)
         {
-            action(Run)
+            action(Start)
             {
+                Caption = 'Start', comment = 'de-DE Ausführen';
                 ApplicationArea = All;
+                Image = Start;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
 
                 trigger OnAction();
                 begin
@@ -55,8 +62,13 @@ page 110015 DMTProcessingPlan
             }
             action(IndentLeft)
             {
+                Caption = 'Indent Left', comment = 'Links einrücken';
                 ApplicationArea = All;
                 Image = PreviousRecord;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+
                 trigger OnAction()
                 begin
                     GetSelection(ProcessingPlan_SELECTED);
@@ -66,8 +78,13 @@ page 110015 DMTProcessingPlan
             }
             action(IndentRight)
             {
+                Caption = 'Indent Right', comment = 'Rechts einrücken';
                 ApplicationArea = All;
                 Image = NextRecord;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+
                 trigger OnAction()
                 begin
                     GetSelection(ProcessingPlan_SELECTED);
@@ -105,7 +122,9 @@ page 110015 DMTProcessingPlan
     var
         ProcessingPlan: record DMTProcessingPlan;
         DMTDataFile: Record DMTDataFile;
+        CodeUnitMetadata: Record "CodeUnit Metadata";
         PageAction: Codeunit DMTDataFilePageAction;
+        Success: Boolean;
     begin
         if not ProcessingPlan_SELECTED.FindSet then exit;
         repeat
@@ -133,8 +152,11 @@ page 110015 DMTProcessingPlan
                 DMTProcessingPlanType::"Run Codeunit":
                     begin
                         SetStatusToStart(ProcessingPlan);
-                        Codeunit.Run(ProcessingPlan.ID);
                         Commit();
+                        ClearLastError();
+                        Success := Codeunit.Run(ProcessingPlan.ID);
+                        if GetLastErrorText() <> '' then
+                            Message(GetLastErrorText());
                     end;
                 DMTProcessingPlanType::"Update Field":
                     begin
