@@ -40,7 +40,7 @@ table 110041 DMTFieldMapping
         field(31; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', comment = 'Herkunftsfeld Nr.';
-            TableRelation = DMTFieldBuffer."No." where("To Table No. Filter" = field("Target Table ID"));
+            TableRelation = DMTFieldBuffer."No." where("Data File ID Filter" = field("Data File ID"));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
@@ -52,9 +52,9 @@ table 110041 DMTFieldMapping
         }
         field(32; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
         field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeader.Code; }
-        field(50; "Validation Type"; Enum "DMTFieldValidationType") { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
+        field(50; "Validation Type"; enum "DMTFieldValidationType") { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
-        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
+        field(100; "Processing Action"; enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
         field(101; "Fixed Value"; Text[250])
         {
             Caption = 'Fixed Value', comment = 'Fester Wert';

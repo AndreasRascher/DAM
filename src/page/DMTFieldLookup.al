@@ -35,7 +35,8 @@ page 110022 "DMTFieldLookup"
         FieldNo: Integer;
     begin
         if IsLoaded then exit;
-        DataFile.Get(Rec.GetRangeMin("To Table No. Filter"));
+        DataFile.Get(Rec.GetRangeMin("Data File ID Filter"));
+
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin

@@ -1703,11 +1703,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field DataFileID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 2701577859 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Default Field Values</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Default Field Values - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1722,16 +1717,6 @@
           <source>Line Type</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 1144461605 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source Table Filter Blob</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table Filter - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 2251108308 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Update Fields Filter</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Update Fields Filter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4252255481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Replacements Header</source>
@@ -2382,11 +2367,6 @@
           <source>Filter</source>
           <note from="Developer" annotates="general" priority="2">Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FilterList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1596337783 - Control 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FixedValue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1596337783 - Control 3030844192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Values</source>

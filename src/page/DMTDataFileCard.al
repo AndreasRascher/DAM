@@ -44,7 +44,7 @@ page 110026 DMTDataFileCard
             {
                 ApplicationArea = all;
                 Caption = 'Field Mapping', Comment = 'Feldzuordnung';
-                SubPageLink = "Data File ID" = Field(ID), "Target Table ID" = field("Target Table ID");
+                SubPageLink = "Data File ID" = field(ID), "Target Table ID" = field("Target Table ID");
             }
         }
         area(FactBoxes)

@@ -103,7 +103,6 @@
           <source>Import Group</source>
           <target>Import Gruppe</target>
           <note from="Developer" annotates="general" priority="2">Import Gruppe</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field ImportGroup - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1485543381 - Field 3507560619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2034,6 +2033,36 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 2279323338 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Action</source>
+          <target>Aktion</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Action - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3604157533 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DataFile ID</source>
+          <target>Datei ID</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field DataFileID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target>Beschreibung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target>Zeilennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 158172202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line Type</source>
+          <target>Zeilenart</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line Type - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4252255481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Replacements Header</source>
           <target>Ersetzungungen Kopf</target>
@@ -2801,6 +2830,55 @@
           <target>DMT Generischer Puffer Übersicht</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1596337783 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Instructions</source>
+          <target>Verarbeitungsinformationen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1596337783 - Control 45670998 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <target>Filter</target>
+          <note from="Developer" annotates="general" priority="2">Filter</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FilterList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1596337783 - Control 3030844192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fixed Values</source>
+          <target>Vorgabewerte</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FixedValuesList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1596337783 - Control 782696917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <target>Filter</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FilterValue - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Processing Plan</source>
+          <target>Verarbeitungsplan</target>
+          <note from="Developer" annotates="general" priority="2">de-DE Verarbeitungsplan</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fields</source>
+          <target>Felder</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control FixedValues - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 1608331573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table Filter</source>
+          <target>Herkunftstabelle Filter</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Rules</source>

@@ -43,9 +43,9 @@ table 110010 DMTProcessingPlan
         }
         field(12; Description; Text[250]) { Caption = 'Description'; }
         field(20; "Action"; Option) { OptionMembers = " ","Import To Buffer","Import To Target","Update Field"; }
-        field(30; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob'; }
-        field(31; "Update Fields Filter"; Text[250]) { Caption = 'Update Fields Filter'; }
-        field(32; "Default Field Values"; Blob) { Caption = 'Default Field Values'; }
+        field(30; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
+        field(31; "Update Fields Filter"; Text[250]) { Caption = 'Update Fields Filter', Locked = true; }
+        field(32; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
     }
 
     keys
