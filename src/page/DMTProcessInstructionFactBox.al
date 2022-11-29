@@ -4,7 +4,6 @@ page 110017 "DMTProcessInstructionFactBox"
     PageType = ListPart;
     SourceTable = DMTFieldMapping;
     SourceTableTemporary = true;
-
     layout
     {
         area(content)
@@ -42,14 +41,15 @@ page 110017 "DMTProcessInstructionFactBox"
     var
         DMTFieldMapping: Record DMTFieldMapping;
     begin
-        if ProcessingPlan."Line Type" = ProcessingPlan."Line Type"::Group then begin
+        if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
             IsSourceTableFilterView := false;
             Rec.DeleteAll();
             exit;
         end;
         IsSourceTableFilterView := true;
-        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.DataFileID);
+        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.ID);
         DMTFieldMapping.CopyToTemp(Rec);
+        Rec.SetFilter(Comment, '<>''''');
         CurrPage.Update(false);
     end;
 
@@ -57,14 +57,15 @@ page 110017 "DMTProcessInstructionFactBox"
     var
         DMTFieldMapping: Record DMTFieldMapping;
     begin
-        if ProcessingPlan."Line Type" = ProcessingPlan."Line Type"::Group then begin
+        if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
             exit;
         end;
         IsFixedValueView := true;
-        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.DataFileID);
+        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.ID);
         DMTFieldMapping.CopyToTemp(Rec);
+        Rec.SetFilter(Comment, '<>''''');
         CurrPage.Update(false);
     end;
 

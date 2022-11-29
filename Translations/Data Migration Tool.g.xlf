@@ -1693,30 +1693,40 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 2279323338 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Action</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Action - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 3604157533 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DataFile ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field DataFileID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3641927271 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DataFile ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 2200046723 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indentation</source>
+          <note from="Developer" annotates="general" priority="2">de-DE Einrückung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Indentation - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1212190007 - Field 158172202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Line Type</source>
+        <trans-unit id="Table 1212190007 - Field 3950656103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Duration</source>
+          <note from="Developer" annotates="general" priority="2">de-DE Verarbeitungszeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start Time</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line Type - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field StartTime - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Type - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4252255481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Replacements Header</source>
@@ -2358,26 +2368,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1596337783 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Processing Instructions</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1596337783 - Control 45670998 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <note from="Developer" annotates="general" priority="2">Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FilterList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1596337783 - Control 3030844192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Values</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FixedValuesList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1596337783 - Control 782696917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingInstructions - Control FilterValue - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE Verarbeitungsplan</note>
@@ -2392,6 +2382,26 @@
           <source>Source Table Filter</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Instructions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 45670998 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <note from="Developer" annotates="general" priority="2">Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FilterList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 3030844192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fixed Values</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FixedValuesList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 782696917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FilterValue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3131662978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Rules</source>
