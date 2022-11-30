@@ -491,7 +491,7 @@ codeunit 110013 "DMTDataFilePageAction"
         DataFile.Modify();
         ImportToBufferTable(DataFile, false);
         ProposeMatchingFields(DataFile.ID);
-        DMTImportNew.StartImport(DataFile, true, false);
+        DMTImportNew.StartImport(DataFile, true, false, '');
     end;
 
     procedure DeleteSelectedTargetTables(var DataFile_SELECTED: Record DMTDataFile temporary)
@@ -549,8 +549,17 @@ codeunit 110013 "DMTDataFilePageAction"
         if not DataFile_SELECTED.FindSet() then exit;
         repeat
             DataFile := DataFile_SELECTED;
-            DMTImport.StartImport(DataFile, true, false);
+            DMTImport.StartImport(DataFile, true, false, '');
         until DataFile_SELECTED.Next() = 0;
+    end;
+
+    internal procedure ImportSelectedIntoTarget(var ProcessingPlan: Record DMTProcessingPlan temporary)
+    var
+        DataFile: Record DMTDataFile;
+        DMTImport: Codeunit DMTImport;
+    begin
+        DataFile.Get(ProcessingPlan.ID);
+        DMTImport.StartImport(DataFile, true, false, ProcessingPlan.ReadSourceTableView());
     end;
 
     procedure DownloadAllALDataMigrationObjects()
@@ -745,4 +754,34 @@ codeunit 110013 "DMTDataFilePageAction"
         until TempDataFile_SELECTED.Next() = 0;
     end;
 
+    procedure UpdateFields(var DataFile: Record DMTDataFile)
+    var
+        ImportNew: Codeunit DMTImport;
+        UpdateTaskNew: Page DMTUpdateTaskNew;
+    begin
+        // Show only Non-Key Fields for selection
+        UpdateTaskNew.LookupMode(true);
+        UpdateTaskNew.Editable := true;
+        if not UpdateTaskNew.InitFieldSelection(DataFile) then
+            exit;
+        if UpdateTaskNew.RunModal() = Action::LookupOK then begin
+            DataFile.WriteLastFieldUpdateSelection(UpdateTaskNew.GetToFieldNoFilter());
+            ImportNew.StartImport(DataFile, false, true, '');
+        end;
+    end;
+
+    procedure UpdateFields(var ProcessingPlan: Record DMTProcessingPlan)
+    var
+        DataFile: Record DMTDataFile;
+        OldFieldFilter: Text;
+    begin
+        if ProcessingPlan.Type <> ProcessingPlan.Type::"Update Field" then
+            exit;
+        if not DataFile.Get(ProcessingPlan.ID) then
+            exit;
+        if ProcessingPlan.ReadUpdateFieldsFilter() = '' then exit;
+        OldFieldFilter := DataFile.ReadLastFieldUpdateSelection();
+        UpdateFields(DataFile);
+        DataFile.WriteLastFieldUpdateSelection(OldFieldFilter);
+    end;
 }

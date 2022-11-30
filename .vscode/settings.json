@@ -24,4 +24,5 @@
         "VariableNamesWithType"
     ],
     "editor.snippetSuggestions": "bottom",
+    "xliffSync.parseFromDeveloperNote": true
  }

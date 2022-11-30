@@ -121,7 +121,7 @@ page 110026 DMTDataFileCard
                 var
                     DMTImportNew: Codeunit DMTImport;
                 begin
-                    DMTImportNew.StartImport(Rec, false, false);
+                    DMTImportNew.StartImport(Rec, false, false, '');
                 end;
             }
             action(UpdateFields)
@@ -135,19 +135,8 @@ page 110026 DMTDataFileCard
                 PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    ImportNew: Codeunit DMTImport;
-                    UpdateTaskNew: Page DMTUpdateTaskNew;
                 begin
-                    // Show only Non-Key Fields for selection
-                    UpdateTaskNew.LookupMode(true);
-                    UpdateTaskNew.Editable := true;
-                    if not UpdateTaskNew.InitFieldSelection(Rec) then
-                        exit;
-                    if UpdateTaskNew.RunModal() = Action::LookupOK then begin
-                        Rec.WriteLastFieldUpdateSelection(UpdateTaskNew.GetToFieldNoFilter());
-                        ImportNew.StartImport(Rec, false, true);
-                    end;
+                    PageActions.UpdateFields(Rec);
                 end;
             }
             action(RetryBufferRecordsWithError)

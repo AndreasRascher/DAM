@@ -96,7 +96,31 @@ page 110029 "DMTUpdateTaskNew"
         end;
     end;
 
-    procedure ConvertNumberFilterToNumberList(NumberFilter: Text) NumberList: List of [Integer]
+    procedure InitFieldSelection(ProcessingPlan: Record DMTProcessingPlan) OK: Boolean
+    var
+        FieldMapping: Record DMTFieldMapping;
+        DMTMgt: Codeunit DMTMgt;
+        NonKeyFieldFilter: Text;
+    begin
+        OK := true;
+        CurrDataFile.get(ProcessingPlan.ID);
+        if CurrDataFile."Target Table ID" = 0 then
+            exit(false);
+
+        // Filter Fields Avaible for Update
+        Rec.FilterGroup(2);
+        Rec.SetRange("Target Table ID", CurrDataFile."Target Table ID");
+        Rec.Setfilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        Rec.SetFilter("Source Field No.", '<>%1', 0);
+        NonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDataFile."Target Table ID", false /*exclude*/);
+        Rec.Setfilter("Target Field No.", NonKeyFieldFilter);
+        // restore last selection
+        if ProcessingPlan.ReadUpdateFieldsFilter() <> '' then begin
+            SelectedFields := ConvertNumberFilterToNumberList(ProcessingPlan.ReadUpdateFieldsFilter());
+        end;
+    end;
+
+    local procedure ConvertNumberFilterToNumberList(NumberFilter: Text) NumberList: List of [Integer]
     var
         Integer: Record Integer;
     begin

@@ -1,11 +1,13 @@
 codeunit 110014 DMTImport
 {
-    procedure StartImport(var DataFile: Record DMTDataFile; NoUserInteraction_New: Boolean; IsUpdateTask: Boolean)
+    procedure StartImport(var DataFile: Record DMTDataFile; NoUserInteraction_New: Boolean; IsUpdateTask: Boolean; SourceTableView_New: Text)
     var
         start: DateTime;
     begin
         start := CurrentDateTime;
         NoUserInteraction := NoUserInteraction_New;
+        SourceTableView := SourceTableView_New;
+
         CheckBufferTableIsNotEmpty(DataFile);
         CheckMappedFieldsExist(DataFile);
 
@@ -243,8 +245,11 @@ codeunit 110014 DMTImport
     begin
         Continue := true; // Canceling the dialog should stop th process
 
-        if NoUserInteraction then
+        if NoUserInteraction then begin
+            if SourceTableView <> '' then
+                BufferRef.SetView(SourceTableView);
             exit(Continue);
+        end;
 
         if BufferTableView = '' then begin
             if DMTDataFile.ReadLastSourceTableView() <> '' then
@@ -458,6 +463,7 @@ codeunit 110014 DMTImport
     var
         DMTMgt: Codeunit DMTMgt;
         NoUserInteraction: Boolean;
+        SourceTableView: Text;
         ProgressBarText_DurationTok: label '\Duration:        ########################################3#';
         ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
         ProgressBarText_ProgressTok: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';

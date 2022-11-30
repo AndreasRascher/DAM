@@ -279,48 +279,63 @@ codeunit 110002 "DMTMgt"
 
             'INTEGER':
                 begin
-                    IF Evaluate(_Integer, FromText, 9) then begin
-                        FieldRef_TO.Value := _Integer;
-                        exit(TRUE);
-                    end else
-                        if ThrowError then
-                            Evaluate(_Integer, FromText, 9)
+                    case true of
+                        Evaluate(_Integer, FromText, 9):
+                            begin
+                                FieldRef_TO.Value := _Integer;
+                                exit(true);
+                            end;
+                        else
+                            if ThrowError then
+                                Evaluate(_Integer, FromText, 9)
+                    end;
                 end;
             'BIGINTEGER':
                 IF Evaluate(_BigInteger, FromText, 9) then begin
                     FieldRef_TO.Value := _BigInteger;
-                    exit(TRUE);
+                    exit(true);
                 end else
                     if ThrowError then
                         Evaluate(_BigInteger, FromText, 9);
             'TEXT', 'TABLEFILTER':
                 begin
                     FieldRef_TO.Value := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
-                    exit(TRUE);
+                    exit(true);
                 end;
             'CODE':
                 begin
                     FieldRef_TO.Value := UPPERCASE(COPYSTR(FromText, 1, FieldRef_TO.LENGTH));
-                    exit(TRUE);
+                    exit(true);
                 end;
             'DECIMAL':
                 IF Evaluate(_Decimal, FromText, 9) then begin
                     FieldRef_TO.Value := _Decimal;
-                    exit(TRUE);
+                    exit(true);
                 end else
                     if ThrowError then
                         Evaluate(_Decimal, FromText, 9);
             'BOOLEAN':
-                IF Evaluate(_Boolean, FromText, 9) then begin
-                    FieldRef_TO.Value := _Boolean;
-                    exit(TRUE);
-                end else
-                    if ThrowError then
-                        Evaluate(_Boolean, FromText, 9);
+                case true of
+                    Evaluate(_Boolean, FromText, 9):
+                        begin
+                            FieldRef_TO.Value := _Boolean;
+                            exit(true);
+                        end;
+                    // Needed for Evaluate from Fixed Value Test (true,false,ja,nein), xml-format only accepts 0 or 1   
+                    Evaluate(_Boolean, FromText):
+                        begin
+                            FieldRef_TO.Value := _Boolean;
+                            exit(true);
+                        end
+                    else
+                        if ThrowError then
+                            Evaluate(_Boolean, FromText, 9);
+                end;
+
             'RECORDID':
                 if Evaluate(_RecordID, FromText) then begin
                     FieldRef_TO.Value := _RecordID;
-                    exit(TRUE);
+                    exit(true);
                 end else
                     if ThrowError then
                         Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
@@ -329,7 +344,7 @@ codeunit 110002 "DMTMgt"
                     //Optionswert wird als Zahl übergeben
                     if Evaluate(_Integer, FromText) then begin
                         FieldRef_TO.Value := _Integer;
-                        exit(TRUE);
+                        exit(true);
                     end else
                         if ThrowError then
                             Evaluate(_RecordID, FromText);
@@ -340,7 +355,7 @@ codeunit 110002 "DMTMgt"
                         OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
                         IF OptionElement.ToLower() = FromText.ToLower() then begin
                             FieldRef_TO.Value := OptionIndex;
-                            exit(TRUE);
+                            exit(true);
                         end;
                     end;
                 end;
@@ -360,7 +375,7 @@ codeunit 110002 "DMTMgt"
                     //ApplicationMgt.MakeDateTimeText(FromText);
                     IF Evaluate(_DateTime, FromText, 9) then begin
                         FieldRef_TO.Value := _DateTime;
-                        exit(TRUE);
+                        exit(true);
                     end else
                         if ThrowError then Evaluate(_DateTime, FromText, 9);
                 end;
@@ -368,7 +383,7 @@ codeunit 110002 "DMTMgt"
                 begin
                     IF Evaluate(_Time, FromText, 9) then begin
                         FieldRef_TO.Value := _Time;
-                        exit(TRUE);
+                        exit(true);
                     end else
                         if ThrowError then Evaluate(_Time, FromText, 9);
                 end;
@@ -379,13 +394,13 @@ codeunit 110002 "DMTMgt"
                     _OutStream.WRITETEXT(FromText);
                     TempBlob.insert();
                     FieldRef_TO.VALUE(TempBlob.Content);
-                    exit(TRUE);
+                    exit(true);
                 end;
             'DATEFORMULA':
                 begin
                     IF Evaluate(_DateFormula, FromText, 9) then begin
                         FieldRef_TO.Value := _DateFormula;
-                        exit(TRUE);
+                        exit(true);
                     end else
                         if ThrowError then Evaluate(_DateFormula, FromText, 9);
                 end;

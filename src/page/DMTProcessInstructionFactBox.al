@@ -4,25 +4,15 @@ page 110017 "DMTProcessInstructionFactBox"
     PageType = ListPart;
     SourceTable = DMTFieldMapping;
     SourceTableTemporary = true;
+    DeleteAllowed = false;
+    InsertAllowed = false;
+    ModifyAllowed = false;
+    LinksAllowed = false;
     layout
     {
         area(content)
         {
 
-            field(Edit; 'Edit')
-            {
-                ApplicationArea = All;
-                ShowCaption = false;
-                trigger OnDrillDown()
-                begin
-                    if IsSourceTableFilterView then
-                        CurrProcessingPlan.EditSourceTableFilter();
-                    if IsFixedValueView then
-                        CurrProcessingPlan.EditDefaultValues();
-                    ReloadPageContent();
-                    CurrPage.Update(false);
-                end;
-            }
             repeater("FilterList")
             {
                 Caption = 'Filter', Comment = 'Filter';
@@ -37,14 +27,89 @@ page 110017 "DMTProcessInstructionFactBox"
                 Visible = IsFixedValueView;
                 field(FilterFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
                 field(FilterValue; Rec.Comment) { ApplicationArea = All; Caption = 'Filter'; }
+            }
+            repeater("UpdateFieldsList")
+            {
+                Caption = 'Fixed Values', Comment = 'de-DE=Vorgabwerte';
+                Visible = IsUpdateSelectedFieldsView;
+                field(UpdateFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
+            }
+        }
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(Edit)
+            {
+                Caption = 'Edit', Comment = 'de-DE=Bearbeiten';
+                ApplicationArea = All;
+                Image = Edit;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Process;
 
+                trigger OnAction()
+                begin
+                    if IsSourceTableFilterView then
+                        CurrProcessingPlan.EditSourceTableFilter();
+                    if IsFixedValueView then
+                        CurrProcessingPlan.EditDefaultValues();
+                    ReloadPageContent();
+                    CurrPage.Update(false);
+                end;
+            }
+            action(AddField)
+            {
+                Caption = 'Add/Remove Field', Comment = 'de-DE=Feld hinzufügen/entfernen';
+                ApplicationArea = All;
+                Visible = ActionAddFieldVisible;
+                Image = Add;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    UpdateTaskNew: page DMTUpdateTaskNew;
+                begin
+                    // Show only Non-Key Fields for selection
+                    UpdateTaskNew.LookupMode(true);
+                    UpdateTaskNew.Editable := true;
+                    if not UpdateTaskNew.InitFieldSelection(CurrProcessingPlan) then
+                        exit;
+                    if UpdateTaskNew.RunModal() = Action::LookupOK then begin
+                        CurrProcessingPlan.SaveUpdateFieldsFilter(UpdateTaskNew.GetToFieldNoFilter());
+                    end;
+                end;
+            }
+            action(ResetSelection)
+            {
+                Caption = 'Reset Selection', Comment = 'de-DE=Auswahl zurücksetzen';
+                ApplicationArea = All;
+                Visible = ActionResetSelectionVisible;
+                Image = Add;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    CurrProcessingPlan.SaveUpdateFieldsFilter('');
+                end;
             }
         }
     }
 
     internal procedure InitFactBoxAsSourceTableFilter(ProcessingPlan: Record DMTProcessingPlan)
     begin
-        if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
+        clear(IsFixedValueView);
+        Clear(IsUpdateSelectedFieldsView);
+        Clear(IsSourceTableFilterView);
+        if ProcessingPlan.Type <> ProcessingPlan.Type::"Import To Target" then begin
             IsSourceTableFilterView := false;
             Rec.DeleteAll();
             exit;
@@ -56,20 +121,39 @@ page 110017 "DMTProcessInstructionFactBox"
     end;
 
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
-    var
-        DMTFieldMapping: Record DMTFieldMapping;
     begin
-        if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
+        clear(IsFixedValueView);
+        Clear(IsUpdateSelectedFieldsView);
+        Clear(IsSourceTableFilterView);
+        if ProcessingPlan.Type <> ProcessingPlan.Type::"Import To Target" then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
             exit;
         end;
         IsFixedValueView := true;
-        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.ID);
-        DMTFieldMapping.CopyToTemp(Rec);
-        Rec.SetFilter(Comment, '<>''''');
-        CurrPage.Update(false);
         CurrProcessingPlan := ProcessingPlan;
+        CurrProcessingPlan.ConvertDefaultValuesViewToFieldLines(Rec);
+        CurrPage.Update(false);
+    end;
+
+    internal procedure InitFactBoxAsUpdateSelectedFields(ProcessingPlan: Record DMTProcessingPlan)
+    begin
+        clear(IsFixedValueView);
+        Clear(IsUpdateSelectedFieldsView);
+        Clear(IsSourceTableFilterView);
+        if ProcessingPlan.Type <> ProcessingPlan.Type::"Update Field" then begin
+            IsUpdateSelectedFieldsView := false;
+            Rec.DeleteAll();
+            exit;
+        end;
+
+        IsUpdateSelectedFieldsView := true;
+        ActionAddFieldVisible := true;
+        ActionResetSelectionVisible := true;
+
+        CurrProcessingPlan := ProcessingPlan;
+        CurrProcessingPlan.ConvertUpdateFieldsListToFieldLines(Rec);
+        CurrPage.Update(false);
     end;
 
     procedure ReloadPageContent()
@@ -92,6 +176,7 @@ page 110017 "DMTProcessInstructionFactBox"
     var
         CurrProcessingPlan: Record DMTProcessingPlan;
         [InDataSet]
-        IsFixedValueView, IsSourceTableFilterView : Boolean;
+        IsFixedValueView, IsSourceTableFilterView, IsUpdateSelectedFieldsView : Boolean;
+        ActionAddFieldVisible, ActionResetSelectionVisible : Boolean;
 }
 

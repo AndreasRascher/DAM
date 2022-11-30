@@ -56,12 +56,12 @@ table 110010 DMTProcessingPlan
         }
         field(12; Description; Text[250]) { Caption = 'Description'; }
         field(30; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
-        field(31; "Update Fields Filter"; Text[250]) { Caption = 'Update Fields Filter', Locked = true; }
+        field(31; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(32; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
         field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress","Finished"; Editable = false; }
         field(41; StartTime; DateTime) { Caption = 'Start Time'; Editable = false; }
-        field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE Verarbeitungszeit'; Editable = false; }
-        field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE Einrückung'; Editable = false; }
+        field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
+        field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
     }
 
     keys
@@ -126,6 +126,16 @@ table 110010 DMTProcessingPlan
         IStr.ReadText(DefaultValuesView);
     end;
 
+    procedure ReadUpdateFieldsFilter() FilterExpr: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields("Update Fields Filter");
+        if not rec."Update Fields Filter".HasValue then exit('');
+        rec."Update Fields Filter".CreateInStream(IStr);
+        IStr.ReadText(FilterExpr);
+    end;
+
     procedure SaveSourceTableFilter(SourceTableView: Text)
     var
         OStr: OutStream;
@@ -152,6 +162,19 @@ table 110010 DMTProcessingPlan
         Rec.Modify();
     end;
 
+    procedure SaveUpdateFieldsFilter(UpdateFieldsFilter: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec."Update Fields Filter");
+        Rec.Modify();
+        if UpdateFieldsFilter = '' then
+            exit;
+        rec."Update Fields Filter".CreateOutStream(Ostr);
+        OStr.WriteText(UpdateFieldsFilter);
+        Rec.Modify();
+    end;
+
     procedure CopyToTemp(var TempProcessingPlan: Record DMTProcessingPlan temporary) LineCount: Integer
     var
         ProcessingPlan: Record DMTProcessingPlan;
@@ -167,20 +190,30 @@ table 110010 DMTProcessingPlan
         TempProcessingPlan.Copy(TempProcessingPlan2, true);
     end;
 
+    procedure CreateSourceTableRef(var SourceRef: RecordRef) Ok: Boolean
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        Clear(SourceRef);
+        if Rec.ID = 0 then exit(false);
+        if not DataFile.Get(Rec.ID) then exit;
+        if (DataFile."Buffer Table ID" = 0) and (DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files") then
+            DataFile."Buffer Table ID" := Database::DMTGenBuffTable;
+        SourceRef.Open(DataFile."Buffer Table ID", false);
+        exit(true)
+    end;
+
     procedure ConvertSourceTableFilterToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
     var
+        TmpFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
-        DataFile: Record DMTDataFile;
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
         CurrView: Text;
     begin
         if (Rec.Type <> Rec.Type::"Import To Target") then
             exit;
-        if Rec.ID = 0 then exit;
-        if not DataFile.Get(Rec.ID) then exit;
-
-        RecRef.Open(DataFile."Buffer Table ID", false, CompanyName);
+        if not Rec.CreateSourceTableRef(RecRef) then
+            exit;
         CurrView := Rec.ReadSourceTableView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
@@ -199,9 +232,8 @@ table 110010 DMTProcessingPlan
         TmpFieldMapping.Copy(TmpFieldMapping2, true);
     end;
 
-    procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
+    procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
     var
-        DataFile: Record DMTDataFile;
         TmpFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
@@ -209,10 +241,7 @@ table 110010 DMTProcessingPlan
     begin
         if (Rec.Type <> Rec.Type::"Import To Target") then
             exit;
-        if Rec.ID = 0 then exit;
-        if not DataFile.Get(Rec.ID) then exit;
-
-        RecRef.Open(DataFile."Target Table ID", false, CompanyName);
+        if Rec.CreateSourceTableRef(RecRef) then exit;
         CurrView := Rec.ReadDefaultValuesView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
@@ -229,5 +258,35 @@ table 110010 DMTProcessingPlan
         end;
 
         TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        LineCount := TmpFieldMapping.Count;
+    end;
+
+    procedure ConvertUpdateFieldsListToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
+    var
+        DataFile: Record DMTDataFile;
+        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        FieldMapping: Record DMTFieldMapping;
+        RecRef: RecordRef;
+        FieldIndexNo: Integer;
+        FieldNoFilter: Text;
+    begin
+        if (Rec.Type <> Rec.Type::"Update Field") then
+            exit;
+        if not Rec.CreateSourceTableRef(RecRef) then exit;
+        if not DataFile.Get(Rec.ID) then exit;
+
+        FieldNoFilter := Rec.ReadDefaultValuesView();
+        if FieldNoFilter <> '' then begin
+            DataFile.FilterRelated(FieldMapping);
+            FieldMapping.Setfilter("Target Field No.", FieldNoFilter);
+            if FieldMapping.FindSet(false, false) then
+                repeat
+                    TmpFieldMapping2 := FieldMapping;
+                    TmpFieldMapping2.Insert();
+                until FieldMapping.Next() = 0;
+        end;
+
+        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        LineCount := TmpFieldMapping.Count;
     end;
 }

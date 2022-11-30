@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=19.09.22;
-    Time=21:58:55;
+    Date=29.11.22;
+    Time=22:17:29;
     Modified=Yes;
     Version List=DMT;
   }
@@ -24,7 +24,7 @@ OBJECT XMLport 50049 DMT Export
                   END;
 
     OnPreXMLport=VAR
-                   NoActionSelectedErr@1000000000 : TextConst 'DEU=Keine Aktion ausgewÑhlt;ENU=No action selected';
+                   NoActionSelectedErr@1000000000 : TextConst 'DEU=Keine Aktion ausgew‚Äûhlt;ENU=No action selected';
                  BEGIN
                    IF ExportTableID = 0 THEN BEGIN
                      ERROR(NoActionSelectedErr);
@@ -57,14 +57,28 @@ OBJECT XMLport 50049 DMT Export
                                                   SourceTableView=SORTING(Field1)
                                                                   WHERE(Field1=FILTER(1..));
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         Lines.SETRANGE(Number,1,ExportRecRef.COUNT);
+                                                                         //Lines.SETFilter(Number,1,ExportRecRef.COUNT);  // 20221129  Stop on last line
                                                                        END;
 
-                                                  Export::OnAfterGetRecord=BEGIN
-                                                                             IF Lines.Number = 1 THEN
-                                                                               ExportRecRef.FINDSET(FALSE,FALSE)
-                                                                             ELSE
-                                                                               ExportRecRef.NEXT;
+                                                  Export::OnAfterGetRecord=VAR
+                                                                             DialogText@1000000000 : Text;
+                                                                           BEGIN
+                                                                             IF Lines.Number = 1 THEN BEGIN
+                                                                               ExportRecRef.FINDSET(FALSE,FALSE);
+                                                                               CLEAR(LineProgress);
+                                                                               DialogText := CONVERTSTR('"' + ExportRecRef.CAPTION + '"','\','/') + ' ######1#\'+FORMAT(ExportRecRef.COUNT);
+                                                                               LineProgress.OPEN(DialogText);
+                                                                               LastUpdateProgress := CURRENTDATETIME-1000;
+                                                                             END ELSE
+                                                                               IF ExportRecRef.NEXT = 0 THEN BEGIN
+                                                                                 LineProgress.CLOSE;
+                                                                                 currXMLport.BREAK; // 20221129 Stop on last line
+                                                                               END ELSE BEGIN
+                                                                                 IF (CURRENTDATETIME - LastUpdateProgress) > 1000 THEN BEGIN
+                                                                                   LineProgress.UPDATE(1,Lines.Number);
+                                                                                   LastUpdateProgress := CURRENTDATETIME;
+                                                                                 END;
+                                                                               END;
                                                                            END;
                                                                             }
 
@@ -2634,6 +2648,8 @@ OBJECT XMLport 50049 DMT Export
       MaxNoOfFields@1000000009 : Integer;
       ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
       TempTableInfo@1000000012 : TEMPORARY Record 2000000028;
+      LineProgress@1000000014 : Dialog;
+      LastUpdateProgress@1000000015 : DateTime;
 
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text;exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text);
     VAR
@@ -2654,7 +2670,7 @@ OBJECT XMLport 50049 DMT Export
         ERROR('ExportToFilename not defined');
 
       start := CURRENTDATETIME;
-      progress.OPEN(STRSUBSTNO('Export %1',CONVERTSTR(exportToFilePath,'\','/')));
+      progress.OPEN(STRSUBSTNO('Export %1\Line #######1#',CONVERTSTR(exportToFilePath,'\','/')));
       DMTExport.InitExport(exportTableID,TableView);
 
       serverFile.CREATETEMPFILE;
@@ -2870,7 +2886,7 @@ OBJECT XMLport 50049 DMT Export
 
         _exportFieldBuffer."No." := 50004;
         _exportFieldBuffer.FieldName := 'No. of Records';
-        _exportFieldBuffer."Field Caption" := 'Anz. DatensÑtze';
+        _exportFieldBuffer."Field Caption" := 'Anz. Datens‚Äûtze';
         _exportFieldBuffer.INSERT;
       END;
 
@@ -2946,7 +2962,7 @@ OBJECT XMLport 50049 DMT Export
       ExportDuration@1000000003 : Duration;
       TAB@1000000004 : Text[1];
       ObjectNotInLicenseMsg@1000000005 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.;ENU=Warning: Table %1 - %2 is not in license.';
-      EmptyTableMsg@1000000007 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist leer. FÅr leere Tabellen wird keine Exportdatei erstellt.';
+      EmptyTableMsg@1000000007 : TextConst 'DEU=Achtung: Tabelle %1 - %2 ist leer. F¬År leere Tabellen wird keine Exportdatei erstellt.';
       IsTableValidForExport@1000000008 : Boolean;
     BEGIN
       CheckFolderPathRTC(ExportToFolderPath);
@@ -3169,4 +3185,3 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
-

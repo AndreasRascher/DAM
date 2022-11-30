@@ -1,12 +1,11 @@
 page 110015 DMTProcessingPlan
 {
-    Caption = 'DMT Processing Plan', Comment = 'de-DE Verarbeitungsplan';
+    Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
-
     layout
     {
         area(Content)
@@ -28,12 +27,17 @@ page 110015 DMTProcessingPlan
         {
             part(SourceTableFilter; "DMTProcessInstructionFactBox")
             {
-                Caption = 'Source Table Filter';
+                Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
                 UpdatePropagation = Both;
             }
             part(FixedValues; "DMTProcessInstructionFactBox")
             {
-                Caption = 'Fields';
+                Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
+                UpdatePropagation = Both;
+            }
+            part(UpdadeSelectedFields; "DMTProcessInstructionFactBox")
+            {
+                Caption = 'Update Selected Fields', Comment = 'de-DE=Felder für Update';
                 UpdatePropagation = Both;
             }
         }
@@ -46,7 +50,7 @@ page 110015 DMTProcessingPlan
         {
             action(Start)
             {
-                Caption = 'Start', comment = 'de-DE Ausführen';
+                Caption = 'Start', comment = 'de-DE=Ausführen';
                 ApplicationArea = All;
                 Image = Start;
                 Promoted = true;
@@ -62,7 +66,7 @@ page 110015 DMTProcessingPlan
             }
             action(IndentLeft)
             {
-                Caption = 'Indent Left', comment = 'Links einrücken';
+                Caption = 'Indent Left', comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
                 Image = PreviousRecord;
                 Promoted = true;
@@ -78,7 +82,7 @@ page 110015 DMTProcessingPlan
             }
             action(IndentRight)
             {
-                Caption = 'Indent Right', comment = 'Rechts einrücken';
+                Caption = 'Indent Right', comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
                 Image = NextRecord;
                 Promoted = true;
@@ -92,9 +96,9 @@ page 110015 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
-            action(ResetLines)
+            action(ResetLinesAction)
             {
-                Caption = 'Reset Lines', comment = 'Zeilen zurücksetzen';
+                Caption = 'Reset Lines', comment = 'de-DE=Zeilen zurücksetzen';
                 ApplicationArea = All;
                 Image = NextRecord;
                 Promoted = true;
@@ -132,6 +136,7 @@ page 110015 DMTProcessingPlan
     begin
         CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
         CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
+        CurrPage.UpdadeSelectedFields.Page.InitFactBoxAsUpdateSelectedFields(Rec);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -159,10 +164,7 @@ page 110015 DMTProcessingPlan
                 DMTProcessingPlanType::"Import To Target":
                     begin
                         SetStatusToStart(ProcessingPlan);
-                        DMTDataFile.Get(ProcessingPlan.ID);
-                        DMTDataFile.WriteSourceTableView(Rec.ReadSourceTableView());
-                        DMTDataFile.SetRecFilter();
-                        PageAction.ImportSelectedIntoTarget(DMTDataFile);
+                        PageAction.ImportSelectedIntoTarget(ProcessingPlan);
                         Commit();
                     end;
                 DMTProcessingPlanType::"Run Codeunit":
@@ -176,9 +178,9 @@ page 110015 DMTProcessingPlan
                     end;
                 DMTProcessingPlanType::"Update Field":
                     begin
-                        Error('ToDo');
                         SetStatusToStart(ProcessingPlan);
                         Commit();
+                        PageAction.UpdateFields(ProcessingPlan);
                     end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
@@ -239,6 +241,13 @@ page 110015 DMTProcessingPlan
             ProcessingPlan.Modify()
         until TempProcessingPLan.Next() = 0;
     end;
+
+    // local procedure UpdateVisibility()
+    // begin
+    //     ShowSourceTableFilterPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
+    //     ShowFixedValuesPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
+    //     ShowUpdateSelectedFieldsPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
+    // end;
 
     var
         ProcessingPlan_SELECTED: record DMTProcessingPlan temporary;
