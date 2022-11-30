@@ -249,7 +249,7 @@ table 110042 "DMTDataFile"
         Rec.Modify();
     end;
 
-    procedure ReadTableLastView() TableView: Text
+    procedure ReadLastSourceTableView() TableView: Text
     var
         IStr: InStream;
     begin
@@ -259,7 +259,7 @@ table 110042 "DMTDataFile"
         IStr.ReadText(TableView);
     end;
 
-    procedure WriteTableLastView(TableView: Text)
+    procedure WriteSourceTableView(TableView: Text)
     var
         OStr: OutStream;
     begin

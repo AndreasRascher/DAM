@@ -136,7 +136,6 @@ page 110015 DMTProcessingPlan
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
     var
-        CodeUnitMetadata: Record "CodeUnit Metadata";
         DMTDataFile: Record DMTDataFile;
         ProcessingPlan: record DMTProcessingPlan;
         PageAction: Codeunit DMTDataFilePageAction;
@@ -161,6 +160,7 @@ page 110015 DMTProcessingPlan
                     begin
                         SetStatusToStart(ProcessingPlan);
                         DMTDataFile.Get(ProcessingPlan.ID);
+                        DMTDataFile.WriteSourceTableView(Rec.ReadSourceTableView());
                         DMTDataFile.SetRecFilter();
                         PageAction.ImportSelectedIntoTarget(DMTDataFile);
                         Commit();

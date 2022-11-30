@@ -2393,6 +2393,11 @@
           <note from="Developer" annotates="general" priority="2">Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 2144073668 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reset Lines</source>
+          <note from="Developer" annotates="general" priority="2">Zeilen zurücksetzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Action 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>
           <note from="Developer" annotates="general" priority="2">de-DE Ausführen</note>

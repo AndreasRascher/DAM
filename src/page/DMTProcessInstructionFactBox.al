@@ -17,6 +17,9 @@ page 110017 "DMTProcessInstructionFactBox"
                 begin
                     if IsSourceTableFilterView then
                         CurrProcessingPlan.EditSourceTableFilter();
+                    if IsFixedValueView then
+                        CurrProcessingPlan.EditDefaultValues();
+                    ReloadPageContent();
                     CurrPage.Update(false);
                 end;
             }
@@ -40,8 +43,6 @@ page 110017 "DMTProcessInstructionFactBox"
     }
 
     internal procedure InitFactBoxAsSourceTableFilter(ProcessingPlan: Record DMTProcessingPlan)
-    var
-        DMTFieldMapping: Record DMTFieldMapping;
     begin
         if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
             IsSourceTableFilterView := false;
@@ -49,11 +50,9 @@ page 110017 "DMTProcessInstructionFactBox"
             exit;
         end;
         IsSourceTableFilterView := true;
-        DMTFieldMapping.SetRange("Data File ID", ProcessingPlan.ID);
-        DMTFieldMapping.CopyToTemp(Rec);
-        Rec.SetFilter(Comment, '<>''''');
-        CurrPage.Update(false);
         CurrProcessingPlan := ProcessingPlan;
+        CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
+        CurrPage.Update(false);
     end;
 
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
@@ -73,18 +72,21 @@ page 110017 "DMTProcessInstructionFactBox"
         CurrProcessingPlan := ProcessingPlan;
     end;
 
-    procedure SaveDefaultValuesToJSONBlob(ProcessingPlan: Record DMTProcessingPlan; var FieldMapping: Record DMTFieldMapping temporary)
-    var
-        JSONTools: Codeunit DMTJSONTools;
-        JArray: JsonArray;
-        JText: Text;
+    procedure ReloadPageContent()
     begin
-        if FieldMapping.FindSet then
-            repeat
-                JArray.Add(JSONTools.Rec2Json(FieldMapping));
-            until FieldMapping.Next() = 0;
-        JArray.WriteTo(JText);
-        ProcessingPlan.SaveDefaultValuesConfig(JText);
+        if Rec.IsTemporary then begin
+            Rec.Reset();
+            Rec.DeleteAll();
+        end;
+        if IsFixedValueView then begin
+            CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
+            CurrProcessingPlan.ConvertDefaultValuesViewToFieldLines(Rec);
+        end;
+        if IsSourceTableFilterView then begin
+            CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
+            CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
+        end;
+        CurrPage.Update();
     end;
 
     var

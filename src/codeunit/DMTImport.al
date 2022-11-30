@@ -247,16 +247,16 @@ codeunit 110014 DMTImport
             exit(Continue);
 
         if BufferTableView = '' then begin
-            if DMTDataFile.ReadTableLastView() <> '' then
-                BufferRef.SetView(DMTDataFile.ReadTableLastView());
+            if DMTDataFile.ReadLastSourceTableView() <> '' then
+                BufferRef.SetView(DMTDataFile.ReadLastSourceTableView());
 
             if not ShowRequestPageFilterDialog(BufferRef, DMTDataFile) then
                 exit(false);
             if BufferRef.HasFilter then begin
-                DMTDataFile.WriteTableLastView(BufferRef.GetView());
+                DMTDataFile.WriteSourceTableView(BufferRef.GetView());
                 Commit();
             end else begin
-                DMTDataFile.WriteTableLastView('');
+                DMTDataFile.WriteSourceTableView('');
                 Commit();
             end;
         end else begin

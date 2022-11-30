@@ -77,11 +77,32 @@ table 110010 DMTProcessingPlan
         DataFile: Record DMTDataFile;
         Import: Codeunit DMTImport;
         BufferRef: RecordRef;
+        CurrView: text;
     begin
         DataFile.Get(Rec.ID);
         Import.InitBufferRef(DataFile, BufferRef);
+        CurrView := ReadSourceTableView();
+        if CurrView <> '' then
+            BufferRef.SetView(CurrView);
         if Import.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
             SaveSourceTableFilter(BufferRef.GetView());
+        end;
+    end;
+
+    procedure EditDefaultValues()
+    var
+        DataFile: Record DMTDataFile;
+        Import: Codeunit DMTImport;
+        TargetRef: RecordRef;
+        CurrView: text;
+    begin
+        DataFile.Get(Rec.ID);
+        TargetRef.Open(DataFile."Target Table ID");
+        CurrView := ReadDefaultValuesView();
+        if CurrView <> '' then
+            TargetRef.SetView(CurrView);
+        if Import.ShowRequestPageFilterDialog(TargetRef, DataFile) then begin
+            SaveDefaultValuesView(TargetRef.GetView());
         end;
     end;
 
@@ -95,14 +116,14 @@ table 110010 DMTProcessingPlan
         IStr.ReadText(SourceTableView);
     end;
 
-    procedure ReadDefaultValuesConfig() JSONArrayAsText: Text
+    procedure ReadDefaultValuesView() DefaultValuesView: Text
     var
         IStr: InStream;
     begin
         rec.calcfields("Default Field Values");
         if not rec."Default Field Values".HasValue then exit('');
         rec."Default Field Values".CreateInStream(IStr);
-        IStr.ReadText(JSONArrayAsText);
+        IStr.ReadText(DefaultValuesView);
     end;
 
     procedure SaveSourceTableFilter(SourceTableView: Text)
@@ -118,16 +139,16 @@ table 110010 DMTProcessingPlan
         Rec.Modify();
     end;
 
-    procedure SaveDefaultValuesConfig(JSONArrayAsText: Text)
+    procedure SaveDefaultValuesView(DefaultValuesView: Text)
     var
         OStr: OutStream;
     begin
         Clear(Rec."Default Field Values");
         Rec.Modify();
-        if JSONArrayAsText = '' then
+        if DefaultValuesView = '' then
             exit;
         rec."Default Field Values".CreateOutStream(Ostr);
-        OStr.WriteText(JSONArrayAsText);
+        OStr.WriteText(DefaultValuesView);
         Rec.Modify();
     end;
 
@@ -144,5 +165,69 @@ table 110010 DMTProcessingPlan
                 TempProcessingPlan2.Insert(false);
             until ProcessingPlan.Next() = 0;
         TempProcessingPlan.Copy(TempProcessingPlan2, true);
+    end;
+
+    procedure ConvertSourceTableFilterToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
+    var
+        RecRef: RecordRef;
+        FieldIndexNo: Integer;
+        DataFile: Record DMTDataFile;
+        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        CurrView: Text;
+    begin
+        if (Rec.Type <> Rec.Type::"Import To Target") then
+            exit;
+        if Rec.ID = 0 then exit;
+        if not DataFile.Get(Rec.ID) then exit;
+
+        RecRef.Open(DataFile."Buffer Table ID", false, CompanyName);
+        CurrView := Rec.ReadSourceTableView();
+        if CurrView <> '' then begin
+            RecRef.SetView(CurrView);
+            if RecRef.HasFilter then
+                for FieldIndexNo := 1 To RecRef.FieldCount do begin
+                    if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
+                        TmpFieldMapping2."Data File ID" := Rec.ID;
+                        TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
+                        TmpFieldMapping2."Source Field Caption" := RecRef.FieldIndex(FieldIndexNo).Caption;
+                        TmpFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2.Comment));
+                        TmpFieldMapping2.Insert();
+                    end;
+                end;
+        end;
+
+        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+    end;
+
+    procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
+    var
+        DataFile: Record DMTDataFile;
+        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        RecRef: RecordRef;
+        FieldIndexNo: Integer;
+        CurrView: Text;
+    begin
+        if (Rec.Type <> Rec.Type::"Import To Target") then
+            exit;
+        if Rec.ID = 0 then exit;
+        if not DataFile.Get(Rec.ID) then exit;
+
+        RecRef.Open(DataFile."Target Table ID", false, CompanyName);
+        CurrView := Rec.ReadDefaultValuesView();
+        if CurrView <> '' then begin
+            RecRef.SetView(CurrView);
+            if RecRef.HasFilter then
+                for FieldIndexNo := 1 To RecRef.FieldCount do begin
+                    if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
+                        TmpFieldMapping2."Data File ID" := Rec.ID;
+                        TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
+                        TmpFieldMapping2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TmpFieldMapping2."Source Field Caption"));
+                        TmpFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2.Comment));
+                        TmpFieldMapping2.Insert();
+                    end;
+                end;
+        end;
+
+        TmpFieldMapping.Copy(TmpFieldMapping2, true);
     end;
 }
