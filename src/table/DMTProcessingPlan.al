@@ -210,8 +210,6 @@ table 110010 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        if (Rec.Type <> Rec.Type::"Import To Target") then
-            exit;
         if not Rec.CreateSourceTableRef(RecRef) then
             exit;
         CurrView := Rec.ReadSourceTableView();
@@ -235,23 +233,22 @@ table 110010 DMTProcessingPlan
     procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
     var
         TmpFieldMapping2: Record DMTFieldMapping temporary;
+        FieldMapping: Record DMTFieldMapping;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        if (Rec.Type <> Rec.Type::"Import To Target") then
-            exit;
-        if Rec.CreateSourceTableRef(RecRef) then exit;
+        if not Rec.CreateSourceTableRef(RecRef) then exit;
         CurrView := Rec.ReadDefaultValuesView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
             if RecRef.HasFilter then
                 for FieldIndexNo := 1 To RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
-                        TmpFieldMapping2."Data File ID" := Rec.ID;
-                        TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
-                        TmpFieldMapping2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TmpFieldMapping2."Source Field Caption"));
-                        TmpFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2.Comment));
+                        FieldMapping.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
+                        TmpFieldMapping2 := FieldMapping;
+                        TmpFieldMapping2."Processing Action" := TmpFieldMapping2."Processing Action"::FixedValue;
+                        TmpFieldMapping2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2."Fixed Value"));
                         TmpFieldMapping2.Insert();
                     end;
                 end;
@@ -264,18 +261,15 @@ table 110010 DMTProcessingPlan
     procedure ConvertUpdateFieldsListToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
     var
         DataFile: Record DMTDataFile;
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
         FieldMapping: Record DMTFieldMapping;
+        TmpFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
-        FieldIndexNo: Integer;
         FieldNoFilter: Text;
     begin
-        if (Rec.Type <> Rec.Type::"Update Field") then
-            exit;
         if not Rec.CreateSourceTableRef(RecRef) then exit;
         if not DataFile.Get(Rec.ID) then exit;
 
-        FieldNoFilter := Rec.ReadDefaultValuesView();
+        FieldNoFilter := Rec.ReadUpdateFieldsFilter();
         if FieldNoFilter <> '' then begin
             DataFile.FilterRelated(FieldMapping);
             FieldMapping.Setfilter("Target Field No.", FieldNoFilter);

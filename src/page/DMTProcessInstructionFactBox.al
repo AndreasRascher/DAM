@@ -12,13 +12,18 @@ page 110017 "DMTProcessInstructionFactBox"
     {
         area(content)
         {
+            field(ID; CurrProcessingPlan.ID)
+            {
+                ApplicationArea = All;
+                ShowCaption = false;
+            }
 
             repeater("FilterList")
             {
                 Caption = 'Filter', Comment = 'Filter';
                 Visible = IsSourceTableFilterView;
                 field("FieldCaption"; Rec."Source Field Caption") { ApplicationArea = All; }
-                field(FixedValue; Rec.Comment) { ApplicationArea = All; }
+                field(FilterValue; Rec.Comment) { ApplicationArea = All; }
             }
 
             repeater("FixedValuesList")
@@ -26,11 +31,11 @@ page 110017 "DMTProcessInstructionFactBox"
                 Caption = 'Fixed Values';
                 Visible = IsFixedValueView;
                 field(FilterFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
-                field(FilterValue; Rec.Comment) { ApplicationArea = All; Caption = 'Filter'; }
+                field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
             }
             repeater("UpdateFieldsList")
             {
-                Caption = 'Fixed Values', Comment = 'de-DE=Vorgabwerte';
+                Caption = 'Fields', Comment = 'de-DE=Vorgabwerte';
                 Visible = IsUpdateSelectedFieldsView;
                 field(UpdateFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
             }
@@ -81,6 +86,7 @@ page 110017 "DMTProcessInstructionFactBox"
                     if not UpdateTaskNew.InitFieldSelection(CurrProcessingPlan) then
                         exit;
                     if UpdateTaskNew.RunModal() = Action::LookupOK then begin
+                        CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
                         CurrProcessingPlan.SaveUpdateFieldsFilter(UpdateTaskNew.GetToFieldNoFilter());
                     end;
                 end;
@@ -106,6 +112,7 @@ page 110017 "DMTProcessInstructionFactBox"
 
     internal procedure InitFactBoxAsSourceTableFilter(ProcessingPlan: Record DMTProcessingPlan)
     begin
+        CurrProcessingPlan := ProcessingPlan;
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
@@ -115,33 +122,33 @@ page 110017 "DMTProcessInstructionFactBox"
             exit;
         end;
         IsSourceTableFilterView := true;
-        CurrProcessingPlan := ProcessingPlan;
         CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
         CurrPage.Update(false);
     end;
 
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
     begin
+        CurrProcessingPlan := ProcessingPlan;
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if ProcessingPlan.Type <> ProcessingPlan.Type::"Import To Target" then begin
+        if not (ProcessingPlan.Type IN [ProcessingPlan.Type::"Update Field", ProcessingPlan.Type::"Import To Target"]) then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
             exit;
         end;
         IsFixedValueView := true;
-        CurrProcessingPlan := ProcessingPlan;
         CurrProcessingPlan.ConvertDefaultValuesViewToFieldLines(Rec);
         CurrPage.Update(false);
     end;
 
     internal procedure InitFactBoxAsUpdateSelectedFields(ProcessingPlan: Record DMTProcessingPlan)
     begin
+        CurrProcessingPlan := ProcessingPlan;
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if ProcessingPlan.Type <> ProcessingPlan.Type::"Update Field" then begin
+        if not (ProcessingPlan.Type IN [ProcessingPlan.Type::"Update Field", ProcessingPlan.Type::"Import To Target"]) then begin
             IsUpdateSelectedFieldsView := false;
             Rec.DeleteAll();
             exit;
@@ -151,7 +158,6 @@ page 110017 "DMTProcessInstructionFactBox"
         ActionAddFieldVisible := true;
         ActionResetSelectionVisible := true;
 
-        CurrProcessingPlan := ProcessingPlan;
         CurrProcessingPlan.ConvertUpdateFieldsListToFieldLines(Rec);
         CurrPage.Update(false);
     end;

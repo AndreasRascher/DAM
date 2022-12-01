@@ -2398,6 +2398,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renumber Lines</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen neu nummerieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action RenumberLinesAction - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Action 3066818762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reset Lines</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen zurücksetzen</note>
@@ -2423,13 +2428,8 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FixedValuesList - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3333708309 - Control 782696917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FilterValue - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3333708309 - Control 4276839630 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Values</source>
+          <source>Fields</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgabwerte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control UpdateFieldsList - Property Caption</note>
         </trans-unit>

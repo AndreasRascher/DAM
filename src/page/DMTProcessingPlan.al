@@ -28,16 +28,19 @@ page 110015 DMTProcessingPlan
             part(SourceTableFilter; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
+                SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
             }
             part(FixedValues; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
+                SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
             }
             part(UpdadeSelectedFields; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Update Selected Fields', Comment = 'de-DE=Felder für Update';
+                SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
             }
         }
@@ -112,6 +115,16 @@ page 110015 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
+            action(RenumberLinesAction)
+            {
+                Caption = 'Renumber Lines', comment = 'de-DE=Zeilen neu nummerieren';
+                ApplicationArea = All;
+                Image = NumberGroup;
+                trigger OnAction()
+                begin
+                    RenumberLines()
+                end;
+            }
         }
     }
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -156,16 +169,16 @@ page 110015 DMTProcessingPlan
                 DMTProcessingPlanType::"Import To Buffer":
                     begin
                         SetStatusToStart(ProcessingPlan);
+                        Commit();
                         DMTDataFile.Get(ProcessingPlan.ID);
                         DMTDataFile.SetRecFilter();
                         PageAction.ImportToBufferTable(DMTDataFile, false);
-                        Commit();
                     end;
                 DMTProcessingPlanType::"Import To Target":
                     begin
                         SetStatusToStart(ProcessingPlan);
-                        PageAction.ImportSelectedIntoTarget(ProcessingPlan);
                         Commit();
+                        PageAction.RunWithProcessingPlanParams(ProcessingPlan);
                     end;
                 DMTProcessingPlanType::"Run Codeunit":
                     begin
@@ -180,7 +193,7 @@ page 110015 DMTProcessingPlan
                     begin
                         SetStatusToStart(ProcessingPlan);
                         Commit();
-                        PageAction.UpdateFields(ProcessingPlan);
+                        PageAction.RunWithProcessingPlanParams(ProcessingPlan);
                     end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
@@ -210,6 +223,35 @@ page 110015 DMTProcessingPlan
         ProcessingPlan.StartTime := CurrentDateTime;
         ProcessingPlan.Status := ProcessingPlan.Status::"In Progress";
         ProcessingPlan.Modify();
+    end;
+
+    local procedure RenumberLines()
+    var
+        ProcessingPlan: Record DMTProcessingPlan;
+        LineNoMapping: Dictionary of [Integer, Integer];
+        OldLineNo, NewLineNo : Integer;
+    begin
+        if not ProcessingPlan.FindSet() then exit;
+        //Create Mapping
+        repeat
+            NewLineNo += 10000;
+            LineNoMapping.Add(ProcessingPlan."Line No.", NewLineNo);
+        until ProcessingPlan.Next() = 0;
+        //Rename Lines
+        while LineNoMapping.Count > 0 do begin
+            foreach OldLineNo in LineNoMapping.Keys do begin
+                // Remove from mapping if same line no
+                NewLineNo := LineNoMapping.Get(OldLineNo);
+                if OldLineNo = NewLineNo then
+                    LineNoMapping.Remove(OldLineNo);
+                // Rename Line to free line no, Remove From Mapping
+                if not LineNoMapping.Keys.Contains(NewLineNo) then begin
+                    ProcessingPlan.Get(OldLineNo);
+                    ProcessingPlan.Rename(NewLineNo);
+                    LineNoMapping.Remove(OldLineNo);
+                end;
+            end;
+        end;
     end;
 
     procedure GetSelection(var TempProcessingPlan_Selected: Record DMTProcessingPlan temporary) HasLines: Boolean

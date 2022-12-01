@@ -121,7 +121,7 @@ page 110026 DMTDataFileCard
                 var
                     DMTImportNew: Codeunit DMTImport;
                 begin
-                    DMTImportNew.StartImport(Rec, false, false, '');
+                    DMTImportNew.StartImport(Rec, false, false, '', '');
                 end;
             }
             action(UpdateFields)

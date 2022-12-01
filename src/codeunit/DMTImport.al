@@ -1,12 +1,34 @@
 codeunit 110014 DMTImport
 {
-    procedure StartImport(var DataFile: Record DMTDataFile; NoUserInteraction_New: Boolean; IsUpdateTask: Boolean; SourceTableView_New: Text)
+    procedure RunWithProcessingPlanParams(var ProcessingPlan: record DMTProcessingPlan)
+    var
+        DataFile: Record DMTDataFile;
+        start: DateTime;
+    begin
+        start := CurrentDateTime;
+
+        NoUserInteraction := true;
+        DataFile.Get(ProcessingPlan.ID);
+        SourceTableView := ProcessingPlan.ReadSourceTableView();
+        UpdateFieldsFilter := ProcessingPlan.ReadUpdateFieldsFilter();
+
+        CheckBufferTableIsNotEmpty(DataFile);
+        CheckMappedFieldsExist(DataFile);
+
+        CurrProcessingPlan := ProcessingPlan;
+        ProcessFullBuffer(DataFile, UpdateFieldsFilter <> '');
+
+        UpdateProcessingTime(DataFile, start);
+    end;
+
+    procedure StartImport(var DataFile: Record DMTDataFile; NoUserInteraction_New: Boolean; IsUpdateTask: Boolean; SourceTableView_New: Text; UpdateFieldsFilter_New: Text)
     var
         start: DateTime;
     begin
         start := CurrentDateTime;
         NoUserInteraction := NoUserInteraction_New;
         SourceTableView := SourceTableView_New;
+        UpdateFieldsFilter := UpdateFieldsFilter_New;
 
         CheckBufferTableIsNotEmpty(DataFile);
         CheckMappedFieldsExist(DataFile);
@@ -118,20 +140,31 @@ codeunit 110014 DMTImport
     procedure LoadFieldMapping(DataFile: Record DMTDataFile; UseToFieldFilter: Boolean; var TempFieldMapping: Record "DMTFieldMapping" temporary) OK: Boolean
     var
         FieldMapping: Record "DMTFieldMapping";
+        FieldMapping_ProcessingPlan: Record DMTFieldMapping temporary;
     begin
         DataFile.FilterRelated(FieldMapping);
         FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
         if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then
             FieldMapping.SetFilter("Source Field No.", '<>0');
-        if UseToFieldFilter then
-            FieldMapping.Setfilter("Target Field No.", DataFile.ReadLastFieldUpdateSelection());
-        FieldMapping.CopyToTemp(TempFieldMapping);
-        OK := TempFieldMapping.FindFirst();
-    end;
 
-    procedure SetBufferTableView(bufferTableViewNEW: text)
-    begin
-        BufferTableView := bufferTableViewNEW;
+        if UpdateFieldsFilter <> '' then begin // Scope ProcessingPlan
+            FieldMapping.Setfilter("Target Field No.", UpdateFieldsFilter);
+        end else
+            if UseToFieldFilter then  // Scope DataFileCard
+                FieldMapping.Setfilter("Target Field No.", DataFile.ReadLastFieldUpdateSelection());
+        FieldMapping.CopyToTemp(TempFieldMapping);
+        // Apply Processing Plan Settings
+        if CurrProcessingPlan."Line No." <> 0 then begin
+            CurrProcessingPlan.ConvertDefaultValuesViewToFieldLines(FieldMapping_ProcessingPlan);
+            if FieldMapping_ProcessingPlan.FindSet() then
+                repeat
+                    TempFieldMapping.Get(FieldMapping_ProcessingPlan.RecordId);
+                    TempFieldMapping := FieldMapping_ProcessingPlan;
+                    TempFieldMapping.Modify()
+until FieldMapping_ProcessingPlan.Next() = 0;
+        end;
+
+        OK := TempFieldMapping.FindFirst();
     end;
 
     procedure AssignKeyFields(SourceRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpFieldMapping: record "DMTFieldMapping" temporary)
@@ -251,22 +284,19 @@ codeunit 110014 DMTImport
             exit(Continue);
         end;
 
-        if BufferTableView = '' then begin
-            if DMTDataFile.ReadLastSourceTableView() <> '' then
-                BufferRef.SetView(DMTDataFile.ReadLastSourceTableView());
+        if DMTDataFile.ReadLastSourceTableView() <> '' then
+            BufferRef.SetView(DMTDataFile.ReadLastSourceTableView());
 
-            if not ShowRequestPageFilterDialog(BufferRef, DMTDataFile) then
-                exit(false);
-            if BufferRef.HasFilter then begin
-                DMTDataFile.WriteSourceTableView(BufferRef.GetView());
-                Commit();
-            end else begin
-                DMTDataFile.WriteSourceTableView('');
-                Commit();
-            end;
+        if not ShowRequestPageFilterDialog(BufferRef, DMTDataFile) then
+            exit(false);
+        if BufferRef.HasFilter then begin
+            DMTDataFile.WriteSourceTableView(BufferRef.GetView());
+            Commit();
         end else begin
-            BufferRef.SetView(BufferTableView);
+            DMTDataFile.WriteSourceTableView('');
+            Commit();
         end;
+
         DMTDataFile.Find('=');
     end;
 
@@ -462,13 +492,16 @@ codeunit 110014 DMTImport
 
     var
         DMTMgt: Codeunit DMTMgt;
+        #region GlobalProcessionOptions
         NoUserInteraction: Boolean;
+        UpdateFieldsFilter: Text;
         SourceTableView: Text;
+        CurrProcessingPlan: Record DMTProcessingPlan;
+        #endregion GlobalProcessionOptions
         ProgressBarText_DurationTok: label '\Duration:        ########################################3#';
         ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
         ProgressBarText_ProgressTok: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
         ProgressBarText_RecordTok: label '\Record:    ########################################2#';
         ProgressBarText_TimeRemainingTok: label '\Time Remaining: ########################################5#';
         ProgressBarText_TitleTok: label '_________________________%1_________________________', Locked = true;
-        BufferTableView: Text;
 }
