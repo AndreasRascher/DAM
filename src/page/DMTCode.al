@@ -1,4 +1,4 @@
-page 110012 DMTCode
+page 110012 "DMTCode"
 {
     Caption = 'Code';
     PageType = List;

@@ -156,10 +156,13 @@ page 110015 DMTProcessingPlan
     var
         DMTDataFile: Record DMTDataFile;
         ProcessingPlan: record DMTProcessingPlan;
+        // ProcessStorageSave: Codeunit DMTProcessStorageSave;
+        ProcessStorage: Codeunit DMTProcessStorage;
         PageAction: Codeunit DMTDataFilePageAction;
         Success: Boolean;
     begin
         if not ProcessingPlan_SELECTED.FindSet then exit;
+        ProcessStorage.Bind();
         repeat
             ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
             ProcessingPlan.TestField(ID);
@@ -168,31 +171,28 @@ page 110015 DMTProcessingPlan
                     ;
                 DMTProcessingPlanType::"Import To Buffer":
                     begin
-                        SetStatusToStart(ProcessingPlan);
-                        Commit();
+                        SetStatusToStartAndCommit(ProcessingPlan);
                         DMTDataFile.Get(ProcessingPlan.ID);
                         DMTDataFile.SetRecFilter();
                         PageAction.ImportToBufferTable(DMTDataFile, false);
                     end;
                 DMTProcessingPlanType::"Import To Target":
                     begin
-                        SetStatusToStart(ProcessingPlan);
-                        Commit();
+                        SetStatusToStartAndCommit(ProcessingPlan);
                         PageAction.RunWithProcessingPlanParams(ProcessingPlan);
                     end;
                 DMTProcessingPlanType::"Run Codeunit":
                     begin
-                        SetStatusToStart(ProcessingPlan);
-                        Commit();
+                        SetStatusToStartAndCommit(ProcessingPlan);
                         ClearLastError();
+                        ProcessStorage.Set(ProcessingPlan);
                         Success := Codeunit.Run(ProcessingPlan.ID);
                         if GetLastErrorText() <> '' then
                             Message(GetLastErrorText());
                     end;
                 DMTProcessingPlanType::"Update Field":
                     begin
-                        SetStatusToStart(ProcessingPlan);
-                        Commit();
+                        SetStatusToStartAndCommit(ProcessingPlan);
                         PageAction.RunWithProcessingPlanParams(ProcessingPlan);
                     end;
             end;
@@ -200,6 +200,7 @@ page 110015 DMTProcessingPlan
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;
             ProcessingPlan.Modify();
             Commit();
+            ProcessStorage.Unbind();
         until ProcessingPlan_SELECTED.Next() = 0;
     end;
 
@@ -218,11 +219,12 @@ page 110015 DMTProcessingPlan
         until ProcessingPlan_SELECTED.Next() = 0;
     end;
 
-    local procedure SetStatusToStart(var ProcessingPlan: record DMTProcessingPlan)
+    local procedure SetStatusToStartAndCommit(var ProcessingPlan: record DMTProcessingPlan)
     begin
         ProcessingPlan.StartTime := CurrentDateTime;
         ProcessingPlan.Status := ProcessingPlan.Status::"In Progress";
         ProcessingPlan.Modify();
+        Commit();
     end;
 
     local procedure RenumberLines()
