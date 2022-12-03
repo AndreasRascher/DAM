@@ -13,8 +13,9 @@ codeunit 110016 "DMTProcessStorage"
 
     procedure Set(Storage: Variant)
     begin
-        if not IsBindingActive() then
-            Bind();
+        if IsBindingActive() then
+            Unbind();
+        Bind();
         SetPublisher(Storage);
     end;
 
