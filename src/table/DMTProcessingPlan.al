@@ -283,4 +283,13 @@ table 110010 DMTProcessingPlan
         TmpFieldMapping.Copy(TmpFieldMapping2, true);
         LineCount := TmpFieldMapping.Count;
     end;
+
+    procedure ApplySourceTableFilter(var Ref: RecordRef) OK: Boolean
+    var
+        ProcessPlan: Record DMTProcessingPlan;
+    begin
+        OK := true;
+        if ProcessPlan.ReadSourceTableView() = '' then exit(false);
+        Ref.SetView(ProcessPlan.ReadSourceTableView());
+    end;
 }
