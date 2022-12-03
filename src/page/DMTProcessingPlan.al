@@ -161,7 +161,6 @@ page 110015 DMTProcessingPlan
         Success: Boolean;
     begin
         if not ProcessingPlan_SELECTED.FindSet then exit;
-        ProcessStorage.Bind();
         repeat
             ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
             ProcessingPlan.TestField(ID);

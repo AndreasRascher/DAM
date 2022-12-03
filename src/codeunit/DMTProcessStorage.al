@@ -1,7 +1,11 @@
 /// <summary>
-/// Use as an Single Instance alternative if you need to clear the single instance values on error.
-/// Usage: Before the process starts use Bind() and then Set(ValueToStore). 
-/// As long as the codeunit is in scope (alive) every other object can access the stored value by calling Get()
+/// <p>Use as an Single Instance alternative if you need to clear the single instance values on error.</p>
+/// <p>Concept:</p>
+///   <p>- 2 Instances of the same codeunit are alive after calling the first publisher</p>
+///   <p>- Events are used to exchange values between these instances</p>
+/// <p>Usage: Before the process starts call Set(ValueToStore) to active the binding and set the value.</p>
+/// <p>The process called after should be runmodal or if codeunit.run(). If not the variable will quickly run out of scope before get() is called.</p>
+/// <p>As long as the codeunit is in scope (alive) every other object can access the stored value by calling Get()</p>
 /// </summary>
 codeunit 110016 "DMTProcessStorage"
 {
