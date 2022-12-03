@@ -306,12 +306,10 @@ table 110010 DMTProcessingPlan
     end;
 
     procedure ApplySourceTableFilter(var Ref: RecordRef) OK: Boolean
-    var
-        ProcessPlan: Record DMTProcessingPlan;
     begin
         OK := true;
-        if ProcessPlan.ReadSourceTableView() = '' then exit(false);
-        Ref.SetView(ProcessPlan.ReadSourceTableView());
+        if Rec.ReadSourceTableView() = '' then exit(false);
+        Ref.SetView(Rec.ReadSourceTableView());
     end;
 
     internal procedure InitFlowFilters()

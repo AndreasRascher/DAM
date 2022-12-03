@@ -2061,6 +2061,13 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungszeit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table No.</source>
+          <target>Herkunftstabellennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start Time</source>
           <target>Startzeit</target>
@@ -2877,11 +2884,19 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 2144073668 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renumber Lines</source>
+          <target>Zeilen neu nummerieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen neu nummerieren</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action RenumberLinesAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 3066818762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reset Lines</source>
           <target>Zeilen zurücksetzen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen zurücksetzen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLines - Property Caption</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLinesAction - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>
@@ -2907,23 +2922,17 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FixedValuesList - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3333708309 - Control 782696917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <target>Filter</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FilterValue - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3333708309 - Control 4276839630 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Values</source>
+          <source>Fields</source>
           <target>Vorgabwerte</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgabwerte</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control UpdateFieldsList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Action 66295949 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add/Remove Field</source>
           <target>Feld hinzufügen/entfernen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Feld hinzufügen/entfernen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action AddField - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Action 746276264 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
