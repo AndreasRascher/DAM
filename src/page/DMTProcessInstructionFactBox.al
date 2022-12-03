@@ -116,7 +116,7 @@ page 110017 "DMTProcessInstructionFactBox"
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if ProcessingPlan.Type <> ProcessingPlan.Type::"Import To Target" then begin
+        if not (ProcessingPlan.Type in [ProcessingPlan.Type::"Import To Target", ProcessingPlan.Type::"Run Codeunit"]) then begin
             IsSourceTableFilterView := false;
             Rec.DeleteAll();
             exit;

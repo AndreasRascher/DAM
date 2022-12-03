@@ -1,11 +1,11 @@
 /// <summary>
 /// <p>Use as an Single Instance alternative if you need to clear the single instance values on error.</p>
-/// <p>Concept:</p>
-///   <p>- 2 Instances of the same codeunit are alive after calling the first publisher</p>
-///   <p>- Events are used to exchange values between these instances</p>
-/// <p>Usage: Before the process starts call Set(ValueToStore) to active the binding and set the value.</p>
-/// <p>The process called after should be runmodal or if codeunit.run(). If not the variable will quickly run out of scope before get() is called.</p>
-/// <p>As long as the codeunit is in scope (alive) every other object can access the stored value by calling Get()</p>
+/// <p>* <b>Concept:</b></p>
+///   <p> 2 Instances of the same codeunit are alive after calling the first publisher.</p>
+///   <p> Events are used to exchange values between these instances.</p>
+/// <p>* <b>Usage</b>: Before the process starts call <i>Set(ValueToStore)</i> to active the binding and set the value.</p>
+/// <p>The process called after should be runmodal or if codeunit.run(). If not the variable will quickly run out of scope before <i>Get()</i> is called.</p>
+/// <p>As long as the codeunit is in scope (alive) every other object can access the stored value by calling <i>Get()</i></p>
 /// </summary>
 codeunit 110016 "DMTProcessStorage"
 {
@@ -13,6 +13,7 @@ codeunit 110016 "DMTProcessStorage"
 
     procedure Set(Storage: Variant)
     begin
+        // Redo binding fixes problem with 2nd call 
         if IsBindingActive() then
             Unbind();
         Bind();

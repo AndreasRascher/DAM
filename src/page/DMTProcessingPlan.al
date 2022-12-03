@@ -20,6 +20,7 @@ page 110015 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Source Table No."; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
         }
@@ -134,6 +135,7 @@ page 110015 DMTProcessingPlan
 
     trigger OnAfterGetRecord()
     begin
+        Rec.InitFlowFilters();
         LineStyle := '';
         case true of
             (Rec.Type = Rec.Type::Group):

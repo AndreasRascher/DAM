@@ -1718,6 +1718,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungszeit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start Time</source>
           <note from="Developer" annotates="general" priority="2"></note>

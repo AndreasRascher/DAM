@@ -45,6 +45,7 @@ table 110010 DMTProcessingPlan
                         begin
                             DMTDataFile.Get(Rec.ID);
                             Description := DMTDataFile.Name;
+                            "Source Table No." := 0;
                         end;
                     (Rec.ID <> 0) and (Type in [Type::"Run Codeunit"]):
                         begin
@@ -55,9 +56,16 @@ table 110010 DMTProcessingPlan
             end;
         }
         field(12; Description; Text[250]) { Caption = 'Description'; }
-        field(30; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
-        field(31; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
-        field(32; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
+        field(30; "Source Table No."; Integer)
+        {
+            Caption = 'Source Table No.';
+            BlankZero = true;
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
+        }
+        field(31; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', locked = true; FieldClass = FlowFilter; }
+        field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
+        field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
+        field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
         field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress","Finished"; Editable = false; }
         field(41; StartTime; DateTime) { Caption = 'Start Time'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
@@ -79,8 +87,14 @@ table 110010 DMTProcessingPlan
         BufferRef: RecordRef;
         CurrView: text;
     begin
-        DataFile.Get(Rec.ID);
-        Import.InitBufferRef(DataFile, BufferRef);
+        if Rec.Type = Rec.Type::"Run Codeunit" then begin
+            Rec.TestField("Source Table No.");
+            BufferRef.Open(Rec."Source Table No.");
+            DataFile.BufferTableType := DataFile.BufferTableType::"Seperate Buffer Table per CSV";
+        end else begin
+            DataFile.Get(Rec.ID);
+            Import.InitBufferRef(DataFile, BufferRef);
+        end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
@@ -196,6 +210,13 @@ table 110010 DMTProcessingPlan
     begin
         Clear(SourceRef);
         if Rec.ID = 0 then exit(false);
+        case Rec.Type of
+            rec.Type::"Run Codeunit":
+                begin
+                    SourceRef.Open(rec."Source Table No.", false);
+                    exit(true);
+                end;
+        end;
         if not DataFile.Get(Rec.ID) then exit;
         if (DataFile."Buffer Table ID" = 0) and (DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files") then
             DataFile."Buffer Table ID" := Database::DMTGenBuffTable;
@@ -291,5 +312,16 @@ table 110010 DMTProcessingPlan
         OK := true;
         if ProcessPlan.ReadSourceTableView() = '' then exit(false);
         Ref.SetView(ProcessPlan.ReadSourceTableView());
+    end;
+
+    internal procedure InitFlowFilters()
+    var
+        NAVAppInstalledApp: Record "NAV App Installed App";
+        mI: ModuleInfo;
+    begin
+        NavApp.GetCurrentModuleInfo(mI);
+        NAVAppInstalledApp.SetRange("App ID", mI.Id);
+        NAVAppInstalledApp.FindFirst();
+        Rec.SetRange("Current App Package ID Filter", NAVAppInstalledApp."Package ID");
     end;
 }
