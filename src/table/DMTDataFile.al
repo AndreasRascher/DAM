@@ -149,6 +149,14 @@ table 110042 "DMTDataFile"
             NextNo += DataFile.ID;
     end;
 
+    procedure CopyFrom(var FileRec: Record File)
+    begin
+        Rec.Size := FileRec.Size;
+        Rec.Path := FileRec.Path;
+        Rec.Name := FileRec.Name;
+        Rec."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+    end;
+
     procedure GetRecByFilePath(FilePath: Text; FileName: Text) OK: Boolean
     var
         DataFile: Record DMTDataFile;
@@ -219,10 +227,7 @@ table 110042 "DMTDataFile"
         FileRec: Record File;
     begin
         if Rec.FindFileRec(FileRec) then begin
-            Rec.Size := FileRec.Size;
-            Rec.Path := FileRec.Path;
-            Rec.Name := FileRec.Name;
-            Rec."Created At" := CreateDateTime(FileRec.Date, FileRec.Time);
+            CopyFrom(FileRec);
             if DoModify then
                 Rec.Modify();
         end;
@@ -284,9 +289,10 @@ table 110042 "DMTDataFile"
         FileRec: Record File;
     begin
         DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-        if Rec.FindFileRec(FileRec) then
+        if Rec.FindFileRec(FileRec) then begin
             Rec.DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-
+            Rec.CopyFrom(FileRec);
+        end;
         Rec.ImportToBufferIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToBufferIndicator := Enum::DMTImportIndicator::Empty;
 
