@@ -31,18 +31,21 @@ page 110015 DMTProcessingPlan
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
                 SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
+                Enabled = ShowSourceTableFilterPart;
             }
             part(FixedValues; "DMTProcessInstructionFactBox")
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
                 SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
+                Enabled = ShowFixedValuesPart;
             }
-            part(UpdadeSelectedFields; "DMTProcessInstructionFactBox")
+            part(ProcessSelectedFieldsOnly; "DMTProcessInstructionFactBox")
             {
-                Caption = 'Update Selected Fields', Comment = 'de-DE=Felder für Update';
+                Caption = 'Process selected fields only', Comment = 'de-DE=Ausgew. Felder verarbeiten';
                 SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
+                Enabled = ShowProcessSelectedFieldsOnly;
             }
         }
     }
@@ -149,9 +152,10 @@ page 110015 DMTProcessingPlan
 
     trigger OnAfterGetCurrRecord()
     begin
+        UpdateVisibility();
         CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
         CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
-        CurrPage.UpdadeSelectedFields.Page.InitFactBoxAsUpdateSelectedFields(Rec);
+        CurrPage.ProcessSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -286,14 +290,16 @@ page 110015 DMTProcessingPlan
         until TempProcessingPLan.Next() = 0;
     end;
 
-    // local procedure UpdateVisibility()
-    // begin
-    //     ShowSourceTableFilterPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
-    //     ShowFixedValuesPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
-    //     ShowUpdateSelectedFieldsPart := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"];
-    // end;
+    local procedure UpdateVisibility()
+    begin
+        ShowSourceTableFilterPart := Rec.TypeSupportsSourceTableFilter();
+        ShowFixedValuesPart := Rec.TypeSupportsFixedValues();
+        ShowProcessSelectedFieldsOnly := Rec.TypeSupportsProcessSelectedFieldsOnly();
+    end;
 
     var
+        [InDataSet]
+        ShowSourceTableFilterPart, ShowFixedValuesPart, ShowProcessSelectedFieldsOnly : Boolean;
         ProcessingPlan_SELECTED: record DMTProcessingPlan temporary;
         LineStyle: Text;
 }

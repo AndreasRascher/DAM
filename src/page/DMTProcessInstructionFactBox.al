@@ -12,12 +12,6 @@ page 110017 "DMTProcessInstructionFactBox"
     {
         area(content)
         {
-            field(ID; CurrProcessingPlan.ID)
-            {
-                ApplicationArea = All;
-                ShowCaption = false;
-            }
-
             repeater("FilterList")
             {
                 Caption = 'Filter', Comment = 'Filter';
@@ -116,7 +110,7 @@ page 110017 "DMTProcessInstructionFactBox"
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if not (ProcessingPlan.Type in [ProcessingPlan.Type::"Import To Target", ProcessingPlan.Type::"Run Codeunit"]) then begin
+        if not ProcessingPlan.TypeSupportsSourceTableFilter() then begin
             IsSourceTableFilterView := false;
             Rec.DeleteAll();
             exit;
@@ -132,7 +126,7 @@ page 110017 "DMTProcessInstructionFactBox"
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if not (ProcessingPlan.Type IN [ProcessingPlan.Type::"Update Field", ProcessingPlan.Type::"Import To Target"]) then begin
+        if not ProcessingPlan.TypeSupportsFixedValues() then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
             exit;
@@ -148,7 +142,7 @@ page 110017 "DMTProcessInstructionFactBox"
         clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
-        if not (ProcessingPlan.Type IN [ProcessingPlan.Type::"Update Field", ProcessingPlan.Type::"Import To Target"]) then begin
+        if not ProcessingPlan.TypeSupportsProcessSelectedFieldsOnly() then begin
             IsUpdateSelectedFieldsView := false;
             Rec.DeleteAll();
             exit;

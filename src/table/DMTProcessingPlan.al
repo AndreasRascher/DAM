@@ -322,4 +322,20 @@ table 110010 DMTProcessingPlan
         NAVAppInstalledApp.FindFirst();
         Rec.SetRange("Current App Package ID Filter", NAVAppInstalledApp."Package ID");
     end;
+
+    procedure TypeSupportsSourceTableFilter(): Boolean
+    begin
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit"]);
+    end;
+
+    procedure TypeSupportsProcessSelectedFieldsOnly(): Boolean
+    begin
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"]);
+    end;
+
+    procedure TypeSupportsFixedValues(): Boolean
+    begin
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"]);
+    end;
+
 }

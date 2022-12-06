@@ -2383,15 +2383,15 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewerte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control FixedValues - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 2185914457 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process selected fields only</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ausgew. Felder verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control ProcessSelectedFieldsOnly - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Control 1608331573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Table Filter</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldaten Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1212190007 - Control 253805979 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Update Selected Fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Felder für Update</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control UpdadeSelectedFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1042755249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Indent Left</source>
