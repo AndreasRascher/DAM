@@ -151,11 +151,24 @@ table 110048 DMTDataFileBuffer
                             else
                                 Rec."Target Table ID" := Rec."NAV Src.Table No.";
                         end;
+                    //5005350 "Phys. Inventory Order Header"
+                    //5875 "Phys. Invt. Order Header
+                    5005350:
+                        Rec."Target Table ID" := 5875; //5875
+                    // 5005351 "Phys. Inventory Order Line"
+                    // 5876 "Phys. Invt. Order Line"
+                    5005351:
+                        Rec."Target Table ID" := 5876; // 5876
+                    // 5005361 "Expect. Phys. Inv. Track. Line"
+                    // 5886 "Exp. Phys. Invt. Tracking"
+                    5005361:
+                        Rec."Target Table ID" := 5886; //5886 
                     else
                         Error('unhandled obsolete Table %1', Rec."NAV Src.Table No.");
                 end;
             end;
             Rec.Modify();
+
         end;
     end;
 
