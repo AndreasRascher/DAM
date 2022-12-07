@@ -2643,6 +2643,31 @@
           <note from="Developer" annotates="general" priority="2">ZIP-Dateien (*.zip)|*.zip</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 286210954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Buffer</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Buffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 4081878561 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Target</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Target - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 1280137342 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Run Codeunit</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Run Codeunit - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 375687917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Field</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Update Field - Property Caption</note>
+        </trans-unit>
       </group>
     </body>
   </file>
