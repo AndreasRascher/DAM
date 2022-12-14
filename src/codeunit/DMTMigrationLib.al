@@ -50,6 +50,7 @@ codeunit 110011 "DMTMigrationLib"
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
     var
         RoutingHeader: Record "Routing Header";
+        Contact: Record Contact;
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -68,6 +69,9 @@ codeunit 110011 "DMTMigrationLib"
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
             IsMatch(TargetField, Database::Vendor, 'Pay-to Vendor No.'),
             IsMatch(TargetField, Database::Contact, 'Company No.'),
+            IsMatch(TargetField, Database::Contact, Contact."First Name"),  // Avoid ProcessNameChange to clear Names
+            IsMatch(TargetField, Database::Contact, Contact."Middle Name"),
+            IsMatch(TargetField, Database::Contact, Contact.Surname),
             IsMatch(TargetField, Database::Item, 'Sales Unit of Measure'),
             IsMatch(TargetField, Database::Item, 'Purch. Unit of Measure'),
             IsMatch(TargetField, Database::Item, 'Unit Cost'),

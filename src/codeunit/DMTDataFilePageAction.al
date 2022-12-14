@@ -165,7 +165,7 @@ codeunit 110013 "DMTDataFilePageAction"
         until TempFieldMapping_Selected.Next() = 0;
     end;
 
-    procedure MoveSelectedLines(TempFieldMapping_Selected: Record DMTFieldMapping temporary; Direction: Option Up,Down,Top,Bottom)
+    procedure MoveSelectedLines(var TempFieldMapping_Selected: Record DMTFieldMapping temporary; Direction: Option Up,Down,Top,Bottom)
     var
         FieldMapping: Record DMTFieldMapping;
         TempFieldMapping: Record DMTFieldMapping temporary;
