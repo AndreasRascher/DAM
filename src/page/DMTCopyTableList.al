@@ -49,6 +49,7 @@ page 110013 "DMTCopyTableList"
                 Image = Copy;
                 Promoted = true;
                 PromotedOnly = true;
+                PromotedCategory = Process;
                 ApplicationArea = All;
                 trigger OnAction()
                 begin
