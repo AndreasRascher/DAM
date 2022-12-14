@@ -49,6 +49,7 @@ page 110013 "DMTCopyTableList"
                 Image = Copy;
                 Promoted = true;
                 PromotedOnly = true;
+                ApplicationArea = All;
                 trigger OnAction()
                 begin
                     GetSelection(TempCopyTable_SELECTED);
