@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=29.11.22;
-    Time=22:17:29;
+    Date=15.12.22;
+    Time=10:02:31;
     Modified=Yes;
     Version List=DMT;
   }
@@ -66,16 +66,18 @@ OBJECT XMLport 50049 DMT Export
                                                                              IF Lines.Number = 1 THEN BEGIN
                                                                                ExportRecRef.FINDSET(FALSE,FALSE);
                                                                                CLEAR(LineProgress);
-                                                                               DialogText := CONVERTSTR('"' + ExportRecRef.CAPTION + '"','\','/') + ' ######1#\'+FORMAT(ExportRecRef.COUNT);
+                                                                               TotalLineCount := ExportRecRef.COUNT;
+                                                                               DialogText := CONVERTSTR('Table: "' + ExportRecRef.CAPTION + '"','\','/') + '\Processed ################1 \No. of Lines ####################2#';
                                                                                LineProgress.OPEN(DialogText);
-                                                                               LastUpdateProgress := CURRENTDATETIME-1000;
+                                                                               LastUpdateProgress := CURRENTDATETIME - 1000;
                                                                              END ELSE
                                                                                IF ExportRecRef.NEXT = 0 THEN BEGIN
                                                                                  LineProgress.CLOSE;
                                                                                  currXMLport.BREAK; // 20221129 Stop on last line
                                                                                END ELSE BEGIN
                                                                                  IF (CURRENTDATETIME - LastUpdateProgress) > 1000 THEN BEGIN
-                                                                                   LineProgress.UPDATE(1,Lines.Number);
+                                                                                   LineProgress.UPDATE(1,FORMAT(Lines.Number));
+                                                                                   LineProgress.UPDATE(2,FORMAT(TotalLineCount));
                                                                                    LastUpdateProgress := CURRENTDATETIME;
                                                                                  END;
                                                                                END;
@@ -2648,8 +2650,10 @@ OBJECT XMLport 50049 DMT Export
       MaxNoOfFields@1000000009 : Integer;
       ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
       TempTableInfo@1000000012 : TEMPORARY Record 2000000028;
+      IsLastLine@1000000013 : Boolean;
       LineProgress@1000000014 : Dialog;
       LastUpdateProgress@1000000015 : DateTime;
+      TotalLineCount@1000000016 : Integer;
 
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text;exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text);
     VAR
@@ -3185,3 +3189,4 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
+
