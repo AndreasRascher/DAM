@@ -29,6 +29,7 @@ codeunit 110012 DMTProcessRecord
         DMTMgt.AssignValueToFieldRef(SourceRef, TempFieldMapping, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         DMTMgt.ApplyReplacements(TempFieldMapping, FieldWithTypeCorrectValueToValidate);
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
+        CurrValueToAssign_IsInitialized := true;
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin
@@ -67,7 +68,8 @@ codeunit 110012 DMTProcessRecord
         TempFieldMapping.SetRange("Is Key Field(Target)", true);
         TempFieldMapping.SetFilter("Processing Action", '<>%1', TempFieldMapping."Processing Action"::Ignore);
         TempFieldMapping.SetCurrentKey("Validation Order");
-        TempFieldMapping.FindSet();
+        if not TempFieldMapping.FindSet() then
+            Error('Fieldmapping for Key Fields is invalid');
         repeat
             if not ProcessedFields.Contains(TempFieldMapping.RecordID) then begin
                 CurrFieldToProcess := TempFieldMapping.RecordID;
@@ -125,7 +127,10 @@ codeunit 110012 DMTProcessRecord
         ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
         ErrorItem.Add('GetLastErrorCode', GetLastErrorCode);
         ErrorItem.Add('GetLastErrorText', GetLastErrorText);
-        ErrorItem.Add('ErrorValue', Format(CurrValueToAssign.Value));
+        if CurrValueToAssign_IsInitialized then
+            ErrorItem.Add('ErrorValue', Format(CurrValueToAssign.Value))
+        else
+            ErrorItem.Add('ErrorValue', '');
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
         ClearLastError();
@@ -189,6 +194,7 @@ codeunit 110012 DMTProcessRecord
         CurrFieldToProcess: RecordId;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
+        CurrValueToAssign_IsInitialized: Boolean;
         SkipRecord: Boolean;
         // DMTTable: Record DMTTable;
         // TempDMTField: Record DMTField temporary;
