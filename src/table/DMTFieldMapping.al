@@ -118,7 +118,7 @@ table 110041 DMTFieldMapping
             exit;
         end;
         FieldMapping := Rec;
-        DataFile.get(Rec."Target Table ID");
+        DataFile.get(Rec."Data File ID");
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin

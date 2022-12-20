@@ -8,4 +8,5 @@ enum 110009 "DMTProcessingPlanType"
     value(3; "Import To Buffer") { Caption = 'Import to Buffer'; }
     value(4; "Import To Target") { Caption = 'Import to Target'; }
     value(5; "Update Field") { Caption = 'Update Field'; }
+    value(6; "Buffer + Target") { Caption = 'Buffer + Target'; }
 }

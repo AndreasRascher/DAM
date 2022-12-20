@@ -183,7 +183,7 @@ page 110015 DMTProcessingPlan
                 DMTProcessingPlanType::"Import To Target":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        PageAction.RunWithProcessingPlanParams(ProcessingPlan);
+                        PageAction.ImportWithProcessingPlanParams(ProcessingPlan);
                     end;
                 DMTProcessingPlanType::"Run Codeunit":
                     begin
@@ -197,7 +197,15 @@ page 110015 DMTProcessingPlan
                 DMTProcessingPlanType::"Update Field":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        PageAction.RunWithProcessingPlanParams(ProcessingPlan);
+                        PageAction.ImportWithProcessingPlanParams(ProcessingPlan);
+                    end;
+                DMTProcessingPlanType::"Buffer + Target":
+                    begin
+                        SetStatusToStartAndCommit(ProcessingPlan);
+                        DMTDataFile.Get(ProcessingPlan.ID);
+                        DMTDataFile.SetRecFilter();
+                        PageAction.ImportToBufferTable(DMTDataFile, false);
+                        PageAction.ImportWithProcessingPlanParams(ProcessingPlan);
                     end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;

@@ -1853,6 +1853,11 @@
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 1263952573 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2250631420 - NamedType 2070409300" size-unit="char" translate="yes" xml:space="preserve">
           <source>\Duration:        ########################################3#</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2293,6 +2298,11 @@
           <note from="Developer" annotates="general" priority="2">Update der offenen Tabellenrelationen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action UpdateTableRelationInfo - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action UploadFileToDefaultFolder - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 97409727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>ErrorLog Summary</source>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll Zusammenfassung</note>
@@ -2642,6 +2652,11 @@
           <source>ZIP Files (*.zip)|*.zip</source>
           <note from="Developer" annotates="general" priority="2">ZIP-Dateien (*.zip)|*.zip</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 3533810158 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer + Target</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Buffer + Target - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Group</source>

@@ -209,6 +209,19 @@ page 110027 "DMTDataFileList"
                     PageActions.AddDataFiles();
                 end;
             }
+            action(UploadFileToDefaultFolder)
+            {
+                Image = MoveUp;
+                Caption = 'Upload File';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Category7;
+                PromotedOnly = true;
+                trigger OnAction()
+                begin
+                    PageActions.UploadFileToDefaultFolder();
+                end;
+            }
             action(DeleteMarkedLines)
             {
                 Caption = 'Delete Marked Lines', Comment = 'Markierte Zeilen löschen';

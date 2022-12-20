@@ -745,6 +745,36 @@ codeunit 110013 "DMTDataFilePageAction"
         until TempDataFile_SELECTED.Next() = 0;
     end;
 
+    internal procedure UploadFileToDefaultFolder()
+    var
+        DMTSetup: Record "DMTSetup";
+        Setup: Record DMTSetup;
+        FileMgt: Codeunit "File Management";
+        TempBlob: Codeunit "Temp Blob";
+        FieldImport: XmlPort DMTFieldBufferImport;
+        FileFound: Boolean;
+        ServerFile: File;
+        InStr: InStream;
+        ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
+        OuStr: OutStream;
+        FileName: Text;
+        ServerFilePath: Text;
+    begin
+        Setup.Get();
+        Setup.TestField("Default Export Folder Path");
+
+        TempBlob.CreateInStream(InStr);
+        if not UploadIntoStream('Select a csv file', '', format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
+            exit;
+        end;
+        ServerFilePath := FileMgt.CombinePath(Setup."Default Export Folder Path", FileName);
+        ServerFile.Create(ServerFilePath, TextEncoding::UTF8);
+        ServerFile.CreateOutStream(OuStr);
+        CopyStream(OuStr, InStr);
+        Message(ImportFinishedMsg);
+        ServerFile.Close();
+    end;
+
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var
         Import: Codeunit DMTImport;
@@ -761,7 +791,7 @@ codeunit 110013 "DMTDataFilePageAction"
         end;
     end;
 
-    procedure RunWithProcessingPlanParams(var ProcessingPlan: Record DMTProcessingPlan)
+    procedure ImportWithProcessingPlanParams(var ProcessingPlan: Record DMTProcessingPlan)
     var
         Import: Codeunit DMTImport;
     begin
