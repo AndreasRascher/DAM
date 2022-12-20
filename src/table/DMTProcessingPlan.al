@@ -32,7 +32,9 @@ table 110010 DMTProcessingPlan
             else
             if (Type = const("Import To Target")) DMTDataFile.ID
             else
-            if (Type = const("Update Field")) DMTDataFile.ID;
+            if (Type = const("Update Field")) DMTDataFile.ID
+            else
+            if (Type = const("Buffer + Target")) DMTDataFile.ID;
             trigger OnValidate()
             var
                 CodeUnitMetadata: Record "CodeUnit Metadata";
@@ -41,7 +43,7 @@ table 110010 DMTProcessingPlan
                 case true of
                     (xRec.ID <> 0) and (Rec.ID = 0):
                         Description := '';
-                    (Rec.ID <> 0) and (Type in [Type::"Import To Buffer", Type::"Import To Target", Type::"Update Field"]):
+                    (Rec.ID <> 0) and (Type in [Type::"Import To Buffer", Type::"Import To Target", Type::"Update Field", Type::"Buffer + Target"]):
                         begin
                             DMTDataFile.Get(Rec.ID);
                             Description := DMTDataFile.Name;
@@ -325,17 +327,17 @@ table 110010 DMTProcessingPlan
 
     procedure TypeSupportsSourceTableFilter(): Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit"]);
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit", Rec.Type::"Buffer + Target"]);
     end;
 
     procedure TypeSupportsProcessSelectedFieldsOnly(): Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"]);
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]);
     end;
 
     procedure TypeSupportsFixedValues(): Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field"]);
+        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]);
     end;
 
 }
