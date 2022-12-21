@@ -129,6 +129,51 @@ page 110015 DMTProcessingPlan
                     RenumberLines()
                 end;
             }
+            action(XMLExport)
+            {
+                Caption = 'Create Backup', Comment = 'Backup erstellen';
+                ApplicationArea = All;
+                Image = CreateXMLFile;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    XMLBackup: Codeunit DMTXMLBackup;
+                    TablesToExport: List of [Integer];
+                    TableMetadata: Record "Table Metadata";
+                begin
+                    TableMetadata.Get(Database::DMTProcessingPlan);
+                    TablesToExport.Add(Database::DMTProcessingPlan);
+                    XMLBackup.Export(TablesToExport, TableMetadata.Caption);
+                end;
+            }
+            action(XMLImport)
+            {
+                Caption = 'Import Backup', Comment = 'Backup importieren';
+                ApplicationArea = All;
+                Image = ImportCodes;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    DataFile: Record DMTDataFile;
+                    PageActions: Codeunit DMTDataFilePageAction;
+                    XMLBackup: Codeunit DMTXMLBackup;
+                begin
+                    XMLBackup.Import();
+                    // Update imported "Qty.Lines In Trgt. Table" with actual values
+                    if DataFile.FindSet() then
+                        repeat
+                            PageActions.UpdateQtyLinesInBufferTable(DataFile);
+                        until DataFile.Next() = 0;
+                end;
+            }
         }
     }
     trigger OnNewRecord(BelowxRec: Boolean)

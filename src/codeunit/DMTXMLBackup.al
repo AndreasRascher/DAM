@@ -436,6 +436,8 @@ codeunit 110003 "DMTXMLBackup"
         TablesToExport.Add(Database::DMTFieldMapping);
         TablesToExport.Add(Database::DMTReplacementsHeader);
         TablesToExport.Add(Database::DMTReplacementsLine);
+        TablesToExport.Add(Database::DMTProcessingPlan);
+        TablesToExport.Add(Database::DMTCopyTable);
         foreach TableID in TablesToExport do begin
             _RecRef.OPEN(TableID);
             if _RecRef.FINDSET(false, false) then
