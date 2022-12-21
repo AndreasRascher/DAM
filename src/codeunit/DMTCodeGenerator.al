@@ -212,6 +212,7 @@ codeunit 110004 "DMTCodeGenerator"
         tempBlob.CreateOutStream(oStr, TextEncoding::UTF8);  // Import / Export as UTF-8
         oStr.WriteText(Content.ToText());
         tempBlob.CreateInStream(iStr);
+        toFileName := DelChr(toFileName, '=', '#&-%/\(), ');
         DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 

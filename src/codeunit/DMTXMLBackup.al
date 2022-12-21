@@ -135,7 +135,7 @@ codeunit 110003 "DMTXMLBackup"
         tempTenantMedia.Content.CreateOutStream(oStr);
         XDoc.WriteTo(oStr);
         // Compose Export Filename
-        if exportFileBaseName <> '' then
+        if exportFileBaseName = '' then
             exportFileBaseName := 'Backup_';
         Company.Get(CompanyName);
         if Company."Display Name" <> '' then

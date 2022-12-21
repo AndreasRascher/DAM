@@ -225,6 +225,16 @@ page 110026 DMTDataFileCard
                     DMTCode.Run();
                 end;
             }
+            action(ExportTargetTableToCSV)
+            {
+                Caption = 'Export target table to CSV';
+                ApplicationArea = all;
+                Image = CodesList;
+                trigger OnAction()
+                begin
+                    PageActions.ExportTargetTableToCSV(Rec);
+                end;
+            }
 
         }
     }

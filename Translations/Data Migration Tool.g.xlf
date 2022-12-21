@@ -2133,6 +2133,11 @@
           <note from="Developer" annotates="general" priority="2">Datensätze in Zieltabelle löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action DeleteRecordsInTargetTable - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Action 670310682 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export target table to CSV</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action ExportTargetTableToCSV - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
@@ -2383,6 +2388,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property PromotedActionCategories</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
@@ -2427,6 +2437,16 @@
           <source>Start</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ausführen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action Start - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Backup</source>
+          <note from="Developer" annotates="general" priority="2">Backup erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLExport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 2090228232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Backup</source>
+          <note from="Developer" annotates="general" priority="2">Backup importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>

@@ -111,6 +111,13 @@ table 110042 "DMTDataFile"
         key(Key3; Path, Name) { }
     }
 
+    fieldgroups
+    {
+
+        fieldgroup(DropDown; ID, "NAV Src.Table No.", BufferTableType, "NAV Src.Table Name") { }
+    }
+
+
     trigger OnInsert()
     var
         DMTFile: Record DMTDataFile;

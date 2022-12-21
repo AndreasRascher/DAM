@@ -775,6 +775,111 @@ codeunit 110013 "DMTDataFilePageAction"
         ServerFile.Close();
     end;
 
+    internal procedure ExportTargetTableToCSV(Rec: Record DMTDataFile)
+    var
+        DMTCodeGenerator: Codeunit DMTCodeGenerator;
+        Field: Record Field;
+        RecRef: RecordRef;
+        TabChar: char;
+        LineNo: Integer;
+        FieldValue: Text;
+        FileManagement: Codeunit "File Management";
+        FileContent: TextBuilder;
+        tempBlob: Codeunit "Temp Blob";
+        iStr: InStream;
+        oStr: OutStream;
+        Line: Text;
+        Content: TextBuilder;
+    begin
+        TabChar := 9;
+        if Rec."Target Table ID" = 0 then exit;
+        RecRef.Open(Rec."Target Table ID");
+        if not RecRef.FindSet() then exit;
+
+        Field.SetRange(TableNo, RecRef.Number);
+        Field.setfilter(Type, StrSubstNo('<>%1&<>%2&<>%3', Field.Type::BLOB, Field.Type::Media, Field.Type::MediaSet));
+        Field.SetFilter(Class, '%1', Field.Class::Normal);
+        Field.SetRange(Enabled, true);
+        Field.SetFilter(FieldName, '<>$systemId&<>SystemCreatedAt&<>SystemCreatedBy&<>SystemModifiedAt&<>SystemModifiedBy');
+        // Title Line
+        LineNo += 1;
+        Field.FindSet();
+        repeat
+            Line += Format(Field.FieldName).Replace(TabChar, '') + TabChar;
+        until Field.Next() = 0;
+        Line := Line.TrimEnd(TabChar);
+        Content.AppendLine(Line);
+
+        // Data
+        repeat
+            LineNo += 1;
+            Clear(Line);
+            Field.FindSet();
+            repeat
+                FieldValue := GetFormattedFieldValue(RecRef, Field."No.").Replace(TabChar, '');
+                Line += FieldValue + TabChar;
+            until Field.Next() = 0;
+            Line := Line.TrimEnd(TabChar);
+            Content.AppendLine(Line);
+        until RecRef.Next() = 0;
+        DMTCodeGenerator.DownloadFile(Content, StrSubstNo('%1_%2.csv', CompanyName, RecRef.Caption));
+    end;
+
+    LOCAL PROCEDURE GetFormattedFieldValue(recRef: RecordRef; fieldNo: Integer) _Result: Text[250];
+    VAR
+        fieldRef: FieldRef;
+        _Integer: Integer;
+        _Text: Text[1024];
+        _Decimal: Decimal;
+        _Date: Date;
+        _Time: Time;
+        _Boolean: Boolean;
+        _Field: Record Field;
+    BEGIN
+        //* returns values in xmlformat, handles problems with field.type optionstring bug
+        fieldRef := recRef.FIELD(fieldNo);
+        IF LOWERCASE(FORMAT(fieldRef.CLASS)) = 'flowfield' THEN
+            fieldRef.CALCFIELD();
+        fieldRef.VALUE := fieldRef.VALUE;
+        CASE UPPERCASE(FORMAT(fieldRef.TYPE)) OF
+            'BOOLEAN':
+                BEGIN
+                    _Boolean := fieldRef.Value;
+                    _Result := '0';
+                    IF _Boolean THEN _Result := '1';
+                END;
+            'INTEGER':
+                BEGIN
+                    _Integer := fieldRef.VALUE;
+                    IF _Integer <> 0 THEN _Result := FORMAT(_Integer, 0, 9);
+                END;
+            'OPTION':
+                BEGIN
+                    _Integer := fieldRef.VALUE;
+                    _Result := FORMAT(_Integer, 0, 9);
+                END;
+            'DECIMAL':
+                BEGIN
+                    _Decimal := fieldRef.VALUE;
+                    IF _Decimal <> 0 THEN _Result := FORMAT(_Decimal, 0, 9);
+                END;
+            'DATE':
+                BEGIN
+                    _Date := fieldRef.VALUE;
+                    IF _Date <> 0D THEN _Result := FORMAT(_Date, 0, 9);
+                END;
+            'TIME':
+                BEGIN
+                    _Time := fieldRef.VALUE;
+                    IF _Time <> 0T THEN _Result := FORMAT(_Time, 0, 9);
+                END;
+            'CHAR', 'TEXT', 'CODE':
+                _Result := fieldRef.VALUE;
+            ELSE
+                _Result := FORMAT(fieldRef.VALUE, 0, 9);
+        END; // END_CASE
+    END;
+
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var
         Import: Codeunit DMTImport;

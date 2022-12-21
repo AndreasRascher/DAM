@@ -6,6 +6,9 @@ page 110015 DMTProcessingPlan
     UsageCategory = Lists;
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
+    // Report = Backup
+    // Category4 = Arrange
+    PromotedActionCategories = 'New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20';
     layout
     {
         area(Content)
@@ -78,7 +81,7 @@ page 110015 DMTProcessingPlan
                 Image = PreviousRecord;
                 Promoted = true;
                 PromotedOnly = true;
-                PromotedCategory = Process;
+                PromotedCategory = Category4;
 
                 trigger OnAction()
                 begin
@@ -94,7 +97,7 @@ page 110015 DMTProcessingPlan
                 Image = NextRecord;
                 Promoted = true;
                 PromotedOnly = true;
-                PromotedCategory = Process;
+                PromotedCategory = Category4;
 
                 trigger OnAction()
                 begin
@@ -107,7 +110,7 @@ page 110015 DMTProcessingPlan
             {
                 Caption = 'Reset Lines', comment = 'de-DE=Zeilen zurücksetzen';
                 ApplicationArea = All;
-                Image = NextRecord;
+                Image = Restore;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedCategory = Process;
@@ -137,7 +140,7 @@ page 110015 DMTProcessingPlan
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
-                PromotedCategory = Process;
+                PromotedCategory = Report;
 
                 trigger OnAction()
                 var
@@ -158,7 +161,7 @@ page 110015 DMTProcessingPlan
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedIsBig = true;
-                PromotedCategory = Process;
+                PromotedCategory = Report;
 
                 trigger OnAction()
                 var
