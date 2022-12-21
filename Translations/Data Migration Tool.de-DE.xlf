@@ -2523,6 +2523,13 @@
           <note from="Developer" annotates="general" priority="2">Feldzuordnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control Lines - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 2906990245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Options</source>
+          <target>Verarbeitungsoptionen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsoptionen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control ProcessingOptions - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1733595285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Autom. Übernahme</source>
           <target>Auto Migration</target>
@@ -2563,7 +2570,6 @@
           <source>Export target table to CSV</source>
           <target>Zieltabelle als CSV exportieren</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action ExportTargetTableToCSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

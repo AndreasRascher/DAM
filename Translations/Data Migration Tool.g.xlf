@@ -2103,6 +2103,11 @@
           <note from="Developer" annotates="general" priority="2">Feldzuordnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control Lines - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 2906990245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Options</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsoptionen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control ProcessingOptions - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1733595285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Autom. Übernahme</source>
           <note from="Developer" annotates="general" priority="2">Auto Migration</note>

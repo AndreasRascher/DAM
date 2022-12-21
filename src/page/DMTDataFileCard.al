@@ -37,6 +37,7 @@ page 110026 DMTDataFileCard
             }
             group(ProcessingOptions)
             {
+                Caption = 'Processing Options', Comment = 'de-DE=Verarbeitungsoptionen';
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { ApplicationArea = All; }
                 field("Import Only New Records"; Rec."Import Only New Records") { ApplicationArea = All; }
             }
