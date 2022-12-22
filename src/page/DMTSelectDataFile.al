@@ -6,6 +6,7 @@ page 110025 "DMTSelectDataFile"
     SourceTable = DMTDataFileBuffer;
     InsertAllowed = false;
     DeleteAllowed = false;
+    SourceTableView = sorting("DateTime") order(descending);
 
     layout
     {
@@ -32,7 +33,7 @@ page 110025 "DMTSelectDataFile"
                         end;
                     end;
                 }
-                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; ShowMandatory = true; }
                 field("NAV Src.Table Caption"; Rec."NAV Src.Table Caption") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
                 field("Target Table Caption"; Rec."Target Table Caption") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
                 field("NAV Src.Table Name"; Rec."NAV Src.Table Name") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }

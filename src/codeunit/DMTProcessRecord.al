@@ -51,14 +51,14 @@ codeunit 110012 DMTProcessRecord
     begin
         TempFieldMapping.SetRange("Is Key Field(Target)", false);
         TempFieldMapping.SetCurrentKey("Validation Order");
-        TempFieldMapping.FindSet();
-        repeat
-            if not ProcessedFields.Contains(TempFieldMapping.RecordID) then begin
-                CurrFieldToProcess := TempFieldMapping.RecordID;
-                AssignField(TempFieldMapping."Validation Type");
-                ProcessedFields.Add(TempFieldMapping.RecordId);
-            end;
-        until TempFieldMapping.Next() = 0;
+        if TempFieldMapping.FindSet() then // if only Key Fields are mapped this is false
+            repeat
+                if not ProcessedFields.Contains(TempFieldMapping.RecordID) then begin
+                    CurrFieldToProcess := TempFieldMapping.RecordID;
+                    AssignField(TempFieldMapping."Validation Type");
+                    ProcessedFields.Add(TempFieldMapping.RecordId);
+                end;
+            until TempFieldMapping.Next() = 0;
     end;
 
     local procedure ProcessKeyFields()

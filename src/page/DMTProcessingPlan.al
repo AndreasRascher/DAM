@@ -1,6 +1,7 @@
 page 110015 DMTProcessingPlan
 {
     Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
+    AdditionalSearchTerms = 'DMT Plan';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

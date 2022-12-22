@@ -2313,6 +2313,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action UploadFileToDefaultFolder - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Backup</source>
+          <note from="Developer" annotates="general" priority="2">Backup erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action XMLExport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1929500315 - Action 2090228232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Backup</source>
+          <note from="Developer" annotates="general" priority="2">Backup importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action XMLImport - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 97409727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>ErrorLog Summary</source>
           <note from="Developer" annotates="general" priority="2">Fehlerprotokoll Zusammenfassung</note>
@@ -2402,6 +2412,11 @@
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Property 3863440606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Plan</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property AdditionalSearchTerms</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>
