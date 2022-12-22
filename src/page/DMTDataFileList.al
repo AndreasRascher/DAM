@@ -269,10 +269,10 @@ page 110027 "DMTDataFileList"
                 Caption = 'Create Backup', Comment = 'Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Report;
 
                 trigger OnAction()
                 var
@@ -291,10 +291,10 @@ page 110027 "DMTDataFileList"
                 Caption = 'Import Backup', Comment = 'Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Report;
 
                 trigger OnAction()
                 var

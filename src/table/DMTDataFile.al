@@ -114,7 +114,7 @@ table 110042 "DMTDataFile"
     fieldgroups
     {
 
-        fieldgroup(DropDown; ID, "NAV Src.Table No.", BufferTableType, "NAV Src.Table Name") { }
+        fieldgroup(DropDown; ID, Name, "NAV Src.Table No.", BufferTableType, "NAV Src.Table Name") { }
     }
 
 
