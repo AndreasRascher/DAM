@@ -23,6 +23,15 @@ page 110001 "DMT Error Log List"
                 field("Ignore Error"; Rec."Ignore Error") { ApplicationArea = All; StyleExpr = TextStyle; }
                 field("DMT User"; Rec."DMT User") { ApplicationArea = All; StyleExpr = TextStyle; }
                 field("DMT Errorlog Created At"; Rec."DMT Errorlog Created At") { ApplicationArea = All; StyleExpr = TextStyle; }
+                field(ErrorCallstack; Rec.ErrorCallstack)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = TextStyle;
+                    trigger OnDrillDown()
+                    begin
+                        Message(Rec.ReadErrorCallStack());
+                    end;
+                }
             }
         }
     }

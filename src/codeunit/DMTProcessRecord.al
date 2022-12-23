@@ -181,6 +181,7 @@ codeunit 110012 DMTProcessRecord
         _DMTErrorlog.Errortext := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
         _DMTErrorlog.ErrorCode := CopyStr(ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
         _DMTErrorlog."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
+        _DMTErrorlog.SaveErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'), false);
         _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
         _DMTErrorlog.Insert();

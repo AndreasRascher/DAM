@@ -263,6 +263,11 @@
           <note from="Developer" annotates="general" priority="2">Fehler für Feldwert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field Error Field Value - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2600471051 - Field 2139189352 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Callstack</source>
+          <note from="Developer" annotates="general" priority="2">Fehler Aufrufliste</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field ErrorCallstack - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2600471051 - Field 4082874751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Code</source>
           <note from="Developer" annotates="general" priority="2">Fehler Code</note>

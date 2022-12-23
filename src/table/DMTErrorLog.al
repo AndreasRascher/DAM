@@ -43,8 +43,9 @@ table 110001 "DMTErrorLog"
         }
         field(40; Errortext; Text[2048]) { Caption = 'Error Text', Comment = 'Fehlertext'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
-        field(42; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
-        field(43; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'Fehler für Feldwert'; }
+        field(42; ErrorCallstack; Blob) { Caption = 'Error Callstack', Comment = 'Fehler Aufrufliste'; }
+        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
+        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'Fehler für Feldwert'; }
         field(52; DataFilePath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
         field(53; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
         field(60; "DMT User"; Text[250]) { Caption = 'DMT User', comment = 'DMT Benutzer'; Editable = false; }
@@ -143,5 +144,28 @@ table 110001 "DMTErrorLog"
             end;
         end;
         Page.Run(Page::DMTErrorLogSummary, TempErrorLog);
+    end;
+
+    procedure ReadErrorCallStack() ErrorCallStack: Text
+    var
+        IStr: InStream;
+    begin
+        rec.calcfields(ErrorCallStack);
+        if not rec.ErrorCallStack.HasValue then exit('');
+        rec.ErrorCallStack.CreateInStream(IStr);
+        IStr.ReadText(ErrorCallStack);
+    end;
+
+    procedure SaveErrorCallStack(ErrorCallStack: Text; DoModify: Boolean)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec.ErrorCallStack);
+        if DoModify then Rec.Modify();
+        if ErrorCallStack = '' then
+            exit;
+        rec.ErrorCallStack.CreateOutStream(Ostr);
+        OStr.WriteText(ErrorCallStack);
+        if DoModify then Rec.Modify();
     end;
 }

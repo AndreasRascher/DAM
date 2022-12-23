@@ -322,7 +322,9 @@ table 110010 DMTProcessingPlan
         NavApp.GetCurrentModuleInfo(mI);
         NAVAppInstalledApp.SetRange("App ID", mI.Id);
         NAVAppInstalledApp.FindFirst();
+        Rec.FilterGroup(2);
         Rec.SetRange("Current App Package ID Filter", NAVAppInstalledApp."Package ID");
+        Rec.FilterGroup(0);
     end;
 
     procedure TypeSupportsSourceTableFilter(): Boolean
