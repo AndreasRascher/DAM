@@ -319,7 +319,6 @@
           <source>Error Callstack</source>
           <target>Fehler-Aufrufliste</target>
           <note from="Developer" annotates="general" priority="2">Fehler Aufrufliste</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTErrorLog - Field ErrorCallstack - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2600471051 - Field 4082874751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2195,9 +2194,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! All Records in table "%1" (company "%2") will be deleted. Continue?</source>
-          <target>Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</target>
-          <note from="Developer" annotates="general" priority="2">Warnung! Alle Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?</note>
+          <source>Warning! Records in table "%1" (company "%2") will be deleted. Continue?\Filter:"%3"</source>
+          <target>Warnung! Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?\Filter:"%3"</target>
+          <note from="Developer" annotates="general" priority="2">Warnung! Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?\Filter:"%3"</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">The placeholder "%3" was found in source, but not in target.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">

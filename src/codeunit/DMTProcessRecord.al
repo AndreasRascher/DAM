@@ -143,9 +143,8 @@ codeunit 110012 DMTProcessRecord
             exit(false);
         if ErrorLogDict.Count > 0 then
             exit(false);
+        ClearLastError();
         Success := ChangeRecordWithPerm.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
-        if not Success then
-            LogLastError();
     end;
 
     procedure SaveErrorLog() ErrorsExist: Boolean
