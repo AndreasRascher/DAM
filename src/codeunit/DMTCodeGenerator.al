@@ -188,7 +188,7 @@ codeunit 110004 "DMTCodeGenerator"
                 C.AppendLine('        }');
 
             UNTIL DMTFieldBuffer.NEXT() = 0;
-        AddTargetRecordExistsFlowField(TargetTableID, NAVSrcTableNo, DMTFieldBuffer, C);
+        AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
@@ -279,27 +279,48 @@ codeunit 110004 "DMTCodeGenerator"
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; var DMTFieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; BufferTableNo: Integer; var DMTFieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
         DMTMgt: Codeunit DMTMgt;
-        RecRef: RecordRef;
-        TargetTableName, KeyField1Name : text;
+        BufferRef, TargetRef : RecordRef;
+        TargetTableName: text;
+        BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
+        KeyFieldIndex: Integer;
+        f: TextBuilder;
     begin
-        if DMTFieldBuffer.Get(NAVSrcTableNo, 59999) then
+        if DMTFieldBuffer.Get(BufferTableNo, 59999) then
             exit;
-        RecRef.Open(TargetTableID);
-        TargetTableName := QuoteValue(RecRef.Name);
-        KeyField1Name := QuoteValue(RecRef.KeyIndex(1).FieldIndex(1).Name);
+        TargetRef.Open(TargetTableID);
+        TargetTableName := QuoteValue(TargetRef.Name);
+        BufferRef.Open(BufferTableNo);
+        for KeyFieldIndex := 1 to DMTMgt.GetListOfKeyFieldIDs(TargetRef).Count do
+            TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
+        for KeyFieldIndex := 1 to DMTMgt.GetListOfKeyFieldIDs(BufferRef).Count do
+            BufferKeyFieldNames.Add(QuoteValue(BufferRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
+        if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
+            exit;
 
-        if DMTMgt.GetListOfKeyFieldIDs(RecRef).Count = 1 then begin
-            c.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
-            c.AppendLine('        {');
-            c.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
-            c.AppendLine('            FieldClass = FlowField;');
-            c.AppendLine('            CalcFormula = exist(' + TargetTableName + ' where(' + KeyField1Name + '= field(' + KeyField1Name + ')));');
-            c.AppendLine('            Editable = false;');
-            c.AppendLine('        }');
+        f.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
+        f.AppendLine('        {');
+        f.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
+        f.AppendLine('            FieldClass = FlowField;');
+
+        for KeyFieldIndex := 1 to TargetKeyFieldNames.Count do begin
+            if KeyFieldIndex = 1 then
+                f.Append('            CalcFormula = exist(' + TargetTableName + ' where(' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')')
+            else begin
+                f.AppendLine('');
+                f.Append('                                                     ' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')');
+            end;
+            if KeyFieldIndex = TargetKeyFieldNames.Count then
+                f.AppendLine('));')
+            else
+                f.Append(',')
         end;
+
+        f.AppendLine('            Editable = false;');
+        f.AppendLine('        }');
+        c.Append(f.ToText());
     end;
 
     local procedure QuoteValue(TextValue: Text): Text
