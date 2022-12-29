@@ -150,10 +150,10 @@ codeunit 110004 "DMTCodeGenerator"
         DataFile.testfield("Buffer Table ID");
         DataFile.TestField("NAV Src.Table No.");
         DataFile.TestField("NAV Src.Table Caption");
-        C := CreateALTable(DataFile."Buffer Table ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
+        C := CreateALTable(DataFile."Target Table ID", DataFile."Buffer Table ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
     end;
 
-    local procedure CreateALTable(BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
+    local procedure CreateALTable(TargetTableID: Integer; BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
@@ -165,7 +165,7 @@ codeunit 110004 "DMTCodeGenerator"
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        IF FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then
+        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then
             repeat
                 CASE DMTFieldBuffer.Type OF
                     DMTFieldBuffer.Type::RecordID:
@@ -188,6 +188,7 @@ codeunit 110004 "DMTCodeGenerator"
                 C.AppendLine('        }');
 
             UNTIL DMTFieldBuffer.NEXT() = 0;
+        AddTargetRecordExistsFlowField(TargetTableID, NAVSrcTableNo, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
@@ -276,6 +277,44 @@ codeunit 110004 "DMTCodeGenerator"
             KeyString += GetALFieldNameWithMasking(FieldBuffer.FieldName) + ',';
         end;
         KeyString := DelChr(KeyString, '>', ',');
+    end;
+
+    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; var DMTFieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    var
+        DMTMgt: Codeunit DMTMgt;
+        RecRef: RecordRef;
+        TargetTableName, KeyField1Name : text;
+    begin
+        if DMTFieldBuffer.Get(NAVSrcTableNo, 59999) then
+            exit;
+        RecRef.Open(TargetTableID);
+        TargetTableName := QuoteValue(RecRef.Name);
+        KeyField1Name := QuoteValue(RecRef.KeyIndex(1).FieldIndex(1).Name);
+
+        if DMTMgt.GetListOfKeyFieldIDs(RecRef).Count = 1 then begin
+            c.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
+            c.AppendLine('        {');
+            c.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
+            c.AppendLine('            FieldClass = FlowField;');
+            c.AppendLine('            CalcFormula = exist(' + TargetTableName + ' where(' + KeyField1Name + '= field(' + KeyField1Name + ')));');
+            c.AppendLine('            Editable = false;');
+            c.AppendLine('        }');
+        end;
+    end;
+
+    local procedure QuoteValue(TextValue: Text): Text
+    var
+        DummyText: Text;
+        Letters: Label 'abcdefghijklmnopqrstuvwxyz';
+        numbers: Label '0123456789';
+        i: Integer;
+    begin
+        DummyText := DelChr(TextValue.ToLower(), '=', Letters);
+        DummyText := DelChr(DummyText, '=', numbers);
+        if DummyText <> '' then
+            exit('"' + TextValue + '"')
+        else
+            exit(TextValue);
     end;
 
     procedure GetALFieldNameWithMasking(FieldName: Text) MaskedFieldName: Text

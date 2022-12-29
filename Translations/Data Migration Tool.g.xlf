@@ -1833,6 +1833,16 @@
           <note from="Developer" annotates="general" priority="2">Warnung! Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?\Filter:"%3"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 368545005 - Method 3626138499 - NamedType 179704015" size-unit="char" translate="yes" xml:space="preserve">
+          <source>abcdefghijklmnopqrstuvwxyz</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method QuoteValue - NamedType Letters</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 368545005 - Method 3626138499 - NamedType 487318212" size-unit="char" translate="yes" xml:space="preserve">
+          <source>0123456789</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method QuoteValue - NamedType numbers</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
