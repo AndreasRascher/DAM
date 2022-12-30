@@ -36,7 +36,7 @@ page 110016 FileBrowser
                     var
                         FileRec: Record File;
                     begin
-                        if not rec."Is a file" then begin
+                        if not Rec."Is a file" then begin
                             CurrFolder := CurrFolder + '\' + Rec.Name;
                             CurrFolder := CurrFolder.Replace('\\', '\');
                             //CurrFolder := Rec.Path;
@@ -71,7 +71,7 @@ page 110016 FileBrowser
         end;
     end;
 
-    procedure SetupFileBrowser(CurrFolderNew: text; BrowseForFolderNew: Boolean)
+    procedure SetupFileBrowser(CurrFolderNew: Text; BrowseForFolderNew: Boolean)
     begin
         BrowseForFolder := BrowseForFolderNew;
         CurrFolder := CurrFolderNew;

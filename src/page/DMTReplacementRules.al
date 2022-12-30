@@ -1,4 +1,4 @@
-page 110006 "DMTReplacementRules"
+page 110006 DMTReplacementRules
 {
     Caption = 'DMT Replacement Rules', Comment = 'DMT Ersetzungsregeln';
     PageType = List;
@@ -6,7 +6,7 @@ page 110006 "DMTReplacementRules"
     UsageCategory = Administration;
     SourceTable = DMTReplacementsHeader;
     DelayedInsert = true;
-    CardPageId = "DMTReplacementsCard";
+    CardPageId = DMTReplacementsCard;
 
     layout
     {

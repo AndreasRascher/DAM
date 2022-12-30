@@ -1,4 +1,4 @@
-enum 110005 "DMTImportIndicator"
+enum 110005 DMTImportIndicator
 {
     Extensible = true;
 

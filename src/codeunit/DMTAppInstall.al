@@ -11,12 +11,12 @@ codeunit 110007 "DMT App Install"
     trigger OnInstallAppPerDatabase()
     begin
         HandleFreshInstall();
-        HandleReinstall();
+        HandleReInstall();
     end;
 
     local procedure HandleFreshInstall();
     begin
-        if Not CheckIfThisIsFirstInstallOfApp() then
+        if not CheckIfThisIsFirstInstallOfApp() then
             exit;
     end;
 

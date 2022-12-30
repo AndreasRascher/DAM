@@ -1,4 +1,4 @@
-page 110029 "DMTUpdateTaskNew"
+page 110029 DMTUpdateTaskNew
 {
     PageType = Worksheet;
     UsageCategory = None;
@@ -28,7 +28,7 @@ page 110029 "DMTUpdateTaskNew"
                     ApplicationArea = All;
                     trigger OnValidate()
                     begin
-                        if rec."Target Field No." = 0 then
+                        if Rec."Target Field No." = 0 then
                             exit;
                         if IsSelected then begin
                             if not SelectedFields.Contains(Rec."Target Field No.") then
@@ -48,11 +48,11 @@ page 110029 "DMTUpdateTaskNew"
         IsSelected := SelectedFields.Contains(Rec."Target Field No.");
     end;
 
-    procedure GetToFieldNoFilter() ToFieldNoFilter: text
+    procedure GetToFieldNoFilter() ToFieldNoFilter: Text
     var
         DMTMgt: Codeunit DMTMgt;
         ToFieldNo: Integer;
-        KeyFieldFilter: text;
+        KeyFieldFilter: Text;
     begin
 
         // Collect Key Field IDs
@@ -72,24 +72,24 @@ page 110029 "DMTUpdateTaskNew"
         ToFieldNoFilter := ToFieldNoFilter.TrimEnd('|');
     end;
 
-    procedure InitFieldSelection(DataFile: record DMTDataFile) OK: Boolean
+    procedure InitFieldSelection(DataFile: Record DMTDataFile) OK: Boolean
     var
         FieldMapping: Record DMTFieldMapping;
         DMTMgt: Codeunit DMTMgt;
         NonKeyFieldFilter: Text;
     begin
         OK := true;
-        CurrDataFile.copy(DataFile);
+        CurrDataFile.Copy(DataFile);
         if CurrDataFile."Target Table ID" = 0 then
             exit(false);
 
         // Filter Fields Avaible for Update
         Rec.FilterGroup(2);
         Rec.SetRange("Target Table ID", CurrDataFile."Target Table ID");
-        Rec.Setfilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        Rec.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
         Rec.SetFilter("Source Field No.", '<>%1', 0);
         NonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDataFile."Target Table ID", false /*exclude*/);
-        Rec.Setfilter("Target Field No.", NonKeyFieldFilter);
+        Rec.SetFilter("Target Field No.", NonKeyFieldFilter);
         // restore last selection
         if DataFile.ReadLastFieldUpdateSelection() <> '' then begin
             SelectedFields := ConvertNumberFilterToNumberList(DataFile.ReadLastFieldUpdateSelection());
@@ -103,17 +103,17 @@ page 110029 "DMTUpdateTaskNew"
         NonKeyFieldFilter: Text;
     begin
         OK := true;
-        CurrDataFile.get(ProcessingPlan.ID);
+        CurrDataFile.Get(ProcessingPlan.ID);
         if CurrDataFile."Target Table ID" = 0 then
             exit(false);
 
         // Filter Fields Avaible for Update
         Rec.FilterGroup(2);
         Rec.SetRange("Target Table ID", CurrDataFile."Target Table ID");
-        Rec.Setfilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        Rec.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
         Rec.SetFilter("Source Field No.", '<>%1', 0);
         NonKeyFieldFilter := DMTMgt.GetIncludeExcludeKeyFieldFilter(CurrDataFile."Target Table ID", false /*exclude*/);
-        Rec.Setfilter("Target Field No.", NonKeyFieldFilter);
+        Rec.SetFilter("Target Field No.", NonKeyFieldFilter);
         // restore last selection
         if ProcessingPlan.ReadUpdateFieldsFilter() <> '' then begin
             SelectedFields := ConvertNumberFilterToNumberList(ProcessingPlan.ReadUpdateFieldsFilter());
@@ -133,7 +133,7 @@ page 110029 "DMTUpdateTaskNew"
     end;
 
     var
-        CurrDataFile: record DMTDataFile;
+        CurrDataFile: Record DMTDataFile;
         [InDataSet]
         IsSelected: Boolean;
         KeyFields: List of [Integer];

@@ -1,10 +1,10 @@
-codeunit 110004 "DMTCodeGenerator"
+codeunit 110004 DMTCodeGenerator
 {
 
     procedure CreateALXMLPort(DataFile: Record DMTDataFile) C: TextBuilder
     begin
-        DataFile.Testfield("Import XMLPort ID");
-        DataFile.Testfield("NAV Src.Table No.");
+        DataFile.TestField("Import XMLPort ID");
+        DataFile.TestField("NAV Src.Table No.");
         DataFile.TestField("NAV Src.Table Caption");
         C := CreateALXMLPort(DataFile."Import XMLPort ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
     end;
@@ -14,7 +14,7 @@ codeunit 110004 "DMTCodeGenerator"
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
     begin
-        C.AppendLine('xmlport ' + format(ImportXMLPortID) + ' T' + format(NAVSrcTableNo) + 'Import');
+        C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
         if DMTSetup."Import with FlowFields" then
@@ -33,14 +33,14 @@ codeunit 110004 "DMTCodeGenerator"
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        IF FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then begin
-            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ')');
+        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false) then begin
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
-            DMTFieldBuffer.FINDSET();
+            DMTFieldBuffer.FindSet();
             repeat
                 C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
-            UNTIL DMTFieldBuffer.NEXT() = 0;
+            until DMTFieldBuffer.Next() = 0;
         end;
 
         C.AppendLine('                trigger OnBeforeInsertRecord()');
@@ -77,18 +77,18 @@ codeunit 110004 "DMTCodeGenerator"
         C.AppendLine('');
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ': Record ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ';');
+        C.AppendLine('        ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ': Record ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.Filename <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ': Record ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + ';');
+        C.AppendLine('        ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ': Record ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo) + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -147,7 +147,7 @@ codeunit 110004 "DMTCodeGenerator"
 
     procedure CreateALTable(DataFile: Record DMTDataFile) C: TextBuilder
     begin
-        DataFile.testfield("Buffer Table ID");
+        DataFile.TestField("Buffer Table ID");
         DataFile.TestField("NAV Src.Table No.");
         DataFile.TestField("NAV Src.Table Caption");
         C := CreateALTable(DataFile."Target Table ID", DataFile."Buffer Table ID", DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption");
@@ -160,34 +160,34 @@ codeunit 110004 "DMTCodeGenerator"
         _FieldTypeText: Text;
     begin
         DMTSetup.Get();
-        FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, true, FALSE);
-        C.AppendLine('table ' + FORMAT(BufferTableID) + ' ' + STRSUBSTNO('T%1Buffer', NAVSrcTableNo));
+        FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, true, false);
+        C.AppendLine('table ' + Format(BufferTableID) + ' ' + StrSubstNo('T%1Buffer', NAVSrcTableNo));
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, FALSE, DMTSetup."Import with FlowFields", FALSE) then
+        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false) then
             repeat
-                CASE DMTFieldBuffer.Type OF
+                case DMTFieldBuffer.Type of
                     DMTFieldBuffer.Type::RecordID:
                         _FieldTypeText := 'Text[250]'; // Import recordIDs as text to avoid validation issues on import
                     DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
-                        _FieldTypeText := STRSUBSTNO('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
-                    ELSE
-                        _FieldTypeText := FORMAT(DMTFieldBuffer.Type);
+                        _FieldTypeText := StrSubstNo('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
+                    else
+                        _FieldTypeText := Format(DMTFieldBuffer.Type);
                 end;
-                C.AppendLine(STRSUBSTNO('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
+                C.AppendLine(StrSubstNo('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
                 // field(1; "No."; Code[20])
                 C.AppendLine('        {');
-                C.AppendLine(STRSUBSTNO('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
+                C.AppendLine(StrSubstNo('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
 
-                IF DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option then begin
-                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OPTIONSTRING + ';');
-                    C.AppendLine(STRSUBSTNO('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OPTIONSTRING, '=', '"'), DelChr(DMTFieldBuffer.OPTIONCAPTION, '=', '"')));
+                if DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option then begin
+                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OptionString + ';');
+                    C.AppendLine(StrSubstNo('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OptionString, '=', '"'), DelChr(DMTFieldBuffer.OptionCaption, '=', '"')));
                 end;
 
                 C.AppendLine('        }');
 
-            UNTIL DMTFieldBuffer.NEXT() = 0;
+            until DMTFieldBuffer.Next() = 0;
         AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
@@ -204,7 +204,7 @@ codeunit 110004 "DMTCodeGenerator"
         C.AppendLine('}');
     end;
 
-    procedure DownloadFile(Content: TextBuilder; toFileName: text)
+    procedure DownloadFile(Content: TextBuilder; toFileName: Text)
     var
         tempBlob: Codeunit "Temp Blob";
         iStr: InStream;
@@ -217,12 +217,12 @@ codeunit 110004 "DMTCodeGenerator"
         DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
-    local procedure GetCleanFieldName(VAR Field: Record DMTFieldBuffer) CleanFieldName: Text
+    local procedure GetCleanFieldName(var Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := DelChr(Field.FieldName, '=', '#&-%/\(),. ');
         // XMLPort Fieldelements cannot start with numbers
         if CleanFieldName <> '' then
-            if CopyStr(CleanFieldName, 1, 1) IN ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
+            if CopyStr(CleanFieldName, 1, 1) in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
                 CleanFieldName := '_' + CleanFieldName;
     end;
 
@@ -231,22 +231,22 @@ codeunit 110004 "DMTCodeGenerator"
         CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
     end;
 
-    procedure FilterFields(VAR DMTFieldBuffer_FOUND: Record DMTFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
+    procedure FilterFields(var DMTFieldBuffer_FOUND: Record DMTFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
     var
         Debug: Integer;
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
-        CLEAR(DMTFieldBuffer_FOUND);
+        Clear(DMTFieldBuffer_FOUND);
         DMTFieldBuffer_FOUND.SetRange(TableNo, TableNo);
         Debug := DMTFieldBuffer_FOUND.Count;
-        IF NOT IncludeDisabled then
-            DMTFieldBuffer_FOUND.SetRange(Enabled, TRUE);
+        if not IncludeDisabled then
+            DMTFieldBuffer_FOUND.SetRange(Enabled, true);
         Debug := DMTFieldBuffer_FOUND.Count;
         DMTFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DMTFieldBuffer_FOUND.Class::Normal, DMTFieldBuffer_FOUND.Class::FlowField);
-        IF NOT IncludeFlowFields then
+        if not IncludeFlowFields then
             DMTFieldBuffer_FOUND.SetRange(Class, DMTFieldBuffer_FOUND.Class::Normal);
-        IF NOT IncludeBlob then
-            DMTFieldBuffer_FOUND.SETFILTER(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
+        if not IncludeBlob then
+            DMTFieldBuffer_FOUND.SetFilter(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.SetRange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
         Debug := DMTFieldBuffer_FOUND.Count;
@@ -273,7 +273,7 @@ codeunit 110004 "DMTCodeGenerator"
 
         foreach FieldIDText in FieldIds do begin
             Evaluate(FieldID, FieldIDText);
-            FieldBuffer.get(TableIDInNAV, FieldID);
+            FieldBuffer.Get(TableIDInNAV, FieldID);
             KeyString += GetALFieldNameWithMasking(FieldBuffer.FieldName) + ',';
         end;
         KeyString := DelChr(KeyString, '>', ',');
@@ -283,7 +283,7 @@ codeunit 110004 "DMTCodeGenerator"
     var
         DMTMgt: Codeunit DMTMgt;
         BufferRef, TargetRef : RecordRef;
-        TargetTableName: text;
+        TargetTableName: Text;
         BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
         KeyFieldIndex: Integer;
         f: TextBuilder;
@@ -320,18 +320,15 @@ codeunit 110004 "DMTCodeGenerator"
 
         f.AppendLine('            Editable = false;');
         f.AppendLine('        }');
-        c.Append(f.ToText());
+        C.Append(f.ToText());
     end;
 
     local procedure QuoteValue(TextValue: Text): Text
     var
         DummyText: Text;
-        Letters: Label 'abcdefghijklmnopqrstuvwxyz';
-        numbers: Label '0123456789';
-        i: Integer;
     begin
-        DummyText := DelChr(TextValue.ToLower(), '=', Letters);
-        DummyText := DelChr(DummyText, '=', numbers);
+        DummyText := DelChr(TextValue.ToLower(), '=', 'abcdefghijklmnopqrstuvwxyz');
+        DummyText := DelChr(DummyText, '=', '0123456789');
         if DummyText <> '' then
             exit('"' + TextValue + '"')
         else

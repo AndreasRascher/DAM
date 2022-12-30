@@ -1,4 +1,4 @@
-table 110008 "DMTSetup"
+table 110008 DMTSetup
 {
     Caption = 'DMT Setup', comment = 'DMT Einrichtung';
     DataClassification = ToBeClassified;
@@ -38,7 +38,7 @@ table 110008 "DMTSetup"
                 if Rec."Default Export Folder Path" <> '' then begin
                     Rec."Default Export Folder Path" := DelChr(Rec."Default Export Folder Path", '<>', '"');
                     if not "Default Export Folder Path".EndsWith('\') then
-                        REc."Default Export Folder Path" += '\'
+                        Rec."Default Export Folder Path" += '\'
                 end;
                 // Try Find Schema.csv
                 if (Rec."Default Export Folder Path" <> '') and (Rec."Schema.csv File Path" = '') then begin
@@ -139,9 +139,9 @@ table 110008 "DMTSetup"
         Rec."Obj. ID Range XMLPorts" := CopyStr(ObjMgt.GetAvailableObjectIDsInLicenseFilter(Enum::DMTObjTypes::XMLPort, true), 1, MaxStrLen(Rec."Obj. ID Range XMLPorts"));
     end;
 
-    procedure SyncSomeSettingsForAllCompanies(FromCompanyName: text)
+    procedure SyncSomeSettingsForAllCompanies(FromCompanyName: Text)
     var
-        Company: record Company;
+        Company: Record Company;
         RecRefFrom, RecRefTo : RecordRef;
         FieldID: Integer;
         FieldIDsToSyncList: List of [Integer];
@@ -153,7 +153,7 @@ table 110008 "DMTSetup"
 
         RecRefFrom.GetTable(Rec);
         Company.SetFilter(Name, '<>%1', FromCompanyName);
-        If Company.FindSet() then
+        if Company.FindSet() then
             repeat
                 Clear(RecRefTo);
                 RecRefTo.Open(RecRefFrom.Number, false, Company.Name);

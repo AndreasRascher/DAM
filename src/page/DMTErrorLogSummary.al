@@ -1,4 +1,4 @@
-page 110014 "DMTErrorLogSummary"
+page 110014 DMTErrorLogSummary
 {
     Caption = 'ErrorLog Summary', Comment = 'Fehlerprotokoll Zusammenfassung';
     PageType = List;
@@ -21,7 +21,7 @@ page 110014 "DMTErrorLogSummary"
                 field("Error Field Value"; Rec."Error Field Value") { ApplicationArea = All; }
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
         }
     }

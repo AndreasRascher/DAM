@@ -1,26 +1,26 @@
-codeunit 110011 "DMTMigrationLib"
+codeunit 110011 DMTMigrationLib
 {
     procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
     begin
         //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
-        CLEAR(OldFieldName);
-        CASE TRUE OF
-            (TargetTableNo = DATABASE::Customer) AND (FieldName = 'Country/Region Code'):
+        Clear(OldFieldName);
+        case true of
+            (TargetTableNo = Database::Customer) and (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Vendor) AND (FieldName = 'Country/Region Code'):
+            (TargetTableNo = Database::Vendor) and (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Contact) AND (FieldName = 'Country/Region Code'):
+            (TargetTableNo = Database::Contact) and (FieldName = 'Country/Region Code'):
                 OldFieldName := 'Country Code';
-            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Country/Region of Origin Code'):
+            (TargetTableNo = Database::Item) and (FieldName = 'Country/Region of Origin Code'):
                 OldFieldName := 'Country of Origin Code';
-            (TargetTableNo = DATABASE::Item) AND (FieldName = 'Time Bucket'):
+            (TargetTableNo = Database::Item) and (FieldName = 'Time Bucket'):
                 OldFieldName := 'Reorder Cycle';
             // Item Cross Reference -> Item Reference
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type'):
+            (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference Type'):
                 OldFieldName := 'Cross-Reference Type';
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference Type No.'):
+            (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference Type No.'):
                 OldFieldName := 'Cross-Reference Type No.';
-            (TargetTableNo = DATABASe::"Item Reference") AND (FieldName = 'Reference No.'):
+            (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference No.'):
                 OldFieldName := 'Cross-Reference No.';
         end; // end_CASE
         Found := OldFieldName <> '';
@@ -32,7 +32,7 @@ codeunit 110011 "DMTMigrationLib"
         ValidationType: Enum DMTFieldValidationType;
         KnownFixedValue: Text;
     begin
-        TargetField.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
+        TargetField.Get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
         if FindKnownUseValidateValue(TargetField, ValidationType) then
             FieldMapping."Validation Type" := ValidationType;
         if FindKnownFixedValue(TargetField, KnownFixedValue) then
@@ -56,7 +56,7 @@ codeunit 110011 "DMTMigrationLib"
         Found := true;
         case true of
             IsMatch(TargetField, 'VAT Registration No.'),
-            IsMatch(TargetField, Database::"Location", 'ESCM In Behalf of Customer No.'),
+            IsMatch(TargetField, Database::Location, 'ESCM In Behalf of Customer No.'),
             IsMatch(TargetField, Database::"Stockkeeping Unit", 'Phys Invt Counting Period Code'),
             IsMatch(TargetField, Database::"Stockkeeping Unit", 'Standard Cost'),
             IsMatch(TargetField, Database::"G/L Account", 'Totaling'),
@@ -162,7 +162,7 @@ codeunit 110011 "DMTMigrationLib"
     begin
         GLSetup.Get();
 
-        If GLSetup."Global Dimension 1 Code" <> '' then begin
+        if GLSetup."Global Dimension 1 Code" <> '' then begin
             DimValue.SetRange("Dimension Code", GLSetup."Global Dimension 1 Code");
             DimValue.ModifyAll("Global Dimension No.", 1);
         end;

@@ -1,4 +1,4 @@
-codeunit 110003 "DMTXMLBackup"
+codeunit 110003 DMTXMLBackup
 {
 
     procedure Export();
@@ -16,12 +16,12 @@ codeunit 110003 "DMTXMLBackup"
     procedure Import();
     var
         allObj: Record AllObj;
-        DMTSetup: Record "DMTSetup";
+        DMTSetup: Record DMTSetup;
         TargetRef: RecordRef;
         FldRef: FieldRef;
         FileFound: Boolean;
         Start: DateTime;
-        serverFile: file;
+        serverFile: File;
         InStr: InStream;
         FieldNodeID: Integer;
         TableNodeID: Integer;
@@ -35,9 +35,9 @@ codeunit 110003 "DMTXMLBackup"
         XTableList: XmlNodeList;
     begin
         if DMTSetup.Get() and (DMTSetup."Backup.xml File Path" <> '') then
-            if ServerFile.Open(DMTSetup."Backup.xml File Path") then begin
+            if serverFile.Open(DMTSetup."Backup.xml File Path") then begin
                 FileFound := true;
-                ServerFile.CreateInStream(InStr);
+                serverFile.CreateInStream(InStr);
             end;
 
         if not FileFound then
@@ -56,10 +56,10 @@ codeunit 110003 "DMTXMLBackup"
             XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
             foreach XRecordNode in XRecordList do begin
                 // Check for renumbering
-                if not allObj.GET(allObj."Object Type"::Table, TableNodeID) then
+                if not allObj.Get(allObj."Object Type"::Table, TableNodeID) then
                     if TableNodeName <> '' then begin
                         allObj.SetRange("Object Type", allObj."Object Type"::Table);
-                        allObj.SetFilter("Object Name", Convertstr(TableNodeName, '_', '?'));
+                        allObj.SetFilter("Object Name", ConvertStr(TableNodeName, '_', '?'));
                         if allObj.FindFirst() then
                             TableNodeID := allObj."Object ID";
                     end;
@@ -75,7 +75,7 @@ codeunit 110003 "DMTXMLBackup"
                             FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
                     end;
                 end;
-                if not TargetRef.modify() then TargetRef.insert();
+                if not TargetRef.Modify() then TargetRef.Insert();
             end;
         end;
 
@@ -100,13 +100,13 @@ codeunit 110003 "DMTXMLBackup"
     local procedure ExportXML(exportFileBaseName: Text);
     var
         allObj: Record AllObj;
-        Company: record Company;
+        Company: Record Company;
         tempTenantMedia: Record "Tenant Media" temporary;
         tableID: Integer;
         oStr: OutStream;
         fieldDefinitionNode: XmlNode;
-        rootNode: XMLNode;
-        tableNode: XMLNode;
+        rootNode: XmlNode;
+        tableNode: XmlNode;
     begin
         // DOKUMENT
         Clear(XDoc);
@@ -119,9 +119,9 @@ codeunit 110003 "DMTXMLBackup"
 
         // Table Loop
         CreateTableIDList(TablesList);
-        foreach tableID in Tableslist do
-            IF GetTableLineCount(tableID) > 0 then begin
-                allObj.GET(allObj."Object Type"::Table, tableID);
+        foreach tableID in TablesList do
+            if GetTableLineCount(tableID) > 0 then begin
+                allObj.Get(allObj."Object Type"::Table, tableID);
                 tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
                 rootNode.AsXmlElement().Add(tableNode);
 
@@ -161,8 +161,8 @@ codeunit 110003 "DMTXMLBackup"
                 _LineCount += 1;
     end;
 
-    local procedure AddTable(VAR _XMLNode_Start: XMLNode; i_TableID: Integer);
-    VAR
+    local procedure AddTable(var _XMLNode_Start: XmlNode; i_TableID: Integer);
+    var
         ID: RecordId;
         recRef: RecordRef;
         fldRef: FieldRef;
@@ -170,8 +170,8 @@ codeunit 110003 "DMTXMLBackup"
         keyFieldID: Integer;
         fieldIDsList: List of [Integer];
         fieldValueAsText: Text;
-        fieldNode: XMLNode;
-        recordNode: XMLNode;
+        fieldNode: XmlNode;
+        recordNode: XmlNode;
         textNode: XmlText;
     begin
         foreach ID in RecordIDList do begin
@@ -183,15 +183,15 @@ codeunit 110003 "DMTXMLBackup"
                 // Add Key Fields As Attributes
                 foreach keyFieldID in fieldIDsList do begin
                     fldRef := recRef.Field(keyFieldID);
-                    AddAttribute(recordNode, CreateTagName(fldRef.NAME), GetFldRefValueAsText(fldRef));
+                    AddAttribute(recordNode, CreateTagName(fldRef.Name), GetFldRefValueAsText(fldRef));
                 end;
                 // Add Fields with Value
-                for i := 1 TO recRef.FIELDCOUNT do begin
+                for i := 1 to recRef.FieldCount do begin
                     fldRef := recRef.FieldIndex(i);
                     if not FldRefIsEmpty(fldRef) then begin
                         fieldNode := XmlElement.Create('FIELD').AsXmlNode();
                         recordNode.AsXmlElement().Add(fieldNode);
-                        AddAttribute(fieldNode, 'ID', Format(fldRef.NUMBER));
+                        AddAttribute(fieldNode, 'ID', Format(fldRef.Number));
                         fieldValueAsText := GetFldRefValueAsText(fldRef);
                         textNode := XmlText.Create(fieldValueAsText);
                         fieldNode.AsXmlElement().Add(textNode);
@@ -207,6 +207,8 @@ codeunit 110003 "DMTXMLBackup"
     begin
         InitRef.Open(FldRef.Record().Number);
         InitRef.Init();
+        if FldRef.Type in [FieldType::Blob] then
+            FldRef.CalcField();
         IsEmpty := (InitRef.Field(FldRef.Number).Value = FldRef.Value);
         exit(IsEmpty);
     end;
@@ -228,7 +230,7 @@ codeunit 110003 "DMTXMLBackup"
         OStream: OutStream;
         TimeType: Time;
     begin
-        case FldRef.TYPE OF
+        case FldRef.Type of
             FldRef.Type::BigInteger:
                 begin
                     Evaluate(BigIntegerType, ValueAsText);
@@ -237,7 +239,7 @@ codeunit 110003 "DMTXMLBackup"
             FldRef.Type::Blob:
                 begin
                     Clear(TenantMedia.Content);
-                    IF ValueAsText <> '' then begin
+                    if ValueAsText <> '' then begin
                         TenantMedia.Content.CreateOutStream(OStream);
                         Base64Convert.FromBase64(ValueAsText, OStream);
                     end;
@@ -278,8 +280,8 @@ codeunit 110003 "DMTXMLBackup"
                 end;
             FldRef.Type::Guid:
                 begin
-                    Evaluate(GuidType, ValueAsText, 9);
-                    FldRef.Value(GuidType);
+                    Evaluate(GUIDType, ValueAsText, 9);
+                    FldRef.Value(GUIDType);
                 end;
             FldRef.Type::Integer,
             FldRef.Type::Option:
@@ -311,7 +313,7 @@ codeunit 110003 "DMTXMLBackup"
 
     procedure GetFldRefValueAsText(var FldRef: FieldRef) ValueText: Text;
     begin
-        case Format(FldRef.Type) OF
+        case Format(FldRef.Type) of
             'BLOB':
                 GetBlobFieldAsText(FldRef, true, ValueText);
             'Media':
@@ -334,7 +336,7 @@ codeunit 110003 "DMTXMLBackup"
             'Text',
             'Time',
             'RecordID':
-                ValueText := FORMAT(FldRef.VALUE, 0, 9);
+                ValueText := Format(FldRef.Value, 0, 9);
             else
                 Error('GetFldRefValueAsText:unhandled Fieldtype %1', FldRef.Type);
         end;
@@ -348,7 +350,7 @@ codeunit 110003 "DMTXMLBackup"
     begin
         for FldIndex := 1 to RecRef.FieldCount do begin
             FldRef := RecRef.FieldIndex(FldIndex);
-            If (FldRef.Class = FldRef.Class::Normal) and FldRef.Active then begin
+            if (FldRef.Class = FldRef.Class::Normal) and FldRef.Active then begin
                 Clear(FieldProps);
                 FieldProps.Add('ID', Format(FldRef.Number));
                 FieldProps.Add('Name', FldRef.Name);
@@ -375,24 +377,24 @@ codeunit 110003 "DMTXMLBackup"
             Evaluate(ID, fieldID.Get('ID'));
             fldRef := recRef.Field(ID);
             xField := XmlElement.Create('Field').AsXmlNode();
-            AddAttribute(xField, 'Number', format(fldRef.Number));
-            AddAttribute(xField, 'Type', FORMAT(fldRef.TYPE));
+            AddAttribute(xField, 'Number', Format(fldRef.Number));
+            AddAttribute(xField, 'Type', Format(fldRef.Type));
             if fldRef.Length <> 0 then
-                AddAttribute(xField, 'Length', FORMAT(fldRef.LENGTH));
+                AddAttribute(xField, 'Length', Format(fldRef.Length));
             if fldRef.Class <> FieldClass::Normal then
-                AddAttribute(xField, 'Class', FORMAT(fldRef.CLASS));
+                AddAttribute(xField, 'Class', Format(fldRef.Class));
             if not fldRef.Active then
-                AddAttribute(xField, 'Active', FORMAT(fldRef.Active, 0, 9));
-            AddAttribute(xField, 'Name', FORMAT(fldRef.Name, 0, 9));
-            AddAttribute(xField, 'Caption', FORMAT(fldRef.Caption, 0, 9));
+                AddAttribute(xField, 'Active', Format(fldRef.Active, 0, 9));
+            AddAttribute(xField, 'Name', Format(fldRef.Name, 0, 9));
+            AddAttribute(xField, 'Caption', Format(fldRef.Caption, 0, 9));
             if not (fldRef.Type in [FieldType::Blob, FieldType::Media, FieldType::MediaSet]) then
                 AddAttribute(xField, 'InitValue', Format(recRef.Field(fldRef.Number).Value, 0, 9));
-            If fldRef.Type = FieldType::Option then begin
-                AddAttribute(xField, 'OptionCaption', FORMAT(fldRef.OptionCaption));
-                AddAttribute(xField, 'OptionMembers', FORMAT(fldRef.OptionMembers));
+            if fldRef.Type = FieldType::Option then begin
+                AddAttribute(xField, 'OptionCaption', Format(fldRef.OptionCaption));
+                AddAttribute(xField, 'OptionMembers', Format(fldRef.OptionMembers));
             end;
             if fldRef.Relation <> 0 then
-                AddAttribute(xField, 'Relation', FORMAT(fldRef.Relation));
+                AddAttribute(xField, 'Relation', Format(fldRef.Relation));
             XFieldDefinition.AsXmlElement().Add(xField);
         end;
     end;
@@ -408,8 +410,8 @@ codeunit 110003 "DMTXMLBackup"
 
     procedure CreateTagName(_Name: Text) _TagName: Text;
     begin
-        _Name := DELCHR(_Name, '=', ' ');
-        _TagName := CONVERTSTR(_Name, '\/-.()', '______')
+        _Name := DelChr(_Name, '=', ' ');
+        _TagName := ConvertStr(_Name, '\/-.()', '______')
     end;
 
     procedure GetListOfKeyFieldIDs(var RecRef: RecordRef) KeyFieldIDsList: List of [Integer];
@@ -426,7 +428,7 @@ codeunit 110003 "DMTXMLBackup"
     end;
 
     procedure MarkAll();
-    VAR
+    var
         _RecRef: RecordRef;
         TableID: Integer;
         TablesToExport: List of [Integer];
@@ -439,30 +441,30 @@ codeunit 110003 "DMTXMLBackup"
         TablesToExport.Add(Database::DMTProcessingPlan);
         TablesToExport.Add(Database::DMTCopyTable);
         foreach TableID in TablesToExport do begin
-            _RecRef.OPEN(TableID);
-            if _RecRef.FINDSET(false, false) then
+            _RecRef.Open(TableID);
+            if _RecRef.FindSet(false, false) then
                 repeat
                     if not RecordIDList.Contains(_RecRef.RecordId) then
                         RecordIDList.Add(_RecRef.RecordId);
                 until _RecRef.Next() = 0;
-            _RecRef.close();
+            _RecRef.Close();
 
         end;
     end;
 
     procedure MarkSelected(TablesToExport: List of [Integer]);
-    VAR
+    var
         _RecRef: RecordRef;
         TableID: Integer;
     begin
         foreach TableID in TablesToExport do begin
-            _RecRef.OPEN(TableID);
-            if _RecRef.FINDSET(false, false) then
+            _RecRef.Open(TableID);
+            if _RecRef.FindSet(false, false) then
                 repeat
                     if not RecordIDList.Contains(_RecRef.RecordId) then
                         RecordIDList.Add(_RecRef.RecordId);
                 until _RecRef.Next() = 0;
-            _RecRef.close();
+            _RecRef.Close();
         end;
     end;
 
@@ -471,8 +473,8 @@ codeunit 110003 "DMTXMLBackup"
         FileMgt: Codeunit "File Management";
         IsDownloaded: Boolean;
         InStr: InStream;
-        OutExt: text;
-        Path: text;
+        OutExt: Text;
+        Path: Text;
         AllFilesDescriptionTxt: TextConst DEU = 'Alle Dateien (*.*)|*.*', ENU = 'All Files (*.*)|*.*';
         ExcelFileTypeTok: TextConst DEU = 'Excel-Dateien (*.xlsx)|*.xlsx', ENU = 'Excel Files (*.xlsx)|*.xlsx';
         ExportLbl: TextConst DEU = 'Export', ENU = 'Export';
@@ -481,7 +483,7 @@ codeunit 110003 "DMTXMLBackup"
         XMLFileTypeTok: TextConst DEU = 'XML-Dateien (*.xml)|*.xml', ENU = 'XML Files (*.xml)|*.xml';
         ZIPFileTypeTok: TextConst DEU = 'ZIP-Dateien (*.zip)|*.zip', ENU = 'ZIP Files (*.zip)|*.zip';
     begin
-        case uppercase(FileMgt.GetExtension(FileName)) OF
+        case UpperCase(FileMgt.GetExtension(FileName)) of
             'XLSX':
                 OutExt := ExcelFileTypeTok;
             'XML':
@@ -493,13 +495,13 @@ codeunit 110003 "DMTXMLBackup"
             'ZIP':
                 OutExt := ZIPFileTypeTok;
         end;
-        IF OutExt = '' then
+        if OutExt = '' then
             OutExt := AllFilesDescriptionTxt
         else
             OutExt += '|' + AllFilesDescriptionTxt;
 
         TempTenantMedia.Content.CreateInStream(InStr, FileEncoding);
-        IsDownloaded := DOWNLOADFROMSTREAM(InStr, ExportLbl, Path, OutExt, FileName);
+        IsDownloaded := DownloadFromStream(InStr, ExportLbl, Path, OutExt, FileName);
         if IsDownloaded then
             exit(FileName);
         exit('');
@@ -517,12 +519,12 @@ codeunit 110003 "DMTXMLBackup"
             exit(false);
         if not Evaluate(MediaID, Format(FldRef.Value)) then
             exit(false);
-        If (Format(FldRef.Value) = '') then
+        if (Format(FldRef.Value) = '') then
             exit(true);
         if IsNullGuid(MediaID) then
             exit(true);
         TenantMedia.Get(MediaID);
-        TenantMedia.calcfields(Content);
+        TenantMedia.CalcFields(Content);
         if TenantMedia.Content.HasValue then begin
             TenantMedia.Content.CreateInStream(IStream);
             if Base64Encode then

@@ -1,4 +1,4 @@
-codeunit 110010 "DMTProgressDialog"
+codeunit 110010 DMTProgressDialog
 {
     procedure AppendTextLine(TextLineNew: Text)
     begin
@@ -14,7 +14,7 @@ codeunit 110010 "DMTProgressDialog"
     var
         FieldText: Text;
     begin
-        FieldText := PadStr('', IndicatorLenght, '#') + format(ProgressIndicatorNo) + '#';
+        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressIndicatorNo) + '#';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -22,7 +22,7 @@ codeunit 110010 "DMTProgressDialog"
     var
         FieldText: Text;
     begin
-        FieldText := PadStr('', IndicatorLenght, '#') + format(ProgressIndicatorNo) + '@';
+        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressIndicatorNo) + '@';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -41,13 +41,13 @@ codeunit 110010 "DMTProgressDialog"
         if not IsProgressOpen then
             exit;
         if Number <> 0 then
-            Progress.update(Number, Value);
+            Progress.Update(Number, Value);
     end;
 
     procedure Close()
     begin
         if IsProgressOpen then
-            Progress.close();
+            Progress.Close();
     end;
 
     procedure SaveCustomStartTime(Index: Integer)
@@ -68,7 +68,7 @@ codeunit 110010 "DMTProgressDialog"
 
     procedure UpdateControlWithCustomDuration(ControlIndex: Integer; CustomDuration: Integer)
     begin
-        ControlValuesDict.Add(ControlIndex, format(GetCustomDuration(CustomDuration)));
+        ControlValuesDict.Add(ControlIndex, Format(GetCustomDuration(CustomDuration)));
         DoUpdate();
     end;
 

@@ -1,4 +1,4 @@
-table 110007 "DMTReplacementsLine"
+table 110007 DMTReplacementsLine
 {
     Caption = 'Replacements Line', Comment = 'Ersetzungen Zeile';
     DataClassification = ToBeClassified;
@@ -21,7 +21,7 @@ table 110007 "DMTReplacementsLine"
         key(PK; "Repl.Rule Code", "Line No.") { Clustered = true; }
     }
 
-    internal procedure filterFor(ReplacementRuleHeader: Record "DMTReplacementsHeader") hasLines: Boolean
+    internal procedure filterFor(ReplacementRuleHeader: Record DMTReplacementsHeader) hasLines: Boolean
     begin
         Rec.SetRange("Repl.Rule Code", ReplacementRuleHeader.Code);
         hasLines := not Rec.IsEmpty;

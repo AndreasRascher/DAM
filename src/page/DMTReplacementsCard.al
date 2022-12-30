@@ -1,4 +1,4 @@
-page 110008 "DMTReplacementsCard"
+page 110008 DMTReplacementsCard
 {
     Caption = 'DMT Replacements Card', Comment = 'DMT Ersetzungen Karte';
     PageType = Document;
@@ -18,13 +18,13 @@ page 110008 "DMTReplacementsCard"
                 field("Source Table Caption"; Rec."Source Table Caption") { ApplicationArea = All; }
             }
 
-            part(Lines; "DMTReplacementsSub")
+            part(Lines; DMTReplacementsSub)
             {
                 ApplicationArea = All;
                 Caption = 'Lines', Comment = 'Zeilen';
                 SubPageLink = "Repl.Rule Code" = field(Code);
             }
-            part(AssignedLines; "DMTReplacementsAssignedSub")
+            part(AssignedLines; DMTReplacementsAssignedSub)
             {
                 ApplicationArea = All;
                 Caption = 'Assigned Lines', Comment = 'Zugeordnete Zeilen';

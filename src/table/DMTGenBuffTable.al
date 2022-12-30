@@ -1,4 +1,4 @@
-table 110005 "DMTGenBuffTable"
+table 110005 DMTGenBuffTable
 {
     DataClassification = ToBeClassified;
 
@@ -320,8 +320,8 @@ table 110005 "DMTGenBuffTable"
         GenBuffTableQry: Query DMTGenBuffTableQry;
         Choice: Integer;
         FileList: List of [Text];
-        Choices: text;
-        FileName: text;
+        Choices: Text;
+        FileName: Text;
         GenBufferTableIsEmptyErr: TextConst DEU = 'Die generische Puffertabelle ist leer',
                                             ENU = 'the generic Buffer Table is empty';
     begin
@@ -380,7 +380,7 @@ table 110005 "DMTGenBuffTable"
         GenBuffTable.FindFirst();
         NoOfCols := GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
 
-        GenBuffTable.reset();
+        GenBuffTable.Reset();
         GenBuffTable.FilterBy(DataFile);
         GenBuffTable.SetRange(IsCaptionLine, false);
         // less Columns is faster
@@ -392,7 +392,7 @@ table 110005 "DMTGenBuffTable"
             101 .. 150:
                 Page.Run(Page::DMTGenBufferList150, GenBuffTable);
             else
-                Page.Run(Page::"DMTGenBufferList250", GenBuffTable);
+                Page.Run(Page::DMTGenBufferList250, GenBuffTable);
         end;
     end;
 

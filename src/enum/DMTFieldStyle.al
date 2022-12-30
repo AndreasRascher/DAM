@@ -1,4 +1,4 @@
-enum 110004 "DMTFieldStyle"
+enum 110004 DMTFieldStyle
 {
     Extensible = true;
 

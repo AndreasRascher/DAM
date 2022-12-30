@@ -20,7 +20,7 @@ codeunit 110006 DMTPageBackgroundTasks
     begin
         if DataFile.FindSet(false, false) then begin
             repeat
-                MyResult.Add(format(DataFile.RecordId), Format(RelationsCheck.FindUnhandledRelatedTableIDs(DataFile).Count));
+                MyResult.Add(Format(DataFile.RecordId), Format(RelationsCheck.FindUnhandledRelatedTableIDs(DataFile).Count));
             until DataFile.Next() = 0;
         end;
         Message('test');

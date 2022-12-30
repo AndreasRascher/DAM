@@ -1,4 +1,4 @@
-page 110025 "DMTSelectDataFile"
+page 110025 DMTSelectDataFile
 {
     Caption = 'Select Data Files', Comment = 'Dateien auswählen';
     PageType = List;
@@ -12,7 +12,7 @@ page 110025 "DMTSelectDataFile"
     {
         area(Content)
         {
-            field(HasSchema; format(IsNAVSchemaFileImported())) { Caption = 'Schema Data Found'; ApplicationArea = All; }
+            field(HasSchema; Format(IsNAVSchemaFileImported())) { Caption = 'Schema Data Found'; ApplicationArea = All; }
             repeater(repeater)
             {
                 field(Name; Rec.Name) { ApplicationArea = All; StyleExpr = LineStyle; }
@@ -23,13 +23,13 @@ page 110025 "DMTSelectDataFile"
                     StyleExpr = LineStyle;
                     trigger OnLookup(var Text: Text): Boolean
                     var
-                        DMTObjMgt: codeunit DMTObjMgt;
+                        DMTObjMgt: Codeunit DMTObjMgt;
                         NAVSrcTableNo: Integer;
                         NAVSrcTableCaption: Text;
                     begin
                         if DMTObjMgt.LookUpOldVersionTable(NAVSrcTableNo, NAVSrcTableCaption) then begin
                             Rec."NAV Src.Table No." := NAVSrcTableNo;
-                            Rec."NAV Src.Table Caption" := copystr(NAVSrcTableCaption, 1, MaxStrLen(Rec."NAV Src.Table Caption"));
+                            Rec."NAV Src.Table Caption" := CopyStr(NAVSrcTableCaption, 1, MaxStrLen(Rec."NAV Src.Table Caption"));
                         end;
                     end;
                 }

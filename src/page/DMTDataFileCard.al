@@ -43,7 +43,7 @@ page 110026 DMTDataFileCard
             }
             part(Lines; DMTFieldMapping)
             {
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Caption = 'Field Mapping', Comment = 'Feldzuordnung';
                 SubPageLink = "Data File ID" = field(ID), "Target Table ID" = field("Target Table ID");
             }
@@ -216,7 +216,7 @@ page 110026 DMTDataFileCard
             action(CreateCode)
             {
                 Caption = 'Create Mapping Code';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Image = CodesList;
                 trigger OnAction()
                 var
@@ -229,7 +229,7 @@ page 110026 DMTDataFileCard
             action(ExportTargetTableToCSV)
             {
                 Caption = 'Export target table to CSV';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Image = CodesList;
                 trigger OnAction()
                 begin

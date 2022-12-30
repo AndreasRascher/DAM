@@ -14,7 +14,7 @@ Code   | ProcessStorage Instanz 1 | Call Publisher Set                    | Call
 Global |			              | Subcriber -> ProcessStorage Instanz 2 | Subscriber -> ProcessStorage Instanz 2
        |                          | Store Global                          | Get Global
 */
-codeunit 110016 "DMTProcessStorage"
+codeunit 110016 DMTProcessStorage
 {
     EventSubscriberInstance = Manual;
 
@@ -70,7 +70,7 @@ codeunit 110016 "DMTProcessStorage"
     begin
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"DMTProcessStorage", 'SetPublisher', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::DMTProcessStorage, 'SetPublisher', '', false, false)]
     local procedure SetStorage(var Storage: Variant)
     begin
         GlobalStorageVariant := Storage;
@@ -83,7 +83,7 @@ codeunit 110016 "DMTProcessStorage"
     begin
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"DMTProcessStorage", 'GetPublisher', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::DMTProcessStorage, 'GetPublisher', '', false, false)]
     local procedure GetStorage(var Storage: Variant)
     begin
         Storage := GlobalStorageVariant;

@@ -68,7 +68,7 @@ table 110010 DMTProcessingPlan
         field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
         field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
-        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress","Finished"; Editable = false; }
+        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished; Editable = false; }
         field(41; StartTime; DateTime) { Caption = 'Start Time'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
@@ -87,7 +87,7 @@ table 110010 DMTProcessingPlan
         DataFile: Record DMTDataFile;
         Import: Codeunit DMTImport;
         BufferRef: RecordRef;
-        CurrView: text;
+        CurrView: Text;
     begin
         if Rec.Type = Rec.Type::"Run Codeunit" then begin
             Rec.TestField("Source Table No.");
@@ -110,7 +110,7 @@ table 110010 DMTProcessingPlan
         DataFile: Record DMTDataFile;
         Import: Codeunit DMTImport;
         TargetRef: RecordRef;
-        CurrView: text;
+        CurrView: Text;
     begin
         DataFile.Get(Rec.ID);
         TargetRef.Open(DataFile."Target Table ID");
@@ -126,9 +126,9 @@ table 110010 DMTProcessingPlan
     var
         IStr: InStream;
     begin
-        rec.calcfields("Source Table Filter");
-        if not rec."Source Table Filter".HasValue then exit('');
-        rec."Source Table Filter".CreateInStream(IStr);
+        Rec.CalcFields("Source Table Filter");
+        if not Rec."Source Table Filter".HasValue then exit('');
+        Rec."Source Table Filter".CreateInStream(IStr);
         IStr.ReadText(SourceTableView);
     end;
 
@@ -136,9 +136,9 @@ table 110010 DMTProcessingPlan
     var
         IStr: InStream;
     begin
-        rec.calcfields("Default Field Values");
-        if not rec."Default Field Values".HasValue then exit('');
-        rec."Default Field Values".CreateInStream(IStr);
+        Rec.CalcFields("Default Field Values");
+        if not Rec."Default Field Values".HasValue then exit('');
+        Rec."Default Field Values".CreateInStream(IStr);
         IStr.ReadText(DefaultValuesView);
     end;
 
@@ -146,9 +146,9 @@ table 110010 DMTProcessingPlan
     var
         IStr: InStream;
     begin
-        rec.calcfields("Update Fields Filter");
-        if not rec."Update Fields Filter".HasValue then exit('');
-        rec."Update Fields Filter".CreateInStream(IStr);
+        Rec.CalcFields("Update Fields Filter");
+        if not Rec."Update Fields Filter".HasValue then exit('');
+        Rec."Update Fields Filter".CreateInStream(IStr);
         IStr.ReadText(FilterExpr);
     end;
 
@@ -160,7 +160,7 @@ table 110010 DMTProcessingPlan
         Rec.Modify();
         if SourceTableView = '' then
             exit;
-        rec."Source Table Filter".CreateOutStream(Ostr);
+        Rec."Source Table Filter".CreateOutStream(OStr);
         OStr.WriteText(SourceTableView);
         Rec.Modify();
     end;
@@ -173,7 +173,7 @@ table 110010 DMTProcessingPlan
         Rec.Modify();
         if DefaultValuesView = '' then
             exit;
-        rec."Default Field Values".CreateOutStream(Ostr);
+        Rec."Default Field Values".CreateOutStream(OStr);
         OStr.WriteText(DefaultValuesView);
         Rec.Modify();
     end;
@@ -186,7 +186,7 @@ table 110010 DMTProcessingPlan
         Rec.Modify();
         if UpdateFieldsFilter = '' then
             exit;
-        rec."Update Fields Filter".CreateOutStream(Ostr);
+        Rec."Update Fields Filter".CreateOutStream(OStr);
         OStr.WriteText(UpdateFieldsFilter);
         Rec.Modify();
     end;
@@ -213,9 +213,9 @@ table 110010 DMTProcessingPlan
         Clear(SourceRef);
         if Rec.ID = 0 then exit(false);
         case Rec.Type of
-            rec.Type::"Run Codeunit":
+            Rec.Type::"Run Codeunit":
                 begin
-                    SourceRef.Open(rec."Source Table No.", false);
+                    SourceRef.Open(Rec."Source Table No.", false);
                     exit(true);
                 end;
         end;
@@ -239,7 +239,7 @@ table 110010 DMTProcessingPlan
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
             if RecRef.HasFilter then
-                for FieldIndexNo := 1 To RecRef.FieldCount do begin
+                for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         TmpFieldMapping2."Data File ID" := Rec.ID;
                         TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
@@ -266,7 +266,7 @@ table 110010 DMTProcessingPlan
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
             if RecRef.HasFilter then
-                for FieldIndexNo := 1 To RecRef.FieldCount do begin
+                for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         FieldMapping.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
                         TmpFieldMapping2 := FieldMapping;
@@ -295,7 +295,7 @@ table 110010 DMTProcessingPlan
         FieldNoFilter := Rec.ReadUpdateFieldsFilter();
         if FieldNoFilter <> '' then begin
             DataFile.FilterRelated(FieldMapping);
-            FieldMapping.Setfilter("Target Field No.", FieldNoFilter);
+            FieldMapping.SetFilter("Target Field No.", FieldNoFilter);
             if FieldMapping.FindSet(false, false) then
                 repeat
                     TmpFieldMapping2 := FieldMapping;

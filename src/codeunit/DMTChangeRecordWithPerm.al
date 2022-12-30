@@ -13,7 +13,7 @@ codeunit 110009 ChangeRecordWithPerm
         DMTDataFile.TestField("Target Table ID");
         RecRef.Open(DMTDataFile."Target Table ID");
         if DMTCopyTable.ShowRequestPageFilterDialog(RecRef) then
-            if confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany, RecRef.GetFilters), false) then begin
+            if Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany, RecRef.GetFilters), false) then begin
                 if not RecRef.IsEmpty then
                     RecRef.DeleteAll();
             end;
@@ -25,10 +25,10 @@ codeunit 110009 ChangeRecordWithPerm
         TargetRef: RecordRef;
         TargetRef2: RecordRef;
     begin
-        TargetRef.Open(TmpTargetRef.Number, FALSE);
+        TargetRef.Open(TmpTargetRef.Number, false);
         DMTMgt.CopyRecordRef(TmpTargetRef, TargetRef);
 
-        IF TargetRef2.Get(TargetRef.RecordId) then begin
+        if TargetRef2.Get(TargetRef.RecordId) then begin
             InsertOK := TargetRef.Modify(InsertTrue);
         end else begin
             InsertOK := TargetRef.Insert(InsertTrue);

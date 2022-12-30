@@ -15,19 +15,19 @@ xmlport 110000 DMTFieldBufferImport
             tableelement(Field; DMTFieldBuffer)
             {
                 XmlName = 'Field';
-                fieldelement("TableNo"; Field."TableNo") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("No"; Field."No.") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("TableName"; Field."TableName") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("FieldName"; Field."FieldName") { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(TableNo; Field.TableNo) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(No; Field."No.") { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(TableName; Field.TableName) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(FieldName; Field.FieldName) { FieldValidate = No; MinOccurs = Zero; }
                 fieldelement("Type"; Field."Type") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("Len"; Field."Len") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("Class"; Field."Class") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("Enabled"; Field."Enabled") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("TypeName"; Field."Type Name") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("FieldCaption"; Field."Field Caption") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("RelationTableNo"; Field."RelationTableNo") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("RelationFieldNo"; Field."RelationFieldNo") { FieldValidate = No; MinOccurs = Zero; }
-                fieldelement("SQLDataType"; Field."SQLDataType") { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(Len; Field.Len) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(Class; Field.Class) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(Enabled; Field.Enabled) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(TypeName; Field."Type Name") { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(FieldCaption; Field."Field Caption") { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(RelationTableNo; Field.RelationTableNo) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(RelationFieldNo; Field.RelationFieldNo) { FieldValidate = No; MinOccurs = Zero; }
+                fieldelement(SQLDataType; Field.SQLDataType) { FieldValidate = No; MinOccurs = Zero; }
                 fieldelement(TableCaption; Field."Table Caption") { FieldValidate = No; MinOccurs = Zero; }
                 fieldelement(PrimaryKey; Field."Primary Key") { FieldValidate = No; MinOccurs = Zero; }
                 fieldelement(OptionString; Field.OptionString) { FieldValidate = No; MinOccurs = Zero; }
@@ -53,13 +53,13 @@ xmlport 110000 DMTFieldBufferImport
     {
         layout
         {
-            area(content)
+            area(Content)
             {
                 group(Umgebung)
                 {
                     Caption = 'Environment';
                     field(GetDatabaseNameCtrl; GetDatabaseName()) { Caption = 'Database'; ApplicationArea = All; }
-                    field(COMPANYNAME; COMPANYNAME) { Caption = 'Company'; ApplicationArea = All; }
+                    field(COMPANYNAME; CompanyName) { Caption = 'Company'; ApplicationArea = All; }
                 }
             }
         }
@@ -69,8 +69,8 @@ xmlport 110000 DMTFieldBufferImport
     var
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
-        IF currXMLport.Filename <> '' then //only for manual excecution
-            MESSAGE(LinesProcessedMsg, Field.TABLECAPTION, ReceivedLinesCount);
+        if currXMLport.Filename <> '' then //only for manual excecution
+            Message(LinesProcessedMsg, Field.TableCaption, ReceivedLinesCount);
     end;
 
     trigger OnPreXmlPort()
@@ -87,9 +87,9 @@ xmlport 110000 DMTFieldBufferImport
     var
         _Field: Record "Field";
     begin
-        IF _TableNo = 0 then exit('');
-        IF _FieldNo = 0 then exit('');
-        IF NOT _Field.GET(_TableNo, _FieldNo) then exit('');
+        if _TableNo = 0 then exit('');
+        if _FieldNo = 0 then exit('');
+        if not _Field.Get(_TableNo, _FieldNo) then exit('');
         _FieldCpt := _Field."Field Caption";
     end;
 
@@ -100,7 +100,7 @@ xmlport 110000 DMTFieldBufferImport
         CharArray[1] := 9; // TAB
         CharArray[2] := 10; // LF
         CharArray[3] := 13; // CR
-        exit(DELCHR(TextIn, '=', CharArray));
+        exit(DelChr(TextIn, '=', CharArray));
     end;
 
     local procedure ClearBufferBeforeImportTable(BufferTableNo: Integer)
@@ -108,14 +108,14 @@ xmlport 110000 DMTFieldBufferImport
         BufferRef: RecordRef;
     begin
         //* Puffertabelle l”schen vor dem Import
-        IF NOT currXMLport.IMPORTFILE then
-            EXIT;
-        IF BufferTableNo < 50000 then begin
-            MESSAGE('Achtung: Puffertabellen ID kleiner 50000');
-            EXIT;
+        if not currXMLport.ImportFile then
+            exit;
+        if BufferTableNo < 50000 then begin
+            Message('Achtung: Puffertabellen ID kleiner 50000');
+            exit;
         end;
-        BufferRef.OPEN(BufferTableNo);
-        IF NOT BufferRef.IsEmpty then
+        BufferRef.Open(BufferTableNo);
+        if not BufferRef.IsEmpty then
             BufferRef.DeleteAll();
     end;
 
@@ -123,9 +123,9 @@ xmlport 110000 DMTFieldBufferImport
     var
         ActiveSession: Record "Active Session";
     begin
-        ActiveSession.SetRange("Server Instance ID", SERVICEINSTANCEID());
-        ActiveSession.SetRange("Session ID", SESSIONID());
-        ActiveSession.FINDFIRST();
+        ActiveSession.SetRange("Server Instance ID", ServiceInstanceId());
+        ActiveSession.SetRange("Session ID", SessionId());
+        ActiveSession.FindFirst();
         exit(ActiveSession."Database Name");
     end;
 }

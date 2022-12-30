@@ -1,6 +1,6 @@
 codeunit 110014 DMTImport
 {
-    procedure RunWithProcessingPlanParams(var ProcessingPlan: record DMTProcessingPlan)
+    procedure RunWithProcessingPlanParams(var ProcessingPlan: Record DMTProcessingPlan)
     var
         DataFile: Record DMTDataFile;
         start: DateTime;
@@ -42,7 +42,7 @@ codeunit 110014 DMTImport
     procedure ProcessFullBuffer(var DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
     var
         ErrorLog: Record DMTErrorLog;
-        TempFieldMapping: Record "DMTFieldMapping" temporary;
+        TempFieldMapping: Record DMTFieldMapping temporary;
         MigrationLib: Codeunit DMTMigrationLib;
         BufferRef, BufferRef2 : RecordRef;
         MaxWith: Integer;
@@ -58,13 +58,13 @@ codeunit 110014 DMTImport
         if not EditView(BufferRef, DataFile) then
             exit;
         ErrorLog.DeleteExistingLogFor(DataFile);
-        BufferRef.findset();
-        DataFile.Calcfields("Target Table Caption");
+        BufferRef.FindSet();
+        DataFile.CalcFields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
-        if Strlen(ProgressBarTitle) < MaxWith then begin
-            ProgressBarTitle := PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_') +
+        if StrLen(ProgressBarTitle) < MaxWith then begin
+            ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
                                 ProgressBarTitle +
-                                PadStr('', (Strlen(ProgressBarTitle) - MaxWith) div 2, '_');
+                                PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_');
         end;
         DMTMgt.ProgressBar_Open(BufferRef, ProgressBarTitle +
                                            ProgressBarText_FilterTok +
@@ -72,18 +72,18 @@ codeunit 110014 DMTImport
                                            ProgressBarText_DurationTok +
                                            ProgressBarText_ProgressTok +
                                            ProgressBarText_TimeRemainingTok);
-        DMTMgt.ProgressBar_UpdateControl(1, CONVERTSTR(BufferRef.GETFILTERS, '@', '_'));
+        DMTMgt.ProgressBar_UpdateControl(1, ConvertStr(BufferRef.GetFilters, '@', '_'));
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DataFile, TempFieldMapping, IsUpdateTask);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
-                                      2, STRSUBSTNO('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
+                                      2, StrSubstNo('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
                                       3, DMTMgt.ProgressBar_GetTimeElapsed(),
                                       5, DMTMgt.ProgressBar_GetRemainingTime());
-            IF DMTMgt.ProgressBar_GetStep() MOD 50 = 0 then
-                COMMIT();
+            if DMTMgt.ProgressBar_GetStep() mod 50 = 0 then
+                Commit();
         until BufferRef.Next() = 0;
         MigrationLib.RunPostProcessingFor(DataFile);
         DMTMgt.ProgressBar_Close();
@@ -91,10 +91,10 @@ codeunit 110014 DMTImport
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure RetryProcessFullBuffer(var RecIdToProcessList: list of [RecordID]; DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
+    procedure RetryProcessFullBuffer(var RecIdToProcessList: List of [RecordId]; DataFile: Record DMTDataFile; IsUpdateTask: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
-        TempFieldMapping: Record "DMTFieldMapping" temporary;
+        TempFieldMapping: Record DMTFieldMapping temporary;
         ID: RecordId;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
@@ -108,11 +108,11 @@ codeunit 110014 DMTImport
         LoadFieldMapping(DataFile, IsUpdateTask, TempFieldMapping);
 
         // Buffer loop
-        BufferRef.OPEN(DataFile."Buffer Table ID");
+        BufferRef.Open(DataFile."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
-        BufferRef.get(ID);
+        BufferRef.Get(ID);
         DMTMgt.ProgressBar_Open(RecIdToProcessList.Count,
-         StrSubstNo(ProgressBarText_TitleTok, BufferRef.CAPTION) +
+         StrSubstNo(ProgressBarText_TitleTok, BufferRef.Caption) +
          ProgressBarText_FilterTok +
          ProgressBarText_RecordTok +
          ProgressBarText_DurationTok +
@@ -120,26 +120,26 @@ codeunit 110014 DMTImport
          ProgressBarText_TimeRemainingTok);
         DMTMgt.ProgressBar_UpdateControl(1, 'Error');
         foreach ID in RecIdToProcessList do begin
-            BufferRef.get(ID);
-            BufferRef2 := BufferRef.DUPLICATE(); // Variant + Events = Call By Reference 
+            BufferRef.Get(ID);
+            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DataFile, TempFieldMapping, IsUpdateTask);
             DMTMgt.ProgressBar_NextStep();
             DMTMgt.ProgressBar_Update(0, '',
                                       4, DMTMgt.ProgressBar_GetProgress(),
-                                      2, STRSUBSTNO('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
+                                      2, StrSubstNo('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
                                       3, DMTMgt.ProgressBar_GetTimeElapsed(),
                                       5, DMTMgt.ProgressBar_GetRemainingTime());
-            IF DMTMgt.ProgressBar_GetStep() MOD 50 = 0 then
-                COMMIT();
+            if DMTMgt.ProgressBar_GetStep() mod 50 = 0 then
+                Commit();
         end;
         DMTMgt.ProgressBar_Close();
         DMTErrorLog.OpenListWithFilter(DataFile, true);
         DMTMgt.GetResultQtyMessage();
     end;
 
-    procedure LoadFieldMapping(DataFile: Record DMTDataFile; UseToFieldFilter: Boolean; var TempFieldMapping: Record "DMTFieldMapping" temporary) OK: Boolean
+    procedure LoadFieldMapping(DataFile: Record DMTDataFile; UseToFieldFilter: Boolean; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
     var
-        FieldMapping: Record "DMTFieldMapping";
+        FieldMapping: Record DMTFieldMapping;
         FieldMapping_ProcessingPlan: Record DMTFieldMapping temporary;
     begin
         DataFile.FilterRelated(FieldMapping);
@@ -148,10 +148,10 @@ codeunit 110014 DMTImport
             FieldMapping.SetFilter("Source Field No.", '<>0');
 
         if UpdateFieldsFilter <> '' then begin // Scope ProcessingPlan
-            FieldMapping.Setfilter("Target Field No.", UpdateFieldsFilter);
+            FieldMapping.SetFilter("Target Field No.", UpdateFieldsFilter);
         end else
             if UseToFieldFilter then  // Scope DataFileCard
-                FieldMapping.Setfilter("Target Field No.", DataFile.ReadLastFieldUpdateSelection());
+                FieldMapping.SetFilter("Target Field No.", DataFile.ReadLastFieldUpdateSelection());
         FieldMapping.CopyToTemp(TempFieldMapping);
         // Apply Processing Plan Settings
         if CurrProcessingPlan."Line No." <> 0 then begin
@@ -167,15 +167,15 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         OK := TempFieldMapping.FindFirst();
     end;
 
-    procedure AssignKeyFields(SourceRef: RecordRef; VAR TmpTargetRef: RecordRef; var TmpFieldMapping: record "DMTFieldMapping" temporary)
+    procedure AssignKeyFields(SourceRef: RecordRef; var TmpTargetRef: RecordRef; var TmpFieldMapping: Record DMTFieldMapping temporary)
     var
         ToFieldRef: FieldRef;
     begin
-        IF NOT TmpTargetRef.ISTEMPORARY then
+        if not TmpTargetRef.IsTemporary then
             Error('AssignKeyFieldsAndInsertTmpRec - Temporay Record expected');
         TmpFieldMapping.Reset();
         TmpFieldMapping.SetRange("Is Key Field(Target)", true);
-        TmpFieldMapping.findset();
+        TmpFieldMapping.FindSet();
         repeat
             if not IsKnownAutoincrementField(TmpFieldMapping."Target Table ID", TmpFieldMapping."Target Field No.") then begin
                 case TmpFieldMapping."Processing Action" of
@@ -193,14 +193,14 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         until TmpFieldMapping.Next() = 0;
     end;
 
-    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; VAR TmpTargetRef: RecordRef; var TempFieldMapping: Record "DMTFieldMapping" temporary)
+    procedure ValidateNonKeyFieldsAndModify(BufferRef: RecordRef; var TmpTargetRef: RecordRef; var TempFieldMapping: Record DMTFieldMapping temporary)
     var
         ToFieldRef: FieldRef;
     begin
         TempFieldMapping.Reset();
         TempFieldMapping.SetRange("Is Key Field(Target)", false);
         TempFieldMapping.SetCurrentKey("Validation Order");
-        if not TempFieldMapping.findset() then
+        if not TempFieldMapping.FindSet() then
             exit; // Required for tables with only key fields
         repeat
             //hier: MigrateFieldsaufrufen
@@ -238,8 +238,8 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         Debug: Text;
     begin
         FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
-        IF BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SetView(BufferRef.CAPTION, BufferRef.GETVIEW());
+        if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
+            FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
 
         if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
             if DataFile.FilterRelated(FieldMapping) then begin
@@ -257,15 +257,15 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         end else begin
             // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
             PrimaryKeyRef := BufferRef.KeyIndex(1);
-            for Index := 1 TO PrimaryKeyRef.FieldCount DO
+            for Index := 1 to PrimaryKeyRef.FieldCount do
                 FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
         end;
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RUNMODAL();
-        BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
+        Continue := FPBuilder.RunModal();
+        BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
-    procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: text; TargetTableID: Integer)
+    procedure InitFieldFilter(var BuffKeyFieldFilter: Text; var BuffNonKeyFieldFilter: Text; TargetTableID: Integer)
     var
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
     begin
@@ -345,11 +345,11 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         Debug: List of [Text];
     begin
         KeyRef := TmpTargetRef.KeyIndex(1);
-        for KeyFieldIndex := 1 To KeyRef.FieldCount do begin
+        for KeyFieldIndex := 1 to KeyRef.FieldCount do begin
             FldRef := KeyRef.FieldIndex(KeyFieldIndex);
             Debug.Add('FieldName:' + FldRef.Name);
             if FldRef.Relation <> 0 then begin
-                Debug.Add('Relation' + format(FldRef.Relation));
+                Debug.Add('Relation' + Format(FldRef.Relation));
                 RelatedRef.Open(FldRef.Relation);
                 case true of
                     (RelatedRef.KeyIndex(1).FieldCount = 2) and (KeyRef.FieldCount = 3):
@@ -376,7 +376,7 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         ErrorLog.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(DMTDataFile, TempFieldMapping, BufferRef2, UpdateExistingRecordsOnly);
         Commit();
-        While not ProcessRecord.Run() do begin
+        while not ProcessRecord.Run() do begin
             ProcessRecord.LogLastError();
         end;
         ProcessRecord.InitInsert();
@@ -414,7 +414,7 @@ until FieldMapping_ProcessingPlan.Next() = 0;
                 begin
                     RecRef.Open(DataFile."Buffer Table ID");
                     if RecRef.IsEmpty then
-                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.CAPTION, DataFile."Buffer Table ID");
+                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.Caption, DataFile."Buffer Table ID");
                 end;
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
@@ -431,7 +431,7 @@ until FieldMapping_ProcessingPlan.Next() = 0;
     begin
         DataFile.FilterRelated(FieldMapping);
         FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
-        DataFile.Calcfields("Target Table Caption");
+        DataFile.CalcFields("Target Table Caption");
         if FieldMapping.IsEmpty then
             Error(FieldMappingEmptyErr, DataFile.FullDataFilePath());
     end;
@@ -498,10 +498,10 @@ until FieldMapping_ProcessingPlan.Next() = 0;
         SourceTableView: Text;
         CurrProcessingPlan: Record DMTProcessingPlan;
         #endregion GlobalProcessionOptions
-        ProgressBarText_DurationTok: label '\Duration:        ########################################3#';
-        ProgressBarText_FilterTok: label '\Filter:       ########################################1#';
-        ProgressBarText_ProgressTok: label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
-        ProgressBarText_RecordTok: label '\Record:    ########################################2#';
-        ProgressBarText_TimeRemainingTok: label '\Time Remaining: ########################################5#';
-        ProgressBarText_TitleTok: label '_________________________%1_________________________', Locked = true;
+        ProgressBarText_DurationTok: Label '\Duration:        ########################################3#';
+        ProgressBarText_FilterTok: Label '\Filter:       ########################################1#';
+        ProgressBarText_ProgressTok: Label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
+        ProgressBarText_RecordTok: Label '\Record:    ########################################2#';
+        ProgressBarText_TimeRemainingTok: Label '\Time Remaining: ########################################5#';
+        ProgressBarText_TitleTok: Label '_________________________%1_________________________', Locked = true;
 }

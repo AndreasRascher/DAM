@@ -1,10 +1,10 @@
-codeunit 110000 "DMTObjMgt"
+codeunit 110000 DMTObjMgt
 {
     procedure LookUpOldVersionTable(var NAVSrcTableNo: Integer; var NAVSrcTableCaption: Text) OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTSetup: Record "DMTSetup";
-        DMTSelectTables: Page "DMTSelectTableList";
+        DMTSetup: Record DMTSetup;
+        DMTSelectTables: Page DMTSelectTableList;
         DMTFieldBufferQry: Query DMTFieldBufferQry;
     begin
         DMTSetup.CheckSchemaInfoHasBeenImporterd();
@@ -30,7 +30,7 @@ codeunit 110000 "DMTObjMgt"
     procedure LookUpTargetTable(var DMTTable: Record DMTDataFile) OK: Boolean;
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTSelectTables: Page "DMTSelectTableList";
+        DMTSelectTables: Page DMTSelectTableList;
     begin
         LoadTableList(TempAllObjWithCaption);
         if TempAllObjWithCaption.FindFirst() then;
@@ -89,7 +89,7 @@ codeunit 110000 "DMTObjMgt"
 
     procedure ImportNAVSchemaFile()
     var
-        DMTSetup: Record "DMTSetup";
+        DMTSetup: Record DMTSetup;
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort DMTFieldBufferImport;
         FileFound: Boolean;
@@ -106,7 +106,7 @@ codeunit 110000 "DMTObjMgt"
 
         if not FileFound then begin
             TempBlob.CreateInStream(InStr);
-            if not UploadIntoStream('Select a Schema.csv file', '', format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
+            if not UploadIntoStream('Select a Schema.csv file', '', Format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
                 exit;
             end;
         end;
@@ -211,9 +211,9 @@ codeunit 110000 "DMTObjMgt"
     local procedure IsCoreAppObject(AllObjWithCaption: Record AllObjWithCaption) IsCoreAppObj: Boolean
     begin
         case AllObjWithCaption."Object Type" of
-            allObjWithCaption."Object Type"::Table:
+            AllObjWithCaption."Object Type"::Table:
                 begin
-                    IsCoreAppObj := allObjWithCaption."Object ID" in [Database::DMTSetup,
+                    IsCoreAppObj := AllObjWithCaption."Object ID" in [Database::DMTSetup,
                                                                       Database::DMTDataFile,
                                                                       Database::DMTFieldMapping,
                                                                       Database::DMTErrorLog,
@@ -225,9 +225,9 @@ codeunit 110000 "DMTObjMgt"
                                                                       Database::DMTReplacementsLine,
                                                                       Database::DMTProcessingPlan];
                 end;
-            allObjWithCaption."Object Type"::XMLport:
+            AllObjWithCaption."Object Type"::XMLport:
                 begin
-                    IsCoreAppObj := allObjWithCaption."Object ID" in [Xmlport::DMTFieldBufferImport,
+                    IsCoreAppObj := AllObjWithCaption."Object ID" in [Xmlport::DMTFieldBufferImport,
                                                                       Xmlport::DMTGenBuffImport];
                 end;
         end;

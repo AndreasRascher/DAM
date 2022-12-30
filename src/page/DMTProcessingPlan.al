@@ -30,21 +30,21 @@ page 110015 DMTProcessingPlan
         }
         area(FactBoxes)
         {
-            part(SourceTableFilter; "DMTProcessInstructionFactBox")
+            part(SourceTableFilter; DMTProcessInstructionFactBox)
             {
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
                 SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
                 Enabled = ShowSourceTableFilterPart;
             }
-            part(FixedValues; "DMTProcessInstructionFactBox")
+            part(FixedValues; DMTProcessInstructionFactBox)
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
                 SubPageLink = "Data File ID" = field(ID);
                 UpdatePropagation = Both;
                 Enabled = ShowFixedValuesPart;
             }
-            part(ProcessSelectedFieldsOnly; "DMTProcessInstructionFactBox")
+            part(ProcessSelectedFieldsOnly; DMTProcessInstructionFactBox)
             {
                 Caption = 'Process selected fields only', Comment = 'de-DE=Ausgew. Felder verarbeiten';
                 SubPageLink = "Data File ID" = field(ID);
@@ -191,11 +191,11 @@ page 110015 DMTProcessingPlan
         LineStyle := '';
         case true of
             (Rec.Type = Rec.Type::Group):
-                LineStyle := format(Enum::DMTFieldStyle::Bold);
+                LineStyle := Format(Enum::DMTFieldStyle::Bold);
             (Rec.Status = Rec.Status::"In Progress"):
-                LineStyle := format(Enum::DMTFieldStyle::Yellow);
+                LineStyle := Format(Enum::DMTFieldStyle::Yellow);
             (Rec.Status = Rec.Status::Finished):
-                LineStyle := format(Enum::DMTFieldStyle::"Bold + Green");
+                LineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
     end;
 
@@ -210,7 +210,7 @@ page 110015 DMTProcessingPlan
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
     var
         DMTDataFile: Record DMTDataFile;
-        ProcessingPlan: record DMTProcessingPlan;
+        ProcessingPlan: Record DMTProcessingPlan;
         ProcessStorage: Codeunit DMTProcessStorage;
         PageAction: Codeunit DMTDataFilePageAction;
         Success: Boolean;
@@ -267,7 +267,7 @@ page 110015 DMTProcessingPlan
 
     local procedure ResetLines(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
     var
-        ProcessingPlan: record DMTProcessingPlan;
+        ProcessingPlan: Record DMTProcessingPlan;
     begin
         if not ProcessingPlan_SELECTED.FindSet then exit;
         repeat
@@ -280,7 +280,7 @@ page 110015 DMTProcessingPlan
         until ProcessingPlan_SELECTED.Next() = 0;
     end;
 
-    local procedure SetStatusToStartAndCommit(var ProcessingPlan: record DMTProcessingPlan)
+    local procedure SetStatusToStartAndCommit(var ProcessingPlan: Record DMTProcessingPlan)
     begin
         ProcessingPlan.StartTime := CurrentDateTime;
         ProcessingPlan.Status := ProcessingPlan.Status::"In Progress";
@@ -326,7 +326,7 @@ page 110015 DMTProcessingPlan
         if TempProcessingPlan_Selected.IsTemporary then
             TempProcessingPlan_Selected.DeleteAll();
 
-        ProcessingPlan.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        ProcessingPlan.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(ProcessingPlan);
         Debug := ProcessingPlan.Count;
         ProcessingPlan.CopyToTemp(TempProcessingPlan_Selected);
@@ -335,7 +335,7 @@ page 110015 DMTProcessingPlan
 
     internal procedure IndentLines(var TempProcessingPLan: Record DMTProcessingPlan temporary; Direction: Integer)
     var
-        ProcessingPlan: record DMTProcessingPlan;
+        ProcessingPlan: Record DMTProcessingPlan;
     begin
         if not TempProcessingPLan.FindSet() then exit;
         repeat
@@ -357,6 +357,6 @@ page 110015 DMTProcessingPlan
     var
         [InDataSet]
         ShowSourceTableFilterPart, ShowFixedValuesPart, ShowProcessSelectedFieldsOnly : Boolean;
-        ProcessingPlan_SELECTED: record DMTProcessingPlan temporary;
+        ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         LineStyle: Text;
 }

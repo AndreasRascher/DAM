@@ -42,7 +42,7 @@ codeunit 110005 DMTRelationsCheck
                 tempAllObjWithCaption := AllObjWithCaption;
                 tempAllObjWithCaption.Insert();
             end;
-        if FindUnhandledRelatedTableIDs(DataFile).count = 0 then
+        if FindUnhandledRelatedTableIDs(DataFile).Count = 0 then
             exit;
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
 
@@ -111,7 +111,7 @@ codeunit 110005 DMTRelationsCheck
                 tempAllObjWithCaption := AllObjWithCaption;
                 tempAllObjWithCaption.Insert();
             end;
-        if FindUnhandledRelatedTableIDs(DataFile).count = 0 then
+        if FindUnhandledRelatedTableIDs(DataFile).Count = 0 then
             exit;
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
 
@@ -121,13 +121,13 @@ codeunit 110005 DMTRelationsCheck
     local procedure CreateRelatedTableIDsList(TargetTableID: Integer; TargetFieldNo: Integer; var RelatedTableIDsList: List of [Integer])
     var
         TargetField: Record Field;
-        TableRelations: record "Table Relations Metadata";
+        TableRelations: Record "Table Relations Metadata";
         ExcludeKnownTableIDsFromSearchFilter: Text;
     begin
         if TargetField.Get(TargetTableID, TargetFieldNo) then begin
             TableRelations.SetRange("Table ID", TargetField.TableNo);
             TableRelations.SetRange("Field No.", TargetField."No.");
-            TableRelations.setfilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
+            TableRelations.SetFilter("Related Table ID", ExcludeKnownTableIDsFromSearchFilter);
             if TableRelations.FindSet() then
                 repeat
                     if not RelatedTableIDsList.Contains(TableRelations."Related Table ID") then

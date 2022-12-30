@@ -12,7 +12,7 @@ xmlport 110001 DMTGenBuffImport
     {
         textelement(Root)
         {
-            tableelement(GenBuffTable; "DMTGenBuffTable")
+            tableelement(GenBuffTable; DMTGenBuffTable)
             {
                 textelement(FieldContent)
                 {
@@ -22,12 +22,12 @@ xmlport 110001 DMTGenBuffImport
                         RecRef: RecordRef;
                     begin
                         CurrColIndex += 1;
-                        If MaxColCount < (CurrColIndex - 1000) then
+                        if MaxColCount < (CurrColIndex - 1000) then
                             MaxColCount := (CurrColIndex - 1000);
                         RecRef.GetTable(GenBuffTable);
-                        RecRef.Field(GenBuffTable.FieldNo("Import File Path")).Value := CopyStr(CurrPath, 1, Maxstrlen(GenBuffTable."Import File Path"));
-                        RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, Maxstrlen(GenBuffTable."Import from Filename"));
-                        RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrDataFile.RecordID;
+                        RecRef.Field(GenBuffTable.FieldNo("Import File Path")).Value := CopyStr(CurrPath, 1, MaxStrLen(GenBuffTable."Import File Path"));
+                        RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, MaxStrLen(GenBuffTable."Import from Filename"));
+                        RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrDataFile.RecordId;
                         RecRef.Field(CurrColIndex).Value := FieldContent;
                         RecRef.SetTable(GenBuffTable);
                     end;
@@ -53,7 +53,7 @@ xmlport 110001 DMTGenBuffImport
     {
         layout
         {
-            area(content)
+            area(Content)
             {
                 // group(GroupName)
                 // {
@@ -72,7 +72,7 @@ xmlport 110001 DMTGenBuffImport
 
     trigger OnPreXmlPort()
     var
-        GenBuffTable: Record "DMTGenBuffTable";
+        GenBuffTable: Record DMTGenBuffTable;
     begin
         /* Delete old line on reimport*/
         if CurrFileName <> '' then
@@ -93,8 +93,8 @@ xmlport 110001 DMTGenBuffImport
         LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
     begin
         GenBuffTable.UpdateMaxColCount(CurrDataFile, CurrFileName, MaxColCount);
-        IF currXMLport.Filename <> '' then //only for manual excecution
-            MESSAGE(LinesProcessedMsg, currXMLport.Filename, ReceivedLinesCount);
+        if currXMLport.Filename <> '' then //only for manual excecution
+            Message(LinesProcessedMsg, currXMLport.Filename, ReceivedLinesCount);
     end;
 
     procedure SetImportFromFile(DataFile: Record DMTDataFile)

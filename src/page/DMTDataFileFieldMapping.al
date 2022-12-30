@@ -11,7 +11,7 @@ page 110028 DMTFieldMapping
         {
             repeater(repeater)
             {
-                field("Processing Action"; rec."Processing Action") { ApplicationArea = all; }
+                field("Processing Action"; Rec."Processing Action") { ApplicationArea = All; }
                 field("To Field No."; Rec."Target Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
                 field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
                 field("From Field Caption"; Rec."Source Field Caption")
@@ -169,7 +169,7 @@ page 110028 DMTFieldMapping
         Clear(FieldMapping_SELECTED);
         if FieldMapping_SELECTED.IsTemporary then FieldMapping_SELECTED.DeleteAll();
         Debug := Rec.Count;
-        FieldMapping.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        FieldMapping.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(FieldMapping);
         Debug := FieldMapping.Count;
         FieldMapping.CopyToTemp(FieldMapping_SELECTED);
@@ -181,7 +181,7 @@ page 110028 DMTFieldMapping
         DataFile: Record DMTDataFile;
         ErrorLog: Record DMTErrorLog;
     begin
-        DataFile.get(FieldMapping.GetRangeMin("Data File ID"));
+        DataFile.Get(FieldMapping.GetRangeMin("Data File ID"));
         ErrorLog.SetRange(DataFileName, DataFile.Name);
         ErrorLog.SetRange(DataFilePath, DataFile.Path);
         ErrorLog.SetRange("Import to Field No.", FieldMapping."Target Field No.");

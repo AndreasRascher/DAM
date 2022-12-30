@@ -15,7 +15,7 @@ table 110041 DMTFieldMapping
         field(11; "Target Field No."; Integer)
         {
             Caption = 'Target Field No.', comment = 'Ziel Feldnr.';
-            TableRelation = Field."No." WHERE(TableNo = field("Target Table ID"));
+            TableRelation = Field."No." where(TableNo = field("Target Table ID"));
         }
         field(12; "Target Field Caption"; Text[80])
         {
@@ -29,13 +29,13 @@ table 110041 DMTFieldMapping
             Caption = 'Target Field Name', comment = 'Zielfeld Name';
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = lookup(Field."FieldName" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
+            CalcFormula = lookup(Field.FieldName where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
         field(14; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'Schlüsselfeld'; Editable = false; }
         field(30; "Source Table ID"; Integer)
         {
             Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(31; "Source Field No."; Integer)
         {
@@ -52,9 +52,9 @@ table 110041 DMTFieldMapping
         }
         field(32; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
         field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeader.Code; }
-        field(50; "Validation Type"; enum "DMTFieldValidationType") { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
+        field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
-        field(100; "Processing Action"; enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
+        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
         field(101; "Fixed Value"; Text[250])
         {
             Caption = 'Fixed Value', comment = 'Fester Wert';
@@ -118,7 +118,7 @@ table 110041 DMTFieldMapping
             exit;
         end;
         FieldMapping := Rec;
-        DataFile.get(Rec."Data File ID");
+        DataFile.Get(Rec."Data File ID");
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
@@ -145,7 +145,7 @@ table 110041 DMTFieldMapping
     internal procedure UpdateProcessingAction(SrcFieldNo: Integer);
     begin
         case SrcFieldNo of
-            Rec.FieldNo(rec."Fixed Value"):
+            Rec.FieldNo(Rec."Fixed Value"):
                 begin
                     if (xRec."Fixed Value" <> Rec."Fixed Value") then begin
                         case true of
@@ -158,7 +158,7 @@ table 110041 DMTFieldMapping
                         end;
                     end;
                 end;
-            Rec.FieldNo(rec."Source Field No."):
+            Rec.FieldNo(Rec."Source Field No."):
                 begin
                     if (xRec."Source Field No." <> Rec."Source Field No.") then begin
                         if Rec."Source Field No." <> 0 then

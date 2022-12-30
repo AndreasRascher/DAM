@@ -17,7 +17,7 @@ table 110048 DMTDataFileBuffer
         {
             Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
             DataClassification = SystemMetadata;
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(31; "Target Table Caption"; Text[250])
         {
@@ -48,7 +48,7 @@ table 110048 DMTDataFileBuffer
         DMTSetup.TestField("Default Export Folder Path");
         FileRec.SetRange(Path, DMTSetup."Default Export Folder Path");
         FileRec.SetRange("Is a file", true);
-        If not FileRec.FindSet() then exit(false);
+        if not FileRec.FindSet() then exit(false);
         repeat
             Rec.Init();
             Rec.Path := FileRec.Path;
@@ -111,7 +111,7 @@ table 110048 DMTDataFileBuffer
     var
         DataFile: Record DMTDataFile;
     begin
-        if rec.Name = '' then exit;
+        if Rec.Name = '' then exit;
         DataFile.SetRange(Path, Rec.Path);
         DataFile.SetRange(Name, Rec.Name);
         exit(not DataFile.IsEmpty());
@@ -132,11 +132,11 @@ table 110048 DMTDataFileBuffer
         TableMetadata: Record "Table Metadata";
     begin
         // Feature: If Target Table Obsolete, switch to alternative
-        if TableMetadata.Get(rec."NAV Src.Table No.") then begin
+        if TableMetadata.Get(Rec."NAV Src.Table No.") then begin
             if not (TableMetadata.ObsoleteState in [TableMetadata.ObsoleteState::Removed, TableMetadata.ObsoleteState::Pending]) then begin
                 Rec."Target Table ID" := TableMetadata.ID;
             end else begin
-                Case Rec."NAV Src.Table No." of
+                case Rec."NAV Src.Table No." of
                     5105: // Customer Template
                         Rec."Target Table ID" := Database::"Customer Templ.";
                     5717: //Item Cross Reference

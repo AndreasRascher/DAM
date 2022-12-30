@@ -1,10 +1,10 @@
-page 110013 "DMTCopyTableList"
+page 110013 DMTCopyTableList
 {
     Caption = 'DMT Copy Table List', Comment = 'DMT Tabellen kopieren';
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = "DMTCopyTable";
+    SourceTable = DMTCopyTable;
     AutoSplitKey = true;
 
     layout
@@ -27,13 +27,13 @@ page 110013 "DMTCopyTableList"
                         Rec.EditSavedFilters();
                     end;
                 }
-                field("Description"; Rec."Description") { ApplicationArea = All; }
+                field(Description; Rec.Description) { ApplicationArea = All; }
                 field("No. of Records"; Rec."No. of Records(Target)") { ApplicationArea = All; }
                 field("No. of Records imported"; Rec."No. of Records inserted") { ApplicationArea = All; }
                 field("Processing Time"; Rec."Processing Time") { ApplicationArea = All; }
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
 
         }
@@ -62,7 +62,7 @@ page 110013 "DMTCopyTableList"
 
     trigger OnAfterGetRecord()
     begin
-        Rec.Setfilter(ExcludeSourceCompanyFilter, '<>%1', CompanyName);
+        Rec.SetFilter(ExcludeSourceCompanyFilter, '<>%1', CompanyName);
     end;
 
     local procedure CopyDataFromSourceCompany(var CopyTable_SELECTED: Record DMTCopyTable temporary)
@@ -131,7 +131,7 @@ page 110013 "DMTCopyTableList"
         Clear(CopyTable_SELECTED);
         if CopyTable_SELECTED.IsTemporary then CopyTable_SELECTED.DeleteAll();
         Debug := Rec.Count;
-        CopyTable.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CopyTable.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(CopyTable);
         Debug := CopyTable.Count;
         CopyTable.CopyToTemp(CopyTable_SELECTED);
@@ -139,5 +139,5 @@ page 110013 "DMTCopyTableList"
     end;
 
     var
-        TempCopyTable_SELECTED: record DMTCopyTable temporary;
+        TempCopyTable_SELECTED: Record DMTCopyTable temporary;
 }

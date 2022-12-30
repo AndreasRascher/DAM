@@ -1,4 +1,4 @@
-page 110004 "DMTGenBufferList150"
+page 110004 DMTGenBufferList150
 {
     Caption = 'DMT GenBufferList';
     PageType = List;
@@ -7,7 +7,7 @@ page 110004 "DMTGenBufferList150"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             repeater(General)
             {
@@ -533,5 +533,5 @@ page 110004 "DMTGenBufferList150"
         Fld111Visible, Fld112Visible, Fld113Visible, Fld114Visible, Fld115Visible, Fld116Visible, Fld117Visible, Fld118Visible, Fld119Visible, Fld120Visible,
         Fld121Visible, Fld122Visible, Fld123Visible, Fld124Visible, Fld125Visible, Fld126Visible, Fld127Visible, Fld128Visible, Fld129Visible, Fld130Visible,
         Fld131Visible, Fld132Visible, Fld133Visible, Fld134Visible, Fld135Visible, Fld136Visible, Fld137Visible, Fld138Visible, Fld139Visible, Fld140Visible,
-        Fld141Visible, Fld142Visible, Fld143Visible, Fld144Visible, Fld145Visible, Fld146Visible, Fld147Visible, Fld148Visible, Fld149Visible, Fld150Visible : boolean;
+        Fld141Visible, Fld142Visible, Fld143Visible, Fld144Visible, Fld145Visible, Fld146Visible, Fld147Visible, Fld148Visible, Fld149Visible, Fld150Visible : Boolean;
 }

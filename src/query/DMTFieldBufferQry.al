@@ -1,4 +1,4 @@
-query 110002 "DMTFieldBufferQry"
+query 110002 DMTFieldBufferQry
 {
     QueryType = Normal;
 

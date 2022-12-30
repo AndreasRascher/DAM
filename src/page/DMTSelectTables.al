@@ -1,4 +1,4 @@
-page 110010 "DMTSelectTableList"
+page 110010 DMTSelectTableList
 {
     Caption = 'Tables', Comment = 'Tabellen';
     PageType = List;
@@ -11,14 +11,14 @@ page 110010 "DMTSelectTableList"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             repeater(General)
             {
                 field("Object ID"; Rec."Object ID") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Caption"; Rec."Object Caption") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Object Name"; Rec."Object Name") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(ObjectStatus; format(ObjectStatus)) { ApplicationArea = All; Caption = 'Object Status', comment = 'Objektstatus'; StyleExpr = LineStyle; }
+                field(ObjectStatus; Format(ObjectStatus)) { ApplicationArea = All; Caption = 'Object Status', comment = 'Objektstatus'; StyleExpr = LineStyle; }
             }
 
         }
@@ -31,7 +31,7 @@ page 110010 "DMTSelectTableList"
             Rec.DeleteAll(false);
         end;
 
-        If AllObjWithCaption.FindSet() then
+        if AllObjWithCaption.FindSet() then
             repeat
                 Rec := AllObjWithCaption;
                 Rec.Insert(false);

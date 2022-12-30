@@ -1,9 +1,9 @@
-codeunit 110008 "DMTErrorWrapper"
+codeunit 110008 DMTErrorWrapper
 {
     trigger OnRun()
     begin
         ClearLastError();
-        CASE OnRunAction OF
+        case OnRunAction of
             OnRunAction::FieldValidate:
                 FieldValidateRecRef(SourceRef, TargetRef, FieldMapping);
             OnRunAction::FieldValidateWithValue:
@@ -14,8 +14,8 @@ codeunit 110008 "DMTErrorWrapper"
     procedure SetFieldValidateRecRef(_SourceRef: RecordRef; _TargetRef: RecordRef; _FieldMapping: Record DMTFieldMapping)
     begin
         OnRunAction := OnRunAction::FieldValidate;
-        SourceRef := _SourceRef.duplicate();
-        TargetRef := _TargetRef.duplicate();
+        SourceRef := _SourceRef.Duplicate();
+        TargetRef := _TargetRef.Duplicate();
         FieldMapping := _FieldMapping;
     end;
 
@@ -23,11 +23,11 @@ codeunit 110008 "DMTErrorWrapper"
     begin
         OnRunAction := OnRunAction::FieldValidateWithValue;
         NewValue := _NewValue;
-        TargetRef := _RecRef_TO.duplicate();
+        TargetRef := _RecRef_TO.Duplicate();
         TargetFieldNo := _TargetFieldNo;
     end;
 
-    procedure GetTargetRef(VAR _TargetRef: RecordRef)
+    procedure GetTargetRef(var _TargetRef: RecordRef)
     begin
         _TargetRef := TargetRef;
     end;
@@ -39,12 +39,12 @@ codeunit 110008 "DMTErrorWrapper"
         DMTMgt.ValidateFieldImplementation(_SourceRef, _FieldMapping, _TargetRef);
     end;
 
-    LOCAL procedure FieldValidateWithValue(_NewValue: Variant; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
+    local procedure FieldValidateWithValue(_NewValue: Variant; _RecRef_TO: RecordRef; _FieldNo_TO: Integer)
     var
         ToField: FieldRef;
     begin
-        ToField := _RecRef_TO.FIELD(_FieldNo_TO);
-        ToField.VALIDATE(_NewValue);
+        ToField := _RecRef_TO.Field(_FieldNo_TO);
+        ToField.Validate(_NewValue);
     end;
 
 

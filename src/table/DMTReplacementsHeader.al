@@ -1,4 +1,4 @@
-table 110006 "DMTReplacementsHeader"
+table 110006 DMTReplacementsHeader
 {
     Caption = 'Replacements Header', Comment = 'Ersetzungungen Kopf';
     DataClassification = ToBeClassified;
@@ -20,7 +20,7 @@ table 110006 "DMTReplacementsHeader"
         field(10; "Source Table ID"; Integer)
         {
             Caption = 'Source Table ID', Comment = 'Herkunftstabellennr.';
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
             DataClassification = SystemMetadata;
             trigger OnValidate()
             begin
@@ -48,7 +48,7 @@ table 110006 "DMTReplacementsHeader"
 
     trigger OnDelete()
     var
-        ReplacementsLine: Record "DMTReplacementsLine";
+        ReplacementsLine: Record DMTReplacementsLine;
     begin
         if ReplacementsLine.filterFor(Rec) then
             ReplacementsLine.DeleteAll(true);
@@ -82,9 +82,9 @@ table 110006 "DMTReplacementsHeader"
                 TableNoFilter += StrSubstNo('%1|', DataFile."Target Table ID");
             until DataFile.Next() = 0;
         TableNoFilter := TableNoFilter.TrimEnd('|');
-        TableRelationsMetadata.setfilter("Table ID", TableNoFilter);
-        TableRelationsMetadata.Setrange("Related Table ID", Rec."Source Table ID");
-        TableRelationsMetadata.Setrange("Related Field No.", 1);
+        TableRelationsMetadata.SetFilter("Table ID", TableNoFilter);
+        TableRelationsMetadata.SetRange("Related Table ID", Rec."Source Table ID");
+        TableRelationsMetadata.SetRange("Related Field No.", 1);
         if not TableRelationsMetadata.FindSet() then exit;
         repeat
 

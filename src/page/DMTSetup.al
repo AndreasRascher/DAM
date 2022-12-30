@@ -5,7 +5,7 @@ page 110011 "DMT Setup"
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = "DMTSetup";
+    SourceTable = DMTSetup;
     PromotedActionCategories = 'NAV,Backup,Lists,,', Comment = 'NAV,Backup,Listen,,';
 
     layout
@@ -31,7 +31,7 @@ page 110011 "DMT Setup"
                 {
                     field(SessionID; SessionId())
                     {
-                        ApplicationArea = all;
+                        ApplicationArea = All;
                         Caption = 'SessionID';
                         trigger OnAssistEdit()
                         var
@@ -77,7 +77,7 @@ page 110011 "DMT Setup"
                             end;
                         end;
                     }
-                    field("UserID"; UserId) { ApplicationArea = all; Caption = 'User ID'; }
+                    field(UserID; UserId) { ApplicationArea = All; Caption = 'User ID'; }
                 }
             }
             group("Company Settings")
@@ -90,7 +90,7 @@ page 110011 "DMT Setup"
                 }
                 group(Performance)
                 {
-                    field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = all; }
+                    field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
                 }
 
             }
@@ -136,7 +136,7 @@ page 110011 "DMT Setup"
         }
         area(Reporting)
         {
-            action("Table_DMTFieldBuffer")
+            action(Table_DMTFieldBuffer)
             {
                 ApplicationArea = All;
                 Caption = 'Show Schema Data', comment = 'Schema Daten anzeigen';
@@ -205,7 +205,7 @@ page 110011 "DMT Setup"
                 var
                     DMTGenBuffTable: Record DMTGenBuffTable;
                 begin
-                    if confirm('Delete all lines in Gen. Buffer Table?') then
+                    if Confirm('Delete all lines in Gen. Buffer Table?') then
                         DMTGenBuffTable.DeleteAll();
                 end;
             }
@@ -294,6 +294,6 @@ page 110011 "DMT Setup"
     }
     trigger OnOpenPage()
     begin
-        rec.InsertWhenEmpty();
+        Rec.InsertWhenEmpty();
     end;
 }

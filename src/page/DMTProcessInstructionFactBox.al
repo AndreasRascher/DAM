@@ -1,4 +1,4 @@
-page 110017 "DMTProcessInstructionFactBox"
+page 110017 DMTProcessInstructionFactBox
 {
     Caption = 'Processing Instructions';
     PageType = ListPart;
@@ -10,24 +10,24 @@ page 110017 "DMTProcessInstructionFactBox"
     LinksAllowed = false;
     layout
     {
-        area(content)
+        area(Content)
         {
-            repeater("FilterList")
+            repeater(FilterList)
             {
                 Caption = 'Filter', Comment = 'Filter';
                 Visible = IsSourceTableFilterView;
-                field("FieldCaption"; Rec."Source Field Caption") { ApplicationArea = All; }
+                field(FieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
                 field(FilterValue; Rec.Comment) { ApplicationArea = All; }
             }
 
-            repeater("FixedValuesList")
+            repeater(FixedValuesList)
             {
                 Caption = 'Fixed Values';
                 Visible = IsFixedValueView;
                 field(FilterFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
             }
-            repeater("UpdateFieldsList")
+            repeater(UpdateFieldsList)
             {
                 Caption = 'Fields', Comment = 'de-DE=Vorgabwerte';
                 Visible = IsUpdateSelectedFieldsView;
@@ -72,7 +72,7 @@ page 110017 "DMTProcessInstructionFactBox"
 
                 trigger OnAction()
                 var
-                    UpdateTaskNew: page DMTUpdateTaskNew;
+                    UpdateTaskNew: Page DMTUpdateTaskNew;
                 begin
                     // Show only Non-Key Fields for selection
                     UpdateTaskNew.LookupMode(true);
@@ -80,7 +80,7 @@ page 110017 "DMTProcessInstructionFactBox"
                     if not UpdateTaskNew.InitFieldSelection(CurrProcessingPlan) then
                         exit;
                     if UpdateTaskNew.RunModal() = Action::LookupOK then begin
-                        CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
+                        CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
                         CurrProcessingPlan.SaveUpdateFieldsFilter(UpdateTaskNew.GetToFieldNoFilter());
                     end;
                 end;
@@ -107,7 +107,7 @@ page 110017 "DMTProcessInstructionFactBox"
     internal procedure InitFactBoxAsSourceTableFilter(ProcessingPlan: Record DMTProcessingPlan)
     begin
         CurrProcessingPlan := ProcessingPlan;
-        clear(IsFixedValueView);
+        Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         if not ProcessingPlan.TypeSupportsSourceTableFilter() then begin
@@ -123,7 +123,7 @@ page 110017 "DMTProcessInstructionFactBox"
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
     begin
         CurrProcessingPlan := ProcessingPlan;
-        clear(IsFixedValueView);
+        Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         if not ProcessingPlan.TypeSupportsFixedValues() then begin
@@ -139,7 +139,7 @@ page 110017 "DMTProcessInstructionFactBox"
     internal procedure InitFactBoxAsUpdateSelectedFields(ProcessingPlan: Record DMTProcessingPlan)
     begin
         CurrProcessingPlan := ProcessingPlan;
-        clear(IsFixedValueView);
+        Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         if not ProcessingPlan.TypeSupportsProcessSelectedFieldsOnly() then begin
@@ -163,11 +163,11 @@ page 110017 "DMTProcessInstructionFactBox"
             Rec.DeleteAll();
         end;
         if IsFixedValueView then begin
-            CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
+            CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
             CurrProcessingPlan.ConvertDefaultValuesViewToFieldLines(Rec);
         end;
         if IsSourceTableFilterView then begin
-            CurrProcessingPlan.get(CurrProcessingPlan.RecordId);
+            CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
             CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
         end;
         CurrPage.Update();

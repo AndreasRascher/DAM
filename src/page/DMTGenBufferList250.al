@@ -1,4 +1,4 @@
-page 110005 "DMTGenBufferList250"
+page 110005 DMTGenBufferList250
 {
     Caption = 'DMT GenBufferList';
     PageType = List;
@@ -7,7 +7,7 @@ page 110005 "DMTGenBufferList250"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             repeater(General)
             {
@@ -826,7 +826,7 @@ page 110005 "DMTGenBufferList250"
         Fld211Editable, Fld212Editable, Fld213Editable, Fld214Editable, Fld215Editable, Fld216Editable, Fld217Editable, Fld218Editable, Fld219Editable, Fld220Editable,
         Fld221Editable, Fld222Editable, Fld223Editable, Fld224Editable, Fld225Editable, Fld226Editable, Fld227Editable, Fld228Editable, Fld229Editable, Fld230Editable,
         Fld231Editable, Fld232Editable, Fld233Editable, Fld234Editable, Fld235Editable, Fld236Editable, Fld237Editable, Fld238Editable, Fld239Editable, Fld240Editable,
-        Fld241Editable, Fld242Editable, Fld243Editable, Fld244Editable, Fld245Editable, Fld246Editable, Fld247Editable, Fld248Editable, Fld249Editable, Fld250Editable : boolean;
+        Fld241Editable, Fld242Editable, Fld243Editable, Fld244Editable, Fld245Editable, Fld246Editable, Fld247Editable, Fld248Editable, Fld249Editable, Fld250Editable : Boolean;
 
         [InDataSet]
         Fld001Visible, Fld002Visible, Fld003Visible, Fld004Visible, Fld005Visible, Fld006Visible, Fld007Visible, Fld008Visible, Fld009Visible, Fld010Visible,
@@ -853,5 +853,5 @@ page 110005 "DMTGenBufferList250"
         Fld211Visible, Fld212Visible, Fld213Visible, Fld214Visible, Fld215Visible, Fld216Visible, Fld217Visible, Fld218Visible, Fld219Visible, Fld220Visible,
         Fld221Visible, Fld222Visible, Fld223Visible, Fld224Visible, Fld225Visible, Fld226Visible, Fld227Visible, Fld228Visible, Fld229Visible, Fld230Visible,
         Fld231Visible, Fld232Visible, Fld233Visible, Fld234Visible, Fld235Visible, Fld236Visible, Fld237Visible, Fld238Visible, Fld239Visible, Fld240Visible,
-        Fld241Visible, Fld242Visible, Fld243Visible, Fld244Visible, Fld245Visible, Fld246Visible, Fld247Visible, Fld248Visible, Fld249Visible, Fld250Visible : boolean;
+        Fld241Visible, Fld242Visible, Fld243Visible, Fld244Visible, Fld245Visible, Fld246Visible, Fld247Visible, Fld248Visible, Fld249Visible, Fld250Visible : Boolean;
 }

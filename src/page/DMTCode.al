@@ -1,11 +1,11 @@
-page 110012 "DMTCode"
+page 110012 DMTCode
 {
     Caption = 'Code';
     PageType = List;
     UsageCategory = None;
     SourceTableTemporary = true;
     SourceTable = Integer;
-    SourceTableView = sorting(number);
+    SourceTableView = sorting(Number);
     InsertAllowed = false;
     DeleteAllowed = false;
     layout
@@ -52,7 +52,7 @@ page 110012 "DMTCode"
         ResetLines();
     end;
 
-    local procedure CreateFieldMappingCodeBlock(DataFile: Record DMTDataFile; _SourceRecVarName: text; _TargetRecVarName: text) CodeLines: List of [Text]
+    local procedure CreateFieldMappingCodeBlock(DataFile: Record DMTDataFile; _SourceRecVarName: Text; _TargetRecVarName: Text) CodeLines: List of [Text]
     var
         FieldMapping: Record DMTFieldMapping;
         CodeGenerator: Codeunit DMTCodeGenerator;
@@ -89,18 +89,18 @@ page 110012 "DMTCode"
         i: Integer;
     begin
         Rec.DeleteAll();
-        for i := 1 To CodeLines.Count do begin
+        for i := 1 to CodeLines.Count do begin
             Rec.Number := i;
             Rec.Insert();
         end;
     end;
 
-    procedure InitForFieldMapping(DataFile: record DMTDataFile)
+    procedure InitForFieldMapping(DataFile: Record DMTDataFile)
     var
         TableMetadata: Record "Table Metadata";
     begin
         CurrDataFile := DataFile;
-        TableMetadata.get(DataFile."Target Table ID");
+        TableMetadata.Get(DataFile."Target Table ID");
         SourceRecVarName := DelChr(TableMetadata.Name, '=', ' -') + 'Old';
         TargetRecVarName := DelChr(TableMetadata.Name, '=', ' -');
         CodeLines := CreateFieldMappingCodeBlock(DataFile, SourceRecVarName, TargetRecVarName);
@@ -108,7 +108,7 @@ page 110012 "DMTCode"
     end;
 
     var
-        CurrDataFile: record DMTDataFile;
+        CurrDataFile: Record DMTDataFile;
         CodeLines: List of [Text];
         SourceRecVarName, TargetRecVarName : Text;
 }

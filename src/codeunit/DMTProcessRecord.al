@@ -19,7 +19,7 @@ codeunit 110012 DMTProcessRecord
         end;
     end;
 
-    local procedure AssignField(ValidateSetting: Enum "DMTFieldValidationType")
+    local procedure AssignField(ValidateSetting: Enum DMTFieldValidationType)
     var
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
         SourceField: FieldRef;
@@ -53,8 +53,8 @@ codeunit 110012 DMTProcessRecord
         TempFieldMapping.SetCurrentKey("Validation Order");
         if TempFieldMapping.FindSet() then // if only Key Fields are mapped this is false
             repeat
-                if not ProcessedFields.Contains(TempFieldMapping.RecordID) then begin
-                    CurrFieldToProcess := TempFieldMapping.RecordID;
+                if not ProcessedFields.Contains(TempFieldMapping.RecordId) then begin
+                    CurrFieldToProcess := TempFieldMapping.RecordId;
                     AssignField(TempFieldMapping."Validation Type");
                     ProcessedFields.Add(TempFieldMapping.RecordId);
                 end;
@@ -71,9 +71,9 @@ codeunit 110012 DMTProcessRecord
         if not TempFieldMapping.FindSet() then
             Error('Fieldmapping for Key Fields is invalid');
         repeat
-            if not ProcessedFields.Contains(TempFieldMapping.RecordID) then begin
-                CurrFieldToProcess := TempFieldMapping.RecordID;
-                AssignField(Enum::"DMTFieldValidationType"::AssignWithoutValidate);
+            if not ProcessedFields.Contains(TempFieldMapping.RecordId) then begin
+                CurrFieldToProcess := TempFieldMapping.RecordId;
+                AssignField(Enum::DMTFieldValidationType::AssignWithoutValidate);
                 ProcessedFields.Add(TempFieldMapping.RecordId);
             end;
         until TempFieldMapping.Next() = 0;
@@ -160,7 +160,7 @@ codeunit 110012 DMTProcessRecord
         end;
     end;
 
-    procedure AddEntryForLastError(SourceRef: recordref; TargetRef: RecordRef; FieldMapping: Record "DMTFieldMapping"; ErrorItem: Dictionary of [Text, Text]);
+    procedure AddEntryForLastError(SourceRef: RecordRef; TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text]);
     var
         _DMTErrorlog: Record DMTErrorLog;
     begin
@@ -170,7 +170,7 @@ codeunit 110012 DMTProcessRecord
         _DMTErrorlog."From ID" := SourceRef.RecordId;
         _DMTErrorlog."To ID" := TargetRef.RecordId;
         _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
-        _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."to ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
+        _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."To ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
 
         _DMTErrorlog."Import from Table No." := SourceRef.Number;
         _DMTErrorlog."Import from Field No." := FieldMapping."Source Field No.";

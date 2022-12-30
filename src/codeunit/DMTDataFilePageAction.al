@@ -1,4 +1,4 @@
-codeunit 110013 "DMTDataFilePageAction"
+codeunit 110013 DMTDataFilePageAction
 {
     internal procedure InitFieldMapping(DataFileID: Integer): Boolean
     var
@@ -54,12 +54,12 @@ codeunit 110013 "DMTDataFilePageAction"
     begin
         // Load Target Field Names
         TargetFieldNames := CreateTargetFieldNamesDict(DataFile);
-        If TargetFieldNames.Count = 0 then
+        if TargetFieldNames.Count = 0 then
             exit;
 
         //Load Source Field Names
         SourceFieldNames := CreateSourceFieldNamesDict(DataFile);
-        If SourceFieldNames.Count = 0 then
+        if SourceFieldNames.Count = 0 then
             exit;
 
         //Match Fields by Name
@@ -75,7 +75,7 @@ codeunit 110013 "DMTDataFilePageAction"
                 // SetSourceField
                 FieldMapping.Get(DataFile.ID, TargetFieldID);
                 FieldMapping.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-                FieldMapping."Source Field Caption" := copyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(FieldMapping."Source Field Caption"));
+                FieldMapping."Source Field Caption" := CopyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(FieldMapping."Source Field Caption"));
                 FieldMapping.Modify();
             end;
         end;
@@ -92,7 +92,7 @@ codeunit 110013 "DMTDataFilePageAction"
             repeat
                 FieldMapping2 := FieldMapping;
                 MigrationLib.ApplyKnownValidationRules(FieldMapping);
-                if format(FieldMapping2) <> Format(FieldMapping) then
+                if Format(FieldMapping2) <> Format(FieldMapping) then
                     FieldMapping.Modify()
             until FieldMapping.Next() = 0;
     end;
@@ -115,7 +115,7 @@ codeunit 110013 "DMTDataFilePageAction"
         if not FieldMapping.FindSet() then
             exit;
         repeat
-            Field.get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
+            Field.Get(FieldMapping."Target Table ID", FieldMapping."Target Field No.");
             TargetFieldNames.Add(Field."No.", Field.FieldName);
         until FieldMapping.Next() = 0;
     end;
@@ -194,7 +194,7 @@ codeunit 110013 "DMTDataFilePageAction"
                 begin
                     TempFieldMapping.FindFirst();
                     RefPos := TempFieldMapping."Validation Order";
-                    TempFieldMapping_Selected.find('+');
+                    TempFieldMapping_Selected.Find('+');
                     repeat
                         i += 1;
                         TempFieldMapping.Get(TempFieldMapping_Selected.RecordId);
@@ -251,14 +251,14 @@ codeunit 110013 "DMTDataFilePageAction"
 
     procedure DownloadALXMLPort(DataFile: Record DMTDataFile)
     var
-        DMTObjectGenerator: Codeunit "DMTCodeGenerator";
+        DMTObjectGenerator: Codeunit DMTCodeGenerator;
     begin
         DMTObjectGenerator.DownloadFile(DMTObjectGenerator.CreateALXMLPort(DataFile), GetALXMLPortName(DataFile));
     end;
 
     procedure DownloadALBufferTableFile(DataFile: Record DMTDataFile)
     var
-        DMTObjectGenerator: Codeunit "DMTCodeGenerator";
+        DMTObjectGenerator: Codeunit DMTCodeGenerator;
     begin
         DMTObjectGenerator.DownloadFile(
         DMTObjectGenerator.CreateALTable(DataFile), GetALBufferTableName(DataFile));
@@ -290,26 +290,26 @@ codeunit 110013 "DMTDataFilePageAction"
             DataFile.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
                     DataFile.TestField("Import XMLPort ID");
-                    file.Open(DataFile.FullDataFilePath(), TextEncoding::MSDos);
-                    file.CreateInStream(InStr);
+                    File.Open(DataFile.FullDataFilePath(), TextEncoding::MSDos);
+                    File.CreateInStream(InStr);
                     Xmlport.Import(DataFile."Import XMLPort ID", InStr);
                     UpdateQtyLinesInBufferTable(DataFile);
                 end;
             DataFile.BufferTableType::"Generic Buffer Table for all Files":
                 begin
-                    file.Open(DataFile.FullDataFilePath(), TextEncoding::MSDos);
-                    file.CreateInStream(InStr);
+                    File.Open(DataFile.FullDataFilePath(), TextEncoding::MSDos);
+                    File.CreateInStream(InStr);
                     GenBuffImport.SetSource(InStr);
                     GenBuffImport.SetImportFromFile(DataFile);
                     if not HideDialog then
-                        Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(file.Name, '\', '/')));
+                        Progress.Open(StrSubstNo(ImportFileFromPathLbl, ConvertStr(File.Name, '\', '/')));
                     GenBuffImport.Import();
                     if not HideDialog then
                         Progress.Close();
                     UpdateQtyLinesInBufferTable(DataFile);
                 end;
         end;
-        DataFile.Get(DataFile.RecordID);
+        DataFile.Get(DataFile.RecordId);
         DataFile."Import Duration (Buffer)" := CurrentDateTime - Start;
         DataFile.Modify();
     end;
@@ -330,9 +330,9 @@ codeunit 110013 "DMTDataFilePageAction"
                        '==========================================\';
         DataFile_SELECTED.SetAutoCalcFields("Target Table Caption");
         DataFile_SELECTED.FindSet();
-        REPEAT
-            ProgressMsg += '\' + DataFile_SELECTED."Target Table Caption" + '    ###########################' + FORMAT(DataFile_SELECTED."Target Table ID") + '#';
-        UNTIL DataFile_SELECTED.NEXT() = 0;
+        repeat
+            ProgressMsg += '\' + DataFile_SELECTED."Target Table Caption" + '    ###########################' + Format(DataFile_SELECTED."Target Table ID") + '#';
+        until DataFile_SELECTED.Next() = 0;
 
         DataFile_SELECTED.FindSet();
         Start := CurrentDateTime;
@@ -343,7 +343,7 @@ codeunit 110013 "DMTDataFilePageAction"
             Progress.Update(DataFile_SELECTED."Target Table ID", 'Wird eingelesen');
             ImportToBufferTable(DataFile, true);
             Commit();
-            Progress.Update(DataFile_SELECTED."Target Table ID", CURRENTDATETIME - TableStart);
+            Progress.Update(DataFile_SELECTED."Target Table ID", CurrentDateTime - TableStart);
         until DataFile_SELECTED.Next() = 0;
         Progress.Close();
         Message(FinishedMsg, CurrentDateTime - Start);
@@ -382,7 +382,7 @@ codeunit 110013 "DMTDataFilePageAction"
     var
         DMTImportNew: Codeunit DMTImport;
         DMTErrorLogQry: Query DMTErrorLogQry;
-        RecIdList: list of [RecordID];
+        RecIdList: List of [RecordId];
     begin
         DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileFolderPath, DataFile.Path);
         DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileName, DataFile.Name);
@@ -433,10 +433,10 @@ codeunit 110013 "DMTDataFilePageAction"
         end;
     end;
 
-    procedure ProposeObjectIDs(var DataFileRec: record DMTDataFile; IsRenumberObjectsIntent: Boolean)
+    procedure ProposeObjectIDs(var DataFileRec: Record DMTDataFile; IsRenumberObjectsIntent: Boolean)
     var
         DataFile: Record DMTDataFile;
-        DMTSetup: Record "DMTSetup";
+        DMTSetup: Record DMTSetup;
         ObjectMgt: Codeunit DMTObjMgt;
         NoAvailableObjectIDsErr: Label 'No free object IDs of type %1 could be found. Defined ID range in setup: %2',
                                 comment = 'Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
@@ -450,9 +450,9 @@ codeunit 110013 "DMTDataFilePageAction"
         DMTSetup.Get();
 
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
-            Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+            Error(NoAvailableObjectIDsErr, Format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
-            Error(NoAvailableObjectIDsErr, format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
+            Error(NoAvailableObjectIDsErr, Format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
 
         // Collect used numbers
         if DataFile.FindSet() then
@@ -474,7 +474,7 @@ codeunit 110013 "DMTDataFilePageAction"
         // Import XMLPort ID - Assign Next Number in Filter
         // if DMTSetup."Obj. ID Range XMLPorts" <> '' then
         if (DataFileRec."Import XMLPort ID" = 0) and (AvailableXMLPorts.Count > 0) then begin
-            DataFileRec."Import XMLPort ID" := AvailableXMLPorts.get(1);
+            DataFileRec."Import XMLPort ID" := AvailableXMLPorts.Get(1);
             AvailableXMLPorts.Remove(DataFileRec."Import XMLPort ID");
         end;
         if not IsRenumberObjectsIntent then begin
@@ -506,14 +506,14 @@ codeunit 110013 "DMTDataFilePageAction"
         until DataFile_SELECTED.Next() = 0;
     end;
 
-    procedure CreateTableIDFilter(var DataFileRec: record DMTDataFile; FieldNo: Integer) FilterExpr: Text;
+    procedure CreateTableIDFilter(var DataFileRec: Record DMTDataFile; FieldNo: Integer) FilterExpr: Text;
     var
         DataFile: Record DMTDataFile;
-        Integer: Record integer;
+        Integer: Record Integer;
     begin
         if DataFileRec.HasFilter then
             DataFile.CopyFilters(DataFileRec);
-        If not DataFile.FindSet(false, false) then
+        if not DataFile.FindSet(false, false) then
             exit('');
         repeat
             case FieldNo of
@@ -531,7 +531,7 @@ codeunit 110013 "DMTDataFilePageAction"
         until DataFile.Next() = 0;
         FilterExpr := FilterExpr.TrimEnd('|');
         //Sort
-        Integer.setfilter(Number, FilterExpr);
+        Integer.SetFilter(Number, FilterExpr);
         Clear(FilterExpr);
         if Integer.FindSet() then
             repeat
@@ -557,11 +557,11 @@ codeunit 110013 "DMTDataFilePageAction"
     var
         DataFile: Record DMTDataFile;
         DataCompression: Codeunit "Data Compression";
-        ObjGen: Codeunit "DMTCodeGenerator";
+        ObjGen: Codeunit DMTCodeGenerator;
         FileBlob: Codeunit "Temp Blob";
         IStr: InStream;
         OStr: OutStream;
-        toFileName: text;
+        toFileName: Text;
         DefaultTextEncoding: TextEncoding;
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
@@ -588,7 +588,7 @@ codeunit 110013 "DMTDataFilePageAction"
         DataCompression.SaveZipArchive(OStr);
         FileBlob.CreateInStream(IStr, DefaultTextEncoding);
         toFileName := 'BufferTablesAndXMLPorts.zip';
-        DownloadFromStream(iStr, 'Download', 'ToFolder', format(Enum::DMTFileFilter::ZIP), toFileName);
+        DownloadFromStream(IStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::ZIP), toFileName);
     end;
 
     internal procedure RenumberALObjects()
@@ -602,9 +602,9 @@ codeunit 110013 "DMTDataFilePageAction"
         SessionStorage.DisposeLicenseInfo();
 
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::Table, AvailableTables, false) = 0 then
-            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', Format(Enum::DMTObjTypes::Table), DMTSetup."Obj. ID Range Buffer Tables");
         if ObjectMgt.CreateListOfAvailableObjectIDsInLicense(Enum::DMTObjTypes::XMLPort, AvailableXMLPorts, false) = 0 then
-            Error('NoAvailableObjectIDsErr "%1"-"%2"', format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
+            Error('NoAvailableObjectIDsErr "%1"-"%2"', Format(Enum::DMTObjTypes::XMLPort), DMTSetup."Obj. ID Range Buffer Tables");
         DMTSetup.Get();
         DMTSetup.TestField("Obj. ID Range Buffer Tables");
         DMTSetup.TestField("Obj. ID Range XMLPorts");
@@ -651,7 +651,7 @@ codeunit 110013 "DMTDataFilePageAction"
     internal procedure AddDataFiles()
     var
         DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
-        DMTSelectDataFile: page DMTSelectDataFile;
+        DMTSelectDataFile: Page DMTSelectDataFile;
     begin
         DMTSelectDataFile.LookupMode(true);
         if DMTSelectDataFile.RunModal() <> Action::LookupOK then
@@ -747,7 +747,7 @@ codeunit 110013 "DMTDataFilePageAction"
 
     internal procedure UploadFileToDefaultFolder()
     var
-        DMTSetup: Record "DMTSetup";
+        DMTSetup: Record DMTSetup;
         Setup: Record DMTSetup;
         FileMgt: Codeunit "File Management";
         TempBlob: Codeunit "Temp Blob";
@@ -764,7 +764,7 @@ codeunit 110013 "DMTDataFilePageAction"
         Setup.TestField("Default Export Folder Path");
 
         TempBlob.CreateInStream(InStr);
-        if not UploadIntoStream('Select a csv file', '', format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
+        if not UploadIntoStream('Select a csv file', '', Format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
             exit;
         end;
         ServerFilePath := FileMgt.CombinePath(Setup."Default Export Folder Path", FileName);
@@ -780,7 +780,7 @@ codeunit 110013 "DMTDataFilePageAction"
         DMTCodeGenerator: Codeunit DMTCodeGenerator;
         Field: Record Field;
         RecRef: RecordRef;
-        TabChar: char;
+        TabChar: Char;
         LineNo: Integer;
         FieldValue: Text;
         FileManagement: Codeunit "File Management";
@@ -797,7 +797,7 @@ codeunit 110013 "DMTDataFilePageAction"
         if not RecRef.FindSet() then exit;
 
         Field.SetRange(TableNo, RecRef.Number);
-        Field.setfilter(Type, StrSubstNo('<>%1&<>%2&<>%3', Field.Type::BLOB, Field.Type::Media, Field.Type::MediaSet));
+        Field.SetFilter(Type, StrSubstNo('<>%1&<>%2&<>%3', Field.Type::BLOB, Field.Type::Media, Field.Type::MediaSet));
         Field.SetFilter(Class, '%1', Field.Class::Normal);
         Field.SetRange(Enabled, true);
         Field.SetFilter(FieldName, '<>$systemId&<>SystemCreatedAt&<>SystemCreatedBy&<>SystemModifiedAt&<>SystemModifiedBy');
@@ -825,8 +825,8 @@ codeunit 110013 "DMTDataFilePageAction"
         DMTCodeGenerator.DownloadFile(Content, StrSubstNo('%1_%2.csv', CompanyName, RecRef.Caption));
     end;
 
-    LOCAL PROCEDURE GetFormattedFieldValue(recRef: RecordRef; fieldNo: Integer) _Result: Text[250];
-    VAR
+    local procedure GetFormattedFieldValue(recRef: RecordRef; fieldNo: Integer) _Result: Text[250];
+    var
         fieldRef: FieldRef;
         _Integer: Integer;
         _Text: Text[1024];
@@ -835,50 +835,50 @@ codeunit 110013 "DMTDataFilePageAction"
         _Time: Time;
         _Boolean: Boolean;
         _Field: Record Field;
-    BEGIN
+    begin
         //* returns values in xmlformat, handles problems with field.type optionstring bug
-        fieldRef := recRef.FIELD(fieldNo);
-        IF LOWERCASE(FORMAT(fieldRef.CLASS)) = 'flowfield' THEN
-            fieldRef.CALCFIELD();
-        fieldRef.VALUE := fieldRef.VALUE;
-        CASE UPPERCASE(FORMAT(fieldRef.TYPE)) OF
+        fieldRef := recRef.Field(fieldNo);
+        if LowerCase(Format(fieldRef.Class)) = 'flowfield' then
+            fieldRef.CalcField();
+        fieldRef.Value := fieldRef.Value;
+        case UpperCase(Format(fieldRef.Type)) of
             'BOOLEAN':
-                BEGIN
+                begin
                     _Boolean := fieldRef.Value;
                     _Result := '0';
-                    IF _Boolean THEN _Result := '1';
-                END;
+                    if _Boolean then _Result := '1';
+                end;
             'INTEGER':
-                BEGIN
-                    _Integer := fieldRef.VALUE;
-                    IF _Integer <> 0 THEN _Result := FORMAT(_Integer, 0, 9);
-                END;
+                begin
+                    _Integer := fieldRef.Value;
+                    if _Integer <> 0 then _Result := Format(_Integer, 0, 9);
+                end;
             'OPTION':
-                BEGIN
-                    _Integer := fieldRef.VALUE;
-                    _Result := FORMAT(_Integer, 0, 9);
-                END;
+                begin
+                    _Integer := fieldRef.Value;
+                    _Result := Format(_Integer, 0, 9);
+                end;
             'DECIMAL':
-                BEGIN
-                    _Decimal := fieldRef.VALUE;
-                    IF _Decimal <> 0 THEN _Result := FORMAT(_Decimal, 0, 9);
-                END;
+                begin
+                    _Decimal := fieldRef.Value;
+                    if _Decimal <> 0 then _Result := Format(_Decimal, 0, 9);
+                end;
             'DATE':
-                BEGIN
-                    _Date := fieldRef.VALUE;
-                    IF _Date <> 0D THEN _Result := FORMAT(_Date, 0, 9);
-                END;
+                begin
+                    _Date := fieldRef.Value;
+                    if _Date <> 0D then _Result := Format(_Date, 0, 9);
+                end;
             'TIME':
-                BEGIN
-                    _Time := fieldRef.VALUE;
-                    IF _Time <> 0T THEN _Result := FORMAT(_Time, 0, 9);
-                END;
+                begin
+                    _Time := fieldRef.Value;
+                    if _Time <> 0T then _Result := Format(_Time, 0, 9);
+                end;
             'CHAR', 'TEXT', 'CODE':
-                _Result := fieldRef.VALUE;
-            ELSE
-                _Result := FORMAT(fieldRef.VALUE, 0, 9);
-        END; // END_CASE
-    END;
+                _Result := fieldRef.Value;
+            else
+                _Result := Format(fieldRef.Value, 0, 9);
+        end; // END_CASE
+    end;
 
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var

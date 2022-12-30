@@ -1,7 +1,7 @@
-codeunit 110001 "DMTSessionStorage"
+codeunit 110001 DMTSessionStorage
 {
     SingleInstance = true;
-    procedure AddCaption(FieldNo: Integer; CaptionNew: text)
+    procedure AddCaption(FieldNo: Integer; CaptionNew: Text)
     begin
         if Captions.ContainsKey(FieldNo) then
             Captions.Set(FieldNo, CaptionNew)

@@ -1,4 +1,4 @@
-table 110002 "DMTCopyTable"
+table 110002 DMTCopyTable
 {
     DataClassification = SystemMetadata;
     Caption = 'DMT Copy Table', comment = 'DMT Tabellen kopieren';
@@ -25,7 +25,7 @@ table 110002 "DMTCopyTable"
             Caption = 'Copy from Company', Comment = 'Kopieren aus Mandant';
             TableRelation = Company.Name where(Name = field(ExcludeSourceCompanyFilter));
         }
-        field(13; "Description"; text[250]) { CaptionML = DEU = 'Beschreibung', ENU = 'Description'; }
+        field(13; Description; Text[250]) { CaptionML = DEU = 'Beschreibung', ENU = 'Description'; }
         field(14; ExcludeSourceCompanyFilter; Text[250]) { FieldClass = FlowFilter; Caption = 'ExcludeSourceCompanyFilter', Locked = true; }
         field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         field(50; TableView; Blob) { }
@@ -48,7 +48,7 @@ table 110002 "DMTCopyTable"
     begin
         Clear(Rec.TableView);
         Rec.Modify();
-        rec.TableView.CreateOutStream(Ostr);
+        Rec.TableView.CreateOutStream(OStr);
         OStr.WriteText(TableViewAsText);
         Rec.Modify();
     end;
@@ -57,9 +57,9 @@ table 110002 "DMTCopyTable"
     var
         IStr: InStream;
     begin
-        rec.calcfields(TableView);
-        if not rec.TableView.HasValue then exit('');
-        rec.TableView.CreateInStream(IStr);
+        Rec.CalcFields(TableView);
+        if not Rec.TableView.HasValue then exit('');
+        Rec.TableView.CreateInStream(IStr);
         IStr.ReadText(TableViewAsText);
     end;
 
@@ -91,16 +91,16 @@ table 110002 "DMTCopyTable"
         PrimaryKeyRef: KeyRef;
     begin
         FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
-        IF BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SetView(BufferRef.CAPTION, BufferRef.GETVIEW());
+        if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
+            FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
 
         // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
         PrimaryKeyRef := BufferRef.KeyIndex(1);
         for Index := 1 to PrimaryKeyRef.FieldCount do
             FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RUNMODAL();
-        BufferRef.SetView(FPBuilder.GetView(BufferRef.CAPTION));
+        Continue := FPBuilder.RunModal();
+        BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
     procedure CopyToTemp(var TempCopyTable: Record DMTCopyTable temporary)

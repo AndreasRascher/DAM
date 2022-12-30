@@ -9,7 +9,7 @@ page 110001 "DMT Error Log List"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             repeater(General)
             {
@@ -86,14 +86,14 @@ page 110001 "DMT Error Log List"
 
                 trigger OnAction()
                 begin
-                    if not Rec.isempty() then
+                    if not Rec.IsEmpty() then
                         Rec.DeleteAll();
                 end;
             }
             action(AddTableFilter)
             {
                 Caption = 'TableFilter', Comment = 'Tabellenfilter';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Image = FilterLines;
                 Promoted = true;
 
@@ -103,7 +103,7 @@ page 110001 "DMT Error Log List"
                     NAVAppInstalledApp: Record "NAV App Installed App";
                     selection: Integer;
                     mI: ModuleInfo;
-                    choices: text;
+                    choices: Text;
                 begin
                     NavApp.GetCurrentModuleInfo(mI);
                     NAVAppInstalledApp.SetRange("App ID", mI.Id);
@@ -173,7 +173,7 @@ page 110001 "DMT Error Log List"
             action(ShowSummary)
             {
                 Caption = 'Summary', Comment = 'Zusammenfassung';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedOnly = true;
                 Image = Statistics;
@@ -192,7 +192,7 @@ page 110001 "DMT Error Log List"
 
     local procedure SetStyle(): Text
     begin
-        IF Rec."Ignore Error" then
+        if Rec."Ignore Error" then
             //exit('Subordinate');
             exit('Ambiguous');
         exit('');

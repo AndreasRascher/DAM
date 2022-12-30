@@ -1,4 +1,4 @@
-table 110001 "DMTErrorLog"
+table 110001 DMTErrorLog
 {
     DataClassification = ToBeClassified;
 
@@ -31,7 +31,7 @@ table 110001 "DMTErrorLog"
         {
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = Lookup(Field."Field Caption" WHERE(TableNo = FIELD("Import to Table No."), "No." = FIELD("Import to Field No.")));
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Import to Table No."), "No." = field("Import to Field No.")));
         }
         field(30; "Import to Table No."; Integer) { }
         field(31; "Import to Field No."; Integer) { }
@@ -39,7 +39,7 @@ table 110001 "DMTErrorLog"
         {
             FieldClass = FlowField;
             Editable = false;
-            CalcFormula = Lookup(Field."Field Caption" WHERE(TableNo = FIELD("Import to Table No."), "No." = FIELD("Import to Field No.")));
+            CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Import to Table No."), "No." = field("Import to Field No.")));
         }
         field(40; Errortext; Text[2048]) { Caption = 'Error Text', Comment = 'Fehlertext'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
@@ -66,17 +66,17 @@ table 110001 "DMTErrorLog"
     var
         _DMTErrorlog: Record DMTErrorLog;
     begin
-        _DMTErrorlog.INSERT(TRUE);
+        _DMTErrorlog.Insert(true);
         _DMTErrorlog."To ID" := ToRecRef.RecordId;
         _DMTErrorlog."Import to Table No." := ToRecRef.Number;
         _DMTErrorlog."Import to Field No." := ToFieldNo;
         _DMTErrorlog."Ignore Error" := IgnoreError;
 
-        _DMTErrorlog.Errortext := COPYSTR(GETLASTERRORTEXT, 1, MAXSTRLEN(_DMTErrorlog.Errortext));
-        _DMTErrorlog.ErrorCode := CopyStr(GETLASTERRORCODE, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
-        _DMTErrorlog."DMT User" := CopyStr(USERID, 1, MaxStrLen(_DMTErrorlog."DMT User"));
-        _DMTErrorlog."DMT Errorlog Created At" := CURRENTDATETIME;
-        _DMTErrorlog.modify(true);
+        _DMTErrorlog.Errortext := CopyStr(GetLastErrorText, 1, MaxStrLen(_DMTErrorlog.Errortext));
+        _DMTErrorlog.ErrorCode := CopyStr(GetLastErrorCode, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
+        _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
+        _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
+        _DMTErrorlog.Modify(true);
     end;
 
     procedure DeleteExistingLogFor(BufferRef: RecordRef)
@@ -92,7 +92,7 @@ table 110001 "DMTErrorLog"
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
-        DataFile.Testfield(Name);
+        DataFile.TestField(Name);
         DataFile.TestField(Path);
         DMTErrorlog.SetRange(DataFileName, DataFile.Name);
         DMTErrorlog.SetRange(DataFilePath, DataFile.Path);
@@ -104,9 +104,9 @@ table 110001 "DMTErrorLog"
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
-        DMTErrorlog.Setrange("Import to Table No.", DataFile."Target Table ID");
+        DMTErrorlog.SetRange("Import to Table No.", DataFile."Target Table ID");
         if OpenOnlyIfNotEmpty then
-            if DMTErrorLog.IsEmpty then
+            if DMTErrorlog.IsEmpty then
                 exit;
         Page.Run(Page::"DMT Error Log List", DMTErrorlog);
     end;
@@ -150,9 +150,9 @@ table 110001 "DMTErrorLog"
     var
         IStr: InStream;
     begin
-        rec.calcfields(ErrorCallStack);
-        if not rec.ErrorCallStack.HasValue then exit('');
-        rec.ErrorCallStack.CreateInStream(IStr);
+        Rec.CalcFields(ErrorCallstack);
+        if not Rec.ErrorCallstack.HasValue then exit('');
+        Rec.ErrorCallstack.CreateInStream(IStr);
         IStr.ReadText(ErrorCallStack);
     end;
 
@@ -160,11 +160,11 @@ table 110001 "DMTErrorLog"
     var
         OStr: OutStream;
     begin
-        Clear(Rec.ErrorCallStack);
+        Clear(Rec.ErrorCallstack);
         if DoModify then Rec.Modify();
         if ErrorCallStack = '' then
             exit;
-        rec.ErrorCallStack.CreateOutStream(Ostr);
+        Rec.ErrorCallstack.CreateOutStream(OStr);
         OStr.WriteText(ErrorCallStack);
         if DoModify then Rec.Modify();
     end;

@@ -1,4 +1,4 @@
-query 110003 "DMTErrorSummary"
+query 110003 DMTErrorSummary
 {
     QueryType = Normal;
     OrderBy = descending(NoOfErrorsByValue);

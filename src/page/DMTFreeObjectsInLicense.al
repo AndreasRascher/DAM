@@ -1,4 +1,4 @@
-page 110000 "DMTFreeObjectsInLicense"
+page 110000 DMTFreeObjectsInLicense
 {
     CaptionML = ENU = 'Free Objects in License', DEU = 'Freie Objekte in der Lizenz';
     ApplicationArea = All;
@@ -87,7 +87,7 @@ page 110000 "DMTFreeObjectsInLicense"
                             ShowCaption = false;
                             trigger OnDrillDown()
                             begin
-                                Rec.SetRange("Object Type", Rec."Object Type"::XMLPort);
+                                Rec.SetRange("Object Type", Rec."Object Type"::XMLport);
                                 CurrPage.Update();
                             end;
                         }
@@ -193,7 +193,7 @@ page 110000 "DMTFreeObjectsInLicense"
 
         LastUpdate := CurrentDateTime;
         AllObjWithCaption := Rec;
-        rec.DeleteAll();
+        Rec.DeleteAll();
         Rec := AllObjWithCaption;
 
         Progress.Open('Gefundene Objekte #######1#');
@@ -204,7 +204,7 @@ page 110000 "DMTFreeObjectsInLicense"
             Int.SetFilter(Number, ObjInLicenseFilters.Get(TypeNo));
             if Int.FindSet() then
                 repeat
-                    if not AllObjWithCaption.Get(TypeNo, Int.Number) THEN
+                    if not AllObjWithCaption.Get(TypeNo, Int.Number) then
                         AddObjectToCollection(TypeNo, Int.Number);
                 until Int.Next() = 0;
             if (CurrentDateTime - LastUpdate) > 500 then begin
@@ -215,7 +215,7 @@ page 110000 "DMTFreeObjectsInLicense"
         Progress.Close();
         CountObjectsFound();
 
-        if rec.FindFirst() THEN;
+        if Rec.FindFirst() then;
         IsLoaded := true;
     end;
 
@@ -251,34 +251,34 @@ page 110000 "DMTFreeObjectsInLicense"
         TempAllObjWithCaption.Copy(Rec, true);
         for i := 1 to GetMaxObjectType() do begin
             TempAllObjWithCaption."Object Type" := i;
-            rec.SetRange("Object Type", i);
+            Rec.SetRange("Object Type", i);
             case TempAllObjWithCaption."Object Type" of
                 TempAllObjWithCaption."Object Type"::Table:
-                    NoOfTables := rec.Count;
+                    NoOfTables := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Page:
-                    NoOfPages := rec.Count;
+                    NoOfPages := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Report:
-                    NoOfReports := rec.Count;
+                    NoOfReports := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Codeunit:
-                    NoOfCodeunits := rec.Count;
+                    NoOfCodeunits := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Query:
-                    NoOfQueries := rec.Count;
+                    NoOfQueries := Rec.Count;
                 TempAllObjWithCaption."Object Type"::XMLport:
-                    NoOfXMLports := rec.Count;
+                    NoOfXMLports := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Enum:
-                    NoOfEnums := rec.Count;
+                    NoOfEnums := Rec.Count;
             end; // end_CASE
         end;
-        rec.reset();
+        Rec.Reset();
     end;
 
     procedure AddObjectToCollection(ObjectTypeIndex: Integer; ObjectID: Integer)
     begin
-        rec.init();
-        rec."Object Type" := ObjectTypeIndex;
-        rec."Object ID" := ObjectID;
-        rec."Object Name" := StrSubstNo('%1%2', rec."Object Type", rec."Object ID");
-        rec.Insert();
+        Rec.Init();
+        Rec."Object Type" := ObjectTypeIndex;
+        Rec."Object ID" := ObjectID;
+        Rec."Object Name" := StrSubstNo('%1%2', Rec."Object Type", Rec."Object ID");
+        Rec.Insert();
     end;
 
     procedure IsObjectInLicense(AllObjWithCpt: Record AllObjWithCaption) RIMDX: Boolean
@@ -315,7 +315,7 @@ page 110000 "DMTFreeObjectsInLicense"
             if not ObjInLicenseFilters.ContainsKey(PermRange."Object Type") then begin
                 ObjInLicenseFilters.Add(PermRange."Object Type", StrSubstNo('%1..%2', PermRange.From, PermRange."To"))
             end else begin
-                ObjInLicenseFilters.Set(PermRange."Object Type", ObjInLicenseFilters.get(PermRange."Object Type") + StrSubstNo('|%1..%2', PermRange.From, PermRange."To"));
+                ObjInLicenseFilters.Set(PermRange."Object Type", ObjInLicenseFilters.Get(PermRange."Object Type") + StrSubstNo('|%1..%2', PermRange.From, PermRange."To"));
             end;
         until PermRange.Next() = 0;
     end;
@@ -328,7 +328,7 @@ page 110000 "DMTFreeObjectsInLicense"
         AppText: Text;
         Choices: Text;
     begin
-        Apps.setfilter(Publisher, '<>Microsoft');
+        Apps.SetFilter(Publisher, '<>Microsoft');
         Apps.FindSet();
         repeat
             AppText := StrSubstNo('%1_%2', Apps.Publisher, Apps.Name);
@@ -342,8 +342,8 @@ page 110000 "DMTFreeObjectsInLicense"
         if Choice = Choices.Split(',').Count then
             exit;
 
-        Apps.Get(AppList.Get(Choices.Split(',').get(Choice)));
-        AppPackageIDFilter := format(Apps."Package ID");
+        Apps.Get(AppList.Get(Choices.Split(',').Get(Choice)));
+        AppPackageIDFilter := Format(Apps."Package ID");
     end;
 
     var

@@ -1,10 +1,10 @@
-codeunit 110002 "DMTMgt"
+codeunit 110002 DMTMgt
 {
     procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
     begin
         ProgressBar.Open(ProgressBarContent);
-        ProgressBar_Total := BufferRef.COUNT;
-        ProgressBar_StartTime := CURRENTDATETIME;
+        ProgressBar_Total := BufferRef.Count;
+        ProgressBar_StartTime := CurrentDateTime;
         ProgressBar_IsOpen := true;
         // clear old
         Clear(ProgressBar_Step);
@@ -17,22 +17,22 @@ codeunit 110002 "DMTMgt"
     begin
         ProgressBar.Open(ProgressBarContent);
         ProgressBar_Total := TotalLineCount;
-        ProgressBar_StartTime := CURRENTDATETIME;
+        ProgressBar_StartTime := CurrentDateTime;
         ProgressBar_IsOpen := true;
     end;
 
     procedure ProgressBar_UpdateControl(Number: Integer; Value: Variant)
     begin
-        if NOT ProgressBar_IsOpen then
+        if not ProgressBar_IsOpen then
             exit;
         if Number <> 0 then
-            ProgressBar.UPDATE(Number, Value);
+            ProgressBar.Update(Number, Value);
     end;
 
     procedure ProgressBar_Close()
     begin
         if ProgressBar_IsOpen then
-            ProgressBar.close();
+            ProgressBar.Close();
     end;
 
     procedure ProgressBar_GetTotal(): Integer
@@ -52,29 +52,29 @@ codeunit 110002 "DMTMgt"
 
     procedure ProgressBar_GetProgress(): Integer
     begin
-        exit((10000 * (ProgressBar_Step / ProgressBar_Total)) DIV 1);
+        exit((10000 * (ProgressBar_Step / ProgressBar_Total)) div 1);
     end;
 
     procedure ProgressBar_Update(Number1: Integer; Value1: Variant; Number2: Integer; Value2: Variant; Number3: Integer; Value3: Variant; Number4: Integer; Value4: Variant; Number5: Integer; Value5: Variant)
     begin
-        if NOT ProgressBar_IsOpen then
+        if not ProgressBar_IsOpen then
             exit;
-        if (FORMAT(ProgressBar_LastUpdate) = '') then
-            ProgressBar_LastUpdate := CURRENTDATETIME;
-        if (CURRENTDATETIME - ProgressBar_LastUpdate) < 1000 then
+        if (Format(ProgressBar_LastUpdate) = '') then
+            ProgressBar_LastUpdate := CurrentDateTime;
+        if (CurrentDateTime - ProgressBar_LastUpdate) < 1000 then
             exit;
         if Number1 <> 0 then
-            ProgressBar.UPDATE(Number1, Value1);
+            ProgressBar.Update(Number1, Value1);
         if Number2 <> 0 then
-            ProgressBar.UPDATE(Number2, Value2);
+            ProgressBar.Update(Number2, Value2);
         if Number3 <> 0 then
-            ProgressBar.UPDATE(Number3, Value3);
+            ProgressBar.Update(Number3, Value3);
         if Number4 <> 0 then
-            ProgressBar.UPDATE(Number4, Value4);
+            ProgressBar.Update(Number4, Value4);
         if Number5 <> 0 then
-            ProgressBar.UPDATE(Number5, Value5);
+            ProgressBar.Update(Number5, Value5);
 
-        ProgressBar_LastUpdate := CURRENTDATETIME;
+        ProgressBar_LastUpdate := CurrentDateTime;
     end;
 
     procedure ProgressBar_GetRemainingTime() TimeLeft: Text
@@ -84,25 +84,25 @@ codeunit 110002 "DMTMgt"
         ElapsedTime: Duration;
         RoundedRemainingMins: Integer;
     begin
-        ElapsedTime := ROUND(((CURRENTDATETIME - ProgressBar_StartTime) / 1000), 1);
-        RemainingMins := ROUND((((ElapsedTime / ((ProgressBar_GetStep() / ProgressBar_GetTotal()) * 100) * 100) - ElapsedTime) / 60), 0.1);
-        RoundedRemainingMins := ROUND(RemainingMins, 1, '<');
-        RemainingSeconds := ROUND(((RemainingMins - RoundedRemainingMins) * 0.6) * 100, 1);
-        TimeLeft := STRSUBSTNO('%1:', RoundedRemainingMins);
-        if STRLEN(FORMAT(RemainingSeconds)) = 1 then
-            TimeLeft += STRSUBSTNO('0%1', RemainingSeconds)
+        ElapsedTime := Round(((CurrentDateTime - ProgressBar_StartTime) / 1000), 1);
+        RemainingMins := Round((((ElapsedTime / ((ProgressBar_GetStep() / ProgressBar_GetTotal()) * 100) * 100) - ElapsedTime) / 60), 0.1);
+        RoundedRemainingMins := Round(RemainingMins, 1, '<');
+        RemainingSeconds := Round(((RemainingMins - RoundedRemainingMins) * 0.6) * 100, 1);
+        TimeLeft := StrSubstNo('%1:', RoundedRemainingMins);
+        if StrLen(Format(RemainingSeconds)) = 1 then
+            TimeLeft += StrSubstNo('0%1', RemainingSeconds)
         else
-            TimeLeft += STRSUBSTNO('%1', RemainingSeconds);
+            TimeLeft += StrSubstNo('%1', RemainingSeconds);
     end;
 
     procedure ProgressBar_GetTimeElapsed(): Duration
     begin
-        exit(CURRENTDATETIME - ProgressBar_StartTime);
+        exit(CurrentDateTime - ProgressBar_StartTime);
     end;
 
     procedure GetResultQtyMessage()
     begin
-        MESSAGE('Anzahl Datensätze..\' +
+        Message('Anzahl Datensätze..\' +
                 'verarbeitet: %1\' +
                 'eingelesen : %2\' +
                 'mit Fehlern: %3\' +
@@ -112,9 +112,9 @@ codeunit 110002 "DMTMgt"
     procedure UpdateResultQty(IncreaseSuccessCount: Boolean; IncreaseProcessedCount: Boolean)
     begin
         Result_QtyProcessed += 1;
-        IF IncreaseSuccessCount then
+        if IncreaseSuccessCount then
             Result_QtySuccess += 1
-        ELSE
+        else
             Result_QtyFailed += 1;
     end;
 
@@ -139,7 +139,7 @@ codeunit 110002 "DMTMgt"
         FieldID: Integer;
         KeyFieldIDsList: List of [Integer];
     begin
-        IF TableNo = 0 then exit('');
+        if TableNo = 0 then exit('');
         RecRef.Open(TableNo, true);
         KeyFieldIDsList := GetListOfKeyFieldIDs(RecRef);
         foreach FieldID in KeyFieldIDsList do begin
@@ -148,14 +148,14 @@ codeunit 110002 "DMTMgt"
             else
                 KeyFieldNoFilter += StrSubstNo('&<>%1', FieldID);
         end;
-        IF CopyStr(KeyFieldNoFilter, 1, 1) = '|' then
+        if CopyStr(KeyFieldNoFilter, 1, 1) = '|' then
             KeyFieldNoFilter := CopyStr(KeyFieldNoFilter, 2);
-        IF CopyStr(KeyFieldNoFilter, 1, 3) = '&<>' then
+        if CopyStr(KeyFieldNoFilter, 1, 3) = '&<>' then
             KeyFieldNoFilter := CopyStr(KeyFieldNoFilter, 2);
     end;
 
     procedure GetListOfKeyFieldIDs(var RecRef: RecordRef) KeyFieldIDsList: List of [Integer];
-    VAR
+    var
         FieldRef: FieldRef;
         _KeyIndex: Integer;
         KeyRef: KeyRef;
@@ -167,13 +167,13 @@ codeunit 110002 "DMTMgt"
         end;
     end;
 
-    procedure CopyRecordRef(VAR RecRefSource: RecordRef; VAR RecRefTarget: RecordRef)
+    procedure CopyRecordRef(var RecRefSource: RecordRef; var RecRefTarget: RecordRef)
     var
         FieldRefSource: FieldRef;
         FieldRefTarget: FieldRef;
         i: Integer;
     begin
-        for i := 1 TO RecRefSource.FieldCount do begin
+        for i := 1 to RecRefSource.FieldCount do begin
             if RecRefTarget.FieldIndex(i).Class = FieldClass::Normal then begin
                 FieldRefSource := RecRefSource.FieldIndex(i);
                 if FieldRefSource.Type in [FieldType::Blob] then
@@ -184,7 +184,7 @@ codeunit 110002 "DMTMgt"
         end;
     end;
 
-    procedure AssignFieldWithoutValidate(VAR TargetRef: RecordRef; SourceRef: RecordRef; var FieldMapping: Record DMTFieldMapping; DoModify: Boolean)
+    procedure AssignFieldWithoutValidate(var TargetRef: RecordRef; SourceRef: RecordRef; var FieldMapping: Record DMTFieldMapping; DoModify: Boolean)
     var
         FromField: FieldRef;
         ToField: FieldRef;
@@ -194,19 +194,19 @@ codeunit 110002 "DMTMgt"
         if (FieldMapping."Source Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter FromFieldNo = 0');
         if (FieldMapping."Target Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter ToFieldNo = 0');
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRef.Number);
-        FromField := SourceRef.field(FieldMapping."Source Field No.");
-        ToField := TargetRef.field(FieldMapping."Target Field No.");
+        FromField := SourceRef.Field(FieldMapping."Source Field No.");
+        ToField := TargetRef.Field(FieldMapping."Target Field No.");
         if ToField.Type = FromField.Type then
             ToField.Value := FromField.Value
         else
             if not EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
                 Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
         ApplyReplacements(FieldMapping, ToField);
-        IF DoModify then
-            TargetRef.modify();
+        if DoModify then
+            TargetRef.Modify();
     end;
 
-    procedure ValidateField(VAR TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
+    procedure ValidateField(var TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
     var
         // DMTErrorLog: Record DMTErrorLog;
         IsValidateSuccessful: Boolean;
@@ -217,18 +217,18 @@ codeunit 110002 "DMTMgt"
         IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, TargetRef, FieldMapping);
 
         // HANDLE VALIDATE RESULT
-        IF not IsValidateSuccessful then begin
+        if not IsValidateSuccessful then begin
             if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
                 Error(GetLastErrorCode);
             // DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, FieldMapping);
             Error('TODO');
         end else begin
             // Save Successful changes
-            IF TargetRef.modify() then;
+            if TargetRef.Modify() then;
         end;
     end;
 
-    procedure ValidateFieldWithValue(VAR TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
+    procedure ValidateFieldWithValue(var TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
     var
         DMTErrorLog: Record DMTErrorLog;
         DMTErrorWrapper: Codeunit DMTErrorWrapper;
@@ -238,18 +238,18 @@ codeunit 110002 "DMTMgt"
         // VALIDATE
         Commit();
         DMTErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
-        IsValidateSuccessful := DMTErrorWrapper.RUN();
+        IsValidateSuccessful := DMTErrorWrapper.Run();
         DMTErrorWrapper.GetTargetRef(TargetRef);
         // HANDLE VALIDATE RESULT
         if not IsValidateSuccessful then begin
             DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
         end else begin
             // Save Successful changes
-            IF TargetRef.modify() then;
+            if TargetRef.Modify() then;
         end;
     end;
 
-    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
+    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
         _DateFormula: DateFormula;
@@ -264,18 +264,18 @@ codeunit 110002 "DMTMgt"
         OptionIndex: Integer;
         InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = '"%1" ist kein gültiger %2 Wert';
         _OutStream: OutStream;
-        OptionElement: text;
+        OptionElement: Text;
         _Time: Time;
     begin
         if FromText = '' then
-            case UpperCase(Format(FieldRef_TO.TYPE)) of
+            case UpperCase(Format(FieldRef_TO.Type)) of
                 'BIGINTEGER', 'INTEGER', 'DECIMAL':
                     begin
                         FromText := '0';
                         exit(true);
                     end;
             end;
-        case UpperCase(Format(FieldRef_TO.TYPE)) of
+        case UpperCase(Format(FieldRef_TO.Type)) of
 
             'INTEGER':
                 begin
@@ -291,7 +291,7 @@ codeunit 110002 "DMTMgt"
                     end;
                 end;
             'BIGINTEGER':
-                IF Evaluate(_BigInteger, FromText, 9) then begin
+                if Evaluate(_BigInteger, FromText, 9) then begin
                     FieldRef_TO.Value := _BigInteger;
                     exit(true);
                 end else
@@ -299,16 +299,16 @@ codeunit 110002 "DMTMgt"
                         Evaluate(_BigInteger, FromText, 9);
             'TEXT', 'TABLEFILTER':
                 begin
-                    FieldRef_TO.Value := COPYSTR(FromText, 1, FieldRef_TO.LENGTH);
+                    FieldRef_TO.Value := CopyStr(FromText, 1, FieldRef_TO.Length);
                     exit(true);
                 end;
             'CODE':
                 begin
-                    FieldRef_TO.Value := UPPERCASE(COPYSTR(FromText, 1, FieldRef_TO.LENGTH));
+                    FieldRef_TO.Value := UpperCase(CopyStr(FromText, 1, FieldRef_TO.Length));
                     exit(true);
                 end;
             'DECIMAL':
-                IF Evaluate(_Decimal, FromText, 9) then begin
+                if Evaluate(_Decimal, FromText, 9) then begin
                     FieldRef_TO.Value := _Decimal;
                     exit(true);
                 end else
@@ -350,10 +350,10 @@ codeunit 110002 "DMTMgt"
                             Evaluate(_RecordID, FromText);
                 end else begin
                     //Optionswert wird als Text übergeben
-                    NoOfOptions := STRLEN(FieldRef_TO.OPTIONCAPTION) - STRLEN(DELCHR(FieldRef_TO.OPTIONCAPTION, '=', ',')); // zero based
-                    FOR OptionIndex := 0 TO NoOfOptions DO begin
-                        OptionElement := SELECTSTR(OptionIndex + 1, FieldRef_TO.OPTIONCAPTION);
-                        IF OptionElement.ToLower() = FromText.ToLower() then begin
+                    NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
+                    for OptionIndex := 0 to NoOfOptions do begin
+                        OptionElement := SelectStr(OptionIndex + 1, FieldRef_TO.OptionCaption);
+                        if OptionElement.ToLower() = FromText.ToLower() then begin
                             FieldRef_TO.Value := OptionIndex;
                             exit(true);
                         end;
@@ -362,7 +362,7 @@ codeunit 110002 "DMTMgt"
             'DATE':
                 begin
                     //ApplicationMgt.MakeDateText(FromText);
-                    IF Evaluate(_Date, FromText, 9) then begin
+                    if Evaluate(_Date, FromText, 9) then begin
                         FieldRef_TO.Value := _Date;
                         exit(true);
                     end else
@@ -373,7 +373,7 @@ codeunit 110002 "DMTMgt"
             'DATETIME':
                 begin
                     //ApplicationMgt.MakeDateTimeText(FromText);
-                    IF Evaluate(_DateTime, FromText, 9) then begin
+                    if Evaluate(_DateTime, FromText, 9) then begin
                         FieldRef_TO.Value := _DateTime;
                         exit(true);
                     end else
@@ -381,7 +381,7 @@ codeunit 110002 "DMTMgt"
                 end;
             'TIME':
                 begin
-                    IF Evaluate(_Time, FromText, 9) then begin
+                    if Evaluate(_Time, FromText, 9) then begin
                         FieldRef_TO.Value := _Time;
                         exit(true);
                     end else
@@ -390,44 +390,44 @@ codeunit 110002 "DMTMgt"
             'BLOB':
                 begin
                     TempBlob.DeleteAll();
-                    TempBlob.Content.CREATEOUTSTREAM(_OutStream);
-                    _OutStream.WRITETEXT(FromText);
-                    TempBlob.insert();
-                    FieldRef_TO.VALUE(TempBlob.Content);
+                    TempBlob.Content.CreateOutStream(_OutStream);
+                    _OutStream.WriteText(FromText);
+                    TempBlob.Insert();
+                    FieldRef_TO.Value(TempBlob.Content);
                     exit(true);
                 end;
             'DATEFORMULA':
                 begin
-                    IF Evaluate(_DateFormula, FromText, 9) then begin
+                    if Evaluate(_DateFormula, FromText, 9) then begin
                         FieldRef_TO.Value := _DateFormula;
                         exit(true);
                     end else
                         if ThrowError then Evaluate(_DateFormula, FromText, 9);
                 end;
-            ELSE
-                MESSAGE('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', FORMAT(FieldRef_TO.TYPE));
+            else
+                Message('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', Format(FieldRef_TO.Type));
         end;  // end_CASE
     end;
 
-    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; VAR TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping) IsValidateSuccessful: Boolean
+    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; var TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping) IsValidateSuccessful: Boolean
     var
         DMTErrorWrapper: Codeunit DMTErrorWrapper;
     begin
-        COMMIT();
+        Commit();
         DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, TargetRef, FieldMapping);
-        IsValidateSuccessful := DMTErrorWrapper.RUN();
+        IsValidateSuccessful := DMTErrorWrapper.Run();
         DMTErrorWrapper.GetTargetRef(TargetRef);
     end;
 
-    procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; VAR TargetRecRef: RecordRef)
+    procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; var TargetRecRef: RecordRef)
     var
         FieldWithTypeCorrectValueToValidate, ToField : FieldRef;
     begin
-        ToField := TargetRecRef.field(FieldMapping."Target Field No.");
+        ToField := TargetRecRef.Field(FieldMapping."Target Field No.");
         AssignValueToFieldRef(SourceRecRef, FieldMapping, TargetRecRef, FieldWithTypeCorrectValueToValidate);
         ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
-        ToField.VALIDATE(FieldWithTypeCorrectValueToValidate.Value);
-        TargetRecRef.modify();
+        ToField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+        TargetRecRef.Modify();
     end;
 
     procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
@@ -454,14 +454,14 @@ codeunit 110002 "DMTMgt"
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := SourceRecRef.field(FieldMapping."Source Field No.");
+        FromField := SourceRecRef.Field(FieldMapping."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
-        FieldWithTypeCorrectValueToValidate := TargetRecRef.field(FieldMapping."Target Field No.");
+        FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(FieldMapping."Target Field No.");
 
         case true of
             (FieldMapping."Processing Action" = FieldMapping."Processing Action"::FixedValue):
                 DMTMgt.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, FieldMapping."Fixed Value");
-            (TargetRecRef.field(FieldMapping."Target Field No.").Type = FromField.Type):
+            (TargetRecRef.Field(FieldMapping."Target Field No.").Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
                 if not EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
@@ -472,17 +472,17 @@ codeunit 110002 "DMTMgt"
     end;
 
     [TryFunction]
-    procedure TryValidateFieldWithValue(VAR TargetRecRef: RecordRef; ToFieldNo: Integer; NewValue: Variant)
+    procedure TryValidateFieldWithValue(var TargetRecRef: RecordRef; ToFieldNo: Integer; NewValue: Variant)
     begin
         ValidateFieldWithValueImplementation(ToFieldNo, NewValue, TargetRecRef);
     end;
 
-    procedure ValidateFieldWithValueImplementation(ToFieldNo: Integer; NewValue: Variant; VAR TargetRecRef: RecordRef)
+    procedure ValidateFieldWithValueImplementation(ToFieldNo: Integer; NewValue: Variant; var TargetRecRef: RecordRef)
     var
         ToField: FieldRef;
     begin
-        ToField := TargetRecRef.field(ToFieldNo);
-        ToField.VALIDATE(NewValue);
+        ToField := TargetRecRef.Field(ToFieldNo);
+        ToField.Validate(NewValue);
     end;
 
     procedure LookUpPath(CurrentPath: Text; LookUpFolder: Boolean) ResultPath: Text[250]
@@ -521,13 +521,13 @@ codeunit 110002 "DMTMgt"
     end;
 
     var
-        DMTSetup: Record "DMTSetup";
+        DMTSetup: Record DMTSetup;
         // FieldMapping: Record DMTFieldMapping;
         ProgressBar_IsOpen: Boolean;
         ProgressBar_LastUpdate: DateTime;
         ProgressBar_StartTime: DateTime;
         ProgressBar: Dialog;
-        ProgressBar_Step: integer;
+        ProgressBar_Step: Integer;
         ProgressBar_Total: Integer;
         Result_QtyFailed: Integer;
         Result_QtyProcessed: Integer;

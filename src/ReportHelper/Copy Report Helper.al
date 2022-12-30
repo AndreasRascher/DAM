@@ -43,8 +43,8 @@ page 110021 "Copy Report Helper"
                     ReportMetadata_SELECTED: Record "Report Metadata";
                     FileContents: List of [Text];
                     FileNames: List of [Text];
-                    FileNameBase: text;
-                    ReportALCode, ReportRDLCLayout : text;
+                    FileNameBase: Text;
+                    ReportALCode, ReportRDLCLayout : Text;
                 begin
                     if not GetSelection(ReportMetadata_SELECTED) then exit;
                     ReportMetadata_SELECTED.FindSet();
@@ -98,7 +98,7 @@ page 110021 "Copy Report Helper"
         HasLines := ReportMetadata_SELECTED.FindFirst();
     end;
 
-    local procedure ReadALCode(var ReportALCode: Text; ReportID: integer)
+    local procedure ReadALCode(var ReportALCode: Text; ReportID: Integer)
     var
         AppObjectMetadata: Record "Application Object Metadata";
         BText: BigText;
@@ -228,7 +228,7 @@ page 110021 "Copy Report Helper"
         if not Report.RdlcLayout(ReportID, InStr) then
             exit(false);
         OK := XmlDocument.ReadFrom(InStr, RDLXml);
-        RDLXML.WriteTo(ReportRDLCLayout);
+        RDLXml.WriteTo(ReportRDLCLayout);
     end;
 
     procedure DownloadReportFilesAsZip(FileNames: List of [Text]; FileContents: List of [Text])
@@ -256,7 +256,7 @@ page 110021 "Copy Report Helper"
         DataCompression.SaveZipArchive(OStr);
         FileBlob.CreateInStream(IStr);
         FileName := 'ReportsWithLayout.zip';
-        DownloadFromStream(iStr, 'Download', 'ToFolder', ZIPFileTypeTok, FileName);
+        DownloadFromStream(IStr, 'Download', 'ToFolder', ZIPFileTypeTok, FileName);
     end;
 
     procedure SetRDLCFilenameProperty(var ReportALCode: Text; RDLCFileName: Text)
@@ -271,7 +271,7 @@ page 110021 "Copy Report Helper"
         CRLF[2] := 10;
         Lines := ReportALCode.Split(CRLF);
         for Index := 1 to Lines.Count do begin
-            if Lines.get(Index).Trim().StartsWith('RDLCLayout =') then begin
+            if Lines.Get(Index).Trim().StartsWith('RDLCLayout =') then begin
                 Lines.Set(Index, StrSubstNo('    RDLCLayout = ''%1'';', RDLCFileName));
             end;
             ReportALCodeNew.AppendLine(Lines.Get(Index));
@@ -292,7 +292,7 @@ page 110021 "Copy Report Helper"
         Lines := ReportALCode.Split(CRLF);
         for Index := 1 to Lines.Count do begin
 
-            clear(PropertyLineCount);
+            Clear(PropertyLineCount);
             if (Index <= (Lines.Count - 2)) then
                 if (Lines.Get(Index + 1).Trim() = '{') and (Lines.Get(Index + 2).Trim() = '}') then
                     PropertyLineCount := 2;
@@ -334,17 +334,17 @@ page 110021 "Copy Report Helper"
     procedure AddCustomCode(var ReportRDLCLayout: Text);
     var
         CustomCodeFirstLineTok: Label 'Source: https://github.com/AndreasRascher/RDLCReport_CustomCode', Locked = true;
-        NewCustomCode: text;
+        NewCustomCode: Text;
         RDLXML: XmlDocument;
     begin
         if ReportRDLCLayout.Contains(CustomCodeFirstLineTok) then exit;
-        XmlDocument.ReadFrom(ReportRDLCLayout, RDLXml);
+        XmlDocument.ReadFrom(ReportRDLCLayout, RDLXML);
         NewCustomCode := CustomCodeLib_SetGetDataByName();
-        AppendCustomCode(RDLXml, NewCustomCode);
-        RDLXml.WriteTo(ReportRDLCLayout);
+        AppendCustomCode(RDLXML, NewCustomCode);
+        RDLXML.WriteTo(ReportRDLCLayout);
     end;
 
-    procedure AppendCustomCode(var RDLXml: XmlDocument; NewCustomCode: text)
+    procedure AppendCustomCode(var RDLXml: XmlDocument; NewCustomCode: Text)
     var
         NewLine: Text[2];
         XmlNsMgr: XmlNamespaceManager;
@@ -372,9 +372,9 @@ page 110021 "Copy Report Helper"
         if _XMLElement.NamespaceUri() <> '' then
             //_XmlNsMgr.AddNamespace('', _XMLElement.NamespaceUri());
             _XmlNsMgr.AddNamespace('ns', _XMLElement.NamespaceUri());
-        Foreach _XmlAttribute in _XmlAttributeCollection do
+        foreach _XmlAttribute in _XmlAttributeCollection do
             if StrPos(_XmlAttribute.Name(), 'xmlns:') = 1 then
-                _XmlNsMgr.AddNamespace(DELSTR(_XmlAttribute.Name(), 1, 6), _XmlAttribute.Value());
+                _XmlNsMgr.AddNamespace(DelStr(_XmlAttribute.Name(), 1, 6), _XmlAttribute.Value());
     end;
 
     var

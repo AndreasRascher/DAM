@@ -1,4 +1,4 @@
-page 110027 "DMTDataFileList"
+page 110027 DMTDataFileList
 {
     Caption = 'DMT Data File List';
     PageType = List;
@@ -24,7 +24,7 @@ page 110027 "DMTDataFileList"
                 field(Size; Rec.Size) { ApplicationArea = All; }
                 field("Created At"; Rec."Created At") { ApplicationArea = All; }
                 field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
-                field("Import XMLPort ID"; rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
                 // field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
                 field("Import Duration (Buffer)"; Rec."Import Duration (Buffer)") { ApplicationArea = All; }
@@ -36,7 +36,7 @@ page 110027 "DMTDataFileList"
                 field(ImportToTargetIndicator; Rec.ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = Rec.ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; }
-                field("No. of Table Relations"; rec."Table Relations")
+                field("No. of Table Relations"; Rec."Table Relations")
                 {
                     ApplicationArea = All;
                     trigger OnDrillDown()
@@ -68,7 +68,7 @@ page 110027 "DMTDataFileList"
             action(ExportALObjects)
             {
                 Image = ExportFile;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category5;
                 Caption = 'Download buffer table objects', Comment = 'Puffertabellen Objekte runterladen';
@@ -80,7 +80,7 @@ page 110027 "DMTDataFileList"
             action(RenumberALObjects)
             {
                 Image = NumberGroup;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category5;
                 Caption = 'Renumber AL Objects', Comment = 'AL Objekte neu Nummerieren';
@@ -92,7 +92,7 @@ page 110027 "DMTDataFileList"
             action(RenewObjectIdAssignments)
             {
                 Image = NumberGroup;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category5;
                 Caption = 'Renew object id assignments', Comment = 'Objekt-IDs neu zuordnen';
@@ -108,7 +108,7 @@ page 110027 "DMTDataFileList"
             {
                 Image = ImportDatabase;
                 Caption = 'Read files into buffer tables (marked lines)', Comment = 'Dateien in Puffertabellen einlesen (markierte Zeilen)';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category6;
                 PromotedOnly = true;
@@ -132,7 +132,7 @@ page 110027 "DMTDataFileList"
             action(ImportSelectedToTarget)
             {
                 Image = TransferToLines;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedCategory = Category6;
@@ -180,7 +180,7 @@ page 110027 "DMTDataFileList"
             {
                 Image = FilterLines;
                 Caption = 'To Table ID Filter', Comment = 'Zieltabellen-ID Filter';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 trigger OnAction()
                 begin
                     Message(PageActions.CreateTableIDFilter(Rec, Rec.FieldNo("Target Table ID")));
@@ -190,7 +190,7 @@ page 110027 "DMTDataFileList"
             {
                 Image = FilterLines;
                 Caption = 'NAV Table ID Filter', Comment = 'NAV-Tabellen-ID Filter';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 trigger OnAction()
                 begin
                     Message(PageActions.CreateTableIDFilter(Rec, Rec.FieldNo("NAV Src.Table No.")));
@@ -200,7 +200,7 @@ page 110027 "DMTDataFileList"
             {
                 Image = Add;
                 Caption = 'Add Data File';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category7;
                 PromotedOnly = true;
@@ -213,7 +213,7 @@ page 110027 "DMTDataFileList"
             {
                 Image = MoveUp;
                 Caption = 'Upload File';
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category7;
                 PromotedOnly = true;
@@ -226,7 +226,7 @@ page 110027 "DMTDataFileList"
             {
                 Caption = 'Delete Marked Lines', Comment = 'Markierte Zeilen löschen';
                 Image = DeleteRow;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category7;
                 PromotedOnly = true;
@@ -240,7 +240,7 @@ page 110027 "DMTDataFileList"
             {
                 Caption = 'Assign Files to New Default Folder', Comment = 'Dateien dem neuen Standardordner zuordnen';
                 Image = DeleteRow;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category7;
                 PromotedOnly = true;
@@ -254,7 +254,7 @@ page 110027 "DMTDataFileList"
             {
                 Caption = 'Clear Processing Info', Comment = 'Verarbeitungsinformationen zurücksetzen';
                 Image = DeleteRow;
-                ApplicationArea = all;
+                ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Category7;
                 PromotedOnly = true;
@@ -319,7 +319,7 @@ page 110027 "DMTDataFileList"
         Clear(DataFile_Selected);
         if DataFile_Selected.IsTemporary then
             DataFile_Selected.DeleteAll();
-        DataFile.Copy(rec); // if all fields are selected, no filter is applied but the view is also not applied
+        DataFile.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(DataFile);
         DataFile.CopyToTemp(DataFile_Selected);
         HasLines := DataFile_Selected.FindFirst();
@@ -333,7 +333,7 @@ page 110027 "DMTDataFileList"
     end;
 
     var
-        TempDataFile_SELECTED: record DMTDataFile temporary;
+        TempDataFile_SELECTED: Record DMTDataFile temporary;
         PageActions: Codeunit DMTDataFilePageAction;
     // ImportToBufferIndicatorStyleTxt, ImportToTargetIndicatorStyleTxt : Text[15];
 }

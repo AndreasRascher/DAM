@@ -1,4 +1,4 @@
-page 110023 "DMTDataFileFactBox"
+page 110023 DMTDataFileFactBox
 {
     Caption = 'DataFile FactBox';
     PageType = CardPart;
@@ -6,7 +6,7 @@ page 110023 "DMTDataFileFactBox"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             group(FileInfo)
             {

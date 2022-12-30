@@ -1,4 +1,4 @@
-table 110042 "DMTDataFile"
+table 110042 DMTDataFile
 {
     Caption = 'DMTDataFile', locked = true;
     DrillDownPageId = DMTDataFileList;
@@ -20,7 +20,7 @@ table 110042 "DMTDataFile"
         {
             Caption = 'Target Table Caption', comment = 'Zieltabelle Bezeichnung';
             FieldClass = FlowField;
-            CalcFormula = Lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
+            CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
             Editable = false;
         }
         field(12; "No. of Records In Trgt. Table"; Integer)
@@ -32,9 +32,9 @@ table 110042 "DMTDataFile"
         }
         #endregion Target Table
         #region FileInfo
-        field(20; "Path"; Code[98]) { Caption = 'Path'; Editable = false; }
-        field(21; "Name"; Text[99]) { Caption = 'Name'; Editable = false; }
-        field(22; "Size"; Integer) { Caption = 'Size'; Editable = false; }
+        field(20; Path; Code[98]) { Caption = 'Path'; Editable = false; }
+        field(21; Name; Text[99]) { Caption = 'Name'; Editable = false; }
+        field(22; Size; Integer) { Caption = 'Size'; Editable = false; }
         field(23; "Created At"; DateTime) { Caption = 'DateTime'; Editable = false; }
         #endregion FileInfo
         #region Buffer Table Data
@@ -57,7 +57,7 @@ table 110042 "DMTDataFile"
             var
                 DataFileMgt: Codeunit DMTDataFilePageAction;
             begin
-                if (Rec.BuffertableType = Rec.BufferTableType::"Generic Buffer Table for all Files") then begin
+                if (Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files") then begin
                     Clear(Rec."Import XMLPort ID");
                     Clear(Rec."Buffer Table ID");
                 end;
@@ -67,21 +67,21 @@ table 110042 "DMTDataFile"
         field(41; "Import XMLPort ID"; Integer)
         {
             Caption = 'Import XMLPortID', Comment = 'XMLPort ID für Import';
-            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLPort), "App Package ID" = field("Current App Package ID Filter"));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLport), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(42; "Buffer Table ID"; Integer)
         {
             Caption = 'Buffertable ID', Comment = 'Puffertabelle ID';
-            TableRelation = AllObjWithCaption."Object ID" WHERE("Object Type" = CONST(Table), "App Package ID" = field("Current App Package ID Filter"));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(43; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', comment = 'Anz. Datensätze in Puffertabelle'; Editable = false; }
         #endregion Buffer Table Data
         #region Import and Processing Options
-        field(50; "Use OnInsert Trigger"; boolean) { Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden'; InitValue = true; }
+        field(50; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden'; InitValue = true; }
         field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
         field(53; ImportFilter; TableFilter) { Caption = 'Import Filter', Comment = 'Import Filter'; }
         field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'Import Gruppe'; }
@@ -122,7 +122,7 @@ table 110042 "DMTDataFile"
     var
         DMTFile: Record DMTDataFile;
     begin
-        if ("Path" = '') or ("Name" = '') then
+        if (Path = '') or (Name = '') then
             Error(Format(Enum::DMTErrMsg::NoFilePathSelectedError));
         if DMTFile.GetRecByFilePath(Path, Name) then
             Error('FileRecordExistsAlready');
@@ -141,7 +141,7 @@ table 110042 "DMTDataFile"
             GenBuffTable.DeleteAll();
     end;
 
-    procedure FilterRelated(var FieldMapping: Record DMTFieldMapping) HasLines: boolean
+    procedure FilterRelated(var FieldMapping: Record DMTFieldMapping) HasLines: Boolean
     begin
         FieldMapping.SetRange("Data File ID", Rec.ID);
         HasLines := not FieldMapping.IsEmpty;
@@ -168,8 +168,8 @@ table 110042 "DMTDataFile"
     var
         DataFile: Record DMTDataFile;
     begin
-        DataFile.Setrange("Path", FilePath);
-        DataFile.Setrange("Name", FileName);
+        DataFile.SetRange(Path, FilePath);
+        DataFile.SetRange(Name, FileName);
         OK := DataFile.FindFirst();
         if OK then
             Rec.Copy(DataFile);
@@ -186,7 +186,7 @@ table 110042 "DMTDataFile"
     var
         FileMgt: Codeunit "File Management";
     begin
-        FullDataFilePath := FileMgt.CombinePath(Rec.Path, rec.Name);
+        FullDataFilePath := FileMgt.CombinePath(Rec.Path, Rec.Name);
     end;
 
     internal procedure ShowBufferTable() OK: Boolean
@@ -207,10 +207,10 @@ table 110042 "DMTDataFile"
 
     internal procedure ShowTableContent(TableID: Integer) OK: Boolean
     var
-        TableMeta: record "Table Metadata";
+        TableMeta: Record "Table Metadata";
     begin
         OK := TableMeta.Get(TableID);
-        if ok then
+        if OK then
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
     /// <summary>
@@ -229,7 +229,7 @@ table 110042 "DMTDataFile"
         Rec.SetRange("CompanyName Filter", CompanyName); // Required for Table Information Record Count
     end;
 
-    procedure UpdateFileRecProperties(DoModify: boolean)
+    procedure UpdateFileRecProperties(DoModify: Boolean)
     var
         FileRec: Record File;
     begin
@@ -244,9 +244,9 @@ table 110042 "DMTDataFile"
     var
         IStr: InStream;
     begin
-        rec.calcfields(LastFieldUpdateSelection);
-        if not rec.LastFieldUpdateSelection.HasValue then exit('');
-        rec.LastFieldUpdateSelection.CreateInStream(IStr);
+        Rec.CalcFields(LastFieldUpdateSelection);
+        if not Rec.LastFieldUpdateSelection.HasValue then exit('');
+        Rec.LastFieldUpdateSelection.CreateInStream(IStr);
         IStr.ReadText(LastFieldUpdateSelectionAsText);
     end;
 
@@ -256,7 +256,7 @@ table 110042 "DMTDataFile"
     begin
         Clear(Rec.LastFieldUpdateSelection);
         Rec.Modify();
-        rec.LastFieldUpdateSelection.CreateOutStream(Ostr);
+        Rec.LastFieldUpdateSelection.CreateOutStream(OStr);
         OStr.WriteText(LastFieldUpdateSelectionAsText);
         Rec.Modify();
     end;
@@ -265,9 +265,9 @@ table 110042 "DMTDataFile"
     var
         IStr: InStream;
     begin
-        rec.calcfields(LastView);
-        if not rec.LastView.HasValue then exit('');
-        rec.LastView.CreateInStream(IStr);
+        Rec.CalcFields(LastView);
+        if not Rec.LastView.HasValue then exit('');
+        Rec.LastView.CreateInStream(IStr);
         IStr.ReadText(TableView);
     end;
 
@@ -277,7 +277,7 @@ table 110042 "DMTDataFile"
     begin
         Clear(Rec.LastView);
         Rec.Modify();
-        rec.LastView.CreateOutStream(Ostr);
+        Rec.LastView.CreateOutStream(OStr);
         OStr.WriteText(TableView);
         Rec.Modify();
     end;
@@ -317,7 +317,7 @@ table 110042 "DMTDataFile"
         end;
         Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::None);
         Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
-        Calcfields(Rec."No. of Records In Trgt. Table");
+        CalcFields(Rec."No. of Records In Trgt. Table");
         case true of
             (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
                 begin
@@ -332,8 +332,8 @@ table 110042 "DMTDataFile"
         end;
         // Generated Objects exist
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
-            clear(Rec.ImportXMLPortIDStyle);
-            clear(Rec.BufferTableIDStyle);
+            Clear(Rec.ImportXMLPortIDStyle);
+            Clear(Rec.BufferTableIDStyle);
         end else begin
             Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             if (Rec."Buffer Table ID" <> 0) then
