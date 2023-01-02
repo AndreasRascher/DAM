@@ -14,7 +14,7 @@ codeunit 110010 DMTProgressDialog
     var
         FieldText: Text;
     begin
-        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressIndicatorNo) + '#';
+        FieldText := PadStr('', IndicatorLenght, '@') + Format(ProgressIndicatorNo) + '@';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -22,7 +22,7 @@ codeunit 110010 DMTProgressDialog
     var
         FieldText: Text;
     begin
-        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressIndicatorNo) + '@';
+        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressIndicatorNo) + '#';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -36,12 +36,13 @@ codeunit 110010 DMTProgressDialog
         IsProgressOpen := true;
     end;
 
-    procedure UpdateControl(Number: Integer; Value: Variant)
+    procedure UpdateControl(ControlIndex: Integer; Value: Variant)
     begin
-        if not IsProgressOpen then
-            exit;
-        if Number <> 0 then
-            Progress.Update(Number, Value);
+        if not ControlValuesDict.ContainsKey(ControlIndex) then
+            ControlValuesDict.Add(ControlIndex, Value)
+        else
+            ControlValuesDict.Set(ControlIndex, Value);
+        DoUpdate();
     end;
 
     procedure Close()
@@ -68,15 +69,37 @@ codeunit 110010 DMTProgressDialog
 
     procedure UpdateControlWithCustomDuration(ControlIndex: Integer; CustomDuration: Integer)
     begin
-        ControlValuesDict.Add(ControlIndex, Format(GetCustomDuration(CustomDuration)));
+        if not ControlValuesDict.ContainsKey(ControlIndex) then
+            ControlValuesDict.Add(ControlIndex, Format(GetCustomDuration(CustomDuration)))
+        else
+            ControlValuesDict.Set(ControlIndex, Format(GetCustomDuration(CustomDuration)));
         DoUpdate();
+    end;
+
+    procedure GetRemainingTime(StartTimeIndex: Integer; StepIndex: Integer) TimeLeft: Text
+    var
+        RemainingMins: Decimal;
+        RemainingSeconds: Decimal;
+        ElapsedTime: Duration;
+        RoundedRemainingMins: Integer;
+    begin
+        ElapsedTime := Round(((GetCustomDuration(StartTimeIndex)) / 1000), 1);
+        RemainingMins := Round((((ElapsedTime / ((GetStep(StepIndex) / GetTotalStep(StepIndex)) * 100) * 100) - ElapsedTime) / 60), 0.1);
+        RoundedRemainingMins := Round(RemainingMins, 1, '<');
+        RemainingSeconds := Round(((RemainingMins - RoundedRemainingMins) * 0.6) * 100, 1);
+        TimeLeft := StrSubstNo('%1:', RoundedRemainingMins);
+        if StrLen(Format(RemainingSeconds)) = 1 then
+            TimeLeft += StrSubstNo('0%1', RemainingSeconds)
+        else
+            TimeLeft += StrSubstNo('%1', RemainingSeconds);
     end;
 
     local procedure DoUpdate()
     var
         ControlID: Integer;
     begin
-
+        if not IsProgressOpen then
+            exit;
         if LastUpdate = 0DT then
             LastUpdate := CurrentDateTime - UpdateThresholdInMS;
         if (CurrentDateTime - LastUpdate) <= UpdateThresholdInMS then
@@ -86,14 +109,34 @@ codeunit 110010 DMTProgressDialog
         end;
     end;
 
-    procedure NextStep(ControlIndex: Integer)
+    procedure NextStep(StepIndex: Integer)
     var
         CurrStep: Integer;
     begin
-        if not CurrStepValuesDict.Get(ControlIndex, CurrStep) then
-            CurrStepValuesDict.Add(ControlIndex, 1)
+        if not CurrStepValuesDict.Get(StepIndex, CurrStep) then
+            CurrStepValuesDict.Add(StepIndex, 1)
         else
-            CurrStepValuesDict.Set(ControlIndex, CurrStep + 1);
+            CurrStepValuesDict.Set(StepIndex, CurrStep + 1);
+    end;
+
+    procedure GetStep(StepIndex: Integer) CurrStep: Integer
+    begin
+        if not CurrStepValuesDict.Get(StepIndex, CurrStep) then;
+        exit(CurrStep);
+    end;
+
+    procedure SetTotalSteps(Index: Integer; TotalStepsNew: Integer)
+    begin
+        if TotalStepValuesDict.ContainsKey(Index) then
+            TotalStepValuesDict.Set(Index, TotalStepsNew)
+        else
+            TotalStepValuesDict.Add(Index, TotalStepsNew);
+    end;
+
+    procedure GetTotalStep(Index: Integer) TotalSteps: Integer
+    begin
+        if TotalStepValuesDict.Get(Index, TotalSteps) then;
+        exit(TotalSteps);
     end;
 
     var

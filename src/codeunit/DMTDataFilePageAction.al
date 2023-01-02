@@ -380,7 +380,7 @@ codeunit 110013 DMTDataFilePageAction
 
     procedure RetryBufferRecordsWithError(DataFile: Record DMTDataFile)
     var
-        DMTImportNew: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
         DMTErrorLogQry: Query DMTErrorLogQry;
         RecIdList: List of [RecordId];
     begin
@@ -390,7 +390,7 @@ codeunit 110013 DMTDataFilePageAction
         while DMTErrorLogQry.Read() do begin
             RecIdList.Add(DMTErrorLogQry.FromID);
         end;
-        DMTImportNew.RetryProcessFullBuffer(RecIdList, DataFile, false);
+        Migrate.ListOfBufferRecIDs(RecIdList, DataFile);
         DataFile.Get(DataFile.RecordId);
         DataFile.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DataFile.LastImportBy));
         DataFile.LastImportToTargetAt := CurrentDateTime;
@@ -485,13 +485,13 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure AutoMigration(var DataFile: Record DMTDataFile)
     var
-        DMTImportNew: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
     begin
         DataFile.TestField("Target Table ID");
         DataFile.Modify();
         ImportToBufferTable(DataFile, false);
         ProposeMatchingFields(DataFile.ID);
-        DMTImportNew.StartImport(DataFile, true, false, '', '');
+        Migrate.AllFieldsWithoutDialogFrom(DataFile);
     end;
 
     procedure DeleteSelectedTargetTables(var DataFile_SELECTED: Record DMTDataFile temporary)
@@ -543,13 +543,13 @@ codeunit 110013 DMTDataFilePageAction
     internal procedure ImportSelectedIntoTarget(var DataFile_SELECTED: Record DMTDataFile temporary)
     var
         DataFile: Record DMTDataFile;
-        DMTImport: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
     begin
         DataFile_SELECTED.SetCurrentKey("Sort Order");
         if not DataFile_SELECTED.FindSet() then exit;
         repeat
             DataFile := DataFile_SELECTED;
-            DMTImport.StartImport(DataFile, true, false, '', '');
+            Migrate.AllFieldsFrom(DataFile);
         until DataFile_SELECTED.Next() = 0;
     end;
 
@@ -882,7 +882,7 @@ codeunit 110013 DMTDataFilePageAction
 
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var
-        Import: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
         UpdateTaskNew: Page DMTUpdateTaskNew;
     begin
         // Show only Non-Key Fields for selection
@@ -892,14 +892,14 @@ codeunit 110013 DMTDataFilePageAction
             exit;
         if UpdateTaskNew.RunModal() = Action::LookupOK then begin
             DataFile.WriteLastFieldUpdateSelection(UpdateTaskNew.GetToFieldNoFilter());
-            Import.StartImport(DataFile, false, true, '', '');
+            Migrate.SelectedFieldsFrom(DataFile);
         end;
     end;
 
     procedure ImportWithProcessingPlanParams(var ProcessingPlan: Record DMTProcessingPlan)
     var
-        Import: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
     begin
-        Import.RunWithProcessingPlanParams(ProcessingPlan);
+        Migrate.BufferFor(ProcessingPlan);
     end;
 }

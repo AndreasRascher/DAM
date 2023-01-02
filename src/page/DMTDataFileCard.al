@@ -120,9 +120,9 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    DMTImportNew: Codeunit DMTImport;
+                    Migrate: Codeunit DMTMigrate;
                 begin
-                    DMTImportNew.StartImport(Rec, false, false, '', '');
+                    Migrate.AllFieldsFrom(Rec);
                 end;
             }
             action(UpdateFields)
@@ -202,13 +202,13 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    DMTImport: Codeunit DMTImport;
                     CollationProblems: Dictionary of [RecordId, RecordId];
                     RecordMapping: Dictionary of [RecordId, RecordId];
                     NotTransferedRecords: List of [RecordId];
+                    Migrate: Codeunit DMTMigrate;
                 begin
                     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
-                    CollationProblems := DMTImport.FindCollationProblems(RecordMapping);
+                    CollationProblems := Migrate.FindCollationProblems(RecordMapping);
                     Message('No. of Records not Transfered: %1\' +
                             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
                 end;
