@@ -148,7 +148,7 @@ codeunit 110013 DMTDataFilePageAction
         end;
     end;
 
-    internal procedure FieldMapping_SetValidateField(TempFieldMapping_Selected: Record DMTFieldMapping temporary; NewValue: Enum DMTFieldValidationType)
+    internal procedure FieldMapping_SetValidateField(var TempFieldMapping_Selected: Record DMTFieldMapping temporary; NewValue: Enum DMTFieldValidationType)
     var
         FieldMapping: Record DMTFieldMapping;
         NoOfRecords: Integer;
