@@ -113,6 +113,20 @@ codeunit 110012 DMTProcessRecord
         Clear(ErrorLogDict);
     end;
 
+    procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
+    begin
+        DataFile := DMTImportSettings.DataFile();
+        SourceRef := _SourceRef;
+        UpdateExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
+        DMTImportSettings.GetFieldMapping(TempFieldMapping);
+        TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
+        TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
+        TargetRef_INIT.Open(TmpTargetRef.Number, false, TmpTargetRef.CurrentCompany);
+        TargetRef_INIT.Init();
+        RunMode := RunMode::FieldTransfer;
+        Clear(ErrorLogDict);
+    end;
+
     procedure InitInsert()
     begin
         RunMode := RunMode::InsertRecord;

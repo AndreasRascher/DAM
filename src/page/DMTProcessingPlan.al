@@ -18,6 +18,7 @@ page 110015 DMTProcessingPlan
             {
                 IndentationColumn = Rec.Indentation;
                 IndentationControls = Description;
+                ShowAsTree = true;
                 field("Line Type"; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(DataFileID; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
                 field(Description; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }

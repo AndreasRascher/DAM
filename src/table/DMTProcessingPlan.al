@@ -85,7 +85,7 @@ table 110010 DMTProcessingPlan
     procedure EditSourceTableFilter()
     var
         DataFile: Record DMTDataFile;
-        Import: Codeunit DMTImport;
+        Migrate: Codeunit DMTMigrate;
         BufferRef: RecordRef;
         CurrView: Text;
     begin
@@ -95,12 +95,12 @@ table 110010 DMTProcessingPlan
             DataFile.BufferTableType := DataFile.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             DataFile.Get(Rec.ID);
-            Import.InitBufferRef(DataFile, BufferRef);
+            Migrate.InitBufferRef(DataFile, BufferRef);
         end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        if Import.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
+        if Migrate.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
             SaveSourceTableFilter(BufferRef.GetView());
         end;
     end;
@@ -108,16 +108,16 @@ table 110010 DMTProcessingPlan
     procedure EditDefaultValues()
     var
         DataFile: Record DMTDataFile;
-        Import: Codeunit DMTImport;
         TargetRef: RecordRef;
         CurrView: Text;
+        Migrate: Codeunit DMTMigrate;
     begin
         DataFile.Get(Rec.ID);
         TargetRef.Open(DataFile."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        if Import.ShowRequestPageFilterDialog(TargetRef, DataFile) then begin
+        if Migrate.ShowRequestPageFilterDialog(TargetRef, DataFile) then begin
             SaveDefaultValuesView(TargetRef.GetView());
         end;
     end;
