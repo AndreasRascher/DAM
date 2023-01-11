@@ -163,8 +163,10 @@ table 110048 DMTDataFileBuffer
                     // 5886 "Exp. Phys. Invt. Tracking"
                     5005361:
                         Rec."Target Table ID" := 5886; //5886 
+                    5723: // Product Group -> Item Category
+                        Rec."Target Table ID" := 5722;
                     else
-                        Error('unhandled obsolete Table %1', Rec."NAV Src.Table No.");
+                        Message('unhandled obsolete Table %1', Rec."NAV Src.Table No.");
                 end;
             end;
             Rec.Modify();

@@ -1829,8 +1829,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
         <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! Records in table "%1" (company "%2") will be deleted. Continue?\Filter:"%3"</source>
-          <note from="Developer" annotates="general" priority="2">Warnung! Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?\Filter:"%3"</note>
+          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?\Filter:"%4"</source>
+          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
