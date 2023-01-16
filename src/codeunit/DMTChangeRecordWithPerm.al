@@ -7,13 +7,13 @@ codeunit 110009 ChangeRecordWithPerm
     var
         DMTCopyTable: Record DMTCopyTable;
         RecRef: RecordRef;
-        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! Records in table "%1" (company "%2") will be deleted. Continue?\Filter:"%3"',
-                    Comment = 'Warnung! Datensätze in Tabelle "%1" (Mandant "%2") werden gelöscht. Fortfahren?\Filter:"%3"';
+        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?\Filter:"%4"',
+                    Comment = 'Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"';
     begin
         DMTDataFile.TestField("Target Table ID");
         RecRef.Open(DMTDataFile."Target Table ID");
         if DMTCopyTable.ShowRequestPageFilterDialog(RecRef) then
-            if Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Caption, RecRef.CurrentCompany, RecRef.GetFilters), false) then begin
+            if Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Count, RecRef.Caption, RecRef.CurrentCompany, RecRef.GetFilters), false) then begin
                 if not RecRef.IsEmpty then
                     RecRef.DeleteAll();
             end;

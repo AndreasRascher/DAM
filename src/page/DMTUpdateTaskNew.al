@@ -12,11 +12,7 @@ page 110029 DMTUpdateTaskNew
         {
             group(Options)
             {
-                // field(Name; NameSource)
-                // {
-                //     ApplicationArea = All;
-
-                // }
+                field(SelectedFieldsList; GetSelectedFieldsList()) { ApplicationArea = All; }
             }
             repeater(SelectedFields)
             {
@@ -130,6 +126,19 @@ page 110029 DMTUpdateTaskNew
         repeat
             NumberList.Add(Integer.Number);
         until Integer.Next() = 0;
+    end;
+
+    local procedure GetSelectedFieldsList() FieldsListAsText: Text
+    var
+        ID: Integer;
+        FieldMapping: Record DMTFieldMapping;
+    begin
+        foreach ID in SelectedFields do begin
+            FieldMapping.Get(CurrDataFile.ID, ID);
+            FieldMapping.Calcfields("Target Field Caption");
+            FieldsListAsText += ', ' + FieldMapping."Target Field Caption";
+        end;
+        FieldsListAsText := FieldsListAsText.TrimStart(', ');
     end;
 
     var
