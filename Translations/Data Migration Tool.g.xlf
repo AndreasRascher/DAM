@@ -1893,6 +1893,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 3471974442" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No field mapping found for "%1"</source>
+          <note from="Developer" annotates="general" priority="2">Kein Feldmapping gefunden für "%1"</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2885896688 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>

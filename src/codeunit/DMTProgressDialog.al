@@ -28,7 +28,7 @@ codeunit 110010 DMTProgressDialog
 
     procedure Open()
     begin
-        UpdateThresholdInMS := 1000; // 1 Second
+        UpdateThresholdInMS := 1000; // 1 Seconds
         if ProgressMsg.ToText().TrimEnd() = '' then
             Error('es wurde kein Text für Dialog definiert');
         Progress.Open(ProgressMsg.ToText().TrimEnd());
@@ -36,12 +36,21 @@ codeunit 110010 DMTProgressDialog
         IsProgressOpen := true;
     end;
 
-    procedure UpdateControl(ControlIndex: Integer; Value: Variant)
+    procedure UpdateFieldControl(ControlIndex: Integer; Value: Variant)
     begin
-        if not ControlValuesDict.ContainsKey(ControlIndex) then
-            ControlValuesDict.Add(ControlIndex, Value)
+        if not FieldControlValuesDict.ContainsKey(ControlIndex) then
+            FieldControlValuesDict.Add(ControlIndex, Value)
         else
-            ControlValuesDict.Set(ControlIndex, Value);
+            FieldControlValuesDict.Set(ControlIndex, Value);
+        DoUpdate();
+    end;
+
+    local procedure UpdateBarControl(ControlIndex: Integer; Value: Variant)
+    begin
+        if not BarControlValuesDict.ContainsKey(ControlIndex) then
+            BarControlValuesDict.Add(ControlIndex, Value)
+        else
+            BarControlValuesDict.Set(ControlIndex, Value);
         DoUpdate();
     end;
 
@@ -69,11 +78,16 @@ codeunit 110010 DMTProgressDialog
 
     procedure UpdateControlWithCustomDuration(ControlIndex: Integer; CustomDuration: Integer)
     begin
-        if not ControlValuesDict.ContainsKey(ControlIndex) then
-            ControlValuesDict.Add(ControlIndex, Format(GetCustomDuration(CustomDuration)))
-        else
-            ControlValuesDict.Set(ControlIndex, Format(GetCustomDuration(CustomDuration)));
+        UpdateFieldControl(ControlIndex, Format(GetCustomDuration(CustomDuration)));
         DoUpdate();
+    end;
+
+    procedure UpdateProgressBar(ControlIndex: Integer; StepIndex: Integer)
+    var
+        ProgressStep: Integer;
+    begin
+        ProgressStep := (10000 * (GetStep(StepIndex) / GetTotalStep(StepIndex))) div 1;
+        UpdateBarControl(ControlIndex, ProgressStep);
     end;
 
     procedure GetRemainingTime(StartTimeIndex: Integer; StepIndex: Integer) TimeLeft: Text
@@ -104,9 +118,13 @@ codeunit 110010 DMTProgressDialog
             LastUpdate := CurrentDateTime - UpdateThresholdInMS;
         if (CurrentDateTime - LastUpdate) <= UpdateThresholdInMS then
             exit;
-        foreach ControlID in ControlValuesDict.Keys do begin
-            Progress.Update(ControlID, ControlValuesDict.Get(ControlID));
+        foreach ControlID in FieldControlValuesDict.Keys do begin
+            Progress.Update(ControlID, FieldControlValuesDict.Get(ControlID));
         end;
+        foreach ControlID in BarControlValuesDict.Keys do begin
+            Progress.Update(ControlID, BarControlValuesDict.Get(ControlID));
+        end;
+        LastUpdate := CurrentDateTime;
     end;
 
     procedure NextStep(StepIndex: Integer)
@@ -146,7 +164,8 @@ codeunit 110010 DMTProgressDialog
         Progress: Dialog;
         CustomStart: Dictionary of [Integer, DateTime];
         CurrStepValuesDict, TotalStepValuesDict : Dictionary of [Integer, Integer];
-        ControlValuesDict: Dictionary of [Integer, Text];
+        FieldControlValuesDict: Dictionary of [Integer, Text];
+        BarControlValuesDict: Dictionary of [Integer, Integer];
         UpdateThresholdInMS: Integer;
         ProgressMsg: TextBuilder;
 }

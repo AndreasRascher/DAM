@@ -19,6 +19,8 @@
     "CRS.FileNamePattern": "<ObjectNameShort>.al",
     "CRS.ObjectNamePrefix": "DMT",
     "CRS.RenameWithGit": true,
+    "CRS.RemoveUnderscoreFromFilename": true,
+    "CRS.AlSubFolderName": "None",
     "alObjectDesigner.disableFileWatcherOnChange": true,
     "alOutline.completionProviders": [
         "VariableNamesWithType"

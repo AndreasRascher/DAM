@@ -1,4 +1,4 @@
-codeunit 110017 DMTMigrate
+codeunit 110017 "DMTMigrate"
 {
     /// <summary>
     /// Process buffer records defined by RecordIds
@@ -44,7 +44,6 @@ codeunit 110017 DMTMigrate
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
         DMTImportSettings.DataFile(DataFile);
-        DMTImportSettings.DataFile(DataFile);
         DMTImportSettings.UpdateFieldsFilter(DataFile.ReadLastFieldUpdateSelection());
         LoadFieldMapping(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
@@ -55,9 +54,14 @@ codeunit 110017 DMTMigrate
     /// </summary>
     procedure BufferFor(ProcessingPlan: Record DMTProcessingPlan)
     var
+        DataFile: Record DMTDataFile;
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
         DMTImportSettings.ProcessingPlan(ProcessingPlan);
+        DataFile.Get(ProcessingPlan.ID);
+        DMTImportSettings.DataFile(DataFile);
+        DMTImportSettings.UpdateFieldsFilter(ProcessingPlan.ReadUpdateFieldsFilter());
+        DMTImportSettings.SourceTableView(ProcessingPlan.ReadSourceTableView());
         LoadFieldMapping(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
@@ -104,7 +108,10 @@ codeunit 110017 DMTMigrate
         MaxWith: Integer;
         ProgressBarTitle: Text;
         RecordWasSkipped, RecordHadErrors : Boolean;
+        Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
+        Start: DateTime;
     begin
+        Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
         DataFile := DMTImportSettings.DataFile();
 
@@ -113,9 +120,12 @@ codeunit 110017 DMTMigrate
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DMTImportSettings) then
             exit;
+        CheckMappedFieldsExist(DataFile);
+        CheckBufferTableIsNotEmpty(DataFile);
 
         //Prepare Progress Bar
-        BufferRef.FindSet();
+        if not BufferRef.FindSet() then
+            Error('Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"', BufferRef.GetFilters);
         DataFile.Calcfields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
         if StrLen(ProgressBarTitle) < MaxWith then begin
@@ -123,45 +133,46 @@ codeunit 110017 DMTMigrate
                                 ProgressBarTitle +
                                 PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_');
         end;
-        ProgressDialog.SaveCustomStartTime(1);
-        ProgressDialog.SetTotalSteps(1, BufferRef.Count);
+        // ToDo: Performance der Codeunit ProgressDialog schlecht, ggf.weniger generisch,
+        //       durch konkrete Programmierung aller Progressdialoge ersetzten
+        ProgressDialog.SaveCustomStartTime(Control::Progress);
+        ProgressDialog.SetTotalSteps(StepIndex::Process, BufferRef.Count);
         ProgressDialog.AppendTextLine(ProgressBarTitle);
         ProgressDialog.AppendText('\Filter:');
-        ProgressDialog.AddField(42, 1);
+        ProgressDialog.AddField(42, Control::"Filter");
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Record:');
-        ProgressDialog.AddField(42, 2);
+        ProgressDialog.AddField(42, Control::NoofRecord);
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Duration:');
-        ProgressDialog.AddField(42, 3);
+        ProgressDialog.AddField(42, Control::"Duration");
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Progress:');
-        ProgressDialog.AddBar(42, 4);
+        ProgressDialog.AddBar(42, Control::Progress);
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Time Remaining:');
-        ProgressDialog.AddField(42, 5);
+        ProgressDialog.AddField(42, Control::TimeRemaining);
         ProgressDialog.AppendTextLine('');
         ProgressDialog.Open();
-        ProgressDialog.UpdateControl(1, ConvertStr(BufferRef.GetFilters, '@', '_'));
+        ProgressDialog.UpdateFieldControl(Control::"Filter", ConvertStr(BufferRef.GetFilters, '@', '_'));
 
         repeat
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, RecordWasSkipped, RecordHadErrors);
 
-            ProgressDialog.NextStep(1);
-            if RecordWasSkipped then
-                ProgressDialog.NextStep(2);
-
-            ProgressDialog.UpdateControl(2, BufferRef2.GetPosition());
-            ProgressDialog.UpdateControlWithCustomDuration(3, 3);
-            ProgressDialog.UpdateControl(4, StrSubstNo('%1 / %2', ProgressDialog.GetStep(1), ProgressDialog.GetTotalStep(1)));
-            ProgressDialog.UpdateControl(5, ProgressDialog.GetRemainingTime(1, 1));
-            // DMTMgt.ProgressBar_NextStep();
-            // DMTMgt.ProgressBar_Update(0, '',
-            //                           4, DMTMgt.ProgressBar_GetProgress(),
-            //                           2, StrSubstNo('%1 / %2', DMTMgt.ProgressBar_GetStep(), DMTMgt.ProgressBar_GetTotal()),
-            //                           3, DMTMgt.ProgressBar_GetTimeElapsed(),
-            //                           5, DMTMgt.ProgressBar_GetRemainingTime());
+            // ProgressDialog.NextStep(StepIndex::Process);
+            // case true of
+            //     RecordHadErrors:
+            //         ProgressDialog.NextStep(StepIndex::ResultError);
+            //     RecordWasSkipped:
+            //         ProgressDialog.NextStep(StepIndex::Skipped);
+            //     else
+            //         ProgressDialog.NextStep(StepIndex::ResultOK);
+            // end;
+            // ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
+            // ProgressDialog.UpdateControlWithCustomDuration(Control::Duration, Control::Progress);
+            // ProgressDialog.UpdateProgressBar(Control::Progress, StepIndex::Process);
+            // ProgressDialog.UpdateFieldControl(Control::TimeRemaining, ProgressDialog.GetRemainingTime(Control::Progress, StepIndex::Process));
 
             if ProgressDialog.GetStep(1) mod 50 = 0 then
                 Commit();
@@ -169,7 +180,8 @@ codeunit 110017 DMTMigrate
         MigrationLib.RunPostProcessingFor(DataFile);
         ProgressDialog.Close();
         ErrorLog.OpenListWithFilter(DataFile, true);
-        Message('ToDo: DMTMgt.GetResultQtyMessage();');
+        ShowResultDialog(ProgressDialog);
+        Message('Dauer %1', CurrentDateTime - Start);
     end;
 
     procedure InitBufferRef(DataFile: Record DMTDataFile; var BufferRef: RecordRef)
@@ -237,6 +249,19 @@ codeunit 110017 DMTMigrate
         end;
     end;
 
+    local procedure ShowResultDialog(var ProgressDialog: Codeunit DMTProgressDialog)
+    begin
+        Message('Anzahl Datensätze..\' +
+                'verarbeitet: %1\' +
+                'eingelesen : %2\' +
+                'mit Fehlern: %3\' +
+                'Verarbeitungsdauer: %4',
+                ProgressDialog.GetStep(StepIndex::Process),
+                ProgressDialog.GetStep(StepIndex::ResultOK),
+                ProgressDialog.GetStep(StepIndex::ResultError),
+                ProgressDialog.GetCustomDuration(StepIndex::Process));
+    end;
+
     procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
     var
         TargetRecID: RecordId;
@@ -289,8 +314,45 @@ codeunit 110017 DMTMigrate
         BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
+    procedure CheckMappedFieldsExist(DataFile: Record DMTDataFile)
+    var
+        FieldMapping: Record DMTFieldMapping;
+        FieldMappingEmptyErr: label 'No field mapping found for "%1"', comment = 'Kein Feldmapping gefunden für "%1"';
+    begin
+        // Key Fields Mapping Exists
+        DataFile.FilterRelated(FieldMapping);
+        FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        FieldMapping.SetRange("Is Key Field(Target)", true);
+        FieldMapping.SetFilter("Source Field No.", '<>0');
+
+        DataFile.CalcFields("Target Table Caption");
+        if FieldMapping.IsEmpty then
+            Error(FieldMappingEmptyErr, DataFile.FullDataFilePath());
+    end;
+
+    procedure CheckBufferTableIsNotEmpty(DataFile: Record DMTDataFile)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
+    begin
+        case DataFile.BufferTableType of
+            DataFile.BufferTableType::"Seperate Buffer Table per CSV":
+                begin
+                    RecRef.Open(DataFile."Buffer Table ID");
+                    if RecRef.IsEmpty then
+                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.Caption, DataFile."Buffer Table ID");
+                end;
+            DataFile.BufferTableType::"Generic Buffer Table for all Files":
+                begin
+                    if not GenBuffTable.FilterBy(DataFile) then
+                        Error('Für "%1" wurden keine importierten Daten gefunden', DataFile.FullDataFilePath());
+                end;
+        end;
+    end;
+
 
     var
+        StepIndex: Option Process,ResultOK,ResultError,Skipped;
         ProgressBarText_DurationTok: Label '\Duration:        ########################################3#';
         ProgressBarText_FilterTok: Label '\Filter:       ########################################1#';
         ProgressBarText_ProgressTok: Label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
