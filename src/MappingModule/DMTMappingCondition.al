@@ -1,4 +1,4 @@
-table 110037 "DMTMappingCondition"
+table 110045 "DMTMappingCondition"
 {
     fields
     {

@@ -1,4 +1,4 @@
-table 110040 DMTMappingRule
+table 110046 DMTMappingRule
 {
     DataClassification = ToBeClassified;
 

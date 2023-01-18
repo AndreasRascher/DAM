@@ -1,4 +1,4 @@
-table 110038 DMTMapping
+table 110011 DMTMapping
 {
     fields
     {
