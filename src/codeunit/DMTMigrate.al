@@ -111,6 +111,8 @@ codeunit 110017 DMTMigrate
         RecordWasSkipped, RecordHadErrors : Boolean;
         Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
         Start: DateTime;
+        DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
+        TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -145,13 +147,13 @@ codeunit 110017 DMTMigrate
         ProgressDialog.AppendText('\Record:');
         ProgressDialog.AddField(42, Control::NoofRecord);
         ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\Duration:');
+        ProgressDialog.AppendText('\' + DurationLbl + ':');
         ProgressDialog.AddField(42, Control::"Duration");
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Progress:');
         ProgressDialog.AddBar(42, Control::Progress);
         ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\Time Remaining:');
+        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
         ProgressDialog.AddField(42, Control::TimeRemaining);
         ProgressDialog.AppendTextLine('');
         ProgressDialog.Open();
@@ -202,7 +204,7 @@ codeunit 110017 DMTMigrate
             end;
     end;
 
-    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; RecordWasSkipped: Boolean; RecordHadErrors: Boolean)
+    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var RecordWasSkipped: Boolean; var RecordHadErrors: Boolean)
     var
         ErrorLog: Record DMTErrorLog;
         ProcessRecord: Codeunit DMTProcessRecord;
@@ -222,11 +224,13 @@ codeunit 110017 DMTMigrate
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
+            RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
         end else begin
             ProcessRecord.InitInsert();
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
+            RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
         end;
 
         RecordHadErrors := ProcessRecord.SaveErrorLog();

@@ -1943,6 +1943,16 @@
           <note from="Developer" annotates="general" priority="2">Kein Feldmapping gefunden für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Duration</source>
+          <note from="Developer" annotates="general" priority="2">de-DE Dauer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType DurationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time Remaining</source>
+          <note from="Developer" annotates="general" priority="2">de-DE Verbleibende Zeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType TimeRemainingLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2885896688 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
