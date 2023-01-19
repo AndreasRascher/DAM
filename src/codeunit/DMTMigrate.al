@@ -227,6 +227,7 @@ codeunit 110017 "DMTMigrate"
     local procedure EditView(var BufferRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings) Continue: Boolean
     var
         DataFile: Record DMTDataFile;
+        FPBuilder: Codeunit DMTFPBuilder;
     begin
         Continue := true; // Canceling the dialog should stop th process
 
@@ -238,7 +239,7 @@ codeunit 110017 "DMTMigrate"
         end;
 
         DataFile.Get(DMTImportSettings.DataFile().RecordId);
-        if not ShowRequestPageFilterDialog(BufferRef, DataFile) then
+        if not FPBuilder.RunModal(BufferRef, DataFile, true) then
             exit(false);
         if BufferRef.HasFilter then begin
             DataFile.WriteSourceTableView(BufferRef.GetView());
@@ -275,43 +276,6 @@ codeunit 110017 "DMTMigrate"
                 CollationProblems.Add(RecordMapping.Keys.Get(LastIndex), RecordMapping.Values.Get(LastIndex));
             end;
         end;
-    end;
-
-    procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DataFile: Record DMTDataFile) Continue: Boolean;
-    var
-        FieldMapping: Record DMTFieldMapping;
-        GenBuffTable: Record DMTGenBuffTable;
-        FPBuilder: FilterPageBuilder;
-        Index: Integer;
-        PrimaryKeyRef: KeyRef;
-        Debug: Text;
-    begin
-        FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
-        if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
-
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if DataFile.FilterRelated(FieldMapping) then begin
-                // Init Captions
-                if GenBuffTable.FilterBy(DataFile) then
-                    if GenBuffTable.FindFirst() then
-                        GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
-                Debug := GenBuffTable.FieldCaption(Fld001);
-                FieldMapping.SetRange("Is Key Field(Target)", true);
-                if FieldMapping.FindSet() then
-                    repeat
-                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, FieldMapping."Source Field No.");
-                    until FieldMapping.Next() = 0;
-            end;
-        end else begin
-            // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
-            PrimaryKeyRef := BufferRef.KeyIndex(1);
-            for Index := 1 to PrimaryKeyRef.FieldCount do
-                FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
-        end;
-        // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RunModal();
-        BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
     procedure CheckMappedFieldsExist(DataFile: Record DMTDataFile)
@@ -353,11 +317,4 @@ codeunit 110017 "DMTMigrate"
 
     var
         StepIndex: Option Process,ResultOK,ResultError,Skipped;
-        ProgressBarText_DurationTok: Label '\Duration:        ########################################3#';
-        ProgressBarText_FilterTok: Label '\Filter:       ########################################1#';
-        ProgressBarText_ProgressTok: Label '\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@';
-        ProgressBarText_RecordTok: Label '\Record:    ########################################2#';
-        ProgressBarText_TimeRemainingTok: Label '\Time Remaining: ########################################5#';
-        ProgressBarText_TitleTok: Label '_________________________%1_________________________', Locked = true;
-
 }

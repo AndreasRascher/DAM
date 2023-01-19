@@ -131,8 +131,8 @@ page 110029 DMTUpdateTaskNew
 
     local procedure GetSelectedFieldsList() FieldsListAsText: Text
     var
-        ID: Integer;
         FieldMapping: Record DMTFieldMapping;
+        ID: Integer;
     begin
         foreach ID in SelectedFields do begin
             FieldMapping.Get(CurrDataFile.ID, ID);

@@ -32,9 +32,9 @@ codeunit 110015 "DMTImportSettings"
         exit(NoUserInteractionGlobal);
     end;
 
-    procedure DataFile(var DataFile: Record DMTDataFile)
+    procedure DataFile(var DataFileNew: Record DMTDataFile)
     begin
-        DataFileGlobal.Copy(DataFile);
+        DataFileGlobal.Copy(DataFileNew);
     end;
 
     procedure DataFile() DataFile: Record DMTDataFile

@@ -650,23 +650,23 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure AddDataFiles()
     var
-        DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
+        TempDataFile_Selected: Record DMTDataFileBuffer temporary;
         DMTSelectDataFile: Page DMTSelectDataFile;
     begin
         DMTSelectDataFile.LookupMode(true);
         if DMTSelectDataFile.RunModal() <> Action::LookupOK then
             exit;
-        if not DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
+        if not DMTSelectDataFile.GetSelection(TempDataFile_Selected) then
             exit;
-        DataFileBuffer_Selected.SetRange("File is already assigned", false);
-        DataFileBuffer_Selected.SetFilter("Target Table ID", '<>0');
-        if not DataFileBuffer_Selected.FindSet() then begin
+        TempDataFile_Selected.SetRange("File is already assigned", false);
+        TempDataFile_Selected.SetFilter("Target Table ID", '<>0');
+        if not TempDataFile_Selected.FindSet() then begin
             Message('Keine neuen Dateien mit Zieltabellennr. gefunden.');
             exit;
         end;
         repeat
-            AddNewDataFile(DataFileBuffer_Selected);
-        until DataFileBuffer_Selected.Next() = 0;
+            AddNewDataFile(TempDataFile_Selected);
+        until TempDataFile_Selected.Next() = 0;
     end;
 
     procedure AddNewDataFile(DataFileBuffer: Record DMTDataFileBuffer)
@@ -747,12 +747,9 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure UploadFileToDefaultFolder()
     var
-        DMTSetup: Record DMTSetup;
         Setup: Record DMTSetup;
         FileMgt: Codeunit "File Management";
         TempBlob: Codeunit "Temp Blob";
-        FieldImport: XmlPort DMTFieldBufferImport;
-        FileFound: Boolean;
         ServerFile: File;
         InStr: InStream;
         ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
@@ -777,19 +774,19 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure ExportTargetTableToCSV(Rec: Record DMTDataFile)
     var
-        DMTCodeGenerator: Codeunit DMTCodeGenerator;
         Field: Record Field;
+        DMTCodeGenerator: Codeunit DMTCodeGenerator;
+        FileManagement: Codeunit "File Management";
+        tempBlob: Codeunit "Temp Blob";
         RecRef: RecordRef;
         TabChar: Char;
-        LineNo: Integer;
-        FieldValue: Text;
-        FileManagement: Codeunit "File Management";
-        FileContent: TextBuilder;
-        tempBlob: Codeunit "Temp Blob";
         iStr: InStream;
+        LineNo: Integer;
         oStr: OutStream;
+        FieldValue: Text;
         Line: Text;
         Content: TextBuilder;
+        FileContent: TextBuilder;
     begin
         TabChar := 9;
         if Rec."Target Table ID" = 0 then exit;

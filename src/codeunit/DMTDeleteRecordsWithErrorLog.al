@@ -39,7 +39,7 @@ codeunit 110014 DMTDeleteRecordsWithErrorLog
 
     procedure showErrors()
     var
-        TmpErrorMessage: Record "Error Message" temporary;
+        TempErrorMessage: Record "Error Message" temporary;
         RecID: RecordId;
         ErrorItem: Dictionary of [Text, Text];
         ID: Integer;
@@ -47,16 +47,16 @@ codeunit 110014 DMTDeleteRecordsWithErrorLog
         if ErrorLogDict.Count = 0 then exit;
         foreach RecID in ErrorLogDict.Keys do begin
             ErrorItem := ErrorLogDict.Get(RecID);
-            Clear(TmpErrorMessage);
+            Clear(TempErrorMessage);
             ID += 1;
-            TmpErrorMessage.ID := ID;
-            TmpErrorMessage."Record ID" := RecID;
-            TmpErrorMessage."Field Name" := CopyStr(Format(RecID), 1, MaxStrLen(TmpErrorMessage."Field Name"));
-            TmpErrorMessage.Description := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(TmpErrorMessage.Description));
-            TmpErrorMessage.SetErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'));
-            TmpErrorMessage.Insert();
+            TempErrorMessage.ID := ID;
+            TempErrorMessage."Record ID" := RecID;
+            TempErrorMessage."Field Name" := CopyStr(Format(RecID), 1, MaxStrLen(TempErrorMessage."Field Name"));
+            TempErrorMessage.Description := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(TempErrorMessage.Description));
+            TempErrorMessage.SetErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'));
+            TempErrorMessage.Insert();
         end;
-        Page.Run(Page::"Error Messages", TmpErrorMessage);
+        Page.Run(Page::"Error Messages", TempErrorMessage);
     end;
 
     procedure DialogOpen(Dialogtext: Text)

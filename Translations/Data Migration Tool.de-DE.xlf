@@ -2283,18 +2283,6 @@
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?\Filter:"%4"</source>
-          <target>Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"</target>
-          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 2869150615" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Run with OnDelete Trigger?</source>
-          <target>Mit OnDelete Triggern ausführen?</target>
-          <note from="Developer" annotates="general" priority="2">Mit OnDelete Triggern ausführen?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType UseOnDeleteTriggerQst</note>
-        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <target>Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
@@ -2336,36 +2324,6 @@
           <target>"%1" ist kein gültiger %2 Wert</target>
           <note from="Developer" annotates="general" priority="2">"%1" ist kein gültiger %2 Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMgt - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 2070409300" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Duration:        ########################################3#</source>
-          <target>\Dauer:           ########################################3#</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_DurationTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 677652026" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Filter:       ########################################1#</source>
-          <target>\Filter:       ########################################1#</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_FilterTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 3540513133" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</source>
-          <target>\Fortschritt:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_ProgressTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 1472015365" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Record:    ########################################2#</source>
-          <target>\Datensatz: ########################################2#</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_RecordTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 3772374561" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Time Remaining: ########################################5#</source>
-          <target>\Restlaufzeit: ########################################5#</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 3471974442" size-unit="char" translate="yes" xml:space="preserve">
           <source>No field mapping found for "%1"</source>
@@ -2888,6 +2846,48 @@
           <target>Backup importieren</target>
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileList - Action XMLImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Data in Target Table</source>
+          <target>Daten in Zieltabelle löschen</target>
+          <note from="Developer" annotates="general" priority="2">Daten in Zieltabelle löschen</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Method 1361802906 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?</source>
+          <target>Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</target>
+          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Method ConfirmDeletion - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Control 3501145842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table Filter</source>
+          <target>Herkunftstabelle Filter</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control SourceTableView - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Control 1955418601 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table Filter</source>
+          <target>Zieltabelle Filter</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control TargetTableFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Control 2516837557 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use On Delete Trigger</source>
+          <target>Mit OnDelete Trigger ausführen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control UseOnDeleteTrigger - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Action 1386164311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start</source>
+          <target>Starten</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Action StartDeletingCtrl - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 97409727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>ErrorLog Summary</source>

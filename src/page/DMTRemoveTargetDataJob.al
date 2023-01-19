@@ -47,7 +47,10 @@ page 110024 DMTDeleteDatainTargetTable
                 Image = Start;
                 trigger OnAction();
                 begin
-                    StartDeleting();
+                    if (TargetTableView <> '') or (SourceTableView <> '') then
+                        StartDeletingWithTableView()
+                    else
+                        DeleteFullTable()
                 end;
             }
         }
@@ -60,13 +63,13 @@ page 110024 DMTDeleteDatainTargetTable
 
     procedure EditSourceTableView()
     var
+        FPBuilder: Codeunit DMTFPBuilder;
         BufferRef: RecordRef;
     begin
         InitBufferRef(CurrDataFile, BufferRef);
         if SourceTableView <> '' then
             BufferRef.SetView(SourceTableView);
-
-        if not ShowRequestPageFilterDialog(BufferRef, CurrDataFile) then
+        if not FPBuilder.RunModal(BufferRef, CurrDataFile, true) then
             exit;
         SourceTableView := BufferRef.GetView();
         SourceTableFilter := BufferRef.GetFilters;
@@ -75,12 +78,13 @@ page 110024 DMTDeleteDatainTargetTable
     procedure EditTargetTableFilter()
     var
         DMTCopyTable: Record DMTCopyTable;
+        FPBuilder: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
     begin
         RecRef.Open(CurrDataFile."Target Table ID");
         if TargetTableView <> '' then
             RecRef.SetView(TargetTableView);
-        if DMTCopyTable.ShowRequestPageFilterDialog(RecRef) then begin
+        if FPBuilder.RunModal(RecRef, true) then begin
             TargetTableView := RecRef.GetView();
             TargetTableFilter := RecRef.GetFilters;
         end;
@@ -103,43 +107,6 @@ page 110024 DMTDeleteDatainTargetTable
             end;
     end;
 
-    local procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef; var DataFile: Record DMTDataFile) Continue: Boolean;
-    var
-        FieldMapping: Record DMTFieldMapping;
-        GenBuffTable: Record DMTGenBuffTable;
-        FPBuilder: FilterPageBuilder;
-        Index: Integer;
-        PrimaryKeyRef: KeyRef;
-        Debug: Text;
-    begin
-        FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
-        if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
-
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            if DataFile.FilterRelated(FieldMapping) then begin
-                // Init Captions
-                if GenBuffTable.FilterBy(DataFile) then
-                    if GenBuffTable.FindFirst() then
-                        GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
-                Debug := GenBuffTable.FieldCaption(Fld001);
-                FieldMapping.SetRange("Is Key Field(Target)", true);
-                if FieldMapping.FindSet() then
-                    repeat
-                        FPBuilder.AddFieldNo(GenBuffTable.TableCaption, FieldMapping."Source Field No.");
-                    until FieldMapping.Next() = 0;
-            end;
-        end else begin
-            // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
-            PrimaryKeyRef := BufferRef.KeyIndex(1);
-            for Index := 1 to PrimaryKeyRef.FieldCount do
-                FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
-        end;
-        // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RunModal();
-        BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
-    end;
-
     local procedure CreateSourceToTargetRecIDMapping(DataFile: Record DMTDataFile; SourceView: Text; var NotTransferedRecords: List of [RecordId]) RecordMapping: Dictionary of [RecordId, RecordId]
     var
         TempFieldMapping: Record DMTFieldMapping temporary;
@@ -150,7 +117,7 @@ page 110024 DMTDeleteDatainTargetTable
         Clear(NotTransferedRecords);
         Clear(RecordMapping);
 
-        LoadFieldMapping(DataFile, false, TempFieldMapping);
+        LoadFieldMapping(DataFile, TempFieldMapping);
         // FindSourceRef - GenBuffer
         if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
             if not DMTGenBuffTable.FindSetLinesByFileNameWithoutCaptionLine(DataFile) then
@@ -181,7 +148,7 @@ page 110024 DMTDeleteDatainTargetTable
         until SourceRef.Next() = 0;
     end;
 
-    local procedure LoadFieldMapping(DataFile: Record DMTDataFile; UseToFieldFilter: Boolean; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
+    local procedure LoadFieldMapping(DataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
     var
         FieldMapping: Record DMTFieldMapping;
     begin
@@ -219,30 +186,89 @@ page 110024 DMTDeleteDatainTargetTable
         until TmpFieldMapping.Next() = 0;
     end;
 
-    local procedure StartDeleting()
+    local procedure StartDeletingWithTableView()
     var
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
         RecID: RecordId;
-        RecordMapping: Dictionary of [RecordId, RecordId];
+        RecordMapping, RecordMapping2 : Dictionary of [RecordId, RecordId];
         MaxSteps, StepCount : Integer;
         NotTransferedRecords: List of [RecordId];
     begin
+        // Create RecordID Mapping between Buffer and Target Table
         RecordMapping := CreateSourceToTargetRecIDMapping(CurrDataFile, SourceTableView, NotTransferedRecords);
+        // Remove TargetRecordID not in Filter
+        if TargetTableView <> '' then begin
+            RecordMapping2 := RecordMapping;
+            foreach RecID in RecordMapping2.Values do begin
+                if not IsRecIDInView(RecID, TargetTableView) then begin
+                    RecordMapping2.Remove(RecID);
+                end;
+            end;
+            RecordMapping := RecordMapping2;
+        end;
         MaxSteps := RecordMapping.Values.Count;
         CurrDataFile.CalcFields("Target Table Caption");
-        DeleteRecordsWithErrorLog.DialogOpen(CurrDataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
-        foreach RecID in RecordMapping.Values do begin
-            if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecID) then begin
-                DeleteRecordsWithErrorLog.showErrors();
-                Error('Process Stopped');
+        if ConfirmDeletion(MaxSteps, CurrDataFile."Target Table Caption") then begin
+            DeleteRecordsWithErrorLog.DialogOpen(CurrDataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
+            foreach RecID in RecordMapping.Values do begin
+                if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecID) then begin
+                    DeleteRecordsWithErrorLog.showErrors();
+                    Error('Process Stopped');
+                end;
+                StepCount += 1;
+                Commit();
+                DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, UseOnDeleteTrigger);
+                if not DeleteRecordsWithErrorLog.Run() then
+                    DeleteRecordsWithErrorLog.LogLastError();
             end;
-            StepCount += 1;
-            Commit();
-            DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, UseOnDeleteTrigger);
-            if not DeleteRecordsWithErrorLog.Run() then
-                DeleteRecordsWithErrorLog.LogLastError();
+            DeleteRecordsWithErrorLog.showErrors();
         end;
-        DeleteRecordsWithErrorLog.showErrors();
+    end;
+
+    local procedure IsRecIDInView(RecID: RecordId; TableView: Text) Result: Boolean;
+    var
+        RecRef: RecordRef;
+    begin
+        if TableView = '' then exit(true);
+        RecRef.Get(RecID);
+        RecRef.SetView(TableView);
+        Result := RecRef.FindFirst();
+    end;
+
+    local procedure ConfirmDeletion(NoOfLinesToDelete: Integer; TableCaption: Text) OK: Boolean
+    var
+        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?',
+                                             Comment = 'Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?';
+    begin
+        OK := Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, NoOfLinesToDelete, TableCaption, CompanyName), false);
+    end;
+
+    local procedure DeleteFullTable()
+    var
+        DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
+        RecRef: RecordRef;
+        MaxSteps, StepCount : Integer;
+    begin
+        CurrDataFile.TestField("Target Table ID");
+        RecRef.Open(CurrDataFile."Target Table ID");
+        MaxSteps := RecRef.Count;
+        if ConfirmDeletion(MaxSteps, RecRef.Caption) then begin
+            if RecRef.FindSet() then begin
+                DeleteRecordsWithErrorLog.DialogOpen(RecRef.Caption + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
+                repeat
+                    if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecRef.RecordId) then begin
+                        DeleteRecordsWithErrorLog.showErrors();
+                        Error('Process Stopped');
+                    end;
+                    StepCount += 1;
+                    Commit();
+                    DeleteRecordsWithErrorLog.InitRecordToDelete(RecRef.RecordId, UseOnDeleteTrigger);
+                    if not DeleteRecordsWithErrorLog.Run() then
+                        DeleteRecordsWithErrorLog.LogLastError();
+                until RecRef.Next() = 0;
+                DeleteRecordsWithErrorLog.showErrors();
+            end;
+        end;
     end;
 
     procedure SetDataFileID(DataFile: Record DMTDataFile)

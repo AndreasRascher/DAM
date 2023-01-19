@@ -1903,16 +1903,6 @@
           <note from="Developer" annotates="general" priority="2">Pfad Schemadatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Schema.csv File Path - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?\Filter:"%4"</source>
-          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 633686693 - Method 116037593 - NamedType 2869150615" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Run with OnDelete Trigger?</source>
-          <note from="Developer" annotates="general" priority="2">Mit OnDelete Triggern ausführen?</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ChangeRecordWithPerm - Method DeleteRecordsInTargetTable - NamedType UseOnDeleteTriggerQst</note>
-        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
@@ -1947,31 +1937,6 @@
           <source>"%1" is not a valid %2 value.</source>
           <note from="Developer" annotates="general" priority="2">"%1" ist kein gültiger %2 Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMgt - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 2070409300" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Duration:        ########################################3#</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_DurationTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 677652026" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Filter:       ########################################1#</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_FilterTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 3540513133" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Progress:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4@</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_ProgressTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 1472015365" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Record:    ########################################2#</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_RecordTok</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - NamedType 3772374561" size-unit="char" translate="yes" xml:space="preserve">
-          <source>\Time Remaining: ########################################5#</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - NamedType ProgressBarText_TimeRemainingTok</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 3471974442" size-unit="char" translate="yes" xml:space="preserve">
           <source>No field mapping found for "%1"</source>
@@ -2412,6 +2377,11 @@
           <source>Delete Data in Target Table</source>
           <note from="Developer" annotates="general" priority="2">Daten in Zieltabelle löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 660687000 - Method 1361802906 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?</source>
+          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Method ConfirmDeletion - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Control 3501145842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Table Filter</source>
