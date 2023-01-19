@@ -1,4 +1,4 @@
-codeunit 110015 "DMTImportSettings"
+codeunit 110015 DMTImportSettings
 {
     procedure SourceTableView(SourceTableViewNEW: Text)
     begin
@@ -63,9 +63,9 @@ codeunit 110015 "DMTImportSettings"
         exit(UpdateFieldsFilterGlobal);
     end;
 
-    procedure RecIdToProcessList(var RecIdToProcessList: List of [RecordId])
+    procedure RecIdToProcessList(var RecIdToProcessListNew: List of [RecordId])
     begin
-        RecIdToProcessListGlobal := RecIdToProcessList;
+        RecIdToProcessListGlobal := RecIdToProcessListNew;
     end;
 
     procedure RecIdToProcessList(): List of [RecordId]

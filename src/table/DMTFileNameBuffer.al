@@ -36,6 +36,7 @@ table 110048 DMTDataFileBuffer
     keys
     {
         key(Key1; Path, Name) { Clustered = true; }
+        key(Key2; DateTime) { }
     }
 
 

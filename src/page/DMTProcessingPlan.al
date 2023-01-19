@@ -14,7 +14,7 @@ page 110015 DMTProcessingPlan
     {
         area(Content)
         {
-            repeater("EditRepeater")
+            repeater(EditRepeater)
             {
                 IndentationColumn = Rec.Indentation;
                 IndentationControls = DescriptionEdit;
@@ -25,8 +25,8 @@ page 110015 DMTProcessingPlan
                 field(ProcessingTimeEdit; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTimeEdit; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StatusEdit; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("SourceTableNoEdit"; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("LineNoEdit"; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
+                field(SourceTableNoEdit; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field(LineNoEdit; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
             repeater("Repeater")
             {
@@ -283,19 +283,19 @@ page 110015 DMTProcessingPlan
         until ProcessingPlan_SELECTED.Next() = 0;
     end;
 
-    local procedure ResetLines(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
+    local procedure ResetLines(var ProcessingPlan_SELECTED_NEW: Record DMTProcessingPlan temporary)
     var
         ProcessingPlan: Record DMTProcessingPlan;
     begin
-        if not ProcessingPlan_SELECTED.FindSet then exit;
+        if not ProcessingPlan_SELECTED_NEW.FindSet then exit;
         repeat
-            ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
+            ProcessingPlan.Get(ProcessingPlan_SELECTED_NEW.RecordId);
             Clear(ProcessingPlan.Status);
             Clear(ProcessingPlan.StartTime);
             Clear(ProcessingPlan."Processing Duration");
             ProcessingPlan.Modify();
             Commit();
-        until ProcessingPlan_SELECTED.Next() = 0;
+        until ProcessingPlan_SELECTED_NEW.Next() = 0;
     end;
 
     local procedure SetStatusToStartAndCommit(var ProcessingPlan: Record DMTProcessingPlan)

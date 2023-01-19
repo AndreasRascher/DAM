@@ -136,7 +136,7 @@ page 110029 DMTUpdateTaskNew
     begin
         foreach ID in SelectedFields do begin
             FieldMapping.Get(CurrDataFile.ID, ID);
-            FieldMapping.Calcfields("Target Field Caption");
+            FieldMapping.CalcFields("Target Field Caption");
             FieldsListAsText += ', ' + FieldMapping."Target Field Caption";
         end;
         FieldsListAsText := FieldsListAsText.TrimStart(', ');

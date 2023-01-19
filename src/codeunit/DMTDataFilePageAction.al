@@ -776,21 +776,19 @@ codeunit 110013 DMTDataFilePageAction
     var
         Field: Record Field;
         DMTCodeGenerator: Codeunit DMTCodeGenerator;
-        FileManagement: Codeunit "File Management";
-        tempBlob: Codeunit "Temp Blob";
+        FPBuilder: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
         TabChar: Char;
-        iStr: InStream;
         LineNo: Integer;
-        oStr: OutStream;
         FieldValue: Text;
         Line: Text;
         Content: TextBuilder;
-        FileContent: TextBuilder;
     begin
         TabChar := 9;
         if Rec."Target Table ID" = 0 then exit;
         RecRef.Open(Rec."Target Table ID");
+        if not FPBuilder.RunModal(RecRef, true) then
+            exit;
         if not RecRef.FindSet() then exit;
 
         Field.SetRange(TableNo, RecRef.Number);
@@ -826,7 +824,6 @@ codeunit 110013 DMTDataFilePageAction
     var
         fieldRef: FieldRef;
         _Integer: Integer;
-        _Text: Text[1024];
         _Decimal: Decimal;
         _Date: Date;
         _Time: Time;

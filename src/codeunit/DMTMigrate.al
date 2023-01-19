@@ -1,4 +1,4 @@
-codeunit 110017 "DMTMigrate"
+codeunit 110017 DMTMigrate
 {
     /// <summary>
     /// Process buffer records defined by RecordIds
@@ -126,7 +126,7 @@ codeunit 110017 "DMTMigrate"
         //Prepare Progress Bar
         if not BufferRef.FindSet() then
             Error('Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"', BufferRef.GetFilters);
-        DataFile.Calcfields("Target Table Caption");
+        DataFile.CalcFields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
         if StrLen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
@@ -281,7 +281,7 @@ codeunit 110017 "DMTMigrate"
     procedure CheckMappedFieldsExist(DataFile: Record DMTDataFile)
     var
         FieldMapping: Record DMTFieldMapping;
-        FieldMappingEmptyErr: label 'No field mapping found for "%1"', comment = 'Kein Feldmapping gefunden für "%1"';
+        FieldMappingEmptyErr: Label 'No field mapping found for "%1"', comment = 'Kein Feldmapping gefunden für "%1"';
     begin
         // Key Fields Mapping Exists
         DataFile.FilterRelated(FieldMapping);

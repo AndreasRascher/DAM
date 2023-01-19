@@ -1,4 +1,4 @@
-codeunit 110018 "DMTMappingMgt"
+codeunit 110018 DMTMappingMgt
 {
     procedure GetMappingForRef(FieldMapping: Record DMTFieldMapping; var SourceRef: RecordRef)
     begin

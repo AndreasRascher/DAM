@@ -174,27 +174,27 @@ codeunit 110012 DMTProcessRecord
         end;
     end;
 
-    procedure AddEntryForLastError(SourceRef: RecordRef; TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text]);
+    procedure AddEntryForLastError(_SourceRef: RecordRef; _TargetRef: RecordRef; _FieldMapping: Record DMTFieldMapping; _ErrorItem: Dictionary of [Text, Text]);
     var
         _DMTErrorlog: Record DMTErrorLog;
     begin
         _DMTErrorlog.DataFileName := DataFile.Name;
         _DMTErrorlog.DataFilePath := DataFile.Path;
 
-        _DMTErrorlog."From ID" := SourceRef.RecordId;
-        _DMTErrorlog."To ID" := TargetRef.RecordId;
+        _DMTErrorlog."From ID" := _SourceRef.RecordId;
+        _DMTErrorlog."To ID" := _TargetRef.RecordId;
         _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
         _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."To ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
 
-        _DMTErrorlog."Import from Table No." := SourceRef.Number;
-        _DMTErrorlog."Import from Field No." := FieldMapping."Source Field No.";
-        _DMTErrorlog."Import to Table No." := FieldMapping."Target Table ID";
-        _DMTErrorlog."Import to Field No." := FieldMapping."Target Field No.";
-        _DMTErrorlog."Ignore Error" := FieldMapping."Ignore Validation Error";
-        _DMTErrorlog.Errortext := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
-        _DMTErrorlog.ErrorCode := CopyStr(ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
-        _DMTErrorlog."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
-        _DMTErrorlog.SaveErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'), false);
+        _DMTErrorlog."Import from Table No." := _SourceRef.Number;
+        _DMTErrorlog."Import from Field No." := _FieldMapping."Source Field No.";
+        _DMTErrorlog."Import to Table No." := _FieldMapping."Target Table ID";
+        _DMTErrorlog."Import to Field No." := _FieldMapping."Target Field No.";
+        _DMTErrorlog."Ignore Error" := _FieldMapping."Ignore Validation Error";
+        _DMTErrorlog.Errortext := CopyStr(_ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
+        _DMTErrorlog.ErrorCode := CopyStr(_ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
+        _DMTErrorlog."Error Field Value" := CopyStr(_ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
+        _DMTErrorlog.SaveErrorCallStack(_ErrorItem.Get('GetLastErrorCallStack'), false);
         _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
         _DMTErrorlog.Insert();

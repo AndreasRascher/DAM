@@ -8,7 +8,7 @@ table 110046 DMTMappingRule
         field(2; "Line No"; Integer) { Caption = 'Line No'; }
         field(10; "Original Value"; Text[250]) { Caption = 'Original Value', Comment = 'Urspr. Wert'; }
         field(20; Conditions; Text[250]) { Caption = 'Conditions'; }
-        field(30; "MappingValues"; Text[250]) { Caption = 'Mapping Values'; }
+        field(30; MappingValues; Text[250]) { Caption = 'Mapping Values'; }
     }
     keys
     {

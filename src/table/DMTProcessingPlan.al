@@ -98,7 +98,7 @@ table 110010 DMTProcessingPlan
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        if FPBuilder.Runmodal(BufferRef, DataFile, true) then begin
+        if FPBuilder.RunModal(BufferRef, DataFile, true) then begin
             SaveSourceTableFilter(BufferRef.GetView());
         end;
     end;
@@ -107,7 +107,6 @@ table 110010 DMTProcessingPlan
     var
         DataFile: Record DMTDataFile;
         FPBuilder: Codeunit DMTFPBuilder;
-        Migrate: Codeunit DMTMigrate;
         TargetRef: RecordRef;
         CurrView: Text;
     begin
@@ -227,7 +226,7 @@ table 110010 DMTProcessingPlan
 
     procedure ConvertSourceTableFilterToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
     var
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        TempFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
@@ -240,16 +239,16 @@ table 110010 DMTProcessingPlan
             if RecRef.HasFilter then
                 for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
-                        TmpFieldMapping2."Data File ID" := Rec.ID;
-                        TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
-                        TmpFieldMapping2."Source Field Caption" := RecRef.FieldIndex(FieldIndexNo).Caption;
-                        TmpFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2.Comment));
-                        TmpFieldMapping2.Insert();
+                        TempFieldMapping2."Data File ID" := Rec.ID;
+                        TempFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
+                        TempFieldMapping2."Source Field Caption" := RecRef.FieldIndex(FieldIndexNo).Caption;
+                        TempFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempFieldMapping2.Comment));
+                        TempFieldMapping2.Insert();
                     end;
                 end;
         end;
 
-        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        TmpFieldMapping.Copy(TempFieldMapping2, true);
     end;
 
     procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
