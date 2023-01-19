@@ -202,10 +202,10 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
+                    Migrate: Codeunit DMTMigrate;
                     CollationProblems: Dictionary of [RecordId, RecordId];
                     RecordMapping: Dictionary of [RecordId, RecordId];
                     NotTransferedRecords: List of [RecordId];
-                    Migrate: Codeunit DMTMigrate;
                 begin
                     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
                     CollationProblems := Migrate.FindCollationProblems(RecordMapping);

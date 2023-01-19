@@ -241,7 +241,7 @@ table 110010 DMTProcessingPlan
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         TempFieldMapping2."Data File ID" := Rec.ID;
                         TempFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
-                        TempFieldMapping2."Source Field Caption" := RecRef.FieldIndex(FieldIndexNo).Caption;
+                        TempFieldMapping2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TempFieldMapping2."Source Field Caption"));
                         TempFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempFieldMapping2.Comment));
                         TempFieldMapping2.Insert();
                     end;
@@ -283,7 +283,7 @@ table 110010 DMTProcessingPlan
     var
         DataFile: Record DMTDataFile;
         FieldMapping: Record DMTFieldMapping;
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        TempFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldNoFilter: Text;
     begin
@@ -296,12 +296,12 @@ table 110010 DMTProcessingPlan
             FieldMapping.SetFilter("Target Field No.", FieldNoFilter);
             if FieldMapping.FindSet(false, false) then
                 repeat
-                    TmpFieldMapping2 := FieldMapping;
-                    TmpFieldMapping2.Insert();
+                    TempFieldMapping2 := FieldMapping;
+                    TempFieldMapping2.Insert();
                 until FieldMapping.Next() = 0;
         end;
 
-        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        TmpFieldMapping.Copy(TempFieldMapping2, true);
         LineCount := TmpFieldMapping.Count;
     end;
 

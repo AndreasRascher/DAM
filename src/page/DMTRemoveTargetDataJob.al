@@ -77,7 +77,6 @@ page 110024 DMTDeleteDatainTargetTable
 
     procedure EditTargetTableFilter()
     var
-        DMTCopyTable: Record DMTCopyTable;
         FPBuilder: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
     begin

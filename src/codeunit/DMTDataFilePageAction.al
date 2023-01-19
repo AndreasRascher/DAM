@@ -823,12 +823,11 @@ codeunit 110013 DMTDataFilePageAction
     local procedure GetFormattedFieldValue(recRef: RecordRef; fieldNo: Integer) _Result: Text[250];
     var
         fieldRef: FieldRef;
-        _Integer: Integer;
-        _Decimal: Decimal;
-        _Date: Date;
-        _Time: Time;
         _Boolean: Boolean;
-        _Field: Record Field;
+        _Date: Date;
+        _Decimal: Decimal;
+        _Integer: Integer;
+        _Time: Time;
     begin
         //* returns values in xmlformat, handles problems with field.type optionstring bug
         fieldRef := recRef.Field(fieldNo);

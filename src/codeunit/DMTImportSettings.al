@@ -84,10 +84,10 @@ codeunit 110015 DMTImportSettings
     end;
 
     var
-        SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
-        NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
         TempFieldMappingGlobal: Record DMTFieldMapping temporary;
         DataFileGlobal: Record DMTDataFile;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
+        SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
+        NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
 }

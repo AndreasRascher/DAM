@@ -276,9 +276,9 @@ page 110027 DMTDataFileList
 
                 trigger OnAction()
                 var
+                    TableMetadata: Record "Table Metadata";
                     XMLBackup: Codeunit DMTXMLBackup;
                     TablesToExport: List of [Integer];
-                    TableMetadata: Record "Table Metadata";
                 begin
                     TableMetadata.Get(Database::DMTDataFile);
                     TablesToExport.Add(Database::DMTDataFile);
