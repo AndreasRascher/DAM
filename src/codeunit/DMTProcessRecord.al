@@ -10,11 +10,15 @@ codeunit 110012 DMTProcessRecord
         if RunMode = RunMode::FieldTransfer then begin
             if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
-            if not SkipRecord then
+            if (not SkipInsert) or UpdateFieldsInExistingRecordsOnly then
                 ProcessNonKeyFields();
         end;
 
         if RunMode = RunMode::InsertRecord then begin
+            SaveRecord();
+        end;
+
+        if RunMode = RunMode::ModifyRecord then begin
             SaveRecord();
         end;
     end;
@@ -77,24 +81,26 @@ codeunit 110012 DMTProcessRecord
                 ProcessedFields.Add(TempFieldMapping.RecordId);
             end;
         until TempFieldMapping.Next() = 0;
-        SkipRecord := false;
+        SkipInsert := false;
         case true of
-            UpdateExistingRecordsOnly:
+            // Nur vorhandene Datensätze updaten. Felder aus exist. Datensatz kopieren.
+            UpdateFieldsInExistingRecordsOnly:
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
                         DMTMgt.CopyRecordRef(ExistingRef, TmpTargetRef)
                     else
-                        SkipRecord := true; // only update, do not insert record when updating records
+                        SkipInsert := true; // only update, do not insert record when updating records
                 end;
-            DataFile."Import Only New Records" and not UpdateExistingRecordsOnly:
+            // Kein Insert neuer Datensätze
+            DataFile."Import Only New Records" and not UpdateFieldsInExistingRecordsOnly:
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
-                        SkipRecord := true;
+                        SkipInsert := true;
                 end;
             DataFile."Import Only New Records":
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
-                        SkipRecord := true;
+                        SkipInsert := true;
                 end;
         end;
     end;
@@ -103,7 +109,7 @@ codeunit 110012 DMTProcessRecord
     begin
         DataFile := _DataFile;
         SourceRef := _SourceRef;
-        UpdateExistingRecordsOnly := _UpdateExistingRecordsOnly;
+        UpdateFieldsInExistingRecordsOnly := _UpdateExistingRecordsOnly;
         TempFieldMapping.Copy(_TempFieldMapping, true);
         TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
@@ -117,7 +123,7 @@ codeunit 110012 DMTProcessRecord
     begin
         DataFile := DMTImportSettings.DataFile();
         SourceRef := _SourceRef;
-        UpdateExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
+        UpdateFieldsInExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
         DMTImportSettings.GetFieldMapping(TempFieldMapping);
         TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
@@ -130,6 +136,11 @@ codeunit 110012 DMTProcessRecord
     procedure InitInsert()
     begin
         RunMode := RunMode::InsertRecord;
+    end;
+
+    procedure InitModify()
+    begin
+        RunMode := RunMode::ModifyRecord;
     end;
 
     procedure LogLastError()
@@ -151,14 +162,29 @@ codeunit 110012 DMTProcessRecord
     end;
 
     local procedure SaveRecord() Success: Boolean
+    var
+        ExistingRef: RecordRef;
     begin
         Success := true;
-        if SkipRecord then
-            exit(false);
         if ErrorLogDict.Count > 0 then
             exit(false);
         ClearLastError();
-        Success := ChangeRecordWithPerm.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+        case RunMode of
+            RunMode::InsertRecord:
+                begin
+                    if SkipInsert then
+                        exit(false);
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+                end;
+            RunMode::ModifyRecord:
+                begin
+                    // Don't try to modify non-existend TargetRef for field updates
+                    if UpdateFieldsInExistingRecordsOnly then
+                        if not ExistingRef.Get(TmpTargetRef.RecordId) then
+                            exit(false);
+                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+                end;
+        end;
     end;
 
     procedure SaveErrorLog() ErrorsExist: Boolean
@@ -209,12 +235,12 @@ codeunit 110012 DMTProcessRecord
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecord: Boolean;
+        SkipInsert: Boolean;
         // DMTTable: Record DMTTable;
         // TempDMTField: Record DMTField temporary;
-        UpdateExistingRecordsOnly: Boolean;
+        UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
-        RunMode: Option FieldTransfer,InsertRecord;
+        RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
 }

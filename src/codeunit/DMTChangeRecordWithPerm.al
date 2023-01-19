@@ -12,7 +12,7 @@ codeunit 110009 ChangeRecordWithPerm
     end;
 
 
-    procedure InsertRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
     var
         DMTMgt: Codeunit DMTMgt;
         TargetRef: RecordRef;
@@ -26,5 +26,16 @@ codeunit 110009 ChangeRecordWithPerm
         end else begin
             InsertOK := TargetRef.Insert(InsertTrue);
         end;
+    end;
+
+    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean) InsertOK: Boolean
+    var
+        DMTMgt: Codeunit DMTMgt;
+        TargetRef: RecordRef;
+        TargetRef2: RecordRef;
+    begin
+        TargetRef.Open(TmpTargetRef.Number, false);
+        DMTMgt.CopyRecordRef(TmpTargetRef, TargetRef);
+        InsertOK := TargetRef.Modify(UseTrigger);
     end;
 }

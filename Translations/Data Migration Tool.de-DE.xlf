@@ -2851,42 +2851,36 @@
           <source>Delete Data in Target Table</source>
           <target>Daten in Zieltabelle löschen</target>
           <note from="Developer" annotates="general" priority="2">Daten in Zieltabelle löschen</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Method 1361802906 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
           <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?</source>
           <target>Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</target>
           <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Method ConfirmDeletion - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Control 3501145842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Table Filter</source>
           <target>Herkunftstabelle Filter</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control SourceTableView - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Control 1955418601 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table Filter</source>
           <target>Zieltabelle Filter</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control TargetTableFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Control 2516837557 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Use On Delete Trigger</source>
           <target>Mit OnDelete Trigger ausführen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Control UseOnDeleteTrigger - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 660687000 - Action 1386164311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>
           <target>Starten</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDatainTargetTable - Action StartDeletingCtrl - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 97409727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

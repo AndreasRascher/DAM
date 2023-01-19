@@ -45,6 +45,7 @@ codeunit 110017 DMTMigrate
     begin
         DMTImportSettings.DataFile(DataFile);
         DMTImportSettings.UpdateFieldsFilter(DataFile.ReadLastFieldUpdateSelection());
+        DMTImportSettings.UpdateExistingRecordsOnly(true);
         LoadFieldMapping(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
@@ -66,7 +67,7 @@ codeunit 110017 DMTMigrate
         ProcessFullBuffer(DMTImportSettings);
     end;
 
-    local procedure LoadFieldMapping(DMTImportSettings: Codeunit DMTImportSettings) OK: Boolean
+    local procedure LoadFieldMapping(var DMTImportSettings: Codeunit DMTImportSettings) OK: Boolean
     var
         FieldMapping: Record DMTFieldMapping;
         TempFieldMapping, TempFieldMapping_ProcessingPlanSettings : Record DMTFieldMapping temporary;
@@ -160,19 +161,19 @@ codeunit 110017 DMTMigrate
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, RecordWasSkipped, RecordHadErrors);
 
-            // ProgressDialog.NextStep(StepIndex::Process);
-            // case true of
-            //     RecordHadErrors:
-            //         ProgressDialog.NextStep(StepIndex::ResultError);
-            //     RecordWasSkipped:
-            //         ProgressDialog.NextStep(StepIndex::Skipped);
-            //     else
-            //         ProgressDialog.NextStep(StepIndex::ResultOK);
-            // end;
-            // ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
-            // ProgressDialog.UpdateControlWithCustomDuration(Control::Duration, Control::Progress);
-            // ProgressDialog.UpdateProgressBar(Control::Progress, StepIndex::Process);
-            // ProgressDialog.UpdateFieldControl(Control::TimeRemaining, ProgressDialog.GetRemainingTime(Control::Progress, StepIndex::Process));
+            ProgressDialog.NextStep(StepIndex::Process);
+            case true of
+                RecordHadErrors:
+                    ProgressDialog.NextStep(StepIndex::ResultError);
+                RecordWasSkipped:
+                    ProgressDialog.NextStep(StepIndex::Skipped);
+                else
+                    ProgressDialog.NextStep(StepIndex::ResultOK);
+            end;
+            ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
+            ProgressDialog.UpdateControlWithCustomDuration(Control::Duration, Control::Progress);
+            ProgressDialog.UpdateProgressBar(Control::Progress, StepIndex::Process);
+            ProgressDialog.UpdateFieldControl(Control::TimeRemaining, ProgressDialog.GetRemainingTime(Control::Progress, StepIndex::Process));
 
             if ProgressDialog.GetStep(1) mod 50 = 0 then
                 Commit();
@@ -216,10 +217,17 @@ codeunit 110017 DMTMigrate
             ProcessRecord.LogLastError();
         end;
 
-        ProcessRecord.InitInsert();
-        Commit();
-        if not ProcessRecord.Run() then
-            ProcessRecord.LogLastError();
+        if DMTImportSettings.UpdateExistingRecordsOnly() then begin
+            ProcessRecord.InitModify();
+            Commit();
+            if not ProcessRecord.Run() then
+                ProcessRecord.LogLastError();
+        end else begin
+            ProcessRecord.InitInsert();
+            Commit();
+            if not ProcessRecord.Run() then
+                ProcessRecord.LogLastError();
+        end;
 
         RecordHadErrors := ProcessRecord.SaveErrorLog();
     end;
