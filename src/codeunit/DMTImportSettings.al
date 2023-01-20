@@ -1,4 +1,4 @@
-codeunit 110015 "DMTImportSettings"
+codeunit 110015 DMTImportSettings
 {
     procedure SourceTableView(SourceTableViewNEW: Text)
     begin
@@ -32,9 +32,9 @@ codeunit 110015 "DMTImportSettings"
         exit(NoUserInteractionGlobal);
     end;
 
-    procedure DataFile(var DataFile: Record DMTDataFile)
+    procedure DataFile(var DataFileNew: Record DMTDataFile)
     begin
-        DataFileGlobal.Copy(DataFile);
+        DataFileGlobal.Copy(DataFileNew);
     end;
 
     procedure DataFile() DataFile: Record DMTDataFile
@@ -63,9 +63,9 @@ codeunit 110015 "DMTImportSettings"
         exit(UpdateFieldsFilterGlobal);
     end;
 
-    procedure RecIdToProcessList(var RecIdToProcessList: List of [RecordId])
+    procedure RecIdToProcessList(var RecIdToProcessListNew: List of [RecordId])
     begin
-        RecIdToProcessListGlobal := RecIdToProcessList;
+        RecIdToProcessListGlobal := RecIdToProcessListNew;
     end;
 
     procedure RecIdToProcessList(): List of [RecordId]
@@ -84,10 +84,10 @@ codeunit 110015 "DMTImportSettings"
     end;
 
     var
-        SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
-        NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
         TempFieldMappingGlobal: Record DMTFieldMapping temporary;
         DataFileGlobal: Record DMTDataFile;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
+        SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
+        NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
 }

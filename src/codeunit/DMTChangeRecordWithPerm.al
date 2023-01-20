@@ -5,21 +5,14 @@ codeunit 110009 ChangeRecordWithPerm
 
     procedure DeleteRecordsInTargetTable(DMTDataFile: Record DMTDataFile)
     var
-        DMTCopyTable: Record DMTCopyTable;
-        RecRef: RecordRef;
-        DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?\Filter:"%4"',
-                    Comment = 'Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?\Filter:"%4"';
+        DMTDeleteDatainTargetTable: Page DMTDeleteDatainTargetTable;
     begin
-        DMTDataFile.TestField("Target Table ID");
-        RecRef.Open(DMTDataFile."Target Table ID");
-        if DMTCopyTable.ShowRequestPageFilterDialog(RecRef) then
-            if Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, RecRef.Count, RecRef.Caption, RecRef.CurrentCompany, RecRef.GetFilters), false) then begin
-                if not RecRef.IsEmpty then
-                    RecRef.DeleteAll();
-            end;
+        DMTDeleteDatainTargetTable.SetDataFileID(DMTDataFile);
+        DMTDeleteDatainTargetTable.Run();
     end;
 
-    procedure InsertRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
+
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
     var
         DMTMgt: Codeunit DMTMgt;
         TargetRef: RecordRef;
@@ -33,5 +26,16 @@ codeunit 110009 ChangeRecordWithPerm
         end else begin
             InsertOK := TargetRef.Insert(InsertTrue);
         end;
+    end;
+
+    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean) InsertOK: Boolean
+    var
+        DMTMgt: Codeunit DMTMgt;
+        TargetRef: RecordRef;
+        TargetRef2: RecordRef;
+    begin
+        TargetRef.Open(TmpTargetRef.Number, false);
+        DMTMgt.CopyRecordRef(TmpTargetRef, TargetRef);
+        InsertOK := TargetRef.Modify(UseTrigger);
     end;
 }

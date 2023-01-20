@@ -10,13 +10,22 @@ codeunit 110012 DMTProcessRecord
         if RunMode = RunMode::FieldTransfer then begin
             if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
-            if not SkipRecord then
+            if (not SkipRecord) or UpdateFieldsInExistingRecordsOnly then
                 ProcessNonKeyFields();
         end;
 
         if RunMode = RunMode::InsertRecord then begin
             SaveRecord();
         end;
+
+        if RunMode = RunMode::ModifyRecord then begin
+            SaveRecord();
+        end;
+    end;
+
+    procedure GetRecordWasSkipped(): Boolean
+    begin
+        exit(SkipRecord);
     end;
 
     local procedure AssignField(ValidateSetting: Enum DMTFieldValidationType)
@@ -79,14 +88,16 @@ codeunit 110012 DMTProcessRecord
         until TempFieldMapping.Next() = 0;
         SkipRecord := false;
         case true of
-            UpdateExistingRecordsOnly:
+            // Nur vorhandene Datensätze updaten. Felder aus exist. Datensatz kopieren.
+            UpdateFieldsInExistingRecordsOnly:
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
                         DMTMgt.CopyRecordRef(ExistingRef, TmpTargetRef)
                     else
                         SkipRecord := true; // only update, do not insert record when updating records
                 end;
-            DataFile."Import Only New Records" and not UpdateExistingRecordsOnly:
+            // Kein Insert neuer Datensätze
+            DataFile."Import Only New Records" and not UpdateFieldsInExistingRecordsOnly:
                 begin
                     if ExistingRef.Get(TmpTargetRef.RecordId) then
                         SkipRecord := true;
@@ -103,7 +114,7 @@ codeunit 110012 DMTProcessRecord
     begin
         DataFile := _DataFile;
         SourceRef := _SourceRef;
-        UpdateExistingRecordsOnly := _UpdateExistingRecordsOnly;
+        UpdateFieldsInExistingRecordsOnly := _UpdateExistingRecordsOnly;
         TempFieldMapping.Copy(_TempFieldMapping, true);
         TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
@@ -117,7 +128,7 @@ codeunit 110012 DMTProcessRecord
     begin
         DataFile := DMTImportSettings.DataFile();
         SourceRef := _SourceRef;
-        UpdateExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
+        UpdateFieldsInExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
         DMTImportSettings.GetFieldMapping(TempFieldMapping);
         TmpTargetRef.Open(DataFile."Target Table ID", true, CompanyName);
         TargetKeyFieldIDs := DMTMgt.GetListOfKeyFieldIDs(TmpTargetRef);
@@ -130,6 +141,11 @@ codeunit 110012 DMTProcessRecord
     procedure InitInsert()
     begin
         RunMode := RunMode::InsertRecord;
+    end;
+
+    procedure InitModify()
+    begin
+        RunMode := RunMode::ModifyRecord;
     end;
 
     procedure LogLastError()
@@ -151,14 +167,27 @@ codeunit 110012 DMTProcessRecord
     end;
 
     local procedure SaveRecord() Success: Boolean
+    var
+        ExistingRef: RecordRef;
     begin
         Success := true;
-        if SkipRecord then
-            exit(false);
         if ErrorLogDict.Count > 0 then
             exit(false);
         ClearLastError();
-        Success := ChangeRecordWithPerm.InsertRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+        case RunMode of
+            RunMode::InsertRecord:
+                begin
+                    if SkipRecord then
+                        exit(false);
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+                end;
+            RunMode::ModifyRecord:
+                begin
+                    if SkipRecord then
+                        exit(false);
+                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, DataFile."Use OnInsert Trigger");
+                end;
+        end;
     end;
 
     procedure SaveErrorLog() ErrorsExist: Boolean
@@ -174,27 +203,27 @@ codeunit 110012 DMTProcessRecord
         end;
     end;
 
-    procedure AddEntryForLastError(SourceRef: RecordRef; TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text]);
+    procedure AddEntryForLastError(_SourceRef: RecordRef; _TargetRef: RecordRef; _FieldMapping: Record DMTFieldMapping; _ErrorItem: Dictionary of [Text, Text]);
     var
         _DMTErrorlog: Record DMTErrorLog;
     begin
         _DMTErrorlog.DataFileName := DataFile.Name;
         _DMTErrorlog.DataFilePath := DataFile.Path;
 
-        _DMTErrorlog."From ID" := SourceRef.RecordId;
-        _DMTErrorlog."To ID" := TargetRef.RecordId;
+        _DMTErrorlog."From ID" := _SourceRef.RecordId;
+        _DMTErrorlog."To ID" := _TargetRef.RecordId;
         _DMTErrorlog."From ID (Text)" := CopyStr(Format(_DMTErrorlog."From ID"), 1, MaxStrLen(_DMTErrorlog."From ID (Text)"));
         _DMTErrorlog."To ID (Text)" := CopyStr(Format(_DMTErrorlog."To ID"), 1, MaxStrLen(_DMTErrorlog."To ID (Text)"));
 
-        _DMTErrorlog."Import from Table No." := SourceRef.Number;
-        _DMTErrorlog."Import from Field No." := FieldMapping."Source Field No.";
-        _DMTErrorlog."Import to Table No." := FieldMapping."Target Table ID";
-        _DMTErrorlog."Import to Field No." := FieldMapping."Target Field No.";
-        _DMTErrorlog."Ignore Error" := FieldMapping."Ignore Validation Error";
-        _DMTErrorlog.Errortext := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
-        _DMTErrorlog.ErrorCode := CopyStr(ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
-        _DMTErrorlog."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
-        _DMTErrorlog.SaveErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'), false);
+        _DMTErrorlog."Import from Table No." := _SourceRef.Number;
+        _DMTErrorlog."Import from Field No." := _FieldMapping."Source Field No.";
+        _DMTErrorlog."Import to Table No." := _FieldMapping."Target Table ID";
+        _DMTErrorlog."Import to Field No." := _FieldMapping."Target Field No.";
+        _DMTErrorlog."Ignore Error" := _FieldMapping."Ignore Validation Error";
+        _DMTErrorlog.Errortext := CopyStr(_ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(_DMTErrorlog.Errortext));
+        _DMTErrorlog.ErrorCode := CopyStr(_ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(_DMTErrorlog.ErrorCode));
+        _DMTErrorlog."Error Field Value" := CopyStr(_ErrorItem.Get('ErrorValue'), 1, MaxStrLen(_DMTErrorlog."Error Field Value"));
+        _DMTErrorlog.SaveErrorCallStack(_ErrorItem.Get('GetLastErrorCallStack'), false);
         _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
         _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
         _DMTErrorlog.Insert();
@@ -212,9 +241,10 @@ codeunit 110012 DMTProcessRecord
         SkipRecord: Boolean;
         // DMTTable: Record DMTTable;
         // TempDMTField: Record DMTField temporary;
-        UpdateExistingRecordsOnly: Boolean;
+        UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
-        RunMode: Option FieldTransfer,InsertRecord;
+        RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
+
 }

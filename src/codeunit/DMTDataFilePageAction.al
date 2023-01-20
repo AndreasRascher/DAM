@@ -650,23 +650,23 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure AddDataFiles()
     var
-        DataFileBuffer_Selected: Record DMTDataFileBuffer temporary;
+        TempDataFile_Selected: Record DMTDataFileBuffer temporary;
         DMTSelectDataFile: Page DMTSelectDataFile;
     begin
         DMTSelectDataFile.LookupMode(true);
         if DMTSelectDataFile.RunModal() <> Action::LookupOK then
             exit;
-        if not DMTSelectDataFile.GetSelection(DataFileBuffer_Selected) then
+        if not DMTSelectDataFile.GetSelection(TempDataFile_Selected) then
             exit;
-        DataFileBuffer_Selected.SetRange("File is already assigned", false);
-        DataFileBuffer_Selected.SetFilter("Target Table ID", '<>0');
-        if not DataFileBuffer_Selected.FindSet() then begin
+        TempDataFile_Selected.SetRange("File is already assigned", false);
+        TempDataFile_Selected.SetFilter("Target Table ID", '<>0');
+        if not TempDataFile_Selected.FindSet() then begin
             Message('Keine neuen Dateien mit Zieltabellennr. gefunden.');
             exit;
         end;
         repeat
-            AddNewDataFile(DataFileBuffer_Selected);
-        until DataFileBuffer_Selected.Next() = 0;
+            AddNewDataFile(TempDataFile_Selected);
+        until TempDataFile_Selected.Next() = 0;
     end;
 
     procedure AddNewDataFile(DataFileBuffer: Record DMTDataFileBuffer)
@@ -747,12 +747,9 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure UploadFileToDefaultFolder()
     var
-        DMTSetup: Record DMTSetup;
         Setup: Record DMTSetup;
         FileMgt: Codeunit "File Management";
         TempBlob: Codeunit "Temp Blob";
-        FieldImport: XmlPort DMTFieldBufferImport;
-        FileFound: Boolean;
         ServerFile: File;
         InStr: InStream;
         ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
@@ -777,23 +774,21 @@ codeunit 110013 DMTDataFilePageAction
 
     internal procedure ExportTargetTableToCSV(Rec: Record DMTDataFile)
     var
-        DMTCodeGenerator: Codeunit DMTCodeGenerator;
         Field: Record Field;
+        DMTCodeGenerator: Codeunit DMTCodeGenerator;
+        FPBuilder: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
         TabChar: Char;
         LineNo: Integer;
         FieldValue: Text;
-        FileManagement: Codeunit "File Management";
-        FileContent: TextBuilder;
-        tempBlob: Codeunit "Temp Blob";
-        iStr: InStream;
-        oStr: OutStream;
         Line: Text;
         Content: TextBuilder;
     begin
         TabChar := 9;
         if Rec."Target Table ID" = 0 then exit;
         RecRef.Open(Rec."Target Table ID");
+        if not FPBuilder.RunModal(RecRef, true) then
+            exit;
         if not RecRef.FindSet() then exit;
 
         Field.SetRange(TableNo, RecRef.Number);
@@ -828,13 +823,11 @@ codeunit 110013 DMTDataFilePageAction
     local procedure GetFormattedFieldValue(recRef: RecordRef; fieldNo: Integer) _Result: Text[250];
     var
         fieldRef: FieldRef;
-        _Integer: Integer;
-        _Text: Text[1024];
-        _Decimal: Decimal;
-        _Date: Date;
-        _Time: Time;
         _Boolean: Boolean;
-        _Field: Record Field;
+        _Date: Date;
+        _Decimal: Decimal;
+        _Integer: Integer;
+        _Time: Time;
     begin
         //* returns values in xmlformat, handles problems with field.type optionstring bug
         fieldRef := recRef.Field(fieldNo);

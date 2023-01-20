@@ -76,15 +76,13 @@ table 110010 DMTProcessingPlan
 
     keys
     {
-        key(PK; "Line No.")
-        {
-            Clustered = true;
-        }
+        key(PK; "Line No.") { Clustered = true; }
     }
 
     procedure EditSourceTableFilter()
     var
         DataFile: Record DMTDataFile;
+        FPBuilder: Codeunit DMTFPBuilder;
         Migrate: Codeunit DMTMigrate;
         BufferRef: RecordRef;
         CurrView: Text;
@@ -100,7 +98,7 @@ table 110010 DMTProcessingPlan
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        if Migrate.ShowRequestPageFilterDialog(BufferRef, DataFile) then begin
+        if FPBuilder.RunModal(BufferRef, DataFile, true) then begin
             SaveSourceTableFilter(BufferRef.GetView());
         end;
     end;
@@ -108,16 +106,16 @@ table 110010 DMTProcessingPlan
     procedure EditDefaultValues()
     var
         DataFile: Record DMTDataFile;
+        FPBuilder: Codeunit DMTFPBuilder;
         TargetRef: RecordRef;
         CurrView: Text;
-        Migrate: Codeunit DMTMigrate;
     begin
         DataFile.Get(Rec.ID);
         TargetRef.Open(DataFile."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        if Migrate.ShowRequestPageFilterDialog(TargetRef, DataFile) then begin
+        if FPBuilder.RunModal(TargetRef, DataFile, true) then begin
             SaveDefaultValuesView(TargetRef.GetView());
         end;
     end;
@@ -228,7 +226,7 @@ table 110010 DMTProcessingPlan
 
     procedure ConvertSourceTableFilterToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary)
     var
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        TempFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
@@ -241,21 +239,21 @@ table 110010 DMTProcessingPlan
             if RecRef.HasFilter then
                 for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
-                        TmpFieldMapping2."Data File ID" := Rec.ID;
-                        TmpFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
-                        TmpFieldMapping2."Source Field Caption" := RecRef.FieldIndex(FieldIndexNo).Caption;
-                        TmpFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2.Comment));
-                        TmpFieldMapping2.Insert();
+                        TempFieldMapping2."Data File ID" := Rec.ID;
+                        TempFieldMapping2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
+                        TempFieldMapping2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TempFieldMapping2."Source Field Caption"));
+                        TempFieldMapping2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempFieldMapping2.Comment));
+                        TempFieldMapping2.Insert();
                     end;
                 end;
         end;
 
-        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        TmpFieldMapping.Copy(TempFieldMapping2, true);
     end;
 
     procedure ConvertDefaultValuesViewToFieldLines(var TmpFieldMapping: Record DMTFieldMapping temporary) LineCount: Integer
     var
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        TempFieldMapping2: Record DMTFieldMapping temporary;
         FieldMapping: Record DMTFieldMapping;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
@@ -269,15 +267,15 @@ table 110010 DMTProcessingPlan
                 for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         FieldMapping.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
-                        TmpFieldMapping2 := FieldMapping;
-                        TmpFieldMapping2."Processing Action" := TmpFieldMapping2."Processing Action"::FixedValue;
-                        TmpFieldMapping2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TmpFieldMapping2."Fixed Value"));
-                        TmpFieldMapping2.Insert();
+                        TempFieldMapping2 := FieldMapping;
+                        TempFieldMapping2."Processing Action" := TempFieldMapping2."Processing Action"::FixedValue;
+                        TempFieldMapping2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempFieldMapping2."Fixed Value"));
+                        TempFieldMapping2.Insert();
                     end;
                 end;
         end;
 
-        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        TmpFieldMapping.Copy(TempFieldMapping2, true);
         LineCount := TmpFieldMapping.Count;
     end;
 
@@ -285,7 +283,7 @@ table 110010 DMTProcessingPlan
     var
         DataFile: Record DMTDataFile;
         FieldMapping: Record DMTFieldMapping;
-        TmpFieldMapping2: Record DMTFieldMapping temporary;
+        TempFieldMapping2: Record DMTFieldMapping temporary;
         RecRef: RecordRef;
         FieldNoFilter: Text;
     begin
@@ -298,12 +296,12 @@ table 110010 DMTProcessingPlan
             FieldMapping.SetFilter("Target Field No.", FieldNoFilter);
             if FieldMapping.FindSet(false, false) then
                 repeat
-                    TmpFieldMapping2 := FieldMapping;
-                    TmpFieldMapping2.Insert();
+                    TempFieldMapping2 := FieldMapping;
+                    TempFieldMapping2.Insert();
                 until FieldMapping.Next() = 0;
         end;
 
-        TmpFieldMapping.Copy(TmpFieldMapping2, true);
+        TmpFieldMapping.Copy(TempFieldMapping2, true);
         LineCount := TmpFieldMapping.Count;
     end;
 

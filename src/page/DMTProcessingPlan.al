@@ -14,7 +14,7 @@ page 110015 DMTProcessingPlan
     {
         area(Content)
         {
-            repeater("EditRepeater")
+            repeater(EditRepeater)
             {
                 IndentationColumn = Rec.Indentation;
                 IndentationControls = DescriptionEdit;
@@ -25,8 +25,8 @@ page 110015 DMTProcessingPlan
                 field(ProcessingTimeEdit; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTimeEdit; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StatusEdit; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("SourceTableNoEdit"; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("LineNoEdit"; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
+                field(SourceTableNoEdit; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field(LineNoEdit; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
             repeater("Repeater")
             {
@@ -86,8 +86,8 @@ page 110015 DMTProcessingPlan
 
                 trigger OnAction();
                 begin
-                    GetSelection(ProcessingPlan_SELECTED);
-                    RunSelected(ProcessingPlan_SELECTED);
+                    GetSelection(TempProcessingPlan_SELECTED);
+                    RunSelected(TempProcessingPlan_SELECTED);
                     CurrPage.Update(false);
                 end;
             }
@@ -102,8 +102,8 @@ page 110015 DMTProcessingPlan
 
                 trigger OnAction()
                 begin
-                    GetSelection(ProcessingPlan_SELECTED);
-                    IndentLines(ProcessingPlan_SELECTED, -1);
+                    GetSelection(TempProcessingPlan_SELECTED);
+                    IndentLines(TempProcessingPlan_SELECTED, -1);
                     CurrPage.Update(false);
                 end;
             }
@@ -118,8 +118,8 @@ page 110015 DMTProcessingPlan
 
                 trigger OnAction()
                 begin
-                    GetSelection(ProcessingPlan_SELECTED);
-                    IndentLines(ProcessingPlan_SELECTED, +1);
+                    GetSelection(TempProcessingPlan_SELECTED);
+                    IndentLines(TempProcessingPlan_SELECTED, +1);
                     CurrPage.Update(false);
                 end;
             }
@@ -134,8 +134,8 @@ page 110015 DMTProcessingPlan
 
                 trigger OnAction()
                 begin
-                    GetSelection(ProcessingPlan_SELECTED);
-                    ResetLines(ProcessingPlan_SELECTED);
+                    GetSelection(TempProcessingPlan_SELECTED);
+                    ResetLines(TempProcessingPlan_SELECTED);
                     CurrPage.Update(false);
                 end;
             }
@@ -233,7 +233,7 @@ page 110015 DMTProcessingPlan
         PageAction: Codeunit DMTDataFilePageAction;
         Success: Boolean;
     begin
-        if not ProcessingPlan_SELECTED.FindSet then exit;
+        if not ProcessingPlan_SELECTED.FindSet() then exit;
         repeat
             ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
             ProcessingPlan.TestField(ID);
@@ -283,19 +283,19 @@ page 110015 DMTProcessingPlan
         until ProcessingPlan_SELECTED.Next() = 0;
     end;
 
-    local procedure ResetLines(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
+    local procedure ResetLines(var ProcessingPlan_SELECTED_NEW: Record DMTProcessingPlan temporary)
     var
         ProcessingPlan: Record DMTProcessingPlan;
     begin
-        if not ProcessingPlan_SELECTED.FindSet then exit;
+        if not ProcessingPlan_SELECTED_NEW.FindSet() then exit;
         repeat
-            ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
+            ProcessingPlan.Get(ProcessingPlan_SELECTED_NEW.RecordId);
             Clear(ProcessingPlan.Status);
             Clear(ProcessingPlan.StartTime);
             Clear(ProcessingPlan."Processing Duration");
             ProcessingPlan.Modify();
             Commit();
-        until ProcessingPlan_SELECTED.Next() = 0;
+        until ProcessingPlan_SELECTED_NEW.Next() = 0;
     end;
 
     local procedure SetStatusToStartAndCommit(var ProcessingPlan: Record DMTProcessingPlan)
@@ -335,20 +335,20 @@ page 110015 DMTProcessingPlan
         end;
     end;
 
-    procedure GetSelection(var TempProcessingPlan_Selected: Record DMTProcessingPlan temporary) HasLines: Boolean
+    procedure GetSelection(var TempProcessingPlan_SelectedNew: Record DMTProcessingPlan temporary) HasLines: Boolean
     var
         ProcessingPlan: Record DMTProcessingPlan;
         Debug: Integer;
     begin
-        Clear(TempProcessingPlan_Selected);
-        if TempProcessingPlan_Selected.IsTemporary then
-            TempProcessingPlan_Selected.DeleteAll();
+        Clear(TempProcessingPlan_SelectedNew);
+        if TempProcessingPlan_SelectedNew.IsTemporary then
+            TempProcessingPlan_SelectedNew.DeleteAll();
 
         ProcessingPlan.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
         CurrPage.SetSelectionFilter(ProcessingPlan);
         Debug := ProcessingPlan.Count;
-        ProcessingPlan.CopyToTemp(TempProcessingPlan_Selected);
-        HasLines := TempProcessingPlan_Selected.FindFirst();
+        ProcessingPlan.CopyToTemp(TempProcessingPlan_SelectedNew);
+        HasLines := TempProcessingPlan_SelectedNew.FindFirst();
     end;
 
     internal procedure IndentLines(var TempProcessingPLan: Record DMTProcessingPlan temporary; Direction: Integer)
@@ -357,7 +357,7 @@ page 110015 DMTProcessingPlan
     begin
         if not TempProcessingPLan.FindSet() then exit;
         repeat
-            ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);
+            ProcessingPlan.Get(TempProcessingPlan_SELECTED.RecordId);
             ProcessingPlan.Indentation += Direction;
             if ProcessingPlan.Indentation < 0 then
                 ProcessingPlan.Indentation := 0;
@@ -373,8 +373,8 @@ page 110015 DMTProcessingPlan
     end;
 
     var
+        TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         [InDataSet]
-        ShowSourceTableFilterPart, ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowTreeView : Boolean;
-        ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowTreeView : Boolean;
         LineStyle: Text;
 }

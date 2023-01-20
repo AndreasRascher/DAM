@@ -12,10 +12,11 @@ page 110029 DMTUpdateTaskNew
         {
             group(Options)
             {
-                field(SelectedFieldsList; GetSelectedFieldsList()) { ApplicationArea = All; }
+                field(SelectedFieldsList; GetSelectedFieldsList()) { ApplicationArea = All; Caption = 'Current Selection'; }
             }
             repeater(SelectedFields)
             {
+                Caption = 'Select Fields';
                 field("To Field No."; Rec."Target Field No.") { ApplicationArea = All; Editable = false; }
                 field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; Editable = false; }
                 field(Selected; IsSelected)
@@ -130,12 +131,12 @@ page 110029 DMTUpdateTaskNew
 
     local procedure GetSelectedFieldsList() FieldsListAsText: Text
     var
-        ID: Integer;
         FieldMapping: Record DMTFieldMapping;
+        ID: Integer;
     begin
         foreach ID in SelectedFields do begin
             FieldMapping.Get(CurrDataFile.ID, ID);
-            FieldMapping.Calcfields("Target Field Caption");
+            FieldMapping.CalcFields("Target Field Caption");
             FieldsListAsText += ', ' + FieldMapping."Target Field Caption";
         end;
         FieldsListAsText := FieldsListAsText.TrimStart(', ');

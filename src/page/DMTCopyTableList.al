@@ -68,7 +68,6 @@ page 110013 DMTCopyTableList
     local procedure CopyDataFromSourceCompany(var CopyTable_SELECTED: Record DMTCopyTable temporary)
     var
         ProgressDialog: Codeunit DMTProgressDialog;
-        NoOfLinesTransfered: Integer;
     begin
         if not CopyTable_SELECTED.FindSet() then exit;
         repeat

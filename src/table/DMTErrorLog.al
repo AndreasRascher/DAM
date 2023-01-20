@@ -156,16 +156,16 @@ table 110001 DMTErrorLog
         IStr.ReadText(ErrorCallStack);
     end;
 
-    procedure SaveErrorCallStack(ErrorCallStack: Text; DoModify: Boolean)
+    procedure SaveErrorCallStack(ErrorCallStackNew: Text; DoModify: Boolean)
     var
         OStr: OutStream;
     begin
         Clear(Rec.ErrorCallstack);
         if DoModify then Rec.Modify();
-        if ErrorCallStack = '' then
+        if ErrorCallStackNew = '' then
             exit;
         Rec.ErrorCallstack.CreateOutStream(OStr);
-        OStr.WriteText(ErrorCallStack);
+        OStr.WriteText(ErrorCallStackNew);
         if DoModify then Rec.Modify();
     end;
 }

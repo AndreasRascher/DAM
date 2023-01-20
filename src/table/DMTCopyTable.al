@@ -65,13 +65,14 @@ table 110002 DMTCopyTable
 
     procedure EditSavedFilters() Continue: Boolean
     var
+        FPBuilder: Codeunit DMTFPBuilder;
         SourceRef: RecordRef;
     begin
         Continue := true; // Canceling the dialog should stop th process
         SourceRef.Open(Rec."Table No.", false, Rec.SourceCompanyName);
         if Rec.LoadTableView() <> '' then
             SourceRef.SetView(Rec.LoadTableView());
-        if not ShowRequestPageFilterDialog(SourceRef) then
+        if not FPBuilder.RunModal(SourceRef, true) then
             exit(false);
         if SourceRef.HasFilter then begin
             Rec.SaveTableView(SourceRef.GetView());
@@ -81,26 +82,6 @@ table 110002 DMTCopyTable
             Rec.FilterText := '';
         end;
         Rec.Modify();
-    end;
-
-
-    procedure ShowRequestPageFilterDialog(var BufferRef: RecordRef) Continue: Boolean;
-    var
-        FPBuilder: FilterPageBuilder;
-        Index: Integer;
-        PrimaryKeyRef: KeyRef;
-    begin
-        FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
-        if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
-            FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
-
-        // [OPTIONAL] ADD KEY FIELDS TO REQUEST PAGE AS REQUEST FILTER FIELDS for GIVEN RECORD
-        PrimaryKeyRef := BufferRef.KeyIndex(1);
-        for Index := 1 to PrimaryKeyRef.FieldCount do
-            FPBuilder.AddFieldNo(BufferRef.Caption, PrimaryKeyRef.FieldIndex(Index).Number);
-        // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
-        Continue := FPBuilder.RunModal();
-        BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
     procedure CopyToTemp(var TempCopyTable: Record DMTCopyTable temporary)
