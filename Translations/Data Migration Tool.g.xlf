@@ -1698,6 +1698,151 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1473724147 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Mapping</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 646069724 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Value 1 Caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Mapping Value 1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 4015904245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Value 2 Caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Mapping Value 2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 250540853 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Mapping Fields</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field No. of Mapping Fields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 250540853 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>1,2,3,4</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field No. of Mapping Fields - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 4017899121 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Orginal Fields</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field No. of Orginal Fields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 4017899121 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>1,2,3,4</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field No. of Orginal Fields - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 3199764559 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Original Value 1 Caption</source>
+          <note from="Developer" annotates="general" priority="2">Urspr. Wert 1 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Original Value 1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1473724147 - Field 712166234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Original Value 2 Caption</source>
+          <note from="Developer" annotates="general" priority="2">Urspr. Wert 2 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMapping - Field Original Value 2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3571072814 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Condition</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingCondition - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3571072814 - Field 1501468232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vergleichswert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingCondition - Field Compare Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3571072814 - Field 3531284179 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comparison Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingCondition - Field Comparison Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3571072814 - Field 4021610987 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingCondition - Field Mapping Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3571072814 - Field 3345288678 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Original Value</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingCondition - Field Original Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Rule</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 2689876268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Conditions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Conditions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 3123372377 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Line No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 4021610987 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Mapping Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 769611602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Value 1</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Mapping Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 3151489047 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Value 2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Mapping Value 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 3832745821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Original Value 1</source>
+          <note from="Developer" annotates="general" priority="2">Urspr. Wert 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Original Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1967864889 - Field 3195049204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Original Value 2</source>
+          <note from="Developer" annotates="general" priority="2">Urspr. Wert 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingRule - Field Original Value 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2980252950 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Value</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingValue - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2980252950 - Field 4021610987 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingValue - Field Mapping Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2980252950 - Field 2432660905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingValue - Field New Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2980252950 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingValue - Field Target Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2980252950 - Field 3198918236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTMappingValue - Field Target Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2408,6 +2553,31 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList50 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 711263335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Mapping Card</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMappingCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 711263335 - Control 2044106759 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMappingCard - Control Field Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 711263335 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMappingCard - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4257704605 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Mapping List</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMappingList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1407301197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMappingRulesPart - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
           <source>New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2617,6 +2787,31 @@
           <source>Seperate Buffer Table per CSV</source>
           <note from="Developer" annotates="general" priority="2">Separate Tabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3015145536 - EnumValue 224577058 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Equal</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTComparisonType - EnumValue IsEqual - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3015145536 - EnumValue 2552904672 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Equal Or Larger</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTComparisonType - EnumValue IsEqualOrLarger - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3015145536 - EnumValue 1050674676 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Equal Or Lower</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTComparisonType - EnumValue IsEqualOrLower - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3015145536 - EnumValue 3073461802 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Larger Than</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTComparisonType - EnumValue IsLargerThan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3015145536 - EnumValue 3443233574 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Smaller</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTComparisonType - EnumValue IsSmaller - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1024783108 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>
