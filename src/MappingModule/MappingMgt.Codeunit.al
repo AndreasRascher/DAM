@@ -5,7 +5,6 @@ codeunit 110014 "DMTMappingMgt"
     end;
 
     var
-        JToken: JsonToken;
-        JValue: JsonValue;
+        MappingValuesArray: array[30] of Variant;
         MappingValues: List of [JsonValue];
 }
