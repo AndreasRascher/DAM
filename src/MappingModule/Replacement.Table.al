@@ -1,4 +1,4 @@
-table 110038 DMTMapping
+table 110038 DMTReplacement
 {
     Caption = 'DMT Mapping';
     LookupPageId = DMTMappingList;
@@ -7,7 +7,7 @@ table 110038 DMTMapping
     {
         field(1; Code; Code[100]) { Caption = 'Code'; }
         field(2; Description; Text[250]) { Caption = 'Description'; }
-        field(10; "No. of Orginal Fields"; Option)
+        field(10; "No. of Conditions"; Option)
         {
             Caption = 'No. of Orginal Fields';
             OptionMembers = "1","2","3","4";
@@ -15,7 +15,7 @@ table 110038 DMTMapping
         }
         field(11; "Original Value 1 Caption"; Text[80]) { Caption = 'Original Value 1 Caption', Comment = 'Urspr. Wert 1 Bezeichnung'; }
         field(12; "Original Value 2 Caption"; Text[80]) { Caption = 'Original Value 2 Caption', Comment = 'Urspr. Wert 2 Bezeichnung'; }
-        field(20; "No. of Mapping Fields"; Option)
+        field(20; "No. of Replacement Fields"; Option)
         {
             Caption = 'No. of Mapping Fields';
             OptionMembers = "1","2","3","4";

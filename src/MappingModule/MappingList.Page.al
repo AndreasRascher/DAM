@@ -4,8 +4,8 @@ page 110018 DMTMappingList
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = DMTMapping;
-    CardPageId = DMTMappingCard;
+    SourceTable = DMTReplacement;
+    CardPageId = DMTReplacementCard;
 
     layout
     {

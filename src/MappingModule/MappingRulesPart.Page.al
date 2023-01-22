@@ -4,7 +4,7 @@ page 110020 DMTMappingRulesPart
     PageType = ListPart;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = DMTMappingRule;
+    SourceTable = DMTReplacementRule;
 
     layout
     {
@@ -24,10 +24,10 @@ page 110020 DMTMappingRulesPart
     {
     }
 
-    internal procedure EnableControls(Mapping: Record DMTMapping)
+    internal procedure EnableControls(Mapping: Record DMTReplacement)
     begin
-        OriginalValue2_Visible := Mapping."No. of Orginal Fields" in [Mapping."No. of Orginal Fields"::"2"];
-        MappingValue2_Visible := Mapping."No. of Mapping Fields" in [Mapping."No. of Mapping Fields"::"2"];
+        OriginalValue2_Visible := Mapping."No. of Conditions" in [Mapping."No. of Conditions"::"2"];
+        MappingValue2_Visible := Mapping."No. of Replacement Fields" in [Mapping."No. of Replacement Fields"::"2"];
         CurrPage.Update();
     end;
 

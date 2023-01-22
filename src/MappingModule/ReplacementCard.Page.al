@@ -1,9 +1,9 @@
-page 110019 DMTMappingCard
+page 110019 DMTReplacementCard
 {
-    Caption = 'DMT Mapping Card';
+    Caption = 'DMT Replacement Card';
     PageType = Card;
     UsageCategory = None;
-    SourceTable = DMTMapping;
+    SourceTable = DMTReplacement;
 
     layout
     {
@@ -14,7 +14,7 @@ page 110019 DMTMappingCard
                 Caption = 'General';
                 field(Code; Rec.Code) { ApplicationArea = All; }
                 field(Description; Rec.Description) { ApplicationArea = All; }
-                field("No. of Orginal Fields"; Rec."No. of Orginal Fields")
+                field("No. of Orginal Fields"; Rec."No. of Conditions")
                 {
                     ApplicationArea = All;
                     trigger OnValidate()
@@ -23,7 +23,7 @@ page 110019 DMTMappingCard
                         EnableControls(Rec);
                     end;
                 }
-                field("No. of Mapping Fields"; Rec."No. of Mapping Fields")
+                field("No. of Mapping Fields"; Rec."No. of Replacement Fields")
                 {
                     ApplicationArea = All;
                     trigger OnValidate()
@@ -61,7 +61,7 @@ page 110019 DMTMappingCard
             }
             part(Rules; DMTMappingRulesPart)
             {
-                SubPageLink = "Mapping Code" = field(Code);
+                SubPageLink = "Replacement Code" = field(Code);
             }
         }
     }
@@ -69,10 +69,10 @@ page 110019 DMTMappingCard
     actions
     {
     }
-    internal procedure EnableControls(Mapping: Record DMTMapping)
+    internal procedure EnableControls(Mapping: Record DMTReplacement)
     begin
-        OriginalValue2_Visible := Mapping."No. of Orginal Fields" in [Mapping."No. of Orginal Fields"::"2"];
-        MappingValue2_Visible := Mapping."No. of Mapping Fields" in [Mapping."No. of Mapping Fields"::"2"];
+        OriginalValue2_Visible := Mapping."No. of Conditions" in [Mapping."No. of Conditions"::"2"];
+        MappingValue2_Visible := Mapping."No. of Replacement Fields" in [Mapping."No. of Replacement Fields"::"2"];
         CurrPage.Update();
     end;
 
