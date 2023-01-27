@@ -117,8 +117,8 @@ page 110001 "DMT Error Log List"
                         Database::DMTFieldMapping,
                         Database::DMTFieldBuffer,
                         Database::DMTGenBuffTable,
-                        Database::DMTReplacementsHeader,
-                        Database::DMTReplacementsLine);
+                        Database::DMTReplacementsHeaderOLD,
+                        Database::DMTReplacementsLineOLD);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
@@ -131,41 +131,6 @@ page 110001 "DMT Error Log List"
                         allObjWithCaption.Next(selection - 1);
                     Rec.SetRange("Import from Table No.", allObjWithCaption."Object ID");
                     CurrPage.Update(false);
-
-
-                    //                     IF Object.FIND('-') then
-                    //                         REPEAT
-                    //                             Object.CALCFIELDS(Caption);
-                    //                             Choices += CONVERTSTR(Object.Caption, ',', '_') + ',';
-                    //                         UNTIL Object.NEXT = 0;
-                    //                     IF Choices <> '' then
-                    //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
-                    //                     Selection := STRMENU(Choices);
-                    //                     IF Selection = 0 then
-                    //                         EXIT;
-                    //                     Object.FIND('-');
-                    //                     IF Selection > 1 then
-                    //                         Object.NEXT(Selection - 1);
-                    //                     SetRange("Import from Buffertable No.", Object.ID);
-                    //                     CurrPage.UPDATE(FALSE);
-
-                    //                     AddContextFilter - OnAction()
-                    // DMTErrorLog.OPEN;
-                    //                     WHILE DMTErrorLog.READ DO begin
-                    //                         ResultTextArr[COMPRESSARRAY(ResultTextArr) + 1] := DMTErrorLog.DMT_Context_Descr;
-                    //                     end;
-                    //                     FOR Index := 1 TO ARRAYLEN(ResultTextArr) DO begin
-                    //                         Choices += CONVERTSTR(ResultTextArr[Index], ',', '_') + ',';
-                    //                     end;
-                    //                     IF Choices <> '' then
-                    //                         Choices := COPYSTR(Choices, 1, STRLEN(Choices) - 1);
-                    //                     Selection := STRMENU(Choices);
-                    //                     IF Selection = 0 then
-                    //                         EXIT;
-
-                    //                     IF Selection > 1 then
-                    //                         SetRange("DMT Context Descr.", ResultTextArr[Selection]);
-                    //                     CurrPage.UPDATE(FALSE);
 
                 end;
 

@@ -3,7 +3,7 @@ page 110008 DMTReplacementsCard
     Caption = 'DMT Replacements Card', Comment = 'DMT Ersetzungen Karte';
     PageType = Document;
     UsageCategory = None;
-    SourceTable = DMTReplacementsHeader;
+    SourceTable = DMTReplacementsHeaderOLD;
 
     layout
     {

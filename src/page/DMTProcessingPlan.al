@@ -161,9 +161,9 @@ page 110015 DMTProcessingPlan
 
                 trigger OnAction()
                 var
+                    TableMetadata: Record "Table Metadata";
                     XMLBackup: Codeunit DMTXMLBackup;
                     TablesToExport: List of [Integer];
-                    TableMetadata: Record "Table Metadata";
                 begin
                     TableMetadata.Get(Database::DMTProcessingPlan);
                     TablesToExport.Add(Database::DMTProcessingPlan);

@@ -32,7 +32,6 @@ codeunit 110009 ChangeRecordWithPerm
     var
         DMTMgt: Codeunit DMTMgt;
         TargetRef: RecordRef;
-        TargetRef2: RecordRef;
     begin
         TargetRef.Open(TmpTargetRef.Number, false);
         DMTMgt.CopyRecordRef(TmpTargetRef, TargetRef);

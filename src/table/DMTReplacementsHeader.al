@@ -1,4 +1,4 @@
-table 110006 DMTReplacementsHeader
+table 110006 DMTReplacementsHeaderOLD
 {
     Caption = 'Replacements Header', Comment = 'Ersetzungungen Kopf';
     DataClassification = ToBeClassified;
@@ -48,7 +48,7 @@ table 110006 DMTReplacementsHeader
 
     trigger OnDelete()
     var
-        ReplacementsLine: Record DMTReplacementsLine;
+        ReplacementsLine: Record DMTReplacementsLineOLD;
     begin
         if ReplacementsLine.filterFor(Rec) then
             ReplacementsLine.DeleteAll(true);
@@ -56,7 +56,7 @@ table 110006 DMTReplacementsHeader
 
     internal procedure loadDictionary(var ReplaceValueDictionary: Dictionary of [Text, Text]) NoOfEntries: Integer
     var
-        ReplacementsLine: Record DMTReplacementsLine;
+        ReplacementsLine: Record DMTReplacementsLineOLD;
     begin
         Clear(ReplaceValueDictionary);
         if not ReplacementsLine.filterFor(Rec) then

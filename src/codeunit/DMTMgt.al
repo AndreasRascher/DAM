@@ -433,7 +433,7 @@ codeunit 110002 DMTMgt
     procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
     var
         // TempFieldWithReplacementCode: Record "DMTField" temporary;
-        ReplacementsHeader: Record DMTReplacementsHeader;
+        ReplacementsHeader: Record DMTReplacementsHeaderOLD;
         DMTMgt: Codeunit DMTMgt;
         ReplaceValueDictionary: Dictionary of [Text, Text];
         NewValue: Text;

@@ -1,6 +1,6 @@
-page 110018 DMTMappingList
+page 110018 DMTReplacements
 {
-    Caption = 'DMT Mapping List';
+    Caption = 'DMT Replacements';
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;

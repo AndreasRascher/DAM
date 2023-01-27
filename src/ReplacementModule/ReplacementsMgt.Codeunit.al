@@ -73,6 +73,7 @@ codeunit 110014 "DMTReplacementsMgt"
     var
         SourceFieldValuesPerMappingCode: Dictionary of [Text, Dictionary of [Integer, Text]];
         SourceFieldValues: Dictionary of [Integer, Text];
+        TargetFieldValues: Dictionary of [Integer, Text];
     begin
         ThrowErrorIfUninitialized();
         SourceFieldValuesPerMappingCode := ReadArgumentFieldValues(SourceRef, TempReplacementGlobal, TempReplacementFieldSetupGlobal);
@@ -83,15 +84,18 @@ codeunit 110014 "DMTReplacementsMgt"
                     TempReplacementRuleGlobal.SetRange("Replacement Code", TempReplacementGlobal.Code);
                     if TempReplacementRuleGlobal.FindSet() then
                         repeat
-                            hier weiter machen: Wenn die Regel zutrifft, 
-                        den neuen Wert in eine Liste oder Dictionary schreiben
-                            IsMatchingRule(SourceFieldValues);
+                        //hier weiter machen: Wenn die Regel zutrifft, 
+                        // den neuen Wert in eine Liste oder Dictionary schreiben
+                        // if IsMatchingRule(SourceFieldValues) then
+                        // TargetFieldValues.Add(SourceFe) 
                         until TempReplacementRuleGlobal.Next() = 0;
                 end;
             until TempFieldMappingGlobal.Next() = 0;
     end;
 
-    local procedure LoadReplacementFieldSetup(var TempReplacementFieldSetup_Found: Record DMTReplacementFieldSetup temporary; DataFile: Record DMTDataFile) Found: Boolean
+    local procedure LoadReplacementFieldSetup(var
+                                                  TempReplacementFieldSetup_Found: Record DMTReplacementFieldSetup temporary;
+                                                  DataFile: Record DMTDataFile) Found: Boolean
     var
         TempReplacementFieldSetup: Record DMTReplacementFieldSetup temporary;
         ReplacementFieldSetup: Record DMTReplacementFieldSetup;
@@ -184,16 +188,16 @@ codeunit 110014 "DMTReplacementsMgt"
         if SourceFieldValues.ContainsKey(RepFieldType::"Condition 3".AsInteger()) then
             Conditions.Set(3, SourceFieldValues.Get(RepFieldType::"Condition 3".AsInteger()));
         IsMatch := false;
-        case TempReplacementGlobal."No. of Conditions" of
+        case TempReplacementGlobal."No. of From Fields" of
             1:
                 begin
-                    if Conditions.Get(1) = TempReplacementRuleGlobal."Original Value 1" then
+                    if Conditions.Get(1) = TempReplacementRuleGlobal."From Value 1" then
                         IsMatch := true;
                 end;
             2:
                 begin
-                    if Conditions.Get(1) = TempReplacementRuleGlobal."Original Value 1" then
-                        if Conditions.Get(2) = TempReplacementRuleGlobal."Original Value 2" then
+                    if Conditions.Get(1) = TempReplacementRuleGlobal."From Value 1" then
+                        if Conditions.Get(2) = TempReplacementRuleGlobal."From Value 2" then
                             IsMatch := true;
                 end;
             else

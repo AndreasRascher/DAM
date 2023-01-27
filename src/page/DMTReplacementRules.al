@@ -4,7 +4,7 @@ page 110006 DMTReplacementRules
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
-    SourceTable = DMTReplacementsHeader;
+    SourceTable = DMTReplacementsHeaderOLD;
     DelayedInsert = true;
     CardPageId = DMTReplacementsCard;
 

@@ -51,7 +51,7 @@ table 110041 DMTFieldMapping
             end;
         }
         field(32; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
-        field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeader.Code; }
+        field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeaderOLD.Code; }
         field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
         field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }

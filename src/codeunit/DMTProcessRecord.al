@@ -167,8 +167,6 @@ codeunit 110012 DMTProcessRecord
     end;
 
     local procedure SaveRecord() Success: Boolean
-    var
-        ExistingRef: RecordRef;
     begin
         Success := true;
         if ErrorLogDict.Count > 0 then

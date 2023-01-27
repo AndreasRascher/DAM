@@ -3,7 +3,7 @@ page 110009 DMTReplacementsSub
     Caption = 'Line', Comment = 'Zeilen';
     PageType = ListPart;
     UsageCategory = None;
-    SourceTable = DMTReplacementsLine;
+    SourceTable = DMTReplacementsLineOLD;
     DelayedInsert = true;
     AutoSplitKey = true;
 
