@@ -108,6 +108,49 @@ page 110026 DMTDataFileCard
                     PageActions.UpdateQtyLinesInBufferTable(Rec);
                 end;
             }
+
+            action(CountLines)
+            {
+                Caption = 'Count Lines in Target';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    FPBuilder: Codeunit DMTFPBuilder;
+                    RecRef: RecordRef;
+                    TargetTableView, TargetTableFilter : Text;
+                begin
+                    RecRef.Open(Rec."Target Table ID");
+                    if TargetTableView <> '' then
+                        RecRef.SetView(TargetTableView);
+                    if FPBuilder.RunModal(RecRef, true) then begin
+                        TargetTableView := RecRef.GetView();
+                        TargetTableFilter := RecRef.GetFilters;
+                        Message('Anzahl Zeilen im Filter %1', RecRef.Count);
+                    end;
+                end;
+            }
+            action(CountLinesInSource)
+            {
+                Caption = 'Count Lines in Buffer';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    FPBuilder: Codeunit DMTFPBuilder;
+                    RecRef: RecordRef;
+                    TargetTableView, TargetTableFilter : Text;
+                    Migrate: Codeunit DMTMigrate;
+                begin
+                    Migrate.InitBufferRef(Rec, RecRef);
+                    if TargetTableView <> '' then
+                        RecRef.SetView(TargetTableView);
+                    if FPBuilder.RunModal(RecRef, true) then begin
+                        TargetTableView := RecRef.GetView();
+                        TargetTableFilter := RecRef.GetFilters;
+                        Message('Anzahl Zeilen im Filter %1', RecRef.Count);
+                    end;
+                end;
+            }
+
             action(TransferToTargetTable)
             {
                 Caption = 'Import to Target Table', Comment = 'In Zieltabelle übertragen';
