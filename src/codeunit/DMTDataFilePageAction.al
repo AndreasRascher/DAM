@@ -325,9 +325,9 @@ codeunit 110013 DMTDataFilePageAction
         ProgressMsg: Text;
     begin
         DataFile_SELECTED.SetCurrentKey("Sort Order");
-        ProgressMsg := '==========================================\' +
+        ProgressMsg := '=========================================\' +
                        ImportFilesProgressMsg + '\' +
-                       '==========================================\';
+                       '=========================================\';
         DataFile_SELECTED.SetAutoCalcFields("Target Table Caption");
         DataFile_SELECTED.FindSet();
         repeat
@@ -352,6 +352,7 @@ codeunit 110013 DMTDataFilePageAction
     procedure UpdateQtyLinesInBufferTable(DataFile: Record DMTDataFile) QtyLines: Decimal;
     var
         GenBuffTable: Record DMTGenBuffTable;
+        TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
     begin
         if DataFile."Target Table ID" = 0 then
@@ -366,8 +367,13 @@ codeunit 110013 DMTDataFilePageAction
                 end;
             DataFile.BufferTableType::"Seperate Buffer Table per CSV":
                 begin
-                    RecRef.Open(DataFile."Buffer Table ID");
-                    QtyLines := RecRef.Count();
+                    // When importing a backup, some buffer table might not exist
+                    if TableMetadata.Get(DataFile."Buffer Table ID") then begin
+                        RecRef.Open(DataFile."Buffer Table ID");
+                        QtyLines := RecRef.Count();
+                    end else begin
+                        QtyLines := 0;
+                    end;
                 end;
         end;
         // if Rec."No.of Records in Buffer Table" <> QtyLines then begin
@@ -876,15 +882,15 @@ codeunit 110013 DMTDataFilePageAction
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var
         Migrate: Codeunit DMTMigrate;
-        UpdateTaskNew: Page DMTUpdateTaskNew;
+        UpdateTaskNew: Page DMTSelectMultipleFields;
     begin
         // Show only Non-Key Fields for selection
         UpdateTaskNew.LookupMode(true);
         UpdateTaskNew.Editable := true;
-        if not UpdateTaskNew.InitFieldSelection(DataFile) then
+        if not UpdateTaskNew.InitSelectTargetFields(DataFile, DataFile.ReadLastFieldUpdateSelection()) then
             exit;
         if UpdateTaskNew.RunModal() = Action::LookupOK then begin
-            DataFile.WriteLastFieldUpdateSelection(UpdateTaskNew.GetToFieldNoFilter());
+            DataFile.WriteLastFieldUpdateSelection(UpdateTaskNew.GetTargetFieldIDListAsText());
             Migrate.SelectedFieldsFrom(DataFile);
         end;
     end;

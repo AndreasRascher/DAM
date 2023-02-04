@@ -21,8 +21,12 @@
     }
   ],
   "contextSensitiveHelpUrl": "https://DMT.com/help/",
-  "showMyCode": true,
-  "runtime": "7.0",
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "9.1",
   "target":"OnPrem",
   "features": ["TranslationFile"]
 }

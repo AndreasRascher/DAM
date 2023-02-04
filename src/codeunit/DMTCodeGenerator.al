@@ -13,7 +13,9 @@ codeunit 110004 DMTCodeGenerator
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
+        HasFieldsInFilter: Boolean;
     begin
+        HasFieldsInFilter := FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false);
         C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
@@ -33,7 +35,7 @@ codeunit 110004 DMTCodeGenerator
         C.AppendLine('        textelement(Root)');
         C.AppendLine('        {');
 
-        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false) then begin
+        if HasFieldsInFilter then begin
             C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
@@ -188,7 +190,7 @@ codeunit 110004 DMTCodeGenerator
                 C.AppendLine('        }');
 
             until DMTFieldBuffer.Next() = 0;
-        AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
+        AddTargetRecordExistsFlowField(TargetTableID, NAVSrcTableNo, BufferTableID, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
@@ -279,24 +281,29 @@ codeunit 110004 DMTCodeGenerator
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; BufferTableNo: Integer; var DMTFieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
         DMTMgt: Codeunit DMTMgt;
-        BufferRef, TargetRef : RecordRef;
+        TargetRef: RecordRef;
         TargetTableName: Text;
         BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
         KeyFieldIndex: Integer;
         f: TextBuilder;
     begin
-        if DMTFieldBuffer.Get(BufferTableNo, 59999) then
+        // FieldNoIsUsed
+        if FieldBuffer.Get(BufferTableNo, 59999) then
             exit;
+        // FindTargetTableKeyInfo
         TargetRef.Open(TargetTableID);
         TargetTableName := QuoteValue(TargetRef.Name);
-        BufferRef.Open(BufferTableNo);
         for KeyFieldIndex := 1 to DMTMgt.GetListOfKeyFieldIDs(TargetRef).Count do
             TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
-        for KeyFieldIndex := 1 to DMTMgt.GetListOfKeyFieldIDs(BufferRef).Count do
-            BufferKeyFieldNames.Add(QuoteValue(BufferRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
+        // FindSourceTableKeyInfo
+        FieldBuffer.FindFirst();
+        for KeyFieldIndex := 1 to FieldBuffer."Primary Key".Split(',').Count do
+            if FieldBuffer.Get(FieldBuffer.TableNo, FieldBuffer."Primary Key".Split(',').Get(KeyFieldIndex)) then
+                BufferKeyFieldNames.Add(QuoteValue(FieldBuffer.FieldName));
+
         if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
             exit;
 

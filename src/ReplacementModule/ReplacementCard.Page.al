@@ -4,6 +4,8 @@ page 110019 DMTReplacementCard
     PageType = Card;
     UsageCategory = None;
     SourceTable = DMTReplacement;
+    DataCaptionExpression = Rec."Replacement Code" + ' ' + Rec.Description;
+    SourceTableView = sorting(LineType, "Replacement Code", "Line No.") where(LineType = const(Header), "Line No." = const(0));
 
     layout
     {
@@ -12,133 +14,159 @@ page 110019 DMTReplacementCard
             group(General)
             {
                 Caption = 'General';
-                field(Code; Rec.Code) { ApplicationArea = All; }
+                field(Code; Rec."Replacement Code") { ApplicationArea = All; }
                 field(Description; Rec.Description) { ApplicationArea = All; Importance = Promoted; }
-                field("No. of Orginal Fields"; Rec."No. of From Fields")
-                {
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    trigger OnValidate()
-                    begin
-                        CurrPage.Rules.Page.EnableControls(Rec);
-                        EnableControls(Rec);
-                    end;
-                }
-                field("No. of Mapping Fields"; Rec."No. of To Fields")
-                {
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    trigger OnValidate()
-                    begin
-                        CurrPage.Rules.Page.EnableControls(Rec);
-                        EnableControls(Rec);
-                    end;
-                }
+
             }
             group("Field Setup")
             {
                 Caption = 'Field Setup';
-                grid(FieldDefGrid)
+                group(InnerFieldSetup)
                 {
                     ShowCaption = false;
-                    GridLayout = Rows;
-                    group(GridLabels)
+                    grid(NoOfValuesGrid)
                     {
-                        Caption = ' ', Locked = true;
-                        label(FieldCaption) { Caption = 'Caption'; }
-                        label("Rel.to Table ID") { Caption = 'Rel.to Table ID'; }
-                        label("Rel.to Table Name") { Caption = 'Rel.to Table'; }
-                        // field("From Value 1 Caption"; Rec."From Value 1 Caption") { ApplicationArea = All; Caption = 'Caption'; }
-                        // field("Rel.to Table ID (Value 1)"; Rec."Rel.to Table ID (Value 1)") { ApplicationArea = All; Caption = 'Rel.to Table ID'; }
-                        // field("Rel.Table Caption (Value 1)"; Rec."Rel.Table Caption (Value 1)") { ApplicationArea = All; Caption = 'Rel.to Table Name'; }
+                        ShowCaption = false;
+                        GridLayout = Columns;
+                        group(NoOfValuesGrid_Col1)
+                        {
+                            ShowCaption = false;
+                            field("No. of Compare Values"; Rec."No. of Compare Values")
+                            {
+                                ApplicationArea = All;
+                                Importance = Promoted;
+                                trigger OnValidate()
+                                begin
+                                    EnableControls(xRec, Rec);
+                                    UpdatePageParts(xRec, Rec);
+                                end;
+                            }
+                        }
+                        group(NoOfValuesGrid_Col2)
+                        {
+                            ShowCaption = false;
+                            field("No. of fields to modify"; Rec."No. of Values to modify")
+                            {
+                                ApplicationArea = All;
+                                Importance = Promoted;
+                                trigger OnValidate()
+                                begin
+                                    EnableControls(xRec, Rec);
+                                    UpdatePageParts(xRec, Rec);
+                                end;
+                            }
+                        }
                     }
-                    group(FromField1Group)
+                    grid(FieldDefGrid)
                     {
-                        Caption = 'From Value 1';
-                        field("From Value 1 Caption"; Rec."From Value 1 Caption") { ApplicationArea = All; ShowCaption = false; }
-                    }
-                    group(FromField2Group)
-                    {
-                        Caption = 'From Value 2';
-                        Visible = FromValue2_Visible;
-                        field("From Value 2 Caption"; Rec."From Value 2 Caption") { ApplicationArea = All; ShowCaption = false; }
-                    }
-                    group(ToFieldGroup1)
-                    {
-                        Caption = 'To Value 1';
-                        field("To Value 1 Caption"; Rec."To Value 1 Caption") { ApplicationArea = All; ShowCaption = false; }
-                        field("Rel.to Table ID (Value 1)"; Rec."Rel.to Table ID (To Value 1)") { ApplicationArea = All; ShowCaption = false; }
-                        field("Rel.Table Caption (Value 1)"; Rec."Rel.Table Caption (To Value 1)") { ApplicationArea = All; ShowCaption = false; }
-                    }
-                    group(ToFieldGroup2)
-                    {
-                        Visible = ToValue2_Visible;
-                        Caption = 'To Value 2';
-                        field("To Value 2 Caption"; Rec."To Value 2 Caption") { ApplicationArea = All; ShowCaption = false; }
-                        field("Rel.to Table ID (To Value 2)"; Rec."Rel.to Table ID (Value 2)") { ApplicationArea = All; ShowCaption = false; }
-                        field("Rel.Table Caption (To Value 2)"; Rec."Rel.Table Caption (To Value 2)") { ApplicationArea = All; ShowCaption = false; }
+                        ShowCaption = false;
+                        GridLayout = Rows;
+                        group(GridLabels)
+                        {
+                            Caption = ' ', Locked = true;
+                            label(FieldCaption) { Caption = 'Caption'; }
+                            label("Rel.to Table ID") { Caption = 'Rel.to Table ID'; }
+                            label("Rel.to Table Name") { Caption = 'Rel.to Table'; }
+                        }
+                        group(FromField1Group)
+                        {
+                            Caption = 'Compare Value 1';
+                            field("Comp.Fld.1 Caption"; Rec."Comp.Val.1 Caption") { ApplicationArea = All; ShowCaption = false; }
+                            // field("Rel.to Table ID (Comp.Val.1)"; Rec."Rel.to Table ID (Comp.Val.1)") { ApplicationArea = All; ShowCaption = false; }
+                            // field("Rel.to Table Cpt.(Comp.Val.1)"; Rec."Rel.to Table Cpt.(Comp.Val.1)") { ApplicationArea = All; ShowCaption = false; }
 
+                        }
+                        group(FromField2Group)
+                        {
+                            Caption = 'Compare Value 2';
+                            Visible = CompareValue2_Visible;
+                            field("Comp.Fld.2 Caption"; Rec."Comp.Val.2 Caption") { ApplicationArea = All; ShowCaption = false; }
+                        }
+                        group(ToFieldGroup1)
+                        {
+                            Caption = 'New Value 1';
+                            field("New Value 1 Caption"; Rec."New Value 1 Caption") { ApplicationArea = All; ShowCaption = false; }
+                            field("Rel.to Table ID (New Val.1)"; Rec."Rel.to Table ID (New Val.1)") { ApplicationArea = All; ShowCaption = false; }
+                            field("Rel.to Table Cpt.(New Val.1)"; Rec."Rel.to Table Cpt.(New Val.1)") { ApplicationArea = All; ShowCaption = false; }
+                        }
+                        group(ToFieldGroup2)
+                        {
+                            Visible = NewValue2_Visible;
+                            Caption = 'New Value 2';
+                            field("New Value 2 Caption"; Rec."New Value 2 Caption") { ApplicationArea = All; ShowCaption = false; }
+                            field("Rel.to Table ID (New Val.2)"; Rec."Rel.to Table ID (New Val.2)") { ApplicationArea = All; ShowCaption = false; }
+                            field("Rel.to Table Cpt.(New Val.2)"; Rec."Rel.to Table Cpt.(New Val.2)") { ApplicationArea = All; ShowCaption = false; }
+
+                        }
                     }
                 }
-                // group(FromField1Group)
-                // {
-                //     Caption = 'From Value 1';
-                //     field("From Value 1 Caption"; Rec."From Value 1 Caption") { ApplicationArea = All; Caption = 'Caption'; }
-                //     field("Rel.to Table ID (Value 1)"; Rec."Rel.to Table ID (Value 1)") { ApplicationArea = All; Caption = 'Rel.to Table ID'; }
-                //     field("Rel.Table Caption (Value 1)"; Rec."Rel.Table Caption (Value 1)") { ApplicationArea = All; Caption = 'Rel.to Table Name'; }
-                // }
-                // group(FromField2Group)
-                // {
-                //     Caption = 'From Value 2';
-                //     field("From Value 2 Caption"; Rec."From Value 2 Caption") { ApplicationArea = All; Caption = 'Caption'; }
-                //     field("Rel.to Table ID (Value 2)"; Rec."Rel.to Table ID (Value 2)") { ApplicationArea = All; Caption = 'Rel.to Table ID'; }
-                //     field("Rel.Table Caption (Value 2)"; Rec."Rel.Table Caption (Value 2)") { ApplicationArea = All; Caption = 'Rel.to Table Name'; }
-                // }
-                // group(ToFieldGroup)
-                // {
-                //     Caption = 'To Values';
-                //     field("To Value 1 Caption"; Rec."To Value 1 Caption") { ApplicationArea = All; }
-                //     field("To Value 2 Caption"; Rec."To Value 2 Caption") { ApplicationArea = All; }
-                // }
             }
             part(Rules; DMTReplacementRulesPart)
             {
-                SubPageLink = "Replacement Code" = field(Code);
+                SubPageLink = "Replacement Code" = field("Replacement Code");
                 UpdatePropagation = SubPart;
+            }
+            part(Assignments; DMTReplacementAssigmentsPart)
+            {
+                SubPageLink = "Replacement Code" = field("Replacement Code"), LineType = const(Assignment);
+                ApplicationArea = All;
+                // Editable = false;
             }
         }
     }
 
     actions
     {
+        area(Processing)
+        {
+            action(ProposeAssignments)
+            {
+                ApplicationArea = All;
+                Image = Suggest;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+                Caption = 'Propose Assignments', Comment = 'Zuordnung vorschlagen';
+                trigger OnAction()
+                var
+                    ReplacementsMgt: Codeunit DMTReplacementsMgt;
+                begin
+                    if Rec."Replacement Code" <> '' then
+                        CurrPage.SaveRecord();
+                    ReplacementsMgt.proposeAssignments(Rec);
+                    CurrPage.Update(false);
+                end;
+            }
+        }
     }
-    internal procedure EnableControls(Mapping: Record DMTReplacement)
+
+    internal procedure EnableControls(ReplacementOld: Record DMTReplacement; Replacement: Record DMTReplacement)
     begin
-        if UpdateVisiblity(Mapping) then
+        if Replacement.IsEqual(ReplacementOld) then
+            exit;
+        if SetVisiblity(Replacement) then
             CurrPage.Update();
     end;
 
-    local procedure UpdateVisiblity(var Mapping: Record DMTReplacement) DoUpdate: Boolean
-    var
-        OldValue: Boolean;
+    local procedure SetVisiblity(var ReplacementHeader: Record DMTReplacement): Boolean
     begin
-        OldValue := Mapping."No. of From Fields" in [Mapping."No. of From Fields"::"2"];
-        FromValue2_Visible := Mapping."No. of From Fields" in [Mapping."No. of From Fields"::"2"];
-        if FromValue2_Visible <> OldValue then
-            DoUpdate := true;
+        CompareValue2_Visible := ReplacementHeader."No. of Compare Values" in [ReplacementHeader."No. of Compare Values"::"2"];
+        NewValue2_Visible := ReplacementHeader."No. of Values to modify" in [ReplacementHeader."No. of Values to modify"::"2"];
+    end;
 
-        OldValue := Mapping."No. of From Fields" in [Mapping."No. of To Fields"::"2"];
-        ToValue2_Visible := Mapping."No. of To Fields" in [Mapping."No. of To Fields"::"2"];
-        if FromValue2_Visible <> OldValue then
-            DoUpdate := true;
+    internal procedure UpdatePageParts(ReplacementOld: Record DMTReplacement; Replacement: Record DMTReplacement)
+    begin
+        CurrPage.Assignments.Page.InitializeAsAssignmentPerReplacement();
+        if not Replacement.IsEqual(ReplacementOld) then
+            CurrPage.Rules.Page.EnableControls(Rec);
     end;
 
     trigger OnAfterGetRecord()
     begin
-        EnableControls(Rec);
-        CurrPage.Rules.Page.EnableControls(Rec);
+        EnableControls(xRec, Rec);
+        UpdatePageParts(xRec, Rec);
     end;
 
     var
-        FromValue2_Visible, ToValue2_Visible : Boolean;
+        CompareValue2_Visible, NewValue2_Visible : Boolean;
 }

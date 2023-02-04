@@ -36,7 +36,12 @@ codeunit 110012 DMTProcessRecord
         SourceField := SourceRef.Field(TempFieldMapping."Source Field No.");
         TargetField := TmpTargetRef.Field(TempFieldMapping."Target Field No.");
         DMTMgt.AssignValueToFieldRef(SourceRef, TempFieldMapping, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
-        DMTMgt.ApplyReplacements(TempFieldMapping, FieldWithTypeCorrectValueToValidate);
+        // DMTMgt.ApplyReplacements(TempFieldMapping, FieldWithTypeCorrectValueToValidate);
+        if ReplacementsMgt.HasReplacementForTargetField(TargetField.Number) then begin
+            FieldWithTypeCorrectValueToValidate := ReplacementsMgt.GetReplacmentValueFor(TargetField.Number);
+            // if not DMTMgt.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, NewValue, false, false) then
+            // Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
+        end;
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         CurrValueToAssign_IsInitialized := true;
         case ValidateSetting of
@@ -136,6 +141,7 @@ codeunit 110012 DMTProcessRecord
         TargetRef_INIT.Init();
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
+        ReplacementsMgt.InitFor(DataFile, _SourceRef, DataFile."Target Table ID");
     end;
 
     procedure InitInsert()
@@ -244,5 +250,6 @@ codeunit 110012 DMTProcessRecord
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
+        ReplacementsMgt: Codeunit DMTReplacementsMgt;
 
 }

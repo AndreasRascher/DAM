@@ -24,20 +24,26 @@ table 110041 DMTFieldMapping
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(13; "Target Field Name"; Text[80])
+        field(13; "Search Target Field Caption"; Text[80])
+        {
+            Description = 'Searchable field';
+            Caption = 'Target Field Caption', comment = 'Zielfeld Bezeichnung';
+            Editable = false;
+        }
+        field(14; "Target Field Name"; Text[80])
         {
             Caption = 'Target Field Name', comment = 'Zielfeld Name';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field.FieldName where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(14; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'Schlüsselfeld'; Editable = false; }
-        field(30; "Source Table ID"; Integer)
+        field(15; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'Schlüsselfeld'; Editable = false; }
+        field(16; "Source Table ID"; Integer)
         {
             Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
-        field(31; "Source Field No."; Integer)
+        field(17; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', comment = 'Herkunftsfeld Nr.';
             TableRelation = DMTFieldBuffer."No." where("Data File ID Filter" = field("Data File ID"));
@@ -50,8 +56,8 @@ table 110041 DMTFieldMapping
                 UpdateProcessingAction(Rec.FieldNo("Source Field No."));
             end;
         }
-        field(32; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
-        field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeaderOLD.Code; }
+        field(18; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
+        // field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeaderOLD.Code; }
         field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
         field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
@@ -82,6 +88,7 @@ table 110041 DMTFieldMapping
         }
         field(102; "Validation Order"; Integer) { Caption = 'Validation Order', comment = 'Reihenfolge Validierung'; }
         field(103; Comment; Text[250]) { Caption = 'Comment', Comment = 'Bemerkung'; }
+        field(104; Selection; Boolean) { Caption = 'Selection', Comment = 'Auswahl'; }
     }
 
     keys
@@ -95,10 +102,12 @@ table 110041 DMTFieldMapping
         TempFieldMapping2: Record DMTFieldMapping temporary;
     begin
         FieldMapping.Copy(Rec);
+        FieldMapping.SetAutoCalcFields("Target Field Caption");
         if FieldMapping.FindSet(false, false) then
             repeat
                 LineCount += 1;
                 TempFieldMapping2 := FieldMapping;
+                TempFieldMapping2."Search Target Field Caption" := FieldMapping."Target Field Caption";
                 TempFieldMapping2.Insert(false);
             until FieldMapping.Next() = 0;
         TempFieldMapping.Copy(TempFieldMapping2, true);

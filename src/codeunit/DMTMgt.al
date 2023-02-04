@@ -201,7 +201,7 @@ codeunit 110002 DMTMgt
         else
             if not EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
                 Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
-        ApplyReplacements(FieldMapping, ToField);
+        // ApplyReplacements(FieldMapping, ToField);
         if DoModify then
             TargetRef.Modify();
     end;
@@ -425,28 +425,28 @@ codeunit 110002 DMTMgt
     begin
         ToField := TargetRecRef.Field(FieldMapping."Target Field No.");
         AssignValueToFieldRef(SourceRecRef, FieldMapping, TargetRecRef, FieldWithTypeCorrectValueToValidate);
-        ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
+        // ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
         ToField.Validate(FieldWithTypeCorrectValueToValidate.Value);
         TargetRecRef.Modify();
     end;
 
-    procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
-    var
-        // TempFieldWithReplacementCode: Record "DMTField" temporary;
-        ReplacementsHeader: Record DMTReplacementsHeaderOLD;
-        DMTMgt: Codeunit DMTMgt;
-        ReplaceValueDictionary: Dictionary of [Text, Text];
-        NewValue: Text;
-    begin
-        if FieldMapping."Replacements Code" = '' then
-            exit;
+    // procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
+    // var
+    //     // TempFieldWithReplacementCode: Record "DMTField" temporary;
+    //     ReplacementsHeader: Record DMTReplacementsHeaderOLD;
+    //     DMTMgt: Codeunit DMTMgt;
+    //     ReplaceValueDictionary: Dictionary of [Text, Text];
+    //     NewValue: Text;
+    // begin
+    //     if FieldMapping."Replacements Code" = '' then
+    //         exit;
 
-        ReplacementsHeader.Get(FieldMapping."Replacements Code");
-        ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
-        if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
-            if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
-                Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
-    end;
+    //     ReplacementsHeader.Get(FieldMapping."Replacements Code");
+    //     ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
+    //     if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
+    //         if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
+    //             Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
+    // end;
 
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var

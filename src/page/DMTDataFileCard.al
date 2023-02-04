@@ -47,6 +47,11 @@ page 110026 DMTDataFileCard
                 Caption = 'Field Mapping', Comment = 'Feldzuordnung';
                 SubPageLink = "Data File ID" = field(ID), "Target Table ID" = field("Target Table ID");
             }
+            part(Replacements; DMTReplacementAssigmentsPart)
+            {
+                SubPageLink = "Data File ID" = field(ID), "Target Table ID" = field("Target Table ID"), LineType = const(Assignment);
+                ApplicationArea = All;
+            }
         }
         area(FactBoxes)
         {
@@ -113,11 +118,13 @@ page 110026 DMTDataFileCard
             {
                 Caption = 'Count Lines in Target';
                 ApplicationArea = All;
+                Image = CalcWorkCenterCalendar;
                 trigger OnAction()
                 var
                     FPBuilder: Codeunit DMTFPBuilder;
                     RecRef: RecordRef;
                     TargetTableView, TargetTableFilter : Text;
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                 begin
                     RecRef.Open(Rec."Target Table ID");
                     if TargetTableView <> '' then
@@ -125,7 +132,7 @@ page 110026 DMTDataFileCard
                     if FPBuilder.RunModal(RecRef, true) then begin
                         TargetTableView := RecRef.GetView();
                         TargetTableFilter := RecRef.GetFilters;
-                        Message('Anzahl Zeilen im Filter %1', RecRef.Count);
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
                     end;
                 end;
             }
@@ -133,12 +140,14 @@ page 110026 DMTDataFileCard
             {
                 Caption = 'Count Lines in Buffer';
                 ApplicationArea = All;
+                Image = CalcWorkCenterCalendar;
                 trigger OnAction()
                 var
                     FPBuilder: Codeunit DMTFPBuilder;
-                    RecRef: RecordRef;
-                    TargetTableView, TargetTableFilter : Text;
                     Migrate: Codeunit DMTMigrate;
+                    RecRef: RecordRef;
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    TargetTableFilter, TargetTableView : Text;
                 begin
                     Migrate.InitBufferRef(Rec, RecRef);
                     if TargetTableView <> '' then
@@ -146,7 +155,7 @@ page 110026 DMTDataFileCard
                     if FPBuilder.RunModal(RecRef, true) then begin
                         TargetTableView := RecRef.GetView();
                         TargetTableFilter := RecRef.GetFilters;
-                        Message('Anzahl Zeilen im Filter %1', RecRef.Count);
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
                     end;
                 end;
             }
@@ -294,6 +303,7 @@ page 110026 DMTDataFileCard
         FullDataFilePathText := Rec.FullDataFilePath();
         CurrDataFilePathStyle := Rec.DataFileExistsStyle;
         Rec.UpdateFileRecProperties(false);
+        CurrPage.Replacements.Page.InitializeAsAssignmentPerDataFile();
     end;
 
     local procedure SelectDataFilePath()

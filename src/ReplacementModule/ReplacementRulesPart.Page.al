@@ -1,9 +1,10 @@
 page 110020 DMTReplacementRulesPart
 {
-    Caption = 'Mapping Rules';
+    Caption = 'Mapping';
     PageType = ListPart;
     UsageCategory = None;
-    SourceTable = DMTReplacementRule;
+    SourceTable = DMTReplacement;
+    SourceTableView = sorting(LineType, "Replacement Code", "Line No.") where(LineType = const(Line));
     AutoSplitKey = true;
 
     layout
@@ -12,10 +13,10 @@ page 110020 DMTReplacementRulesPart
         {
             repeater(Group)
             {
-                field("Original Value 1"; Rec."From Value 1") { ApplicationArea = All; }
-                field("Original Value 2"; Rec."From Value 2") { ApplicationArea = All; Visible = OriginalValue2_Visible; }
-                field(MappingValue1; Rec."To Value 1") { ApplicationArea = All; }
-                field(MappingValue2; Rec."To Value 2") { ApplicationArea = All; Visible = MappingValue2_Visible; }
+                field("Original Value 1"; Rec."Comp.Value 1") { ApplicationArea = All; }
+                field("Original Value 2"; Rec."Comp.Value 2") { ApplicationArea = All; Visible = OriginalValue2_Visible; }
+                field("New Value 1"; Rec."New Value 1") { ApplicationArea = All; }
+                field("New Value 2"; Rec."New Value 2") { ApplicationArea = All; Visible = MappingValue2_Visible; }
             }
         }
     }
@@ -26,10 +27,16 @@ page 110020 DMTReplacementRulesPart
 
     internal procedure EnableControls(Mapping: Record DMTReplacement)
     begin
-        OriginalValue2_Visible := Mapping."No. of From Fields" in [Mapping."No. of From Fields"::"2"];
-        MappingValue2_Visible := Mapping."No. of To Fields" in [Mapping."No. of To Fields"::"2"];
+        SetColumnVisibility(Mapping);
         CurrPage.Update();
     end;
+
+    local procedure SetColumnVisibility(var Mapping: Record DMTReplacement)
+    begin
+        OriginalValue2_Visible := Mapping."No. of Compare Values" in [Mapping."No. of Compare Values"::"2"];
+        MappingValue2_Visible := Mapping."No. of Values to modify" in [Mapping."No. of Values to modify"::"2"];
+    end;
+
 
     var
         OriginalValue2_Visible, MappingValue2_Visible : Boolean;

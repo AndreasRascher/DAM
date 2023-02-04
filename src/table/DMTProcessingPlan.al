@@ -24,7 +24,7 @@ table 110010 DMTProcessingPlan
         }
         field(11; ID; Integer)
         {
-            Caption = 'DataFile ID';
+            Caption = 'ID';
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else
