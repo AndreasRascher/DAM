@@ -62,40 +62,12 @@ table 110001 DMTErrorLog
         key(Key2; "From ID") { }
     }
 
-    procedure AddEntryForLastError(ToRecRef: RecordRef; ToFieldNo: Integer; IgnoreError: Boolean);
-    var
-        _DMTErrorlog: Record DMTErrorLog;
-    begin
-        _DMTErrorlog.Insert(true);
-        _DMTErrorlog."To ID" := ToRecRef.RecordId;
-        _DMTErrorlog."Import to Table No." := ToRecRef.Number;
-        _DMTErrorlog."Import to Field No." := ToFieldNo;
-        _DMTErrorlog."Ignore Error" := IgnoreError;
-
-        _DMTErrorlog.Errortext := CopyStr(GetLastErrorText, 1, MaxStrLen(_DMTErrorlog.Errortext));
-        _DMTErrorlog.ErrorCode := CopyStr(GetLastErrorCode, 1, MaxStrLen(_DMTErrorlog.ErrorCode));
-        _DMTErrorlog."DMT User" := CopyStr(UserId, 1, MaxStrLen(_DMTErrorlog."DMT User"));
-        _DMTErrorlog."DMT Errorlog Created At" := CurrentDateTime;
-        _DMTErrorlog.Modify(true);
-    end;
 
     procedure DeleteExistingLogFor(BufferRef: RecordRef)
     var
         DMTErrorlog: Record DMTErrorLog;
     begin
         DMTErrorlog.SetRange("From ID", BufferRef.RecordId);
-        if not DMTErrorlog.IsEmpty then // Avoid Tablelocks
-            DMTErrorlog.DeleteAll();
-    end;
-
-    procedure DeleteExistingLogFor(DataFile: Record DMTDataFile)
-    var
-        DMTErrorlog: Record DMTErrorLog;
-    begin
-        DataFile.TestField(Name);
-        DataFile.TestField(Path);
-        DMTErrorlog.SetRange(DataFileName, DataFile.Name);
-        DMTErrorlog.SetRange(DataFilePath, DataFile.Path);
         if not DMTErrorlog.IsEmpty then // Avoid Tablelocks
             DMTErrorlog.DeleteAll();
     end;

@@ -101,25 +101,23 @@ page 110001 "DMT Error Log List"
                 var
                     allObjWithCaption: Record AllObjWithCaption;
                     NAVAppInstalledApp: Record "NAV App Installed App";
+                    DMTObjMgt: Codeunit DMTObjMgt;
                     selection: Integer;
                     mI: ModuleInfo;
                     choices: Text;
+                    ExcludeCoreAppObjIDFilter: Text;
+                    ObjID: Integer;
                 begin
                     NavApp.GetCurrentModuleInfo(mI);
                     NAVAppInstalledApp.SetRange("App ID", mI.Id);
                     NAVAppInstalledApp.FindFirst();
                     allObjWithCaption.SetRange("App Package ID", NAVAppInstalledApp."Package ID");
                     allObjWithCaption.SetRange("Object Type", allObjWithCaption."Object Type"::Table);
-                    allObjWithCaption.SetFilter("Object ID", '<>%1&<>%2&<>%3&<>%4&<>%5&<>%6&<>%7',
-                        Database::DMTSetup,
-                        Database::DMTErrorLog,
-                        Database::DMTDataFile,
-                        Database::DMTFieldMapping,
-                        Database::DMTFieldBuffer,
-                        Database::DMTGenBuffTable,
-                        // Database::DMTReplacementsHeaderOLD,
-                        // Database::DMTReplacementsLineOLD);
-                        Database::DMTReplacement);
+                    foreach ObjID in DMTObjMgt.GetCoreAppObjectIDList(Enum::DMTObjTypes::Table) do begin
+                        ExcludeCoreAppObjIDFilter += StrSubstNo('&<>%1', ObjID);
+                    end;
+                    ExcludeCoreAppObjIDFilter := ExcludeCoreAppObjIDFilter.TrimStart('&');
+                    allObjWithCaption.SetFilter("Object ID", ExcludeCoreAppObjIDFilter);
                     if allObjWithCaption.FindSet() then
                         repeat
                             choices += ConvertStr(allObjWithCaption."Object Caption", ',', '_') + ',';
@@ -132,7 +130,6 @@ page 110001 "DMT Error Log List"
                         allObjWithCaption.Next(selection - 1);
                     Rec.SetRange("Import from Table No.", allObjWithCaption."Object ID");
                     CurrPage.Update(false);
-
                 end;
 
             }

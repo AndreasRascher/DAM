@@ -154,6 +154,10 @@ table 110011 DMTReplacement
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "Replacement Code", Description) { }
+    }
 
     trigger OnInsert()
     begin

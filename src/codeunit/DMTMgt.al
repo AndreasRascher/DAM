@@ -1,137 +1,5 @@
 codeunit 110002 DMTMgt
 {
-    procedure ProgressBar_Open(BufferRef: RecordRef; ProgressBarContent: Text)
-    begin
-        ProgressBar.Open(ProgressBarContent);
-        ProgressBar_Total := BufferRef.Count;
-        ProgressBar_StartTime := CurrentDateTime;
-        ProgressBar_IsOpen := true;
-        // clear old
-        Clear(ProgressBar_Step);
-        Clear(Result_QtyFailed);
-        Clear(Result_QtyProcessed);
-        Clear(Result_QtySuccess);
-    end;
-
-    procedure ProgressBar_Open(TotalLineCount: Integer; ProgressBarContent: Text)
-    begin
-        ProgressBar.Open(ProgressBarContent);
-        ProgressBar_Total := TotalLineCount;
-        ProgressBar_StartTime := CurrentDateTime;
-        ProgressBar_IsOpen := true;
-    end;
-
-    procedure ProgressBar_UpdateControl(Number: Integer; Value: Variant)
-    begin
-        if not ProgressBar_IsOpen then
-            exit;
-        if Number <> 0 then
-            ProgressBar.Update(Number, Value);
-    end;
-
-    procedure ProgressBar_Close()
-    begin
-        if ProgressBar_IsOpen then
-            ProgressBar.Close();
-    end;
-
-    procedure ProgressBar_GetTotal(): Integer
-    begin
-        exit(ProgressBar_Total);
-    end;
-
-    procedure ProgressBar_GetStep(): Integer
-    begin
-        exit(ProgressBar_Step);
-    end;
-
-    procedure ProgressBar_NextStep()
-    begin
-        ProgressBar_Step += 1;
-    end;
-
-    procedure ProgressBar_GetProgress(): Integer
-    begin
-        exit((10000 * (ProgressBar_Step / ProgressBar_Total)) div 1);
-    end;
-
-    procedure ProgressBar_Update(Number1: Integer; Value1: Variant; Number2: Integer; Value2: Variant; Number3: Integer; Value3: Variant; Number4: Integer; Value4: Variant; Number5: Integer; Value5: Variant)
-    begin
-        if not ProgressBar_IsOpen then
-            exit;
-        if (Format(ProgressBar_LastUpdate) = '') then
-            ProgressBar_LastUpdate := CurrentDateTime;
-        if (CurrentDateTime - ProgressBar_LastUpdate) < 1000 then
-            exit;
-        if Number1 <> 0 then
-            ProgressBar.Update(Number1, Value1);
-        if Number2 <> 0 then
-            ProgressBar.Update(Number2, Value2);
-        if Number3 <> 0 then
-            ProgressBar.Update(Number3, Value3);
-        if Number4 <> 0 then
-            ProgressBar.Update(Number4, Value4);
-        if Number5 <> 0 then
-            ProgressBar.Update(Number5, Value5);
-
-        ProgressBar_LastUpdate := CurrentDateTime;
-    end;
-
-    procedure ProgressBar_GetRemainingTime() TimeLeft: Text
-    var
-        RemainingMins: Decimal;
-        RemainingSeconds: Decimal;
-        ElapsedTime: Duration;
-        RoundedRemainingMins: Integer;
-    begin
-        ElapsedTime := Round(((CurrentDateTime - ProgressBar_StartTime) / 1000), 1);
-        RemainingMins := Round((((ElapsedTime / ((ProgressBar_GetStep() / ProgressBar_GetTotal()) * 100) * 100) - ElapsedTime) / 60), 0.1);
-        RoundedRemainingMins := Round(RemainingMins, 1, '<');
-        RemainingSeconds := Round(((RemainingMins - RoundedRemainingMins) * 0.6) * 100, 1);
-        TimeLeft := StrSubstNo('%1:', RoundedRemainingMins);
-        if StrLen(Format(RemainingSeconds)) = 1 then
-            TimeLeft += StrSubstNo('0%1', RemainingSeconds)
-        else
-            TimeLeft += StrSubstNo('%1', RemainingSeconds);
-    end;
-
-    procedure ProgressBar_GetTimeElapsed(): Duration
-    begin
-        exit(CurrentDateTime - ProgressBar_StartTime);
-    end;
-
-    procedure GetResultQtyMessage()
-    begin
-        Message('Anzahl Datensätze..\' +
-                'verarbeitet: %1\' +
-                'eingelesen : %2\' +
-                'mit Fehlern: %3\' +
-                'Verarbeitungsdauer: %4', GetResultQty_QtyProcessed(), GetResultQty_QtySuccess(), GetResultQty_QtyFailed(), ProgressBar_GetTimeElapsed());
-    end;
-
-    procedure UpdateResultQty(IncreaseSuccessCount: Boolean; IncreaseProcessedCount: Boolean)
-    begin
-        Result_QtyProcessed += 1;
-        if IncreaseSuccessCount then
-            Result_QtySuccess += 1
-        else
-            Result_QtyFailed += 1;
-    end;
-
-    procedure GetResultQty_QtyProcessed(): Integer
-    begin
-        exit(Result_QtyProcessed);
-    end;
-
-    procedure GetResultQty_QtyFailed(): Integer
-    begin
-        exit(Result_QtyFailed);
-    end;
-
-    procedure GetResultQty_QtySuccess(): Integer
-    begin
-        exit(Result_QtySuccess);
-    end;
 
     procedure GetIncludeExcludeKeyFieldFilter(TableNo: Integer; Include: Boolean) KeyFieldNoFilter: Text
     var
@@ -204,49 +72,6 @@ codeunit 110002 DMTMgt
         // ApplyReplacements(FieldMapping, ToField);
         if DoModify then
             TargetRef.Modify();
-    end;
-
-    procedure ValidateField(var TargetRef: RecordRef; SourceRef: RecordRef; FieldMapping: Record DMTFieldMapping)
-    var
-        // DMTErrorLog: Record DMTErrorLog;
-        IsValidateSuccessful: Boolean;
-    begin
-        if (FieldMapping."Source Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Source Field No." = 0');
-        if (FieldMapping."Target Field No." = 0) then Error('ValidateField: Invalid Paramter DMTField."Target Field No." = 0');
-        ClearLastError();
-        IsValidateSuccessful := DoIfCodeunitRunValidate(SourceRef, TargetRef, FieldMapping);
-
-        // HANDLE VALIDATE RESULT
-        if not IsValidateSuccessful then begin
-            if GetLastErrorCode = 'DebuggerActivityAborted' then // Avoid Hangups
-                Error(GetLastErrorCode);
-            // DMTErrorLog.AddEntryForLastError(SourceRef, TargetRef, FieldMapping);
-            Error('TODO');
-        end else begin
-            // Save Successful changes
-            if TargetRef.Modify() then;
-        end;
-    end;
-
-    procedure ValidateFieldWithValue(var TargetRef: RecordRef; ToFieldNo: Integer; NewValue: Variant; IgnoreErrorFlag: Boolean)
-    var
-        DMTErrorLog: Record DMTErrorLog;
-        DMTErrorWrapper: Codeunit DMTErrorWrapper;
-        IsValidateSuccessful: Boolean;
-    begin
-        ClearLastError();
-        // VALIDATE
-        Commit();
-        DMTErrorWrapper.SetFieldValidateWithValue(NewValue, TargetRef, ToFieldNo);
-        IsValidateSuccessful := DMTErrorWrapper.Run();
-        DMTErrorWrapper.GetTargetRef(TargetRef);
-        // HANDLE VALIDATE RESULT
-        if not IsValidateSuccessful then begin
-            DMTErrorLog.AddEntryForLastError(TargetRef, ToFieldNo, IgnoreErrorFlag);
-        end else begin
-            // Save Successful changes
-            if TargetRef.Modify() then;
-        end;
     end;
 
     procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
@@ -409,16 +234,6 @@ codeunit 110002 DMTMgt
         end;  // end_CASE
     end;
 
-    procedure DoIfCodeunitRunValidate(SourceRef: RecordRef; var TargetRef: RecordRef; FieldMapping: Record DMTFieldMapping) IsValidateSuccessful: Boolean
-    var
-        DMTErrorWrapper: Codeunit DMTErrorWrapper;
-    begin
-        Commit();
-        DMTErrorWrapper.SetFieldValidateRecRef(SourceRef, TargetRef, FieldMapping);
-        IsValidateSuccessful := DMTErrorWrapper.Run();
-        DMTErrorWrapper.GetTargetRef(TargetRef);
-    end;
-
     procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; var TargetRecRef: RecordRef)
     var
         FieldWithTypeCorrectValueToValidate, ToField : FieldRef;
@@ -429,24 +244,6 @@ codeunit 110002 DMTMgt
         ToField.Validate(FieldWithTypeCorrectValueToValidate.Value);
         TargetRecRef.Modify();
     end;
-
-    // procedure ApplyReplacements(FieldMapping: Record DMTFieldMapping temporary; var ToFieldRef: FieldRef)
-    // var
-    //     // TempFieldWithReplacementCode: Record "DMTField" temporary;
-    //     ReplacementsHeader: Record DMTReplacementsHeaderOLD;
-    //     DMTMgt: Codeunit DMTMgt;
-    //     ReplaceValueDictionary: Dictionary of [Text, Text];
-    //     NewValue: Text;
-    // begin
-    //     if FieldMapping."Replacements Code" = '' then
-    //         exit;
-
-    //     ReplacementsHeader.Get(FieldMapping."Replacements Code");
-    //     ReplacementsHeader.loadDictionary(ReplaceValueDictionary);
-    //     if ReplaceValueDictionary.Get(Format(ToFieldRef.Value), NewValue) then
-    //         if not DMTMgt.EvaluateFieldRef(ToFieldRef, NewValue, false, false) then
-    //             Error('ApplyReplacements EvaluateFieldRef Error "%1"', NewValue);
-    // end;
 
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
@@ -469,20 +266,6 @@ codeunit 110002 DMTMgt
             else
                 Error('unhandled TODO %1', FromField.Type);
         end;
-    end;
-
-    [TryFunction]
-    procedure TryValidateFieldWithValue(var TargetRecRef: RecordRef; ToFieldNo: Integer; NewValue: Variant)
-    begin
-        ValidateFieldWithValueImplementation(ToFieldNo, NewValue, TargetRecRef);
-    end;
-
-    procedure ValidateFieldWithValueImplementation(ToFieldNo: Integer; NewValue: Variant; var TargetRecRef: RecordRef)
-    var
-        ToField: FieldRef;
-    begin
-        ToField := TargetRecRef.Field(ToFieldNo);
-        ToField.Validate(NewValue);
     end;
 
     procedure LookUpPath(CurrentPath: Text; LookUpFolder: Boolean) ResultPath: Text[250]
@@ -522,15 +305,4 @@ codeunit 110002 DMTMgt
 
     var
         DMTSetup: Record DMTSetup;
-        // FieldMapping: Record DMTFieldMapping;
-        ProgressBar_IsOpen: Boolean;
-        ProgressBar_LastUpdate: DateTime;
-        ProgressBar_StartTime: DateTime;
-        ProgressBar: Dialog;
-        ProgressBar_Step: Integer;
-        ProgressBar_Total: Integer;
-        Result_QtyFailed: Integer;
-        Result_QtyProcessed: Integer;
-        Result_QtySuccess: Integer;
-
 }

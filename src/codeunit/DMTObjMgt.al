@@ -27,66 +27,6 @@ codeunit 110000 DMTObjMgt
         end;
     end;
 
-    procedure LookUpTargetTable(var DMTTable: Record DMTDataFile) OK: Boolean;
-    var
-        TempAllObjWithCaption: Record AllObjWithCaption temporary;
-        DMTSelectTables: Page DMTSelectTableList;
-    begin
-        LoadTableList(TempAllObjWithCaption);
-        if TempAllObjWithCaption.FindFirst() then;
-        DMTSelectTables.Set(TempAllObjWithCaption, true);
-        DMTSelectTables.LookupMode(true);
-        if DMTSelectTables.RunModal() = Action::LookupOK then begin
-            DMTSelectTables.GetSelection(TempAllObjWithCaption);
-            DMTTable."Target Table ID" := TempAllObjWithCaption."Object ID";
-            DMTTable."Target Table Caption" := TempAllObjWithCaption."Object Caption";
-        end;
-    end;
-
-    // procedure AddSelectedTables() OK: Boolean;
-    // var
-    //     TempAllObjWithCaption: Record AllObjWithCaption temporary;
-    //     DMTTable: Record DMTTable;
-    //     DMTSelectTables: Page "DMTSelectTableList";
-    // begin
-    //     LoadTableList(TempAllObjWithCaption);
-    //     if TempAllObjWithCaption.FindFirst() then;
-    //     DMTSelectTables.Set(TempAllObjWithCaption, true);
-    //     DMTSelectTables.LookupMode(true);
-    //     if DMTSelectTables.RunModal() = Action::LookupOK then begin
-    //         DMTSelectTables.GetSelection(TempAllObjWithCaption);
-    //         if TempAllObjWithCaption.FindSet() then
-    //             repeat
-    //                 if not DMTTable.get(TempAllObjWithCaption."Object ID") then begin
-    //                     AddNewTargetTable(TempAllObjWithCaption."Object ID", DMTTable);
-    //                 end;
-    //             until TempAllObjWithCaption.Next() = 0;
-    //     end;
-    // end;
-
-    local procedure LoadTableList(var TempAllObjWithCaption: Record AllObjWithCaption temporary)
-    var
-        AllObjWithCaption: Record AllObjWithCaption;
-        DataFile: Record DMTDataFile;
-        TableMeta: Record "Table Metadata";
-    begin
-        AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-        AllObjWithCaption.FindSet();
-        repeat
-            TempAllObjWithCaption := AllObjWithCaption;
-            TempAllObjWithCaption."Object Subtype" := '';
-            if DataFile.Get(TempAllObjWithCaption."Object ID") then
-                TempAllObjWithCaption."Object Subtype" += 'TableExists';
-            if TableMeta.Get(TempAllObjWithCaption."Object ID") then begin
-                if TableMeta.ObsoleteState = TableMeta.ObsoleteState::Pending then
-                    TempAllObjWithCaption."Object Subtype" += 'Pending';
-                if TableMeta.ObsoleteState = TableMeta.ObsoleteState::Pending then
-                    TempAllObjWithCaption."Object Subtype" += 'Removed';
-            end;
-            TempAllObjWithCaption.Insert(false);
-        until AllObjWithCaption.Next() = 0;
-    end;
-
     procedure ImportNAVSchemaFile()
     var
         DMTSetup: Record DMTSetup;
@@ -212,23 +152,35 @@ codeunit 110000 DMTObjMgt
     begin
         case AllObjWithCaption."Object Type" of
             AllObjWithCaption."Object Type"::Table:
-                begin
-                    IsCoreAppObj := AllObjWithCaption."Object ID" in [Database::DMTSetup,
-                                                                      Database::DMTDataFile,
-                                                                      Database::DMTFieldMapping,
-                                                                      Database::DMTErrorLog,
-                                                                      Database::DMTCopyTable,
-                                                                      Database::DMTFieldBuffer,
-                                                                      Database::DMTDataFileBuffer,
-                                                                      Database::DMTGenBuffTable,
-                                                                      Database::DMTReplacement,
-                                                                      Database::DMTProcessingPlan];
-                end;
+                IsCoreAppObj := GetCoreAppObjectIDList(Enum::DMTObjTypes::Table).Contains(AllObjWithCaption."Object ID");
             AllObjWithCaption."Object Type"::XMLport:
+                IsCoreAppObj := GetCoreAppObjectIDList(Enum::DMTObjTypes::XMLPort).Contains(AllObjWithCaption."Object ID");
+        end;
+    end;
+
+    procedure GetCoreAppObjectIDList(ObjType: Enum DMTObjTypes) IDsList: List of [Integer]
+    begin
+        case ObjType of
+            ObjType::Table:
                 begin
-                    IsCoreAppObj := AllObjWithCaption."Object ID" in [Xmlport::DMTFieldBufferImport,
-                                                                      Xmlport::DMTGenBuffImport];
+                    IDsList.Add(Database::DMTSetup);
+                    IDsList.Add(Database::DMTDataFile);
+                    IDsList.Add(Database::DMTFieldMapping);
+                    IDsList.Add(Database::DMTErrorLog);
+                    IDsList.Add(Database::DMTCopyTable);
+                    IDsList.Add(Database::DMTFieldBuffer);
+                    IDsList.Add(Database::DMTDataFileBuffer);
+                    IDsList.Add(Database::DMTGenBuffTable);
+                    IDsList.Add(Database::DMTReplacement);
+                    IDsList.Add(Database::DMTProcessingPlan);
                 end;
+            ObjType::XMLPort:
+                begin
+                    IDsList.Add(Xmlport::DMTFieldBufferImport);
+                    IDsList.Add(Xmlport::DMTGenBuffImport);
+                end;
+            else
+                Error('Unknown Object Type Name %1', ObjType);
         end;
     end;
 
