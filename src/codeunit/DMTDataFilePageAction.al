@@ -815,6 +815,7 @@ codeunit 110013 DMTDataFilePageAction
         repeat
             LineNo += 1;
             Clear(Line);
+            Field.setfilter(ObsoleteState, '%1|%2', Field.ObsoleteState::No, Field.ObsoleteState::Pending);
             Field.FindSet();
             repeat
                 FieldValue := GetFormattedFieldValue(RecRef, Field."No.").Replace(TabChar, '');
