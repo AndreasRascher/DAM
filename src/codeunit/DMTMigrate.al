@@ -119,17 +119,18 @@ codeunit 110017 DMTMigrate
     var
         DataFile: Record DMTDataFile;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
+        Log: Codeunit DMTLog;
         MigrationLib: Codeunit DMTMigrationLib;
         ProgressDialog: Codeunit DMTProgressDialog;
-        Log: Codeunit DMTLog;
         BufferRef, BufferRef2 : RecordRef;
-        MaxWith: Integer;
-        ProgressBarTitle: Text;
-        RecordWasSkipped, RecordHadErrors, TargetRecordExists : Boolean;
-        Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
+        RecordHadErrors, RecordWasSkipped, TargetRecordExists : Boolean;
         Start: DateTime;
+        ResultType: Enum DMTProcessingResultType;
+        MaxWith: Integer;
         DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
         TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
+        Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
+        ProgressBarTitle: Text;
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -182,32 +183,35 @@ codeunit 110017 DMTMigrate
             Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", DataFile);
 
         repeat
-            hier weiter machen:
-            Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
-            Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
+            // hier weiter machen:
+            // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
+            // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, RecordWasSkipped, RecordHadErrors, TargetRecordExists);
+            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
             Log.IncNoOfProcessedRecords();
             ProgressDialog.NextStep(StepIndex::Process);
-            case true of
-                RecordHadErrors:
+            case ResultType of
+                ResultType::Error:
                     begin
                         ProgressDialog.NextStep(StepIndex::ResultError);
                         Log.IncNoOfRecordsWithErrors();
                     end;
-                RecordWasSkipped:
+                ResultType::Ignored:
                     begin
                         if DMTImportSettings.UpdateFieldsFilter() = '' then
-                            ProgressDialog.NextStep(StepIndex::Skipped);
+                            ProgressDialog.NextStep(StepIndex::Ignored);
                         //Field Update
                         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin
-                            Log.inc
                             Log.IncNoOfSuccessfullyProcessedRecords();
                         end;
                     end;
+                ResultType::ChangesApplied:
+                    begin
+                        ProgressDialog.NextStep(StepIndex::ResultOK);
+                        Log.IncNoOfSuccessfullyProcessedRecords();
+                    end;
                 else begin
-                    ProgressDialog.NextStep(StepIndex::ResultOK);
-                    Log.IncNoOfSuccessfullyProcessedRecords();
+                    Error('Unhandled Case %1', ResultType::" ");
                 end;
             end;
             ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
@@ -243,13 +247,12 @@ codeunit 110017 DMTMigrate
             end;
     end;
 
-    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var RecordWasSkipped: Boolean; var RecordHadErrors: Boolean; var TargetRecordExists: Boolean)
+    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
     var
         ProcessRecord: Codeunit DMTProcessRecord;
     begin
         ClearLastError();
-        Clear(RecordHadErrors);
-        Clear(RecordWasSkipped);
+        Clear(ResultType);
         Log.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(BufferRef2, DMTImportSettings);
         Commit();
@@ -268,9 +271,8 @@ codeunit 110017 DMTMigrate
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
         end;
-        TargetRecordExists := ProcessRecord.GetTargetRecordExists();
-        RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
-        RecordHadErrors := ProcessRecord.SaveErrorLog(Log);
+        ProcessRecord.SaveErrorLog(Log);
+        ResultType := ProcessRecord.GetProcessingResultType();
     end;
 
     local procedure EditView(var BufferRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings) Continue: Boolean
@@ -364,5 +366,5 @@ codeunit 110017 DMTMigrate
 
 
     var
-        StepIndex: Option Process,ResultOK,ResultError,Skipped;
+        StepIndex: Option Process,ResultOK,ResultError,Ignored;
 }

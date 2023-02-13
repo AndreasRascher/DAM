@@ -23,16 +23,6 @@ codeunit 110012 DMTProcessRecord
         end;
     end;
 
-    procedure GetRecordWasSkipped(): Boolean
-    begin
-        exit(SkipRecord);
-    end;
-
-    procedure GetTargetRecordExists(): Boolean
-    begin
-        exit(TargetRecordExists);
-    end;
-
     local procedure AssignField(ValidateSetting: Enum DMTFieldValidationType)
     var
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
@@ -196,6 +186,37 @@ codeunit 110012 DMTProcessRecord
             TempFieldMapping.Get(FieldMappingID);
             ErrorsExist := ErrorsExist or not TempFieldMapping."Ignore Validation Error";
             Log.AddErrorByFieldMappingEntry(SourceRef.RecordId, TempFieldMapping, ErrorItem);
+        end;
+    end;
+
+    procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
+    var
+        HasErrors: Boolean;
+    begin
+        // Ausstiegsgrund						Datensatz		Zieldatensatz 
+        // 								        verarbeiten     nicht vorhanden
+        // - Neue neue DS / DS existiert bereits	x
+        // - Fehler beim Werte übertragen			x			x
+        // - Feldupdate 										x
+
+        // Zeilen verarbeiten
+        // - DS Verarbeitet,
+        //   - = DS Importiert + DS Ignoriert + DS mit Fehler
+        // Felder verarbeiten
+        // - DS Verarbeitet
+        //   - = DS aktualisiert + DS Ignoriert + DS mit Fehler
+        HasErrors := (ErrorLogDict.Count > 0);
+        case true of
+            (RunMode = RunMode::FieldTransfer) and HasErrors:
+                exit(ResultType::Error);
+            (RunMode = RunMode::ModifyRecord) and HasErrors:
+                exit(ResultType::Error);
+            (RunMode = RunMode::ModifyRecord) and SkipRecord:
+                exit(ResultType::Ignored);
+            (RunMode = RunMode::FieldTransfer) and not HasErrors and not SkipRecord:
+                exit(ResultType::ChangesApplied);
+            else
+                Error('unhandled case');
         end;
     end;
 
