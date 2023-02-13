@@ -151,6 +151,14 @@ codeunit 110012 DMTProcessRecord
             ErrorItem.Add('ErrorValue', '');
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
+        // Check if this error should block the insert oder modify
+        if RunMode = RunMode::FieldTransfer then
+            if not HasNotIgnoredErrors then begin
+                TempFieldMapping.Get(CurrFieldToProcess);
+                if not TempFieldMapping."Ignore Validation Error" then
+                    HasNotIgnoredErrors := true;
+            end;
+
         ClearLastError();
     end;
 
@@ -185,13 +193,11 @@ codeunit 110012 DMTProcessRecord
             ErrorItem := ErrorLogDict.Get(FieldMappingID);
             TempFieldMapping.Get(FieldMappingID);
             ErrorsExist := ErrorsExist or not TempFieldMapping."Ignore Validation Error";
-            Log.AddErrorByFieldMappingEntry(SourceRef.RecordId, TempFieldMapping, ErrorItem);
+            Log.AddErrorByFieldMappingEntry(SourceRef.RecordId, DataFile, TempFieldMapping, ErrorItem);
         end;
     end;
 
     procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
-    var
-        HasErrors: Boolean;
     begin
         // Ausstiegsgrund						Datensatz		Zieldatensatz 
         // 								        verarbeiten     nicht vorhanden
@@ -205,15 +211,13 @@ codeunit 110012 DMTProcessRecord
         // Felder verarbeiten
         // - DS Verarbeitet
         //   - = DS aktualisiert + DS Ignoriert + DS mit Fehler
-        HasErrors := (ErrorLogDict.Count > 0);
         case true of
-            (RunMode = RunMode::FieldTransfer) and HasErrors:
+            (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and HasNotIgnoredErrors:
                 exit(ResultType::Error);
-            (RunMode = RunMode::ModifyRecord) and HasErrors:
-                exit(ResultType::Error);
-            (RunMode = RunMode::ModifyRecord) and SkipRecord:
+            (RunMode in [RunMode::ModifyRecord, RunMode::InsertRecord]) and SkipRecord:
                 exit(ResultType::Ignored);
-            (RunMode = RunMode::FieldTransfer) and not HasErrors and not SkipRecord:
+            (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and
+            not HasNotIgnoredErrors and not SkipRecord:
                 exit(ResultType::ChangesApplied);
             else
                 Error('unhandled case');
@@ -231,7 +235,7 @@ codeunit 110012 DMTProcessRecord
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecord, TargetRecordExists : Boolean;
+        SkipRecord, TargetRecordExists, HasNotIgnoredErrors : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];

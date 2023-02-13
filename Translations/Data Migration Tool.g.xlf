@@ -1573,6 +1573,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 744607175 - Field 1004182435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context Description</source>
+          <note from="Developer" annotates="general" priority="2">Kontext Beschreibung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Context Description - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 2474578035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Name</source>
           <note from="Developer" annotates="general" priority="2">Dateiname Exportdatei</note>
@@ -1582,11 +1587,6 @@
           <source>Data File Folder Path</source>
           <note from="Developer" annotates="general" priority="2">Ordnerpfad Exportdatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field DataFilePath - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 744607175 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Description</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Description - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No.</source>
@@ -1612,11 +1612,6 @@
           <source>Error Code</source>
           <note from="Developer" annotates="general" priority="2">Fehler Code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field ErrorCode - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 744607175 - Field 2623664455 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Error Text</source>
-          <note from="Developer" annotates="general" priority="2">Fehlertext</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Errortext - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 2137248580 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Error</source>
@@ -1903,10 +1898,10 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3774911051 - Method 3120188037 - NamedType 1257018962" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 3774911051 - Method 4153940936 - NamedType 1257018962" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 records processed</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CreateNoOfBufferRecordsProcessederEntry - NamedType noOfRecordsProcessedLbl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CreateNoOfBufferRecordsProcessedEntry - NamedType noOfRecordsProcessedLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
@@ -2173,10 +2168,10 @@
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action ImportBufferDataFromFile - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2874035913 - Action 2840808828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Error Log</source>
-          <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action OpenErrorLog - Property Caption</note>
+        <trans-unit id="Page 2874035913 - Action 455269300 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <note from="Developer" annotates="general" priority="2">Protokoll</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action OpenLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Retry Records With Error</source>

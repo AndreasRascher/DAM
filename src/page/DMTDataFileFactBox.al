@@ -43,7 +43,7 @@ page 110023 DMTDataFileFactBox
                 {
                     field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; Visible = false; }
                     field(Usage; Rec.Usage) { ApplicationArea = All; }
-                    field(Description; Rec.Description) { ApplicationArea = All; }
+                    field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
                 }
             }
 

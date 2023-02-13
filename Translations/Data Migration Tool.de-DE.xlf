@@ -1887,6 +1887,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 744607175 - Field 1004182435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context Description</source>
+          <target>Kontext Beschreibung</target>
+          <note from="Developer" annotates="general" priority="2">Kontext Beschreibung</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Context Description - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 2474578035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data File Name</source>
           <target>Dateiname Exportdatei</target>
@@ -1898,12 +1905,6 @@
           <target>Ordnerpfad Exportdatei</target>
           <note from="Developer" annotates="general" priority="2">Ordnerpfad Exportdatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field DataFilePath - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 744607175 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Description</source>
-          <target>Beschreibung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Description - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No.</source>
@@ -1934,12 +1935,6 @@
           <target>Fehlercode</target>
           <note from="Developer" annotates="general" priority="2">Fehler Code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field ErrorCode - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 744607175 - Field 2623664455 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Error Text</source>
-          <target>Fehlertext</target>
-          <note from="Developer" annotates="general" priority="2">Fehlertext</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Errortext - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 2137248580 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Error</source>
@@ -2283,11 +2278,12 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3774911051 - Method 3120188037 - NamedType 1257018962" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 3774911051 - Method 4153940936 - NamedType 1257018962" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 records processed</source>
           <target>%1 Zeilen verarbeitet</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CreateNoOfBufferRecordsProcessederEntry - NamedType noOfRecordsProcessedLbl</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CreateNoOfBufferRecordsProcessedEntry - NamedType noOfRecordsProcessedLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
@@ -2607,11 +2603,12 @@
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action ImportBufferDataFromFile - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2874035913 - Action 2840808828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Error Log</source>
-          <target>Fehlerprotokoll</target>
-          <note from="Developer" annotates="general" priority="2">Fehlerprotokoll</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action OpenErrorLog - Property Caption</note>
+        <trans-unit id="Page 2874035913 - Action 455269300 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <target>Protokoll</target>
+          <note from="Developer" annotates="general" priority="2">Protokoll</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action OpenLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Retry Records With Error</source>
@@ -2637,11 +2634,39 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 2680992964 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data File Properties</source>
+          <target>Datei Eigenschaften</target>
+          <note from="Developer" annotates="general" priority="2">Datei Eigenschaften</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control FileInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 1859521773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Size(KB)</source>
+          <target>Größe(KB)</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control GetFileSizeInKB - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1841337754 - Control 3451064716 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Records in</source>
           <target>Anz. Datensätze in</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control TableInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target</source>
+          <target>Ziel</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer</source>
+          <target>Puffer</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data File List</source>
@@ -2785,7 +2810,6 @@
           <source>Use On Delete Trigger</source>
           <target>Mit OnDelete Trigger ausführen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control UseOnDeleteTriggerCtrl - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2771814392 - Action 1386164311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

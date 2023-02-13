@@ -203,9 +203,9 @@ page 110026 DMTDataFileCard
                     PageActions.RetryBufferRecordsWithError(Rec);
                 end;
             }
-            action(OpenErrorLog)
+            action(OpenLog)
             {
-                Caption = 'Error Log', Comment = 'Fehlerprotokoll';
+                Caption = 'Log', Comment = 'Protokoll';
                 ApplicationArea = All;
                 Image = ErrorLog;
                 Promoted = true;

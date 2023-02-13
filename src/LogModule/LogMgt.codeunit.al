@@ -22,14 +22,6 @@ codeunit 110006 DMTLog
         HasLines := not LogEntry.IsEmpty;
     end;
 
-    procedure InitNewProcess(LogUsage: Enum DMTLogUsage; TargetTableID: Integer)
-    var
-        DummyDataFile: Record DMTDataFile;
-    begin
-        DummyDataFile."Target Table ID" := TargetTableID;
-        InitNewProcess(LogUsage, DummyDataFile);
-    end;
-
     procedure InitNewProcess(LogUsage: Enum DMTLogUsage; DataFile: Record DMTDataFile)
     var
         LogEntry: Record DMTLogEntry;
@@ -57,45 +49,65 @@ codeunit 110006 DMTLog
         CheckIfProcessNoIsSet();
         LogEntry := LogEntryTemplate;
         LogEntry."Entry Type" := LogEntry."Entry Type"::"Process Title";
-        LogEntry.Description := CopyStr(TitleDescription, 1, MaxStrLen(LogEntry.Description));
+        LogEntry."Context Description" := CopyStr(TitleDescription, 1, MaxStrLen(LogEntry."Context Description"));
         LogEntry.Insert(true);
     end;
 
-    procedure AddTargetSuccessEntry(SourceID: RecordID)
+    procedure AddTargetSuccessEntry(SourceID: RecordID; DataFile: Record DMTDataFile)
     var
         FieldMappingDummy: Record DMTFieldMapping;
         ErrorItemDummy: Dictionary of [Text, Text];
     begin
-        AddEntry(SourceID, Enum::DMTLogEntryType::Success, FieldMappingDummy, ErrorItemDummy);
+        AddEntry(SourceID, Enum::DMTLogEntryType::Success, DataFile, FieldMappingDummy, ErrorItemDummy);
     end;
 
-    procedure AddTargetErrorByIDEntry(TargetID: RecordID; ErrorItem: Dictionary of [Text, Text])
+    procedure AddTargetErrorByIDEntry(TargetID: RecordID; DataFile: Record DMTDataFile; ErrorItem: Dictionary of [Text, Text])
     var
         FieldMappingDummy: Record DMTFieldMapping;
     begin
-        AddEntry(TargetID, Enum::DMTLogEntryType::Error, FieldMappingDummy, ErrorItem);
+        AddEntry(TargetID, Enum::DMTLogEntryType::Error, DataFile, FieldMappingDummy, ErrorItem);
     end;
 
-    procedure AddErrorByFieldMappingEntry(SourceID: RecordID; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text])
+    procedure AddErrorByFieldMappingEntry(SourceID: RecordID; DataFile: record DMTDataFile; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text])
     begin
-        AddEntry(SourceID, Enum::DMTLogEntryType::Error, FieldMapping, ErrorItem);
+        AddEntry(SourceID, Enum::DMTLogEntryType::Error, DataFile, FieldMapping, ErrorItem);
     end;
 
-    local procedure AddEntry(sourceID: RecordID; logEntryType: Enum DMTLogEntryType; fieldMapping: Record DMTFieldMapping; errorItem: Dictionary of [Text, Text])
+    local procedure AddEntry(sourceID: RecordID; logEntryType: Enum DMTLogEntryType; DataFile: record DMTDataFile; fieldMapping: Record DMTFieldMapping; errorItem: Dictionary of [Text, Text])
     var
         targetIDDummy: RecordId;
     begin
-        AddEntry(sourceID, targetIDDummy, logEntryType, fieldMapping, errorItem);
+        AddEntry(sourceID, targetIDDummy, logEntryType, datafile, fieldMapping, errorItem);
     end;
 
-    local procedure AddEntry(SourceID: RecordID; TargetID: RecordId; LogEntryType: Enum DMTLogEntryType; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text])
+    local procedure AddEntry(SourceID: RecordID; TargetID: RecordId; LogEntryType: Enum DMTLogEntryType; DataFile: record DMTDataFile; FieldMapping: Record DMTFieldMapping; ErrorItem: Dictionary of [Text, Text])
     var
         LogEntry: Record DMTLogEntry;
+        KeyFieldMapping: Record DMTFieldMapping;
+        GenBuffTable: Record DMTGenBuffTable;
+        SourceRef: RecordRef;
+        SourceIdText: Text;
     begin
         CheckIfProcessNoIsSet();
+        if SourceID.TableNo = Database::DMTGenBuffTable then begin
+            DataFile.FilterRelated(KeyFieldMapping);
+            KeyFieldMapping.SetRange("Is Key Field(Target)", true);
+            GenBuffTable.Get(SourceID);
+            SourceRef.GetTable(GenBuffTable);
+            if KeyFieldMapping.FindSet() then
+                repeat
+                    if KeyFieldMapping."Source Field No." <> 0 then
+                        SourceIdText := Format(SourceRef.Field(KeyFieldMapping."Source Field No.").Value) + ',';
+                until KeyFieldMapping.Next() = 0;
+            if SourceIdText.EndsWith(',') then
+                SourceIdText := SourceIdText.Remove(StrLen(SourceIdText));
+        end else begin
+            SourceIdText := Format(SourceID);
+        end;
         LogEntry := LogEntryTemplate;
+        LogEntry."Entry Type" := LogEntryType;
         LogEntry."Source ID" := SourceID;
-        LogEntry."Source ID (Text)" := Format(SourceID);
+        LogEntry."Source ID (Text)" := SourceIdText;
         LogEntry."Target ID" := TargetID;
         LogEntry."Target ID (Text)" := Format(TargetID);
         if FieldMapping."Data File ID" <> 0 then begin
@@ -103,14 +115,15 @@ codeunit 110006 DMTLog
         end;
 
         if LogEntryType = LogEntryType::Error then begin
+            LogEntry."Ignore Error" := FieldMapping."Ignore Validation Error";
             LogEntry.ErrorCode := CopyStr(ErrorItem.Get('GetLastErrorCode'), 1, MaxStrLen(LogEntry.ErrorCode));
             LogEntry.SetErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'));
-            LogEntry.Errortext := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry.Errortext));
+            LogEntry."Context Description" := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
+            if ErrorItem.ContainsKey('ErrorValue') then
+                LogEntry."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
         end;
 
         LogEntry.Insert();
-
-        UpdateStatistics(LogEntryType);
     end;
 
     procedure AddEntryForCurrentProcess(sourceRef: RecordRef; targetRef: RecordRef; fieldMapping: Record DMTFieldMapping; errorItem: Dictionary of [Text, Text]);
@@ -128,7 +141,7 @@ codeunit 110006 DMTLog
         LogEntry."Target Table ID" := fieldMapping."Target Table ID";
         LogEntry."Target Field No." := fieldMapping."Target Field No.";
         LogEntry."Ignore Error" := fieldMapping."Ignore Validation Error";
-        LogEntry.Errortext := CopyStr(errorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry.Errortext));
+        LogEntry."Context Description" := CopyStr(errorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
         LogEntry.ErrorCode := CopyStr(errorItem.Get('GetLastErrorCode'), 1, MaxStrLen(LogEntry.ErrorCode));
         LogEntry."Error Field Value" := CopyStr(errorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
         LogEntry.SetErrorCallStack(errorItem.Get('GetLastErrorCallStack'));
@@ -164,6 +177,7 @@ codeunit 110006 DMTLog
             DataFile.Get(FieldMapping.GetRangeMin("Data File ID"))
         else
             DataFile.Get(FieldMapping."Data File ID");
+        LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Error);
         LogEntry.SetRange(DataFileName, DataFile.Name);
         LogEntry.SetRange(DataFilePath, DataFile.Path);
         LogEntry.SetRange("Target Field No.", FieldMapping."Target Field No.");
@@ -179,11 +193,14 @@ codeunit 110006 DMTLog
         logEntry."Entry Type" := logEntry."Entry Type"::Summary;
         logEntry."Process No." := 0;
         logEntry."Target Table ID" := dataFile."Target Table ID";
-        logEntry.Description := StrSubstNo(durationLbl, duration);
+        logEntry."Context Description" := StrSubstNo(durationLbl, duration);
+        logEntry.DataFileName := dataFile.Name;
+        logEntry.DataFilePath := dataFile.Path;
+        logEntry."Target Table ID" := dataFile."Target Table ID";
         logEntry.Insert();
     end;
 
-    internal procedure CreateNoOfBufferRecordsProcessederEntry(dataFile: record DMTDataFile; noOfRecordsProcessed: Integer)
+    internal procedure CreateNoOfBufferRecordsProcessedEntry(dataFile: record DMTDataFile; noOfRecordsProcessed: Integer)
     var
         logEntry: Record DMTLogEntry;
         noOfRecordsProcessedLbl: Label '%1 records processed';
@@ -191,7 +208,7 @@ codeunit 110006 DMTLog
         logEntry.Usage := logEntry.Usage::"Process Buffer - Record";
         logEntry."Process No." := 0;
         logEntry."Target Table ID" := dataFile."Target Table ID";
-        logEntry.Description := StrSubstNo(noOfRecordsProcessedLbl, noOfRecordsProcessed);
+        logEntry."Context Description" := StrSubstNo(noOfRecordsProcessedLbl, noOfRecordsProcessed);
         logEntry.Insert();
     end;
 
@@ -203,7 +220,7 @@ codeunit 110006 DMTLog
         CheckIfProcessNoIsSet();
         LogEntry := LogEntryTemplate;
         LogEntry."Entry Type" := LogEntry."Entry Type"::Summary;
-        LogEntry.Description := StrSubstNo(SummaryLbl,
+        LogEntry."Context Description" := StrSubstNo(SummaryLbl,
                                            ProcessingStatistics.Get(Format(StatisticType::Processed)),
                                            ProcessingStatistics.Get(Format(StatisticType::Success)),
                                            ProcessingStatistics.Get(Format(StatisticType::Error)),
@@ -230,16 +247,6 @@ codeunit 110006 DMTLog
     procedure IncNoOfSuccessfullyProcessedRecords()
     begin
         ProcessingStatistics.Set(Format(StatisticType::Success), ProcessingStatistics.Get(Format(StatisticType::Success)) + 1);
-    end;
-
-    local procedure UpdateStatistics(LogEntryType: Enum DMTLogEntryType)
-    begin
-        case LogEntryType of
-            LogEntryType::Success:
-                ProcessingStatistics.Set(Format(StatisticType::Success), ProcessingStatistics.Get(Format(StatisticType::Success)) + 1);
-            LogEntryType::Error:
-                ProcessingStatistics.Set(Format(StatisticType::Error), ProcessingStatistics.Get(Format(StatisticType::Error)) + 1);
-        end;
     end;
 
     procedure ShowLogEntriesFor(Datafile: Record DMTDataFile)

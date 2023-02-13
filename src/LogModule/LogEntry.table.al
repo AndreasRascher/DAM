@@ -7,7 +7,6 @@ table 110006 DMTLogEntry
             Caption = 'Entry No.', comment = 'Lfd.Nr.';
             AutoIncrement = true;
         }
-        field(5; Description; Text[250]) { Caption = 'Description'; Editable = false; }
         field(10; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
         field(11; "Process No."; Integer) { Caption = 'Process No.', Comment = 'de-DE=Vorgangsnr.'; }
         field(12; "Entry Type"; Enum DMTLogEntryType) { Caption = 'Entry Type', Comment = 'de-DE=Postenart'; }
@@ -17,7 +16,7 @@ table 110006 DMTLogEntry
         field(31; "Target ID (Text)"; Text[250]) { Caption = 'Source ID (Text)'; }
         field(32; "Target Table ID"; Integer) { }
         field(33; "Target Field No."; Integer) { }
-        field(40; Errortext; Text[2048]) { Caption = 'Error Text', Comment = 'Fehlertext'; }
+        field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
         field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'Fehler Aufrufliste'; }
         field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }

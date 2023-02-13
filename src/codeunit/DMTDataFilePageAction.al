@@ -397,7 +397,7 @@ codeunit 110013 DMTDataFilePageAction
             RecIdList.Add(LogQry.SourceID);
         end;
         Migrate.ListOfBufferRecIDs(RecIdList, DataFile);
-        Log.CreateNoOfBufferRecordsProcessederEntry(DataFile, RecIdList.Count);
+        Log.CreateNoOfBufferRecordsProcessedEntry(DataFile, RecIdList.Count);
     end;
 
     procedure TryFindBufferTableID(var DataFile: Record DMTDataFile; DoModify: Boolean)

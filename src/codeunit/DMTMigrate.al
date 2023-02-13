@@ -72,7 +72,6 @@ codeunit 110017 DMTMigrate
         FieldMapping: Record DMTFieldMapping;
         TempFieldMapping, TempFieldMapping_ProcessingPlanSettings : Record DMTFieldMapping temporary;
         DataFile: Record DMTDataFile;
-        Debug: Integer;
     begin
         DataFile := DMTImportSettings.DataFile();
         DataFile.FilterRelated(FieldMapping);
@@ -202,7 +201,7 @@ codeunit 110017 DMTMigrate
                             ProgressDialog.NextStep(StepIndex::Ignored);
                         //Field Update
                         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin
-                            Log.IncNoOfSuccessfullyProcessedRecords();
+                            //Log.IncNoOfSuccessfullyProcessedRecords();
                         end;
                     end;
                 ResultType::ChangesApplied:
@@ -225,7 +224,7 @@ codeunit 110017 DMTMigrate
         MigrationLib.RunPostProcessingFor(DataFile);
         ProgressDialog.Close();
         Log.CreateSummary();
-        Log.ShowLogEntriesFor(DataFile);
+        Log.ShowLogForCurrentProcess();
         ShowResultDialog(ProgressDialog);
         // Message('Dauer %1', CurrentDateTime - Start);
     end;

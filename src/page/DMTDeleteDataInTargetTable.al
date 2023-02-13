@@ -273,7 +273,7 @@ page 110024 DMTDeleteDataInTargetTable
         MaxSteps: Integer;
         StepCount: Integer;
     begin
-        Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", dataFile."Target Table ID");
+        Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", dataFile);
         MaxSteps := TargetRecordIDsToDelete.Count;
         dataFile.CalcFields("Target Table Caption");
         if ConfirmDeletion(MaxSteps, dataFile."Target Table Caption") then begin
@@ -287,9 +287,9 @@ page 110024 DMTDeleteDataInTargetTable
                 Commit();
                 DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, useOnDeleteTrigger);
                 if DeleteRecordsWithErrorLog.Run() then begin
-                    Log.AddTargetSuccessEntry(RecID);
+                    Log.AddTargetSuccessEntry(RecID, dataFile);
                 end else begin
-                    Log.AddTargetErrorByIDEntry(RecID, Log.CreateErrorItem());
+                    Log.AddTargetErrorByIDEntry(RecID, dataFile, Log.CreateErrorItem());
                     ClearLastError();
                 end;
             end;

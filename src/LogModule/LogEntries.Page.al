@@ -16,12 +16,12 @@ page 110006 "DMTLogEntries"
         {
             repeater(Group)
             {
-                field(Description; Rec.Description) { ApplicationArea = All; }
                 field(Usage; Rec.Usage) { ApplicationArea = All; }
                 field("Entry Type"; Rec."Entry Type") { ApplicationArea = All; }
-                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; }
-                field("Process No."; Rec."Process No.") { ApplicationArea = All; }
-                field(Errortext; Rec.Errortext) { ApplicationArea = All; }
+                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; Visible = false; }
+                field("Process No."; Rec."Process No.") { ApplicationArea = All; Visible = false; }
+                field("Source ID (Text)"; Rec."Source ID (Text)") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field(Errortext; Rec."Context Description") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(CallStack; CallStack)
                 {
                     Caption = 'Error Call Stack';
@@ -34,7 +34,6 @@ page 110006 "DMTLogEntries"
                 field("Error Field Value"; Rec."Error Field Value") { ApplicationArea = All; }
                 field(ErrorCode; Rec.ErrorCode) { ApplicationArea = All; }
                 field("Ignore Error"; Rec."Ignore Error") { ApplicationArea = All; }
-                field("Source ID (Text)"; Rec."Source ID (Text)") { ApplicationArea = All; }
                 field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; }
                 field("Target Field No."; Rec."Target Field No.") { ApplicationArea = All; }
                 field("Target ID (Text)"; Rec."Target ID (Text)") { ApplicationArea = All; }
@@ -103,10 +102,14 @@ page 110006 "DMTLogEntries"
     trigger OnAfterGetRecord()
     begin
         CallStack := Rec.GetErrorCallStack();
+        // format Ignored Entries  
+        LineStyle := Format(Enum::DMTFieldStyle::None);
+        if Rec."Ignore Error" then
+            LineStyle := Format(Enum::DMTFieldStyle::Grey);
     end;
 
     var
-        CallStack: Text;
+        CallStack, LineStyle : Text;
         [InDataSet]
         ShowIgnoredErrorLines: Boolean;
 }
