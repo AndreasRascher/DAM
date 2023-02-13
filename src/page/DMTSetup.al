@@ -163,35 +163,6 @@ page 110011 "DMT Setup"
                 PromotedCategory = Report;
                 RunObject = page DMTDataFileList;
             }
-            action(ErrorLog)
-            {
-                Caption = 'Error Log', Comment = 'Fehlerprotokoll';
-                ApplicationArea = All;
-                Image = Log;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
-                RunObject = page "DMT Error Log List";
-            }
-            // action(OpenGenBufferPage)
-            // {
-            //     Caption = 'OpenGenBufferPage', comment = 'OpenGenBufferPage';
-            //     ApplicationArea = All;
-            //     Image = ListPage;
-            //     Promoted = true;
-            //     PromotedOnly = true;
-            //     PromotedIsBig = true;
-            //     PromotedCategory = Report;
-            //     trigger OnAction()
-            //     var
-            //         DMTGenBuffTable: Record DMTGenBuffTable;
-            //     begin
-            //         if DMTGenBuffTable.FindFirst() then begin
-            //             DMTGenBuffTable.ShowImportDataForFile(DMTGenBuffTable."Import from Filename");
-            //         end;
-            //     end;
-            // }
             action(ClearGenBuffer)
             {
                 Caption = 'Delete Gen. Buffer Table Lines', comment = 'Alle Zeilen in gen. Puffertabelle löschen';

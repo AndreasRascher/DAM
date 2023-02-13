@@ -5,7 +5,7 @@ codeunit 110009 ChangeRecordWithPerm
 
     procedure DeleteRecordsInTargetTable(DMTDataFile: Record DMTDataFile)
     var
-        DMTDeleteDatainTargetTable: Page DMTDeleteDatainTargetTable;
+        DMTDeleteDatainTargetTable: Page DMTDeleteDataInTargetTable;
     begin
         DMTDeleteDatainTargetTable.SetDataFileID(DMTDataFile);
         DMTDeleteDatainTargetTable.Run();

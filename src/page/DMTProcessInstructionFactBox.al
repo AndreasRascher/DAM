@@ -72,16 +72,18 @@ page 110017 DMTProcessInstructionFactBox
 
                 trigger OnAction()
                 var
-                    UpdateTaskNew: Page DMTSelectMultipleFields;
+                    SelectMultipleFields: Page DMTSelectMultipleFields;
+                    RunModalAction: Action;
                 begin
                     // Show only Non-Key Fields for selection
-                    UpdateTaskNew.LookupMode(true);
-                    UpdateTaskNew.Editable := true;
-                    if not UpdateTaskNew.InitSelectTargetFields(CurrProcessingPlan) then
+                    if not SelectMultipleFields.InitSelectTargetFields(CurrProcessingPlan) then
                         exit;
-                    if UpdateTaskNew.RunModal() = Action::LookupOK then begin
-                        CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
-                        CurrProcessingPlan.SaveUpdateFieldsFilter(UpdateTaskNew.GetTargetFieldIDListAsText());
+                    RunModalAction := SelectMultipleFields.RunModal();
+                    if RunModalAction = Action::OK then begin
+                        if SelectMultipleFields.RunModal() = Action::LookupOK then begin
+                            CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
+                            CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
+                        end;
                     end;
                 end;
             }

@@ -76,7 +76,7 @@ table 110002 DMTCopyTable
             exit(false);
         if SourceRef.HasFilter then begin
             Rec.SaveTableView(SourceRef.GetView());
-            Rec.FilterText := SourceRef.GetFilters();
+            Rec.FilterText := CopyStr(SourceRef.GetFilters(), 1, MaxStrLen(Rec.FilterText));
         end else begin
             Rec.SaveTableView('');
             Rec.FilterText := '';

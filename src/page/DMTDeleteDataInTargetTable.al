@@ -1,4 +1,4 @@
-page 110024 DMTDeleteDatainTargetTable
+page 110024 DMTDeleteDataInTargetTable
 {
     Caption = 'Delete Data in Target Table', Comment = 'Daten in Zieltabelle löschen';
     PageType = Card;
@@ -10,17 +10,17 @@ page 110024 DMTDeleteDatainTargetTable
         {
             group(Options)
             {
-                field(SourceTableView; SourceTableFilter)
+                field(SourceTableView; SourceFilterGlobal)
                 {
                     Caption = 'Source Table Filter';
                     ApplicationArea = All;
                     Editable = false;
                     trigger OnDrillDown()
                     begin
-                        EditSourceTableView();
+                        EditSourceTableView(SourceViewGlobal, SourceFilterGlobal, CurrDataFile);
                     end;
                 }
-                field(TargetTableFilter; TargetTableFilter)
+                field(TargetTableFilter; TargetFilterGlobal)
                 {
                     Caption = 'Target Table Filter';
                     ApplicationArea = All;
@@ -28,10 +28,10 @@ page 110024 DMTDeleteDatainTargetTable
 
                     trigger OnDrillDown()
                     begin
-                        EditTargetTableFilter();
+                        EditTargetTableFilter(TargetViewGlobal, TargetFilterGlobal, CurrDataFile);
                     end;
                 }
-                field(UseOnDeleteTrigger; UseOnDeleteTrigger) { Caption = 'Use On Delete Trigger'; ApplicationArea = All; }
+                field(UseOnDeleteTriggerCtrl; UseOnDeleteTriggerGlobal) { Caption = 'Use On Delete Trigger'; ApplicationArea = All; }
             }
         }
     }
@@ -47,10 +47,10 @@ page 110024 DMTDeleteDatainTargetTable
                 Image = Start;
                 trigger OnAction();
                 begin
-                    if (TargetTableView <> '') or (SourceTableView <> '') then
-                        StartDeletingWithTableView()
+                    if (SourceViewGlobal <> '') or (TargetViewGlobal <> '') then
+                        FindRecordIdsInCombinedView(SourceViewGlobal, TargetViewGlobal, CurrDataFile, UseOnDeleteTriggerGlobal)
                     else
-                        DeleteFullTable()
+                        DeleteFullTable(CurrDataFile, UseOnDeleteTriggerGlobal)
                 end;
             }
         }
@@ -58,34 +58,34 @@ page 110024 DMTDeleteDatainTargetTable
 
     trigger OnInit()
     begin
-        UseOnDeleteTrigger := true;
+        UseOnDeleteTriggerGlobal := true;
     end;
 
-    procedure EditSourceTableView()
+    procedure EditSourceTableView(var sourceView: Text; var sourceFilter: Text; dataFile: Record DMTDataFile)
     var
         FPBuilder: Codeunit DMTFPBuilder;
         BufferRef: RecordRef;
     begin
-        InitBufferRef(CurrDataFile, BufferRef);
-        if SourceTableView <> '' then
-            BufferRef.SetView(SourceTableView);
-        if not FPBuilder.RunModal(BufferRef, CurrDataFile, true) then
+        InitBufferRef(dataFile, BufferRef);
+        if sourceView <> '' then
+            BufferRef.SetView(sourceView);
+        if not FPBuilder.RunModal(BufferRef, dataFile, true) then
             exit;
-        SourceTableView := BufferRef.GetView();
-        SourceTableFilter := BufferRef.GetFilters;
+        sourceView := BufferRef.GetView();
+        sourceFilter := BufferRef.GetFilters;
     end;
 
-    procedure EditTargetTableFilter()
+    procedure EditTargetTableFilter(var targetView: Text; var targetFilter: Text; dataFile: Record DMTDataFile)
     var
         FPBuilder: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
     begin
-        RecRef.Open(CurrDataFile."Target Table ID");
-        if TargetTableView <> '' then
-            RecRef.SetView(TargetTableView);
+        RecRef.Open(dataFile."Target Table ID");
+        if targetView <> '' then
+            RecRef.SetView(targetView);
         if FPBuilder.RunModal(RecRef, true) then begin
-            TargetTableView := RecRef.GetView();
-            TargetTableFilter := RecRef.GetFilters;
+            targetView := RecRef.GetView();
+            targetFilter := RecRef.GetFilters;
         end;
     end;
 
@@ -185,43 +185,38 @@ page 110024 DMTDeleteDatainTargetTable
         until TmpFieldMapping.Next() = 0;
     end;
 
-    local procedure StartDeletingWithTableView()
+    local procedure FindRecordIdsInCombinedView(sourceView: Text; targetView: Text; dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean)
     var
-        DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
         RecID: RecordId;
-        RecordMapping, RecordMapping2 : Dictionary of [RecordId, RecordId];
-        MaxSteps, StepCount : Integer;
+        TargetRef: RecordRef;
+        SourceToTargetRecordMapping: Dictionary of [RecordId, RecordId];
         NotTransferedRecords: List of [RecordId];
+        TargetRecordIDsToDelete: List of [RecordId];
     begin
+        dataFile.CalcFields("Target Table Caption");
         // Create RecordID Mapping between Buffer and Target Table
-        RecordMapping := CreateSourceToTargetRecIDMapping(CurrDataFile, SourceTableView, NotTransferedRecords);
-        // Remove TargetRecordID not in Filter
-        if TargetTableView <> '' then begin
-            RecordMapping2 := RecordMapping;
-            foreach RecID in RecordMapping2.Values do begin
-                if not IsRecIDInView(RecID, TargetTableView) then begin
-                    RecordMapping2.Remove(RecID);
+        if sourceView <> '' then begin
+            SourceToTargetRecordMapping := CreateSourceToTargetRecIDMapping(dataFile, sourceView, NotTransferedRecords);
+            TargetRecordIDsToDelete := SourceToTargetRecordMapping.Values;
+            // Remove TargetRecordID not in Filter
+            if targetView <> '' then begin
+                foreach RecID in TargetRecordIDsToDelete do begin
+                    if not IsRecIDInView(RecID, targetView) then begin
+                        TargetRecordIDsToDelete.Remove(RecID);
+                    end;
                 end;
             end;
-            RecordMapping := RecordMapping2;
+        end else begin
+            // Read all RecordIDs from Target
+            TargetRef.Open(dataFile."Target Table ID");
+            TargetRef.SetView(targetView);
+            if TargetRef.FindSet(false, false) then
+                repeat
+                    TargetRecordIDsToDelete.Add(TargetRef.RecordId);
+                until TargetRef.Next() = 0;
         end;
-        MaxSteps := RecordMapping.Values.Count;
-        CurrDataFile.CalcFields("Target Table Caption");
-        if ConfirmDeletion(MaxSteps, CurrDataFile."Target Table Caption") then begin
-            DeleteRecordsWithErrorLog.DialogOpen(CurrDataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
-            foreach RecID in RecordMapping.Values do begin
-                if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecID) then begin
-                    DeleteRecordsWithErrorLog.showErrors();
-                    Error('Process Stopped');
-                end;
-                StepCount += 1;
-                Commit();
-                DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, UseOnDeleteTrigger);
-                if not DeleteRecordsWithErrorLog.Run() then
-                    DeleteRecordsWithErrorLog.LogLastError();
-            end;
-            DeleteRecordsWithErrorLog.showErrors();
-        end;
+
+        DeleteRecordsInList(dataFile, useOnDeleteTrigger, TargetRecordIDsToDelete);
     end;
 
     local procedure IsRecIDInView(RecID: RecordId; TableView: Text) Result: Boolean;
@@ -242,14 +237,14 @@ page 110024 DMTDeleteDatainTargetTable
         OK := Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, NoOfLinesToDelete, TableCaption, CompanyName), false);
     end;
 
-    local procedure DeleteFullTable()
+    local procedure DeleteFullTable(dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean)
     var
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
         RecRef: RecordRef;
         MaxSteps, StepCount : Integer;
     begin
-        CurrDataFile.TestField("Target Table ID");
-        RecRef.Open(CurrDataFile."Target Table ID");
+        dataFile.TestField("Target Table ID");
+        RecRef.Open(dataFile."Target Table ID");
         MaxSteps := RecRef.Count;
         if ConfirmDeletion(MaxSteps, RecRef.Caption) then begin
             if RecRef.FindSet() then begin
@@ -261,12 +256,45 @@ page 110024 DMTDeleteDatainTargetTable
                     end;
                     StepCount += 1;
                     Commit();
-                    DeleteRecordsWithErrorLog.InitRecordToDelete(RecRef.RecordId, UseOnDeleteTrigger);
+                    DeleteRecordsWithErrorLog.InitRecordToDelete(RecRef.RecordId, useOnDeleteTrigger);
                     if not DeleteRecordsWithErrorLog.Run() then
                         DeleteRecordsWithErrorLog.LogLastError();
                 until RecRef.Next() = 0;
                 DeleteRecordsWithErrorLog.showErrors();
             end;
+        end;
+    end;
+
+    local procedure DeleteRecordsInList(var dataFile: Record DMTDataFile; var useOnDeleteTrigger: Boolean; var TargetRecordIDsToDelete: List of [RecordId])
+    var
+        DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
+        Log: Codeunit DMTLog;
+        RecID: RecordId;
+        MaxSteps: Integer;
+        StepCount: Integer;
+    begin
+        Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", dataFile."Target Table ID");
+        MaxSteps := TargetRecordIDsToDelete.Count;
+        dataFile.CalcFields("Target Table Caption");
+        if ConfirmDeletion(MaxSteps, dataFile."Target Table Caption") then begin
+            DeleteRecordsWithErrorLog.DialogOpen(dataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
+            foreach RecID in TargetRecordIDsToDelete do begin
+                if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecID) then begin
+                    DeleteRecordsWithErrorLog.showErrors();
+                    Error(format(Enum::DMTErrMsg::"Process Stopped"));
+                end;
+                StepCount += 1;
+                Commit();
+                DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, useOnDeleteTrigger);
+                if DeleteRecordsWithErrorLog.Run() then begin
+                    Log.AddTargetSuccessEntry(RecID);
+                end else begin
+                    Log.AddTargetErrorByIDEntry(RecID, Log.CreateErrorItem());
+                    ClearLastError();
+                end;
+            end;
+            Log.CreateSummary();
+            Log.ShowLogForCurrentProcess();
         end;
     end;
 
@@ -277,6 +305,6 @@ page 110024 DMTDeleteDatainTargetTable
 
     var
         CurrDataFile: Record DMTDataFile;
-        UseOnDeleteTrigger: Boolean;
-        SourceTableView, TargetTableView, SourceTableFilter, TargetTableFilter : Text;
+        UseOnDeleteTriggerGlobal: Boolean;
+        SourceViewGlobal, TargetViewGlobal, SourceFilterGlobal, TargetFilterGlobal : Text;
 }

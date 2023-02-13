@@ -166,7 +166,7 @@ codeunit 110000 DMTObjMgt
                     IDsList.Add(Database::DMTSetup);
                     IDsList.Add(Database::DMTDataFile);
                     IDsList.Add(Database::DMTFieldMapping);
-                    IDsList.Add(Database::DMTErrorLog);
+                    IDsList.Add(Database::DMTLogEntry);
                     IDsList.Add(Database::DMTCopyTable);
                     IDsList.Add(Database::DMTFieldBuffer);
                     IDsList.Add(Database::DMTDataFileBuffer);

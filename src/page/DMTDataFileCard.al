@@ -55,11 +55,7 @@ page 110026 DMTDataFileCard
         }
         area(FactBoxes)
         {
-            part(DMTDataFileFactBox; DMTDataFileFactBox)
-            {
-                ApplicationArea = All;
-                SubPageLink = ID = field(ID);
-            }
+            part(DMTDataFileFactBox; DMTDataFileFactBox) { ApplicationArea = All; }
         }
     }
 
@@ -219,9 +215,9 @@ page 110026 DMTDataFileCard
 
                 trigger OnAction()
                 var
-                    DMTErrorLog: Record DMTErrorLog;
+                    Log: Codeunit DMTLog;
                 begin
-                    DMTErrorLog.OpenListWithFilter(Rec, false);
+                    Log.ShowLogEntriesFor(Rec);
                 end;
             }
             action(CreateXMLPort)
@@ -304,6 +300,11 @@ page 110026 DMTDataFileCard
         CurrDataFilePathStyle := Rec.DataFileExistsStyle;
         Rec.UpdateFileRecProperties(false);
         CurrPage.Replacements.Page.InitializeAsAssignmentPerDataFile();
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        CurrPage.DMTDataFileFactBox.Page.UpdateFactBoxOnAfterGetCurrRecord(Rec);
     end;
 
     local procedure SelectDataFilePath()

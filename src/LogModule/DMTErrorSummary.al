@@ -5,12 +5,12 @@ query 110003 DMTErrorSummary
 
     elements
     {
-        dataitem(DataItemName; DMTErrorLog)
+        dataitem(DataItemName; DMTLogEntry)
         {
             column(DataFileFolderPath; DataFilePath) { }
             column(DataFileName; DataFileName) { }
-            column(ImporttoTableNo; "Import to Table No.") { }
-            column(ImportToFieldNo; "Import to Field No.") { }
+            column(Target_Table_No_; "Target Table ID") { }
+            column(Target_Field_No_; "Target Field No.") { }
             column(ErrorFieldValue; "Error Field Value") { }
             column(ErrorCode; ErrorCode) { }
             column(NoOfErrorsByValue) { Method = Count; }

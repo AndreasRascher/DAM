@@ -235,7 +235,7 @@ page 110030 DMTReplacementAssigmentsPart
         fieldMapping.SetRange("Source Field No.", SourceFieldNo);
         if fieldMapping.FindFirst() then
             if fieldMapping.Next() = 0 then
-                exit(fieldMapping."Target Field No.")
+                TargetFieldNo := fieldMapping."Target Field No."
             else
                 exit(0);
     end;

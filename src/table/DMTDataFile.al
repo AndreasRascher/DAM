@@ -87,12 +87,7 @@ table 110042 DMTDataFile
         field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'Import Gruppe'; }
         #endregion Import and Processing Options
         field(60; LastView; Blob) { }
-        field(61; LastImportToTargetAt; DateTime) { Caption = 'Last Import At (Target Table)', Comment = 'Letzter Import am (Zieltabelle)'; }
         field(62; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
-        field(70; LastImportBy; Code[50]) { Caption = 'User ID', comment = 'Benutzer-ID'; TableRelation = User."User Name"; Editable = false; }
-        field(71; "Import Duration (Target)"; Duration) { Caption = 'Import Duration (Target)', Comment = 'Import Dauer (Zieltabelle)'; Editable = false; }
-        field(72; "Import Duration (Buffer)"; Duration) { Caption = 'Import Duration (Buffer)', Comment = 'Import Dauer (Puffertabelle)'; Editable = false; }
-        field(73; LastImportToBufferAt; DateTime) { Caption = 'Last Import At (Buffer Table)', Comment = 'Letzter Import am (Puffertabelle)'; Editable = false; }
         field(80; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
         field(81; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
         field(100; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; Editable = false; }
@@ -319,12 +314,14 @@ table 110042 DMTDataFile
         Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Empty;
         CalcFields(Rec."No. of Records In Trgt. Table");
         case true of
-            (Rec.LastImportToTargetAt = 0DT) or (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
+            /*(Rec.LastImportToTargetAt = 0DT) or*/
+            (Rec."No.of Records in Buffer Table" > Rec."No. of Records In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Cross;
                 end;
-            (Rec.LastImportToTargetAt <> 0DT) and (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table"):
+            /*(Rec.LastImportToTargetAt <> 0DT) and */
+            (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table"):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;
@@ -373,16 +370,11 @@ table 110042 DMTDataFile
     begin
         Clear(ImportToBufferIndicator);
         Clear(ImportToBufferIndicatorStyle);
-        Clear("Import Duration (Buffer)");
         Clear(BufferTableIDStyle);
         Clear(ImportToTargetIndicator);
         Clear(ImportToTargetIndicatorStyle);
-        Clear("Import Duration (Target)");
         Clear(ImportXMLPortIDStyle);
         Clear(DataFileExistsStyle);
-        Clear(LastImportBy);
-        Clear(LastImportToBufferAt);
-        Clear(LastImportToTargetAt);
         Clear("No.of Records in Buffer Table");
     end;
 }

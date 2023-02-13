@@ -27,11 +27,6 @@ page 110027 DMTDataFileList
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
                 // field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
-                field("Import Duration (Buffer)"; Rec."Import Duration (Buffer)") { ApplicationArea = All; }
-                field("Import Duration (Target)"; Rec."Import Duration (Target)") { ApplicationArea = All; }
-                field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; Visible = false; }
-                field(LastImportToBufferAt; Rec.LastImportToBufferAt) { ApplicationArea = All; }
-                field(LastImportToTargetAt; Rec.LastImportToTargetAt) { ApplicationArea = All; }
                 field(ImportToBufferIndicator; Rec.ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = Rec.ImportToBufferIndicatorStyle; }
                 field(ImportToTargetIndicator; Rec.ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = Rec.ImportToTargetIndicatorStyle; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }

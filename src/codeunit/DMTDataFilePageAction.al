@@ -276,6 +276,7 @@ codeunit 110013 DMTDataFilePageAction
 
     procedure ImportToBufferTable(DataFile: Record DMTDataFile; HideDialog: Boolean)
     var
+        Log: Codeunit DMTLog;
         GenBuffImport: XmlPort DMTGenBuffImport;
         Start: DateTime;
         Progress: Dialog;
@@ -309,9 +310,8 @@ codeunit 110013 DMTDataFilePageAction
                     UpdateQtyLinesInBufferTable(DataFile);
                 end;
         end;
-        DataFile.Get(DataFile.RecordId);
-        DataFile."Import Duration (Buffer)" := CurrentDateTime - Start;
-        DataFile.Modify();
+        Log.AddImportToBufferSummary(DataFile, CurrentDateTime - Start);
+        // DataFile."Import Duration (Buffer)" := CurrentDateTime - Start;
     end;
 
     procedure ImportSelectedIntoBuffer(var DataFile_SELECTED: Record DMTDataFile temporary)
@@ -379,28 +379,25 @@ codeunit 110013 DMTDataFilePageAction
         // if Rec."No.of Records in Buffer Table" <> QtyLines then begin
         DataFile.Get(DataFile.RecordId);
         DataFile."No.of Records in Buffer Table" := QtyLines;
-        DataFile.LastImportToBufferAt := CurrentDateTime;
         DataFile.Modify();
         // end;
     end;
 
     procedure RetryBufferRecordsWithError(DataFile: Record DMTDataFile)
     var
+        Log: Codeunit DMTLog;
         Migrate: Codeunit DMTMigrate;
-        DMTErrorLogQry: Query DMTErrorLogQry;
+        LogQry: Query DMTLogQry;
         RecIdList: List of [RecordId];
     begin
-        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileFolderPath, DataFile.Path);
-        DMTErrorLogQry.SetRange(DMTErrorLogQry.DataFileName, DataFile.Name);
-        DMTErrorLogQry.Open();
-        while DMTErrorLogQry.Read() do begin
-            RecIdList.Add(DMTErrorLogQry.FromID);
+        LogQry.SetRange(LogQry.DataFileFolderPath, DataFile.Path);
+        LogQry.SetRange(LogQry.DataFileName, DataFile.Name);
+        LogQry.Open();
+        while LogQry.Read() do begin
+            RecIdList.Add(LogQry.SourceID);
         end;
         Migrate.ListOfBufferRecIDs(RecIdList, DataFile);
-        DataFile.Get(DataFile.RecordId);
-        DataFile.LastImportBy := CopyStr(UserId, 1, MaxStrLen(DataFile.LastImportBy));
-        DataFile.LastImportToTargetAt := CurrentDateTime;
-        DataFile.Modify();
+        Log.CreateNoOfBufferRecordsProcessederEntry(DataFile, RecIdList.Count);
     end;
 
     procedure TryFindBufferTableID(var DataFile: Record DMTDataFile; DoModify: Boolean)
@@ -883,15 +880,16 @@ codeunit 110013 DMTDataFilePageAction
     procedure UpdateFields(var DataFile: Record DMTDataFile)
     var
         Migrate: Codeunit DMTMigrate;
-        UpdateTaskNew: Page DMTSelectMultipleFields;
+        SelectMultipleFields: Page DMTSelectMultipleFields;
+        RunModalAction: Action;
     begin
         // Show only Non-Key Fields for selection
-        UpdateTaskNew.LookupMode(true);
-        UpdateTaskNew.Editable := true;
-        if not UpdateTaskNew.InitSelectTargetFields(DataFile, DataFile.ReadLastFieldUpdateSelection()) then
+        SelectMultipleFields.Editable := true;
+        if not SelectMultipleFields.InitSelectTargetFields(DataFile, DataFile.ReadLastFieldUpdateSelection()) then
             exit;
-        if UpdateTaskNew.RunModal() = Action::LookupOK then begin
-            DataFile.WriteLastFieldUpdateSelection(UpdateTaskNew.GetTargetFieldIDListAsText());
+        RunModalAction := SelectMultipleFields.RunModal();
+        if RunModalAction = Action::OK then begin
+            DataFile.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
             Migrate.SelectedFieldsFrom(DataFile);
         end;
     end;

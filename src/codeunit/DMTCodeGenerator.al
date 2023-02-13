@@ -190,7 +190,7 @@ codeunit 110004 DMTCodeGenerator
                 C.AppendLine('        }');
 
             until DMTFieldBuffer.Next() = 0;
-        AddTargetRecordExistsFlowField(TargetTableID, NAVSrcTableNo, BufferTableID, DMTFieldBuffer, C);
+        AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
@@ -281,7 +281,7 @@ codeunit 110004 DMTCodeGenerator
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
         DMTMgt: Codeunit DMTMgt;
         TargetRef: RecordRef;

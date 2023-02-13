@@ -105,10 +105,6 @@ page 110029 "DMTSelectMultipleFields"
     end;
 
     procedure InitSelectTargetFields(DataFile: Record DMTDataFile; SelectedTargetFieldIDFilter: Text) OK: Boolean
-    var
-        FieldMapping: Record DMTFieldMapping;
-        DMTMgt: Codeunit DMTMgt;
-        NonKeyFieldFilter: Text;
     begin
         ShowTargetFieldInfo := true;
         OK := true;
@@ -120,7 +116,6 @@ page 110029 "DMTSelectMultipleFields"
 
     procedure InitSelectTargetFields(ProcessingPlan: Record DMTProcessingPlan) OK: Boolean
     var
-        FieldMapping: Record DMTFieldMapping;
         DMTMgt: Codeunit DMTMgt;
         TargetFieldFilter: Text;
     begin
@@ -165,8 +160,6 @@ page 110029 "DMTSelectMultipleFields"
     end;
 
     local procedure RestoreSourceSelection(SelectedFieldNoFilter: Text)
-    var
-        Debug: text;
     begin
         if SelectedFieldNoFilter = '' then
             exit;

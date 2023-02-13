@@ -1,15 +1,15 @@
-query 110000 DMTErrorLogQry
+query 110000 DMTLogQry
 {
     QueryType = Normal;
 
     elements
     {
-        dataitem(DataItemName; DMTErrorLog)
+        dataitem(DataItemName; DMTLogEntry)
         {
             column(DataFileFolderPath; DataFilePath) { }
             column(DataFileName; DataFileName) { }
             column(QtyRecordID) { Method = Count; }
-            column(FromID; "From ID") { }
+            column(SourceID; "Source ID") { }
         }
     }
 

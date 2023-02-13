@@ -72,6 +72,7 @@ codeunit 110017 DMTMigrate
         FieldMapping: Record DMTFieldMapping;
         TempFieldMapping, TempFieldMapping_ProcessingPlanSettings : Record DMTFieldMapping temporary;
         DataFile: Record DMTDataFile;
+        Debug: Integer;
     begin
         DataFile := DMTImportSettings.DataFile();
         DataFile.FilterRelated(FieldMapping);
@@ -80,7 +81,23 @@ codeunit 110017 DMTMigrate
             FieldMapping.SetFilter("Source Field No.", '<>0');
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin // Scope ProcessingPlan
+            FieldMapping.SetRange("Is Key Field(Target)", true);
+            // Mark Key Fields
+            FieldMapping.FindSet();
+            repeat
+                FieldMapping.Mark(true);
+            until FieldMapping.Next() = 0;
+
+            // Mark Selected Fields
+            FieldMapping.SetRange("Is Key Field(Target)");
             FieldMapping.SetFilter("Target Field No.", DMTImportSettings.UpdateFieldsFilter());
+            FieldMapping.FindSet();
+            repeat
+                FieldMapping.Mark(true);
+            until FieldMapping.Next() = 0;
+
+            FieldMapping.SetRange("Target Field No.");
+            FieldMapping.MarkedOnly(true);
         end;
         FieldMapping.CopyToTemp(TempFieldMapping);
         // Apply Processing Plan Settings
@@ -101,14 +118,14 @@ codeunit 110017 DMTMigrate
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
     var
         DataFile: Record DMTDataFile;
-        ErrorLog: Record DMTErrorLog;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
         MigrationLib: Codeunit DMTMigrationLib;
         ProgressDialog: Codeunit DMTProgressDialog;
+        Log: Codeunit DMTLog;
         BufferRef, BufferRef2 : RecordRef;
         MaxWith: Integer;
         ProgressBarTitle: Text;
-        RecordWasSkipped, RecordHadErrors : Boolean;
+        RecordWasSkipped, RecordHadErrors, TargetRecordExists : Boolean;
         Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
         Start: DateTime;
         DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
@@ -128,7 +145,7 @@ codeunit 110017 DMTMigrate
 
         //Prepare Progress Bar
         if not BufferRef.FindSet() then
-            Error('Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"', BufferRef.GetFilters);
+            Error(format(enum::DMTErrMsg::NoBufferTableRecorsInFilter), BufferRef.GetFilters);
         DataFile.CalcFields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
         if StrLen(ProgressBarTitle) < MaxWith then begin
@@ -159,18 +176,39 @@ codeunit 110017 DMTMigrate
         ProgressDialog.Open();
         ProgressDialog.UpdateFieldControl(Control::"Filter", ConvertStr(BufferRef.GetFilters, '@', '_'));
 
-        repeat
-            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, RecordWasSkipped, RecordHadErrors);
+        if DMTImportSettings.UpdateFieldsFilter() <> '' then
+            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", DataFile)
+        else
+            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", DataFile);
 
+        repeat
+            hier weiter machen:
+            Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
+            Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
+            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, RecordWasSkipped, RecordHadErrors, TargetRecordExists);
+            Log.IncNoOfProcessedRecords();
             ProgressDialog.NextStep(StepIndex::Process);
             case true of
                 RecordHadErrors:
-                    ProgressDialog.NextStep(StepIndex::ResultError);
+                    begin
+                        ProgressDialog.NextStep(StepIndex::ResultError);
+                        Log.IncNoOfRecordsWithErrors();
+                    end;
                 RecordWasSkipped:
-                    ProgressDialog.NextStep(StepIndex::Skipped);
-                else
+                    begin
+                        if DMTImportSettings.UpdateFieldsFilter() = '' then
+                            ProgressDialog.NextStep(StepIndex::Skipped);
+                        //Field Update
+                        if DMTImportSettings.UpdateFieldsFilter() <> '' then begin
+                            Log.inc
+                            Log.IncNoOfSuccessfullyProcessedRecords();
+                        end;
+                    end;
+                else begin
                     ProgressDialog.NextStep(StepIndex::ResultOK);
+                    Log.IncNoOfSuccessfullyProcessedRecords();
+                end;
             end;
             ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
             ProgressDialog.UpdateControlWithCustomDuration(Control::Duration, Control::Progress);
@@ -182,9 +220,10 @@ codeunit 110017 DMTMigrate
         until BufferRef.Next() = 0;
         MigrationLib.RunPostProcessingFor(DataFile);
         ProgressDialog.Close();
-        ErrorLog.OpenListWithFilter(DataFile, true);
+        Log.CreateSummary();
+        Log.ShowLogEntriesFor(DataFile);
         ShowResultDialog(ProgressDialog);
-        Message('Dauer %1', CurrentDateTime - Start);
+        // Message('Dauer %1', CurrentDateTime - Start);
     end;
 
     procedure InitBufferRef(DataFile: Record DMTDataFile; var BufferRef: RecordRef)
@@ -204,15 +243,14 @@ codeunit 110017 DMTMigrate
             end;
     end;
 
-    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var RecordWasSkipped: Boolean; var RecordHadErrors: Boolean)
+    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var RecordWasSkipped: Boolean; var RecordHadErrors: Boolean; var TargetRecordExists: Boolean)
     var
-        ErrorLog: Record DMTErrorLog;
         ProcessRecord: Codeunit DMTProcessRecord;
     begin
         ClearLastError();
         Clear(RecordHadErrors);
         Clear(RecordWasSkipped);
-        ErrorLog.DeleteExistingLogFor(BufferRef2);
+        Log.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(BufferRef2, DMTImportSettings);
         Commit();
         while not ProcessRecord.Run() do begin
@@ -224,16 +262,15 @@ codeunit 110017 DMTMigrate
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
-            RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
         end else begin
             ProcessRecord.InitInsert();
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
-            RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
         end;
-
-        RecordHadErrors := ProcessRecord.SaveErrorLog();
+        TargetRecordExists := ProcessRecord.GetTargetRecordExists();
+        RecordWasSkipped := ProcessRecord.GetRecordWasSkipped();
+        RecordHadErrors := ProcessRecord.SaveErrorLog(Log);
     end;
 
     local procedure EditView(var BufferRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings) Continue: Boolean
@@ -263,12 +300,11 @@ codeunit 110017 DMTMigrate
     end;
 
     local procedure ShowResultDialog(var ProgressDialog: Codeunit DMTProgressDialog)
+    var
+        ResultMsg: Label 'No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4',
+         Comment = 'de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4';
     begin
-        Message('Anzahl Datensätze..\' +
-                'verarbeitet: %1\' +
-                'eingelesen : %2\' +
-                'mit Fehlern: %3\' +
-                'Verarbeitungsdauer: %4',
+        Message(ResultMsg,
                 ProgressDialog.GetStep(StepIndex::Process),
                 ProgressDialog.GetStep(StepIndex::ResultOK),
                 ProgressDialog.GetStep(StepIndex::ResultError),

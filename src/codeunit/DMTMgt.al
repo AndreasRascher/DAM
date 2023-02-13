@@ -234,17 +234,6 @@ codeunit 110002 DMTMgt
         end;  // end_CASE
     end;
 
-    procedure ValidateFieldImplementation(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; var TargetRecRef: RecordRef)
-    var
-        FieldWithTypeCorrectValueToValidate, ToField : FieldRef;
-    begin
-        ToField := TargetRecRef.Field(FieldMapping."Target Field No.");
-        AssignValueToFieldRef(SourceRecRef, FieldMapping, TargetRecRef, FieldWithTypeCorrectValueToValidate);
-        // ApplyReplacements(FieldMapping, FieldWithTypeCorrectValueToValidate);
-        ToField.Validate(FieldWithTypeCorrectValueToValidate.Value);
-        TargetRecRef.Modify();
-    end;
-
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; FieldMapping: Record DMTFieldMapping; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
         DMTMgt: Codeunit DMTMgt;

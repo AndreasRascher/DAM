@@ -152,12 +152,14 @@ page 110028 DMTFieldMapping
         }
     }
     trigger OnAfterGetRecord()
+    var
+        Log: Codeunit DMTLog;
     begin
         IsFixedValue := Rec."Processing Action" = Rec."Processing Action"::FixedValue;
         LineStyleExpr := '';
         if Rec."Processing Action" = Rec."Processing Action"::Ignore then
             LineStyleExpr := Format(Enum::DMTFieldStyle::Grey);
-        if FieldErrorsExist(Rec) then
+        if Log.FieldErrorsExistFor(Rec) then
             LineStyleExpr := Format(Enum::DMTFieldStyle::"Red + Italic");
     end;
 
@@ -176,17 +178,6 @@ page 110028 DMTFieldMapping
         HasLines := FieldMapping_SELECTED.FindFirst();
     end;
 
-    procedure FieldErrorsExist(var FieldMapping: Record DMTFieldMapping) ErrExist: Boolean
-    var
-        DataFile: Record DMTDataFile;
-        ErrorLog: Record DMTErrorLog;
-    begin
-        DataFile.Get(FieldMapping.GetRangeMin("Data File ID"));
-        ErrorLog.SetRange(DataFileName, DataFile.Name);
-        ErrorLog.SetRange(DataFilePath, DataFile.Path);
-        ErrorLog.SetRange("Import to Field No.", FieldMapping."Target Field No.");
-        ErrExist := not ErrorLog.IsEmpty;
-    end;
 
     var
         TempFieldMapping_Selected: Record DMTFieldMapping temporary;

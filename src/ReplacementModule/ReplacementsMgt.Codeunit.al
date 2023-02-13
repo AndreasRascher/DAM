@@ -37,8 +37,11 @@ codeunit 110014 "DMTReplacementsMgt"
     end;
 
     internal procedure GetReplacmentValueFor(Number: Integer) ReturnField: FieldRef
+    var
+        Position: Integer;
     begin
-        ReturnField := NewValueFieldArrayGlobal[NewValueFieldNumbersGlobal.IndexOf(Number)];
+        Position := NewValueFieldNumbersGlobal.IndexOf(Number);
+        ReturnField := NewValueFieldArrayGlobal[Position];
     end;
 
     local procedure FindReplacementValues(var SourceRef: RecordRef; CompareFieldNumbers: List of [Integer]; TargetTableID: Integer) HasReplacementValues: Boolean
@@ -46,7 +49,7 @@ codeunit 110014 "DMTReplacementsMgt"
         CompareFieldValueArray: array[16] of FieldRef;
     begin
         ReadCompareFields(CompareFieldValueArray, SourceRef, CompareFieldNumbers);
-        FindNewValueFields(NewValueFieldArrayGlobal, NewValueFieldNumbersGlobal, CompareFieldValueArray, CompareFieldNumbers, ReplacementLineGlobal, TargetTableID);
+        HasReplacementValues := FindNewValueFields(NewValueFieldArrayGlobal, NewValueFieldNumbersGlobal, CompareFieldValueArray, CompareFieldNumbers, ReplacementLineGlobal, TargetTableID);
     end;
 
     local procedure LoadDatafileAssignments(var ReplacementAssignmentForDataFile: Record DMTReplacement temporary; DataFile: Record DMTDataFile) Found: Boolean
@@ -125,9 +128,10 @@ codeunit 110014 "DMTReplacementsMgt"
 
     local procedure FindNewValueFields(var NewValueFieldArray: array[16] of FieldRef; var NewValueFieldNumbers: List of [Integer]; CompareFieldValueArray: array[16] of FieldRef; CompareFieldNumbers: List of [Integer]; var TempReplacementLine: Record DMTReplacement temporary; TargetTableID: Integer) Found: Boolean
     var
-        ReplacementHeader, ReplacementAssignment : Record DMTReplacement;
+        ReplacementHeader: Record DMTReplacement;
         DummyTargetRef: RecordRef;
         IsMatch: Boolean;
+        ArrayPos: Integer;
     begin
         Clear(NewValueFieldArray);
         Clear(NewValueFieldNumbers);
@@ -163,20 +167,26 @@ codeunit 110014 "DMTReplacementsMgt"
                         begin
                             ReplacementAssignmentForDataFileGlobal.Testfield("New Value 1 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
-                            NewValueFieldArray[1] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
-                            NewValueFieldArray[1].Value(TempReplacementLine."New Value 1");
+                            StoreArrayPosForTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            NewValueFieldArray[ArrayPos] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            NewValueFieldArray[ArrayPos].Value(TempReplacementLine."New Value 1");
                         end;
                     ReplacementHeader."No. of Values to modify"::"2":
                         begin
                             ReplacementAssignmentForDataFileGlobal.Testfield("New Value 1 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
-                            NewValueFieldArray[1] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
-                            NewValueFieldArray[1].Value(TempReplacementLine."New Value 1");
+                            StoreArrayPosForTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            NewValueFieldArray[ArrayPos] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 1 Field No.");
+                            NewValueFieldArray[ArrayPos].Value(TempReplacementLine."New Value 1");
 
                             ReplacementAssignmentForDataFileGlobal.Testfield("New Value 2 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForDataFileGlobal."New Value 2 Field No.");
-                            NewValueFieldArray[2] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 2 Field No.");
-                            NewValueFieldArray[2].Value(TempReplacementLine."New Value 2");
+                            StoreArrayPosForTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 2 Field No.");
+                            ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForDataFileGlobal."New Value 2 Field No.");
+                            NewValueFieldArray[ArrayPos] := DummyTargetRef.Field(ReplacementAssignmentForDataFileGlobal."New Value 2 Field No.");
+                            NewValueFieldArray[ArrayPos].Value(TempReplacementLine."New Value 2");
                         end;
                     else
                         error('unhandled case');
@@ -306,10 +316,24 @@ codeunit 110014 "DMTReplacementsMgt"
 
     end;
 
+    procedure StoreArrayPosForTargetFieldNo(TargetFieldNo: Integer)
+    begin
+        // Stack new field nos
+        if not FieldPosArrayPosMappingGlobal.ContainsKey(TargetFieldNo) then
+            FieldPosArrayPosMappingGlobal.Add(TargetFieldNo, FieldPosArrayPosMappingGlobal.Values.Count + 1);
+    end;
+
+    procedure GetArrayPosByTargetFieldNo(TargetFieldNo: Integer) ArrayPos: Integer
+    begin
+        ArrayPos := FieldPosArrayPosMappingGlobal.Get(TargetFieldNo);
+    end;
+
+
     var
         ReplacementAssignmentForDataFileGlobal, ReplacementLineGlobal : Record DMTReplacement temporary;
-        HasReplacements, IsInitialized : Boolean;
         NewValueFieldArrayGlobal: array[16] of FieldRef;
+        HasReplacements, IsInitialized : Boolean;
         NewValueFieldNumbersGlobal: List of [Integer];
+        FieldPosArrayPosMappingGlobal: Dictionary of [Integer, Integer];
 
 }
