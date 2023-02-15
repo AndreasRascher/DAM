@@ -13,28 +13,29 @@ page 110026 DMTDataFileCard
         {
             group(General)
             {
+                Caption = 'General';
                 group(DataFilePathGroup)
                 {
                     Caption = 'Data File Path', comment = 'Datentdatei Pfad';
-                    field(DataFilePath; FullDataFilePathText)
-                    {
-                        ApplicationArea = All;
-                        Importance = Promoted;
-                        ShowCaption = false;
-                        ShowMandatory = true;
-                        StyleExpr = CurrDataFilePathStyle;
-                        trigger OnAssistEdit()
-                        begin
-                            SelectDataFilePath();
-                        end;
-                    }
+                field(DataFilePath; FullDataFilePathText)
+                {
+                    ApplicationArea = All;
+                    Importance = Promoted;
+                    ShowCaption = false;
+                    ShowMandatory = true;
+                    StyleExpr = CurrDataFilePathStyle;
+                    trigger OnAssistEdit()
+                    begin
+                        SelectDataFilePath();
+                    end;
                 }
-                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; ShowMandatory = true; }
-                field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
-                field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; }
-                field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
-                field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
             }
+            field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; ShowMandatory = true; }
+            field(BufferTableType; Rec.BufferTableType) { ApplicationArea = All; }
+            field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; }
+            field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
+            field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
+        }
             group(ProcessingOptions)
             {
                 Caption = 'Processing Options', Comment = 'de-DE=Verarbeitungsoptionen';
@@ -235,31 +236,31 @@ page 110026 DMTDataFileCard
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Create Buffer Table', comment = 'Puffertabelle erstellen';
+                            Caption = 'Create Buffer Table', comment = 'Puffertabelle erstellen';
 
                 trigger OnAction()
-                begin
-                    PageActions.DownloadALBufferTableFile(Rec);
-                end;
+    begin
+        PageActions.DownloadALBufferTableFile(Rec);
+    end;
             }
             action(CheckTransferedRecords)
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Check Transfered Records', comment = 'Übertragene Datensätze Prüfen';
+                            Caption = 'Check Transfered Records', comment = 'Übertragene Datensätze Prüfen';
 
                 trigger OnAction()
-                var
-                    Migrate: Codeunit DMTMigrate;
-                    CollationProblems: Dictionary of [RecordId, RecordId];
-                    RecordMapping: Dictionary of [RecordId, RecordId];
-                    NotTransferedRecords: List of [RecordId];
-                begin
-                    // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
-                    CollationProblems := Migrate.FindCollationProblems(RecordMapping);
-                    Message('No. of Records not Transfered: %1\' +
-                            'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
-                end;
+    var
+        Migrate: Codeunit DMTMigrate;
+        CollationProblems: Dictionary of [RecordId, RecordId];
+        RecordMapping: Dictionary of [RecordId, RecordId];
+        NotTransferedRecords: List of [RecordId];
+    begin
+        // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
+        CollationProblems := Migrate.FindCollationProblems(RecordMapping);
+        Message('No. of Records not Transfered: %1\' +
+                'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
+    end;
             }
             action(CreateCode)
             {
