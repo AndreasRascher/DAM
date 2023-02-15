@@ -122,7 +122,6 @@ codeunit 110017 DMTMigrate
         MigrationLib: Codeunit DMTMigrationLib;
         ProgressDialog: Codeunit DMTProgressDialog;
         BufferRef, BufferRef2 : RecordRef;
-        RecordHadErrors, RecordWasSkipped, TargetRecordExists : Boolean;
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
         MaxWith: Integer;

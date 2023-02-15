@@ -107,7 +107,7 @@ codeunit 110006 DMTLog
         LogEntry := LogEntryTemplate;
         LogEntry."Entry Type" := LogEntryType;
         LogEntry."Source ID" := SourceID;
-        LogEntry."Source ID (Text)" := SourceIdText;
+        LogEntry."Source ID (Text)" := CopyStr(SourceIdText, 1, MaxStrLen(LogEntry."Source ID (Text)"));
         LogEntry."Target ID" := TargetID;
         LogEntry."Target ID (Text)" := Format(TargetID);
         if FieldMapping."Data File ID" <> 0 then begin

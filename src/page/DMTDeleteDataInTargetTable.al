@@ -265,7 +265,7 @@ page 110024 DMTDeleteDataInTargetTable
         end;
     end;
 
-    local procedure DeleteRecordsInList(var dataFile: Record DMTDataFile; var useOnDeleteTrigger: Boolean; var TargetRecordIDsToDelete: List of [RecordId])
+    local procedure DeleteRecordsInList(var dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean; var TargetRecordIDsToDelete: List of [RecordId])
     var
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
         Log: Codeunit DMTLog;
