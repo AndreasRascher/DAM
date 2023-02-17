@@ -1639,12 +1639,12 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source ID</source>
+          <source>Target ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 2829043428 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source ID (Text)</source>
+          <source>Target ID (Text)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target ID (Text) - Property Caption</note>
         </trans-unit>
@@ -2487,6 +2487,11 @@
           <source>Indent Right</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 4137051400 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action New - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Renumber Lines</source>

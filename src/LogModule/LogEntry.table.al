@@ -12,8 +12,8 @@ table 110006 DMTLogEntry
         field(12; "Entry Type"; Enum DMTLogEntryType) { Caption = 'Entry Type', Comment = 'de-DE=Postenart'; }
         field(20; "Source ID"; RecordId) { Caption = 'Source ID'; }
         field(21; "Source ID (Text)"; Text[250]) { Caption = 'Source ID (Text)'; }
-        field(30; "Target ID"; RecordId) { Caption = 'Source ID'; }
-        field(31; "Target ID (Text)"; Text[250]) { Caption = 'Source ID (Text)'; }
+        field(30; "Target ID"; RecordId) { Caption = 'Target ID'; }
+        field(31; "Target ID (Text)"; Text[250]) { Caption = 'Target ID (Text)'; }
         field(32; "Target Table ID"; Integer) { }
         field(33; "Target Field No."; Integer) { }
         field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }

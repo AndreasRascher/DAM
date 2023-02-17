@@ -493,6 +493,7 @@ codeunit 110013 DMTDataFilePageAction
         DataFile.TestField("Target Table ID");
         DataFile.Modify();
         ImportToBufferTable(DataFile, false);
+        InitFieldMapping(DataFile."ID");
         ProposeMatchingFields(DataFile.ID);
         Migrate.AllFieldsWithoutDialogFrom(DataFile);
     end;

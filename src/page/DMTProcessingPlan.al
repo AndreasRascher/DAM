@@ -7,6 +7,7 @@ page 110015 DMTProcessingPlan
     UsageCategory = Lists;
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
+    InsertAllowed = false;
     // Report = Backup
     // Category4 = Arrange
     PromotedActionCategories = 'New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20';
@@ -19,7 +20,7 @@ page 110015 DMTProcessingPlan
                 IndentationColumn = Rec.Indentation;
                 IndentationControls = Description;
                 ShowAsTree = true;
-                Visible = ShowTreeView;
+                // Visible = ShowTreeView;
                 field("Line Type"; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(DataFileID; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
                 field(Description; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
@@ -29,20 +30,20 @@ page 110015 DMTProcessingPlan
                 field("Source Table No."; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
-            repeater(EditRepeater)
-            {
-                IndentationColumn = Rec.Indentation;
-                IndentationControls = DescriptionEdit;
-                Visible = not ShowTreeView;
-                field(LineTypeEdit; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(DataFileIDEdit; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
-                field(DescriptionEdit; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(ProcessingTimeEdit; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(StartTimeEdit; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(StatusEdit; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(SourceTableNoEdit; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(LineNoEdit; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
-            }
+            // repeater(EditRepeater)
+            // {
+            //     IndentationColumn = Rec.Indentation;
+            //     IndentationControls = DescriptionEdit;
+            //     // Visible = not ShowTreeView;
+            //     field(LineTypeEdit; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(DataFileIDEdit; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
+            //     field(DescriptionEdit; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(ProcessingTimeEdit; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(StartTimeEdit; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(StatusEdit; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(SourceTableNoEdit; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
+            //     field(LineNoEdit; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
+            // }
         }
         area(FactBoxes)
         {
@@ -91,11 +92,59 @@ page 110015 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
+            action(New)
+            {
+                Caption = 'New', Comment = 'de-DE=Neu';
+                ShortcutKey = 'Alt+n';
+                Image = Add;
+                Scope = Repeater;
+                trigger OnAction()
+                var
+                    LineBefore, Line : Record DMTProcessingPlan;
+                    NewLineNo, NextLineNo, LastLineNo : Integer;
+                begin
+                    // find last line no
+                    Clear(Line);
+                    if Line.FindLast() then
+                        LastLineNo := Line."Line No.";
+                    // find line before current rec
+                    LineBefore := Rec;
+                    if LineBefore.Next(-1) <> -1 then
+                        clear(LineBefore);
+
+                    // find line no after current rec
+                    Line := Rec;
+                    if Line.Next(1) <> 1 then
+                        clear(Line);
+                    NextLineNo := Line."Line No.";
+                    case true of
+                        // Rec is last line oder first line
+                        (Rec."Line No." = LastLineNo):
+                            NewLineNo := LastLineNo + 10000;
+                        // new line below current line
+                        (Rec."Line No." < LastLineNo) and (NextLineNo > Rec."Line No."):
+                            NewLineNo := (Rec."Line No." + NextLineNo) div 2;
+                    end;
+                    if NewLineNo <> 0 then begin
+                        Clear(Line);
+                        Line."Line No." := NewLineNo;
+                        if Rec."Line No." <> 0 then
+                            case true of
+                                (Rec.Type <> Rec.Type::Group) and (Rec.Indentation > 0):
+                                    Line.Indentation := Rec.Indentation;
+                                (Rec.Type = Rec.Type::Group):
+                                    Line.Indentation := Rec.Indentation + 1;
+                            end;
+                        Line.Insert();
+                        Rec.Get(Line.RecordId);
+                    end;
+                end;
+            }
             action(IndentLeft)
             {
                 Caption = 'Indent Left', comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
-                Image = PreviousRecord;
+                Image = DecreaseIndent;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedCategory = Category4;
@@ -111,7 +160,7 @@ page 110015 DMTProcessingPlan
             {
                 Caption = 'Indent Right', comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
-                Image = NextRecord;
+                Image = Indent;
                 Promoted = true;
                 PromotedOnly = true;
                 PromotedCategory = Category4;
@@ -200,6 +249,9 @@ page 110015 DMTProcessingPlan
     begin
         LineStyle := '';
         ShowTreeView := not CurrPage.Editable;
+        if not BelowxRec then
+            if (xRec.Indentation <> 0) and (xRec.Type <> xRec.Type::Group) then
+                Rec.Indentation := xRec.Indentation;
     end;
 
     trigger OnAfterGetRecord()

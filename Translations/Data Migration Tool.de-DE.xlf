@@ -1966,14 +1966,14 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source ID</source>
-          <target>Herkunfts-ID</target>
+          <source>Target ID</source>
+          <target>Ziel-ID</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 2829043428 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source ID (Text)</source>
-          <target>Herkunfts-ID (Text)</target>
+          <source>Target ID (Text)</source>
+          <target>Ziel-ID (Text)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target ID (Text) - Property Caption</note>
         </trans-unit>
@@ -2515,7 +2515,6 @@
           <source>General</source>
           <target>Allgemein</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control General - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Control 2096082296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2985,6 +2984,13 @@
           <target>Rechts einrücken</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 4137051400 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New</source>
+          <target>Neu</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neu</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action New - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Renumber Lines</source>

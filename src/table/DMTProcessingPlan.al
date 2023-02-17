@@ -2,6 +2,7 @@ table 110010 DMTProcessingPlan
 {
     DataClassification = ToBeClassified;
     Caption = 'DMTProcessingPlan', Locked = true;
+    LookupPageId = DMTProcessingPlan;
 
     fields
     {
