@@ -191,7 +191,7 @@ codeunit 110006 DMTLog
     begin
         logEntry.Usage := logEntry.Usage::"Import to Buffer Table";
         logEntry."Entry Type" := logEntry."Entry Type"::Summary;
-        logEntry."Process No." := 0;
+        logEntry."Process No." := logEntry.GetNextProcessNo();
         logEntry."Target Table ID" := dataFile."Target Table ID";
         logEntry."Context Description" := StrSubstNo(durationLbl, duration);
         logEntry.DataFileName := dataFile.Name;
@@ -236,17 +236,42 @@ codeunit 110006 DMTLog
 
     procedure IncNoOfProcessedRecords()
     begin
-        ProcessingStatistics.Set(Format(StatisticType::Processed), ProcessingStatistics.Get(Format(StatisticType::Processed)) + 1);
+        ProcessingStatistics.Set(Format(StatisticType::Processed), GetNoOfProcessedRecords() + 1);
+    end;
+
+    procedure GetNoOfProcessedRecords(): Integer
+    begin
+        exit(ProcessingStatistics.Get(Format(StatisticType::Processed)));
     end;
 
     procedure IncNoOfRecordsWithErrors()
     begin
-        ProcessingStatistics.Set(Format(StatisticType::Error), ProcessingStatistics.Get(Format(StatisticType::Error)) + 1);
+        ProcessingStatistics.Set(Format(StatisticType::Error), GetNoOfRecordsWithErrors() + 1);
+    end;
+
+    procedure GetNoOfRecordsWithErrors(): Integer
+    begin
+        exit(ProcessingStatistics.Get(Format(StatisticType::Error)));
     end;
 
     procedure IncNoOfSuccessfullyProcessedRecords()
     begin
-        ProcessingStatistics.Set(Format(StatisticType::Success), ProcessingStatistics.Get(Format(StatisticType::Success)) + 1);
+        ProcessingStatistics.Set(Format(StatisticType::Success), GetNoOfSuccessfullyProcessedRecords());
+    end;
+
+    procedure GetNoOfSuccessfullyProcessedRecords(): Integer
+    begin
+        exit(ProcessingStatistics.Get(Format(StatisticType::Success)));
+    end;
+
+    procedure GetProgress(MaxSteps: Integer): Integer
+    begin
+        exit(GetProgress(GetNoOfProcessedRecords(), MaxSteps));
+    end;
+
+    procedure GetProgress(StepCount: Integer; MaxSteps: Integer): Integer
+    begin
+        exit((10000 * (StepCount / MaxSteps)) div 1);
     end;
 
     procedure ShowLogEntriesFor(Datafile: Record DMTDataFile)
@@ -255,6 +280,16 @@ codeunit 110006 DMTLog
         LogEntries: Page DMTLogEntries;
     begin
         LogEntry.FilterFor(Datafile);
+        LogEntries.SetTableView(LogEntry);
+        LogEntries.Run();
+    end;
+
+    procedure ShowLogEntriesFor(LogEntryWithProcessNo: Record DMTLogEntry)
+    var
+        LogEntry: Record DMTLogEntry;
+        LogEntries: Page DMTLogEntries;
+    begin
+        LogEntry.SetRange("Process No.", LogEntryWithProcessNo."Process No.");
         LogEntries.SetTableView(LogEntry);
         LogEntries.Run();
     end;

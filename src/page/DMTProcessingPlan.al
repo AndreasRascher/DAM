@@ -8,9 +8,10 @@ page 110015 DMTProcessingPlan
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
     InsertAllowed = false;
+    DeleteAllowed = false;
     // Report = Backup
     // Category4 = Arrange
-    PromotedActionCategories = 'New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20';
+    // PromotedActionCategories = 'New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20';
     layout
     {
         area(Content)
@@ -71,7 +72,6 @@ page 110015 DMTProcessingPlan
         }
     }
 
-
     actions
     {
         area(Processing)
@@ -81,9 +81,9 @@ page 110015 DMTProcessingPlan
                 Caption = 'Start', comment = 'de-DE=Ausführen';
                 ApplicationArea = All;
                 Image = Start;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedCategory = Process;
 
                 trigger OnAction();
                 begin
@@ -92,11 +92,11 @@ page 110015 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
-            action(New)
+            action(NewLine)
             {
                 Caption = 'New', Comment = 'de-DE=Neu';
                 ShortcutKey = 'Alt+n';
-                Image = Add;
+                Image = "Invoicing-New";
                 Scope = Repeater;
                 trigger OnAction()
                 var
@@ -140,14 +140,24 @@ page 110015 DMTProcessingPlan
                     end;
                 end;
             }
+            action(DeleteLine)
+            {
+                Caption = 'Delete', Comment = 'de-DE=Löschen';
+                ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht
+                Image = Delete;
+                trigger OnAction()
+                begin
+                    Rec.Delete();
+                end;
+            }
             action(IndentLeft)
             {
                 Caption = 'Indent Left', comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
                 Image = DecreaseIndent;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Category4;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedCategory = Category4;
 
                 trigger OnAction()
                 begin
@@ -161,9 +171,9 @@ page 110015 DMTProcessingPlan
                 Caption = 'Indent Right', comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
                 Image = Indent;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Category4;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedCategory = Category4;
 
                 trigger OnAction()
                 begin
@@ -177,9 +187,9 @@ page 110015 DMTProcessingPlan
                 Caption = 'Reset Lines', comment = 'de-DE=Zeilen zurücksetzen';
                 ApplicationArea = All;
                 Image = Restore;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedCategory = Process;
 
                 trigger OnAction()
                 begin
@@ -203,10 +213,10 @@ page 110015 DMTProcessingPlan
                 Caption = 'Create Backup', Comment = 'Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Report;
 
                 trigger OnAction()
                 var
@@ -224,10 +234,10 @@ page 110015 DMTProcessingPlan
                 Caption = 'Import Backup', Comment = 'Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
+                // Promoted = true;
+                // PromotedOnly = true;
+                // PromotedIsBig = true;
+                // PromotedCategory = Report;
 
                 trigger OnAction()
                 var
@@ -244,19 +254,23 @@ page 110015 DMTProcessingPlan
                 end;
             }
         }
+        area(Promoted)
+        {
+            actionref(NewLineRef; NewLine) { }
+            actionref(DelLine; DeleteLine) { }
+            actionref(StartCtrl; Start) { }
+            group(IndentationGroup)
+            {
+                Caption = 'Indentation';
+                Image = TransferOrder;
+                actionref(IndentLeftRef; IndentLeft) { }
+                actionref(IndentRightRef; IndentRight) { }
+            }
+        }
     }
-    trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-        LineStyle := '';
-        ShowTreeView := not CurrPage.Editable;
-        if not BelowxRec then
-            if (xRec.Indentation <> 0) and (xRec.Type <> xRec.Type::Group) then
-                Rec.Indentation := xRec.Indentation;
-    end;
 
     trigger OnAfterGetRecord()
     begin
-        ShowTreeView := not CurrPage.Editable;
         Rec.InitFlowFilters();
         LineStyle := '';
         case true of
@@ -427,6 +441,6 @@ page 110015 DMTProcessingPlan
     var
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         [InDataSet]
-        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowTreeView : Boolean;
+        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart : Boolean;
         LineStyle: Text;
 }

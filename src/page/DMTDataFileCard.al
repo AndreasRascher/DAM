@@ -56,7 +56,16 @@ page 110026 DMTDataFileCard
         }
         area(FactBoxes)
         {
-            part(DMTDataFileFactBox; DMTDataFileFactBox) { ApplicationArea = All; }
+            part(DMTDataFileFactBox_TableInfo; DMTDataFileFactBox)
+            {
+                ApplicationArea = All;
+                Caption = 'Info', Comment = 'Info';
+            }
+            part(DMTDataFileFactBox_Log; DMTDataFileFactBox)
+            {
+                ApplicationArea = All;
+                Caption = 'Log', Comment = 'Protokoll';
+            }
         }
     }
 
@@ -305,7 +314,8 @@ page 110026 DMTDataFileCard
 
     trigger OnAfterGetCurrRecord()
     begin
-        CurrPage.DMTDataFileFactBox.Page.UpdateFactBoxOnAfterGetCurrRecord(Rec);
+        CurrPage.DMTDataFileFactBox_TableInfo.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        CurrPage.DMTDataFileFactBox_Log.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
     end;
 
     local procedure SelectDataFilePath()

@@ -240,27 +240,27 @@ page 110024 DMTDeleteDataInTargetTable
     local procedure DeleteFullTable(dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean)
     var
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
+        Log: Codeunit DMTLog;
         RecRef: RecordRef;
-        MaxSteps, StepCount : Integer;
+        MaxSteps: Integer;
     begin
         dataFile.TestField("Target Table ID");
         RecRef.Open(dataFile."Target Table ID");
         MaxSteps := RecRef.Count;
         if ConfirmDeletion(MaxSteps, RecRef.Caption) then begin
             if RecRef.FindSet() then begin
+                Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", dataFile);
                 DeleteRecordsWithErrorLog.DialogOpen(RecRef.Caption + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
                 repeat
-                    if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecRef.RecordId) then begin
+                    if not DeleteRecordsWithErrorLog.DialogUpdate(1, Log.GetProgress(MaxSteps), 2, StrSubstNo('%1/%2', Log.GetNoOfProcessedRecords(), MaxSteps), 3, RecRef.RecordId) then begin
                         DeleteRecordsWithErrorLog.showErrors();
                         Error('Process Stopped');
                     end;
-                    StepCount += 1;
                     Commit();
-                    DeleteRecordsWithErrorLog.InitRecordToDelete(RecRef.RecordId, useOnDeleteTrigger);
-                    if not DeleteRecordsWithErrorLog.Run() then
-                        DeleteRecordsWithErrorLog.LogLastError();
+                    DeleteSingeRecordWithLog(dataFile, useOnDeleteTrigger, Log, RecRef.RecordId);
                 until RecRef.Next() = 0;
-                DeleteRecordsWithErrorLog.showErrors();
+                Log.CreateSummary();
+                Log.ShowLogForCurrentProcess();
             end;
         end;
     end;
@@ -271,7 +271,6 @@ page 110024 DMTDeleteDataInTargetTable
         Log: Codeunit DMTLog;
         RecID: RecordId;
         MaxSteps: Integer;
-        StepCount: Integer;
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", dataFile);
         MaxSteps := TargetRecordIDsToDelete.Count;
@@ -279,22 +278,32 @@ page 110024 DMTDeleteDataInTargetTable
         if ConfirmDeletion(MaxSteps, dataFile."Target Table Caption") then begin
             DeleteRecordsWithErrorLog.DialogOpen(dataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
             foreach RecID in TargetRecordIDsToDelete do begin
-                if not DeleteRecordsWithErrorLog.DialogUpdate(1, DeleteRecordsWithErrorLog.CalcProgress(StepCount, MaxSteps), 2, StrSubstNo('%1/%2', StepCount, MaxSteps), 3, RecID) then begin
+                if not DeleteRecordsWithErrorLog.DialogUpdate(1, Log.GetProgress(MaxSteps), 2, StrSubstNo('%1/%2', Log.GetNoOfProcessedRecords(), MaxSteps), 3, RecID) then begin
                     DeleteRecordsWithErrorLog.showErrors();
                     Error(format(Enum::DMTErrMsg::"Process Stopped"));
                 end;
-                StepCount += 1;
                 Commit();
-                DeleteRecordsWithErrorLog.InitRecordToDelete(RecID, useOnDeleteTrigger);
-                if DeleteRecordsWithErrorLog.Run() then begin
-                    Log.AddTargetSuccessEntry(RecID, dataFile);
-                end else begin
-                    Log.AddTargetErrorByIDEntry(RecID, dataFile, Log.CreateErrorItem());
-                    ClearLastError();
-                end;
+                DeleteSingeRecordWithLog(dataFile, useOnDeleteTrigger, Log, RecID);
             end;
             Log.CreateSummary();
             Log.ShowLogForCurrentProcess();
+        end;
+    end;
+
+    local procedure DeleteSingeRecordWithLog(var dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean; var log: Codeunit DMTLog; recID: RecordId)
+    var
+        DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
+    begin
+        DeleteRecordsWithErrorLog.InitRecordToDelete(recID, useOnDeleteTrigger);
+        Log.IncNoOfProcessedRecords();
+        if DeleteRecordsWithErrorLog.Run() then begin
+            log.AddTargetSuccessEntry(recID, dataFile);
+            log.IncNoOfSuccessfullyProcessedRecords();
+            log.IncNoOfProcessedRecords();
+        end else begin
+            log.AddTargetErrorByIDEntry(recID, dataFile, log.CreateErrorItem());
+            log.IncNoOfRecordsWithErrors();
+            ClearLastError();
         end;
     end;
 

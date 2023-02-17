@@ -35,7 +35,7 @@ table 110042 DMTDataFile
         field(20; Path; Code[98]) { Caption = 'Path'; Editable = false; }
         field(21; Name; Text[99]) { Caption = 'Name'; Editable = false; }
         field(22; Size; Integer) { Caption = 'Size'; Editable = false; }
-        field(23; "Created At"; DateTime) { Caption = 'DateTime'; Editable = false; }
+        field(23; "Created At"; DateTime) { Caption = 'Created At'; Editable = false; }
         #endregion FileInfo
         #region Buffer Table Data
         field(30; "NAV Src.Table No."; Integer)

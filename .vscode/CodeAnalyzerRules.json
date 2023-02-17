@@ -66,6 +66,11 @@
             "id": "AA0181",
             "action": "None",
             "justification": "The FindSet() or Find() methods must be used only in connection with the Next() method."
+        },
+        {
+            "id": "AL0603",
+            "action": "None",
+            "justification": "An implicit conversion is being performed from a value of type 'Option' to a value of type Enum"
         }
     ]
 }

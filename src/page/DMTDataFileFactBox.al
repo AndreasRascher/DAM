@@ -11,6 +11,7 @@ page 110023 DMTDataFileFactBox
             group(InfoGroups)
             {
                 ShowCaption = false;
+                Visible = (ViewMode = ViewMode::TableInfo);
                 group(TableInfo)
                 {
                     Caption = 'No. of Records in';
@@ -39,32 +40,41 @@ page 110023 DMTDataFileFactBox
                     field(GetFileSizeInKB; CurrDataFile.GetFileSizeInKB()) { Caption = 'Size(KB)'; ApplicationArea = All; }
                     field("Created At"; CurrDataFile."Created At") { ApplicationArea = All; }
                 }
-                repeater(Log)
-                {
-                    field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; Visible = false; }
-                    field(Usage; Rec.Usage) { ApplicationArea = All; }
-                    field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
-                }
             }
-
-            // group("Import Duration")
-            // {
-            //     Caption = 'Import Duration';
-            //     field("Import Duration (Buffer)"; Rec."Import Duration (Buffer)") { Caption = 'Buffer'; ApplicationArea = All; }
-            //     field("Import Duration (Target)"; Rec."Import Duration (Target)") { Caption = 'Target'; ApplicationArea = All; }
-            // }
-            // group("Last Import")
-            // {
-            //     Caption = 'Last Import';
-            //     field(LastImportBy; Rec.LastImportBy) { ApplicationArea = All; }
-            //     field(LastImportToBufferAt; Rec.LastImportToBufferAt) { Caption = 'Buffer'; ApplicationArea = All; }
-            //     field(LastImportToTargetAt; Rec.LastImportToTargetAt) { Caption = 'Target'; ApplicationArea = All; }
-            // }
-
+            repeater(Log)
+            {
+                Caption = 'Log';
+                Visible = (ViewMode = ViewMode::Log);
+                field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; Visible = false; }
+                field(Usage; Rec.Usage) { ApplicationArea = All; }
+                field("Context Description"; Rec."Context Description") { ApplicationArea = All; }
+            }
         }
     }
-    procedure UpdateFactBoxOnAfterGetCurrRecord(dataFile: Record DMTDataFile)
+    actions
+    {
+        area(Processing)
+        {
+            action(OpenLog)
+            {
+                ApplicationArea = All;
+                Scope = Repeater;
+                Image = Log;
+                Caption = 'Show Log', Comment = 'de-DE=Protoll öffnen';
+
+                trigger OnAction()
+                var
+                    Log: Codeunit DMTLog;
+                begin
+                    Log.ShowLogEntriesFor(Rec);
+                end;
+            }
+        }
+    }
+
+    procedure ShowAsLogAndUpdateOnAfterGetCurrRecord(dataFile: Record DMTDataFile)
     begin
+        ViewMode := ViewMode::Log;
         CurrDataFile.Copy(dataFile);
         CurrDataFile.InitFlowFilters();
         CurrDataFile.CalcFields("No. of Records In Trgt. Table");
@@ -72,7 +82,17 @@ page 110023 DMTDataFileFactBox
         Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
     end;
 
+    procedure ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(dataFile: Record DMTDataFile)
+    begin
+        ViewMode := ViewMode::TableInfo;
+        CurrDataFile.Copy(dataFile);
+        CurrDataFile.InitFlowFilters();
+        CurrDataFile.CalcFields("No. of Records In Trgt. Table");
+        Rec.SetRecFilter();
+    end;
+
     var
         CurrDataFile: Record DMTDataFile;
+        ViewMode: Option " ",Log,TableInfo;
 }
 

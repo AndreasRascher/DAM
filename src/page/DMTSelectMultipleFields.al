@@ -153,8 +153,22 @@ page 110029 "DMTSelectMultipleFields"
 
         DataFile.FilterRelated(FieldMapping);
         FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
-        FieldMapping.SetFilter("Source Field No.", '<>%1', 0);
+        // FieldMapping.SetFilter("Source Field No.", '<>%1', 0);
         FieldMapping.SetRange("Is Key Field(Target)", false);
+        if FieldMapping.FindSet() then
+            repeat
+                case true of
+                    // Transfer Field Value 
+                    (FieldMapping."Processing Action" = FieldMapping."Processing Action"::Transfer) and
+                    (FieldMapping."Source Field No." <> 0):
+                        FieldMapping.Mark(true);
+                    // Transfer Fixed Value
+                    (FieldMapping."Processing Action" = FieldMapping."Processing Action"::FixedValue) and
+                    (FieldMapping."Fixed Value" <> ''):
+                        FieldMapping.Mark(true);
+                end;
+            until FieldMapping.Next() = 0;
+        FieldMapping.MarkedOnly(true);
         FieldMapping.CopyToTemp(TempFieldMapping);
         Success := not TempFieldMapping.IsEmpty();
     end;

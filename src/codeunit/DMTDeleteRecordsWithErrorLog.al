@@ -92,10 +92,7 @@ codeunit 110018 DMTDeleteRecordsWithErrorLog
         Finish := CurrentDateTime;
     end;
 
-    procedure CalcProgress(StepCount: Integer; MaxSteps: Integer): Integer
-    begin
-        exit((10000 * (StepCount / MaxSteps)) div 1);
-    end;
+
 
     procedure GetDuratiation(): Duration
     begin

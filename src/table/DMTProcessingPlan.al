@@ -108,10 +108,12 @@ table 110010 DMTProcessingPlan
     var
         DataFile: Record DMTDataFile;
         FPBuilder: Codeunit DMTFPBuilder;
+        Migrate: Codeunit DMTMigrate;
         TargetRef: RecordRef;
         CurrView: Text;
     begin
         DataFile.Get(Rec.ID);
+        Migrate.CheckBufferTableIsNotEmpty(DataFile);
         TargetRef.Open(DataFile."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then

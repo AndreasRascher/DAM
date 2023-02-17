@@ -54,7 +54,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field BufferTableType - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1485543381 - Field 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DateTime</source>
+          <source>Created At</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Field Created At - Property Caption</note>
         </trans-unit>
@@ -2035,7 +2035,7 @@
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
-          <note from="Developer" annotates="general" priority="2">Backup erstellen</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Backup erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action XMLExport - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2090228232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2047,11 +2047,6 @@
           <source>Delete Gen. Buffer Table Lines</source>
           <note from="Developer" annotates="general" priority="2">Alle Zeilen in gen. Puffertabelle löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ClearGenBuffer - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Action 4113627632 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data File List</source>
-          <note from="Developer" annotates="general" priority="2">Dateien Übersicht</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action TableList - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 2559415762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Show Schema Data</source>
@@ -2112,6 +2107,16 @@
           <source>Processing Options</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsoptionen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control ProcessingOptions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 1096835191 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <note from="Developer" annotates="general" priority="2">Protokoll</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control DMTDataFileFactBox_Log - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2874035913 - Control 3406356291 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Info</source>
+          <note from="Developer" annotates="general" priority="2">Info</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Control DMTDataFileFactBox_TableInfo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1733595285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Autom. Übernahme</source>
@@ -2222,6 +2227,16 @@
           <source>Buffer</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 1979318928 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Log - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Action 455269300 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show Log</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Protoll öffnen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Action OpenLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1929500315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data File List</source>
@@ -2448,11 +2463,6 @@
           <note from="Developer" annotates="general" priority="2">Ignorierte Fehler anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowIgnored - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
-          <source>New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property PromotedActionCategories</note>
-        </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
@@ -2478,6 +2488,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldaten Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 247166185 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1042755249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Indent Left</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Links einrücken</note>
@@ -2488,10 +2503,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 4137051400 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 4181015414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Neu</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action New - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action NewLine - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Renumber Lines</source>
@@ -2517,6 +2532,11 @@
           <source>Import Backup</source>
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 2097681594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indentation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentationGroup - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>

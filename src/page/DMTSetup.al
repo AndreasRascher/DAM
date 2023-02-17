@@ -145,23 +145,12 @@ page 110011 "DMT Setup"
                 PromotedIsBig = true;
                 PromotedCategory = Report;
                 Image = ShowMatrix;
-                Visible = false;
+                // Visible = false;
 
                 trigger OnAction()
                 begin
                     Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, Database::DMTFieldBuffer));
                 end;
-            }
-            action(TableList)
-            {
-                Caption = 'Data File List', Comment = 'Dateien Übersicht';
-                ApplicationArea = All;
-                Image = Table;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
-                RunObject = page DMTDataFileList;
             }
             action(ClearGenBuffer)
             {
@@ -185,7 +174,7 @@ page 110011 "DMT Setup"
         {
             action(XMLExport)
             {
-                Caption = 'Create Backup', Comment = 'Backup erstellen';
+                Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
                 Promoted = true;
