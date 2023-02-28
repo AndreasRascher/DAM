@@ -18,6 +18,7 @@ codeunit 110008 DMTRunDocMigration
             repeat
                 Clear(RecIDsToProcessPerRootRecord);
                 CollectRecIdsInStructure(rootNode, bufferRef_Root, RecIDsToProcessPerRootRecord);
+                MigrateRecords(rootNode.DeleteRecordIfExits, RecIDsToProcessPerRootRecord)
             until bufferRef_Root.Next() = 0;
     end;
 
@@ -77,7 +78,8 @@ codeunit 110008 DMTRunDocMigration
     var
         TableRelation: Record DMTDocMigration temporary;
     begin
-        DocMigration.LoadTableRelation(TableRelation);
+        if DocMigration.LoadTableRelation(TableRelation) = 0 then
+            Error('No Table Relations defined for %1 - %2', DocMigration."Line Type", DocMigration.Description);
         if TableRelation.FindSet() then
             repeat
                 bufferRef.Field(TableRelation."Field ID").SetRange(parentRef.Field(TableRelation."Related Field ID"));
@@ -95,6 +97,13 @@ codeunit 110008 DMTRunDocMigration
             DocMigration_RootTable.SetRange("Line Type", DocMigration_Start."Line Type"::Table);
             OK := DocMigration_RootTable.FindFirst();
         end;
+    end;
+
+    local procedure MigrateRecords(DeleteRecordIfExits: Boolean; RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]])
+    var
+        RedID,
+    begin
+        Error('Procedure MigrateRecords not implemented.');
     end;
 
     procedure setDocMigrationStructure(DocMigrationStructure: Record DMTDocMigration)
