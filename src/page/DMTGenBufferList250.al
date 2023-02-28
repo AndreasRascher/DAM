@@ -11,7 +11,7 @@ page 110005 DMTGenBufferList250
         {
             repeater(General)
             {
-                field("Entry No."; "Entry No.") { ApplicationArea = All; }
+                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; }
                 field("Import from Filename"; Rec."Import from Filename") { ApplicationArea = All; }
                 field(F001; Rec.Fld001) { ApplicationArea = All; Visible = Fld001Visible; Editable = Fld001Editable; }
                 field(F002; Rec.Fld002) { ApplicationArea = All; Visible = Fld002Visible; Editable = Fld002Editable; }

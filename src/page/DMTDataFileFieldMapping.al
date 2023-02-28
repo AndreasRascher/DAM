@@ -28,7 +28,7 @@ page 110028 DMTFieldMapping
                 }
                 field("From Field No."; Rec."Source Field No.") { LookupPageId = DMTFieldLookup; HideValue = IsFixedValue; ApplicationArea = All; }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
-                field("Validation Type"; "Validation Type") { ApplicationArea = All; }
+                field("Validation Type"; Rec."Validation Type") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
                 // field(ReplacementsCode; Rec."Replacements Code") { ApplicationArea = All; StyleExpr = LineStyleExpr; }
                 field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; Visible = false; }

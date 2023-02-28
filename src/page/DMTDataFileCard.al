@@ -155,7 +155,7 @@ page 110026 DMTDataFileCard
                     NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
                 begin
-                    Migrate.InitBufferRef(Rec, RecRef);
+                    Rec.InitBufferRef(RecRef);
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
                     if FPBuilder.RunModal(RecRef, true) then begin

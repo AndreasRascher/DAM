@@ -135,7 +135,7 @@ codeunit 110017 DMTMigrate
         DataFile := DMTImportSettings.DataFile();
 
         // Show Filter Dialog
-        InitBufferRef(DataFile, BufferRef);
+        DataFile.InitBufferRef(BufferRef);
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DMTImportSettings) then
             exit;
@@ -226,23 +226,6 @@ codeunit 110017 DMTMigrate
         Log.ShowLogForCurrentProcess();
         ShowResultDialog(ProgressDialog);
         // Message('Dauer %1', CurrentDateTime - Start);
-    end;
-
-    procedure InitBufferRef(DataFile: Record DMTDataFile; var BufferRef: RecordRef)
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-    begin
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
-            // GenBuffTable.InitFirstLineAsCaptions(DMTDataFile);
-            GenBuffTable.FilterGroup(2);
-            GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterBy(DataFile);
-            GenBuffTable.FilterGroup(0);
-            BufferRef.GetTable(GenBuffTable);
-        end else
-            if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then begin
-                BufferRef.Open(DataFile."Buffer Table ID");
-            end;
     end;
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)

@@ -35,7 +35,28 @@ page 110022 DMTFieldLookup
         FieldNo: Integer;
     begin
         if IsLoaded then exit;
-        DataFile.Get(Rec.GetRangeMin("Data File ID Filter"));
+        Rec.FilterGroup(4);
+        case true of
+            Rec.GetFilter(TableNo) <> '':
+                begin
+                    DataFile.BufferTableType := DataFile.BufferTableType::"Seperate Buffer Table per CSV";
+                    DataFile."Buffer Table ID" := Rec.GetRangeMin(TableNo);
+                end;
+            Rec.GetFilter("Data File ID Filter") <> '':
+                begin
+                    DataFile.Get(Rec.GetRangeMin("Data File ID Filter"));
+                end;
+            else
+                Error('unhandled case');
+        end;
+        if Rec.GetFilter(TableNo) <> '' then begin
+
+        end;
+        if Rec.GetFilter("Data File ID Filter") <> '' then begin
+
+        end;
+        Rec.FilterGroup(0);
+
 
         case DataFile.BufferTableType of
             DataFile.BufferTableType::"Generic Buffer Table for all Files":

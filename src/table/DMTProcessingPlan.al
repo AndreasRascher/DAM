@@ -84,7 +84,6 @@ table 110010 DMTProcessingPlan
     var
         DataFile: Record DMTDataFile;
         FPBuilder: Codeunit DMTFPBuilder;
-        Migrate: Codeunit DMTMigrate;
         BufferRef: RecordRef;
         CurrView: Text;
     begin
@@ -94,7 +93,7 @@ table 110010 DMTProcessingPlan
             DataFile.BufferTableType := DataFile.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             DataFile.Get(Rec.ID);
-            Migrate.InitBufferRef(DataFile, BufferRef);
+            DataFile.InitBufferRef(BufferRef);
         end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then

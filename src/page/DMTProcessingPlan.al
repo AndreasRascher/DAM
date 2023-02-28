@@ -417,18 +417,18 @@ page 110015 DMTProcessingPlan
         HasLines := TempProcessingPlan_SelectedNew.FindFirst();
     end;
 
-    internal procedure IndentLines(var TempProcessingPLan: Record DMTProcessingPlan temporary; Direction: Integer)
+    internal procedure IndentLines(var TempProcessingPlan: Record DMTProcessingPlan temporary; Direction: Integer)
     var
         ProcessingPlan: Record DMTProcessingPlan;
     begin
-        if not TempProcessingPLan.FindSet() then exit;
+        if not TempProcessingPlan.FindSet() then exit;
         repeat
-            ProcessingPlan.Get(TempProcessingPlan_SELECTED.RecordId);
+            ProcessingPlan.Get(TempProcessingPlan.RecordId);
             ProcessingPlan.Indentation += Direction;
             if ProcessingPlan.Indentation < 0 then
                 ProcessingPlan.Indentation := 0;
             ProcessingPlan.Modify()
-        until TempProcessingPLan.Next() = 0;
+        until TempProcessingPlan.Next() = 0;
     end;
 
     local procedure UpdateVisibility()

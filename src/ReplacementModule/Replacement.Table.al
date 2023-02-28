@@ -15,7 +15,7 @@ table 110011 DMTReplacement
         {
             Caption = 'Code';
             NotBlank = true;
-            TableRelation = DMTReplacement."Replacement Code" where(LineType = const(Header));
+            TableRelation = if (LineType = const(Assignment)) DMTReplacement."Replacement Code" where(LineType = const(Header));
             ValidateTableRelation = false;
         }
         field(3; "Line No."; Integer)

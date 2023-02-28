@@ -41,7 +41,7 @@ page 110027 DMTDataFileList
                         RelationsCheck.ShowTableRelations(Rec);
                     end;
                 }
-                field("Unhandled Table Rel."; "Unhandled Table Rel.")
+                field("Unhandled Table Rel."; Rec."Unhandled Table Rel.")
                 {
                     ApplicationArea = All;
                     trigger OnDrillDown()

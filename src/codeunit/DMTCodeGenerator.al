@@ -233,27 +233,27 @@ codeunit 110004 DMTCodeGenerator
         CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
     end;
 
-    procedure FilterFields(var DMTFieldBuffer_FOUND: Record DMTFieldBuffer; TableNo: Integer; IncludeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) HasFields: Boolean
+    procedure FilterFields(var fieldBuffer_FOUND: Record DMTFieldBuffer; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
     var
         Debug: Integer;
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
-        Clear(DMTFieldBuffer_FOUND);
-        DMTFieldBuffer_FOUND.SetRange(TableNo, TableNo);
-        Debug := DMTFieldBuffer_FOUND.Count;
-        if not IncludeDisabled then
-            DMTFieldBuffer_FOUND.SetRange(Enabled, true);
-        Debug := DMTFieldBuffer_FOUND.Count;
-        DMTFieldBuffer_FOUND.SetFilter(Class, '%1|%2', DMTFieldBuffer_FOUND.Class::Normal, DMTFieldBuffer_FOUND.Class::FlowField);
+        Clear(fieldBuffer_FOUND);
+        fieldBuffer_FOUND.SetRange(TableNo, tableNo);
+        Debug := fieldBuffer_FOUND.Count;
+        if not includeDisabled then
+            fieldBuffer_FOUND.SetRange(Enabled, true);
+        Debug := fieldBuffer_FOUND.Count;
+        fieldBuffer_FOUND.SetFilter(Class, '%1|%2', fieldBuffer_FOUND.Class::Normal, fieldBuffer_FOUND.Class::FlowField);
         if not IncludeFlowFields then
-            DMTFieldBuffer_FOUND.SetRange(Class, DMTFieldBuffer_FOUND.Class::Normal);
+            fieldBuffer_FOUND.SetRange(Class, fieldBuffer_FOUND.Class::Normal);
         if not IncludeBlob then
-            DMTFieldBuffer_FOUND.SetFilter(Type, '<>%1', DMTFieldBuffer_FOUND.Type::BLOB);
+            fieldBuffer_FOUND.SetFilter(Type, '<>%1', fieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.SetRange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
-        Debug := DMTFieldBuffer_FOUND.Count;
-        DMTFieldBuffer_FOUND.SetRange(FieldName);
-        HasFields := DMTFieldBuffer_FOUND.FindFirst();
+        Debug := fieldBuffer_FOUND.Count;
+        fieldBuffer_FOUND.SetRange(FieldName);
+        hasFields := fieldBuffer_FOUND.FindFirst();
     end;
 
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text

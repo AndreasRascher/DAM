@@ -79,4 +79,73 @@ codeunit 110019 DMTFPBuilder
         end;
     end;
 
+    procedure GetFiltersFrom(var recRef: RecordRef) FilterDetailsJSON: Text
+    var
+        filtergroupIndex, fieldIndex : Integer;
+        JObj, JResult : JsonObject;
+        JFilters: JsonArray;
+    begin
+        for filtergroupIndex := -1 to 9 do begin
+            recRef.FilterGroup(filtergroupIndex);
+            if recRef.GetFilters <> '' then begin
+                Clear(JFilters);
+                for fieldIndex := 1 to recRef.FieldCount do begin
+                    if recRef.FieldIndex(fieldIndex).GetFilter <> '' then begin
+                        Clear(JObj);
+                        JObj.Add(format(recRef.Field(fieldIndex).Number), recRef.Field(fieldIndex).GetFilter);
+                        JFilters.Add(JObj);
+                    end;
+                    // JFilterGroupsWithFilters.Add(JObj);
+                end;
+                if JFilters.Count > 0 then
+                    JResult.Add(StrSubstNo('Filtergroup %1', filtergroupIndex), JFilters);
+            end;
+        end;
+        if JResult.Keys.Count > 0 then
+            JResult.Add('RecordNumber', recRef.Number);
+        JResult.WriteTo(FilterDetailsJSON);
+    end;
+
+    /// <summary>
+    /// Initialize recordref for the given datafile (buffer table) and apply filters
+    /// </summary>
+    procedure OpenRecRefWithFilters(var recRef: RecordRef; DataFileID: Integer; FilterDetailsJSON: Text)
+    var
+        DataFile: Record DMTDataFile;
+    begin
+        DataFile.Get(DataFileID);
+        DataFile.InitBufferRef(RecRef);
+        RestorFiltersForRecRef(recRef, FilterDetailsJSON, true);
+    end;
+
+    procedure RestorFiltersForRecRef(var recRef: RecordRef; FilterDetailsJSON: Text; IsRecRefOpen: Boolean)
+    var
+        FiltergroupIndex, FieldNo, ArrayIndex : Integer;
+        JObj: JsonObject;
+        JToken: JsonToken;
+        JFilters: JsonArray;
+        Filter: Text;
+    begin
+        if FilterDetailsJSON = '' then
+            exit;
+
+        JObj.ReadFrom(FilterDetailsJSON);
+        JObj.Get('RecordNumber', JToken);
+        if not IsRecRefOpen then
+            recRef.Open(JToken.AsValue().AsInteger());
+        for FiltergroupIndex := -1 to 9 do begin
+            Clear(JToken);
+            if JObj.Get(StrSubstNo('Filtergroup %1', FiltergroupIndex), JToken) then begin
+                JFilters := JToken.AsArray();
+                recRef.FilterGroup(FiltergroupIndex);
+                for ArrayIndex := 1 to JFilters.Count do begin
+                    JFilters.Get(ArrayIndex - 1, JToken);
+                    Evaluate(FieldNo, JToken.AsObject().Keys.Get(1));
+                    Filter := JToken.AsObject().Values.Get(1).AsValue().AsText();
+                    recRef.Field(FieldNo).SetFilter(Filter);
+                end;
+            end;
+        end;
+    end;
+
 }

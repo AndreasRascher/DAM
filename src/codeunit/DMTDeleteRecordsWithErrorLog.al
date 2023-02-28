@@ -23,42 +23,6 @@ codeunit 110018 DMTDeleteRecordsWithErrorLog
         RecRef.Delete(UseOnDeleteTriggers);
     end;
 
-    procedure LogLastError()
-    var
-        ErrorItem: Dictionary of [Text, Text];
-    begin
-        ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
-        ErrorItem.Add('GetLastErrorCode', GetLastErrorCode);
-        ErrorItem.Add('GetLastErrorText', GetLastErrorText);
-        case Runmode of
-            Runmode::"Delete Record":
-                ErrorLogDict.Add(RecIDToDelete, ErrorItem);
-        end;
-        ClearLastError();
-    end;
-
-    procedure showErrors()
-    var
-        TempErrorMessage: Record "Error Message" temporary;
-        RecID: RecordId;
-        ErrorItem: Dictionary of [Text, Text];
-        ID: Integer;
-    begin
-        if ErrorLogDict.Count = 0 then exit;
-        foreach RecID in ErrorLogDict.Keys do begin
-            ErrorItem := ErrorLogDict.Get(RecID);
-            Clear(TempErrorMessage);
-            ID += 1;
-            TempErrorMessage.ID := ID;
-            TempErrorMessage."Record ID" := RecID;
-            TempErrorMessage."Field Name" := CopyStr(Format(RecID), 1, MaxStrLen(TempErrorMessage."Field Name"));
-            TempErrorMessage.Description := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(TempErrorMessage.Description));
-            TempErrorMessage.SetErrorCallStack(ErrorItem.Get('GetLastErrorCallStack'));
-            TempErrorMessage.Insert();
-        end;
-        Page.Run(Page::"Error Messages", TempErrorMessage);
-    end;
-
     procedure DialogOpen(Dialogtext: Text)
     begin
         if not GuiAllowed then exit;
@@ -102,7 +66,6 @@ codeunit 110018 DMTDeleteRecordsWithErrorLog
 
     var
         RecIDToDelete: RecordId;
-        ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         UseOnDeleteTriggers: Boolean;
         Runmode: Option " ","Delete Record";
         DialogWindow: Dialog;

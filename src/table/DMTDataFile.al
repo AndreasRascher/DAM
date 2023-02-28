@@ -377,4 +377,22 @@ table 110042 DMTDataFile
         Clear(DataFileExistsStyle);
         Clear("No.of Records in Buffer Table");
     end;
+
+    procedure InitBufferRef(var BufferRef: RecordRef)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+    begin
+        if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
+            // GenBuffTable.InitFirstLineAsCaptions(DMTRec);
+            GenBuffTable.FilterGroup(2);
+            GenBuffTable.SetRange(IsCaptionLine, false);
+            GenBuffTable.FilterBy(Rec);
+            GenBuffTable.FilterGroup(0);
+            BufferRef.GetTable(GenBuffTable);
+        end else
+            if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
+                BufferRef.Open(Rec."Buffer Table ID");
+            end;
+    end;
+
 }

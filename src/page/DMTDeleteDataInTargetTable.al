@@ -253,7 +253,6 @@ page 110024 DMTDeleteDataInTargetTable
                 DeleteRecordsWithErrorLog.DialogOpen(RecRef.Caption + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
                 repeat
                     if not DeleteRecordsWithErrorLog.DialogUpdate(1, Log.GetProgress(MaxSteps), 2, StrSubstNo('%1/%2', Log.GetNoOfProcessedRecords(), MaxSteps), 3, RecRef.RecordId) then begin
-                        DeleteRecordsWithErrorLog.showErrors();
                         Error('Process Stopped');
                     end;
                     Commit();
@@ -279,7 +278,6 @@ page 110024 DMTDeleteDataInTargetTable
             DeleteRecordsWithErrorLog.DialogOpen(dataFile."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
             foreach RecID in TargetRecordIDsToDelete do begin
                 if not DeleteRecordsWithErrorLog.DialogUpdate(1, Log.GetProgress(MaxSteps), 2, StrSubstNo('%1/%2', Log.GetNoOfProcessedRecords(), MaxSteps), 3, RecID) then begin
-                    DeleteRecordsWithErrorLog.showErrors();
                     Error(format(Enum::DMTErrMsg::"Process Stopped"));
                 end;
                 Commit();
