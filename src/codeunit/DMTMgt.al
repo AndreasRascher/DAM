@@ -292,6 +292,34 @@ codeunit 110002 DMTMgt
             Error('Invalid Fixed Value %1', FixedValue);
     end;
 
+    procedure GetTargetRefRecordID(dataFile: record DMTDataFile; SourceRef: RecordRef; var TmpFieldMapping: Record DMTFieldMapping temporary) TargetRecID: RecordId
+    var
+        DMTMgt: Codeunit DMTMgt;
+        ToFieldRef: FieldRef;
+        TmpTargetRef: RecordRef;
+    begin
+        TmpTargetRef.Open(dataFile."Target Table ID", true);
+
+        TmpFieldMapping.Reset();
+        TmpFieldMapping.SetRange("Is Key Field(Target)", true);
+        TmpFieldMapping.FindSet();
+        repeat
+
+            case TmpFieldMapping."Processing Action" of
+                TmpFieldMapping."Processing Action"::Ignore:
+                    ;
+                TmpFieldMapping."Processing Action"::Transfer:
+                    DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, SourceRef, TmpFieldMapping, false);
+                TmpFieldMapping."Processing Action"::FixedValue:
+                    begin
+                        ToFieldRef := TmpTargetRef.Field(TmpFieldMapping."Target Field No.");
+                        DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TmpFieldMapping."Fixed Value");
+                    end;
+            end;
+        until TmpFieldMapping.Next() = 0;
+        TargetRecID := TmpTargetRef.RecordId;
+    end;
+
     var
         DMTSetup: Record DMTSetup;
 }

@@ -101,9 +101,39 @@ codeunit 110008 DMTRunDocMigration
 
     local procedure MigrateRecords(DeleteRecordIfExits: Boolean; RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]])
     var
-        RedID,
+        dataFile: Record DMTDataFile;
+        docMigration: Record DMTDocMigration;
+        log: Codeunit DMTLog;
+        migrate: Codeunit DMTMigrate;
+        SourceRecID, TargetRecID : RecordId;
+        SourceRef, existingTargetRef : RecordRef;
+        docMigrationLineNo: Integer;
+        recIdList: List of [RecordId];
+        DMTMgt: Codeunit DMTMgt;
+        TmpFieldMapping: Record DMTFieldMapping temporary;
     begin
-        Error('Procedure MigrateRecords not implemented.');
+        // DeleteExisting
+        if DeleteRecordIfExits then
+            foreach docMigrationLineNo in RecIDsToProcessPerRootRecord.Keys do begin
+                RecIDsToProcessPerRootRecord.Get(docMigrationLineNo, recIdList);
+                docMigration.Get(docMigration.Usage::DocMigrationSetup, docMigrationLineNo);
+                datafile.Get(docMigration."DataFile ID");
+                dataFile.LoadFieldMapping(TmpFieldMapping);
+                foreach SourceRecID in recIdList do begin
+                    SourceRef.Get(SourceRecID);
+                    TargetRecID := DMTMgt.GetTargetRefRecordID(dataFile, SourceRef, TmpFieldMapping);
+                    if existingTargetRef.Get(TargetRecID) then
+                        existingTargetRef.Delete();
+                end;
+            end;
+        // MigrateDocumentRecords
+        foreach docMigrationLineNo in RecIDsToProcessPerRootRecord.Keys do begin
+            RecIDsToProcessPerRootRecord.Get(docMigrationLineNo, recIdList);
+            docMigration.Get(docMigration.Usage::DocMigrationSetup, docMigrationLineNo);
+            datafile.Get(docMigration."DataFile ID");
+            migrate.ListOfBufferRecIDs(recIdList, dataFile);
+        end;
+        // log.CreateNoOfBufferRecordsProcessedEntry(dataFile, recIdList.Count);
     end;
 
     procedure setDocMigrationStructure(DocMigrationStructure: Record DMTDocMigration)

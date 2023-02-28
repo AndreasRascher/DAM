@@ -395,4 +395,16 @@ table 110042 DMTDataFile
             end;
     end;
 
+    procedure LoadFieldMapping(var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
+    var
+        FieldMapping: Record DMTFieldMapping;
+    begin
+        Rec.FilterRelated(FieldMapping);
+        FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
+        if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then
+            FieldMapping.SetFilter("Source Field No.", '<>0');
+        FieldMapping.CopyToTemp(TempFieldMapping);
+        OK := TempFieldMapping.FindFirst();
+    end;
+
 }

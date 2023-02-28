@@ -108,15 +108,16 @@ page 110024 DMTDeleteDataInTargetTable
 
     local procedure CreateSourceToTargetRecIDMapping(DataFile: Record DMTDataFile; SourceView: Text; var NotTransferedRecords: List of [RecordId]) RecordMapping: Dictionary of [RecordId, RecordId]
     var
+        DMTMgt: Codeunit DMTMgt;
         TempFieldMapping: Record DMTFieldMapping temporary;
         DMTGenBuffTable: Record DMTGenBuffTable;
-        SourceRef, TmpTargetRef : RecordRef;
-        TargetRef: RecordRef;
+        SourceRef, TargetRef : RecordRef;
+        TargetRecID: RecordId;
     begin
         Clear(NotTransferedRecords);
         Clear(RecordMapping);
 
-        LoadFieldMapping(DataFile, TempFieldMapping);
+        DataFile.LoadFieldMapping(TempFieldMapping);
         // FindSourceRef - GenBuffer
         if DataFile.BufferTableType = DataFile.BufferTableType::"Generic Buffer Table for all Files" then begin
             if not DMTGenBuffTable.FindSetLinesByFileNameWithoutCaptionLine(DataFile) then
@@ -136,53 +137,13 @@ page 110024 DMTDeleteDataInTargetTable
             SourceRef.SetView(SourceView);
         SourceRef.FindSet(false, false);
         repeat
-            Clear(TmpTargetRef);
-            TmpTargetRef.Open(DataFile."Target Table ID", true);
-            AssignKeyFields(SourceRef, TmpTargetRef, TempFieldMapping);
-            if not TargetRef.Get(TmpTargetRef.RecordId) then begin
-                NotTransferedRecords.Add(TmpTargetRef.RecordId)
+            TargetRecID := DMTMgt.GetTargetRefRecordID(DataFile, SourceRef, TempFieldMapping);
+            if not TargetRef.Get(TargetRecID) then begin
+                NotTransferedRecords.Add(TargetRecID)
             end else begin
-                RecordMapping.Add(SourceRef.RecordId, TmpTargetRef.RecordId);
+                RecordMapping.Add(SourceRef.RecordId, TargetRecID);
             end;
         until SourceRef.Next() = 0;
-    end;
-
-    local procedure LoadFieldMapping(DataFile: Record DMTDataFile; var TempFieldMapping: Record DMTFieldMapping temporary) OK: Boolean
-    var
-        FieldMapping: Record DMTFieldMapping;
-    begin
-        DataFile.FilterRelated(FieldMapping);
-        FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
-        if DataFile.BufferTableType = DataFile.BufferTableType::"Seperate Buffer Table per CSV" then
-            FieldMapping.SetFilter("Source Field No.", '<>0');
-        FieldMapping.CopyToTemp(TempFieldMapping);
-        OK := TempFieldMapping.FindFirst();
-    end;
-
-    local procedure AssignKeyFields(SourceRef: RecordRef; var TmpTargetRef: RecordRef; var TmpFieldMapping: Record DMTFieldMapping temporary)
-    var
-        DMTMgt: Codeunit DMTMgt;
-        ToFieldRef: FieldRef;
-    begin
-        if not TmpTargetRef.IsTemporary then
-            Error('AssignKeyFields - Temporay Record expected');
-        TmpFieldMapping.Reset();
-        TmpFieldMapping.SetRange("Is Key Field(Target)", true);
-        TmpFieldMapping.FindSet();
-        repeat
-
-            case TmpFieldMapping."Processing Action" of
-                TmpFieldMapping."Processing Action"::Ignore:
-                    ;
-                TmpFieldMapping."Processing Action"::Transfer:
-                    DMTMgt.AssignFieldWithoutValidate(TmpTargetRef, SourceRef, TmpFieldMapping, false);
-                TmpFieldMapping."Processing Action"::FixedValue:
-                    begin
-                        ToFieldRef := TmpTargetRef.Field(TmpFieldMapping."Target Field No.");
-                        DMTMgt.AssignFixedValueToFieldRef(ToFieldRef, TmpFieldMapping."Fixed Value");
-                    end;
-            end;
-        until TmpFieldMapping.Next() = 0;
     end;
 
     local procedure FindRecordIdsInCombinedView(sourceView: Text; targetView: Text; dataFile: Record DMTDataFile; useOnDeleteTrigger: Boolean)
