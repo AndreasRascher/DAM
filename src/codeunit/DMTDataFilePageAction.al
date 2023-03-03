@@ -385,7 +385,6 @@ codeunit 110013 DMTDataFilePageAction
 
     procedure RetryBufferRecordsWithError(DataFile: Record DMTDataFile)
     var
-        Log: Codeunit DMTLog;
         Migrate: Codeunit DMTMigrate;
         LogQry: Query DMTLogQry;
         RecIdList: List of [RecordId];
@@ -396,8 +395,7 @@ codeunit 110013 DMTDataFilePageAction
         while LogQry.Read() do begin
             RecIdList.Add(LogQry.SourceID);
         end;
-        Migrate.ListOfBufferRecIDs(RecIdList, DataFile);
-        Log.CreateNoOfBufferRecordsProcessedEntry(DataFile, RecIdList.Count);
+        Migrate.RetryBufferRecordIDs(RecIdList, DataFile);
     end;
 
     procedure TryFindBufferTableID(var DataFile: Record DMTDataFile; DoModify: Boolean)

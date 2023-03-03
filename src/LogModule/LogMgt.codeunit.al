@@ -200,17 +200,17 @@ codeunit 110006 DMTLog
         logEntry.Insert();
     end;
 
-    internal procedure CreateNoOfBufferRecordsProcessedEntry(dataFile: record DMTDataFile; noOfRecordsProcessed: Integer)
-    var
-        logEntry: Record DMTLogEntry;
-        noOfRecordsProcessedLbl: Label '%1 records processed';
-    begin
-        logEntry.Usage := logEntry.Usage::"Process Buffer - Record";
-        logEntry."Process No." := 0;
-        logEntry."Target Table ID" := dataFile."Target Table ID";
-        logEntry."Context Description" := StrSubstNo(noOfRecordsProcessedLbl, noOfRecordsProcessed);
-        logEntry.Insert();
-    end;
+    // internal procedure CreateNoOfBufferRecordsProcessedEntry(dataFile: record DMTDataFile; noOfRecordsProcessed: Integer)
+    // var
+    //     logEntry: Record DMTLogEntry;
+    //     noOfRecordsProcessedLbl: Label '%1 records processed';
+    // begin
+    //     logEntry.Usage := logEntry.Usage::"Process Buffer - Record";
+    //     logEntry."Process No." := 0;
+    //     logEntry."Target Table ID" := dataFile."Target Table ID";
+    //     logEntry."Context Description" := StrSubstNo(noOfRecordsProcessedLbl, noOfRecordsProcessed);
+    //     logEntry.Insert();
+    // end;
 
     procedure CreateSummary()
     var

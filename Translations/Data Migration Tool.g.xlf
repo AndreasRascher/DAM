@@ -2003,15 +2003,15 @@
           <note from="Developer" annotates="general" priority="2">Kein Feldmapping gefunden für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
           <source>Duration</source>
           <note from="Developer" annotates="general" priority="2">de-DE Dauer</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType DurationLbl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType DurationLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
           <source>Time Remaining</source>
           <note from="Developer" annotates="general" priority="2">de-DE Verbleibende Zeit</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType TimeRemainingLbl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 771327502 - NamedType 1000503204" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>

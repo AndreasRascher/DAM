@@ -8,6 +8,7 @@ codeunit 110008 DMTRunDocMigration
     local procedure Start(DocMigration: Record DMTDocMigration)
     var
         rootNode: Record DMTDocMigration;
+        log: Codeunit DMTLog;
         bufferRef_Root: RecordRef;
         RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]];
     begin
@@ -18,11 +19,15 @@ codeunit 110008 DMTRunDocMigration
             repeat
                 Clear(RecIDsToProcessPerRootRecord);
                 CollectRecIdsInStructure(rootNode, bufferRef_Root, RecIDsToProcessPerRootRecord);
-                MigrateRecords(rootNode.DeleteRecordIfExits, RecIDsToProcessPerRootRecord)
+                ToDo: 
+                DMTProgressDialog in der bufferRef_Root Schleife initialisieren
+                Log am Ende schreiben
+                MigrateRecords(rootNode.DeleteRecordIfExits, log, RecIDsToProcessPerRootRecord)
             until bufferRef_Root.Next() = 0;
+        log.
     end;
 
-    local procedure CollectRecIdsInStructure(Node: Record DMTDocMigration; parentRef: RecordRef; var RecIDsToProcess: Dictionary of [Integer, List of [RecordId]])
+        local procedure CollectRecIdsInStructure(Node: Record DMTDocMigration; parentRef: RecordRef; var RecIDsToProcess: Dictionary of [Integer, List of [RecordId]])
     var
         NextNode: Record DMTDocMigration;
         docMigration_Tables: Record DMTDocMigration;
@@ -99,11 +104,10 @@ codeunit 110008 DMTRunDocMigration
         end;
     end;
 
-    local procedure MigrateRecords(DeleteRecordIfExits: Boolean; RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]])
+    local procedure MigrateRecords(DeleteRecordIfExits: Boolean; var log: Codeunit DMTLog; RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]])
     var
         dataFile: Record DMTDataFile;
         docMigration: Record DMTDocMigration;
-        log: Codeunit DMTLog;
         migrate: Codeunit DMTMigrate;
         SourceRecID, TargetRecID : RecordId;
         SourceRef, existingTargetRef : RecordRef;
@@ -131,7 +135,7 @@ codeunit 110008 DMTRunDocMigration
             RecIDsToProcessPerRootRecord.Get(docMigrationLineNo, recIdList);
             docMigration.Get(docMigration.Usage::DocMigrationSetup, docMigrationLineNo);
             datafile.Get(docMigration."DataFile ID");
-            migrate.ListOfBufferRecIDs(recIdList, dataFile);
+            migrate.ListOfBufferRecIDs(recIdList, log, dataFile);
         end;
         // log.CreateNoOfBufferRecordsProcessedEntry(dataFile, recIdList.Count);
     end;

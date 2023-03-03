@@ -3,14 +3,27 @@ codeunit 110017 DMTMigrate
     /// <summary>
     /// Process buffer records defined by RecordIds
     /// </summary>
-    procedure ListOfBufferRecIDs(var RecIdToProcessList: List of [RecordId]; DataFile: Record DMTDataFile)
+    procedure RetryBufferRecordIDs(var RecIdToProcessList: List of [RecordId]; DataFile: Record DMTDataFile)
+    var
+        Log: Codeunit DMTLog;
+    begin
+        Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", DataFile);
+        ListOfBufferRecIDs(RecIdToProcessList, Log, DataFile);
+        Log.CreateSummary();
+        Log.ShowLogForCurrentProcess();
+    end;
+    /// <summary>
+    /// Process buffer records defined by RecordIds
+    /// </summary>
+    procedure ListOfBufferRecIDs(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; DataFile: Record DMTDataFile)
     var
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
         DMTImportSettings.RecIdToProcessList(RecIdToProcessList);
         DMTImportSettings.DataFile(DataFile);
+        DMTImportSettings.NoUserInteraction(true);
         LoadFieldMapping(DMTImportSettings);
-        ProcessFullBuffer(DMTImportSettings);
+        ListOfBufferRecIDsInner(RecIdToProcessList, Log, DMTImportSettings);
     end;
     /// <summary>
     /// Process buffer records with field selection
@@ -124,11 +137,6 @@ codeunit 110017 DMTMigrate
         BufferRef, BufferRef2 : RecordRef;
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
-        MaxWith: Integer;
-        DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
-        TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
-        Control: Option "Filter",NoofRecord,"Duration",Progress,TimeRemaining;
-        ProgressBarTitle: Text;
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -145,35 +153,8 @@ codeunit 110017 DMTMigrate
         //Prepare Progress Bar
         if not BufferRef.FindSet() then
             Error(format(enum::DMTErrMsg::NoBufferTableRecorsInFilter), BufferRef.GetFilters);
-        DataFile.CalcFields("Target Table Caption");
-        ProgressBarTitle := DataFile."Target Table Caption";
-        if StrLen(ProgressBarTitle) < MaxWith then begin
-            ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
-                                ProgressBarTitle +
-                                PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_');
-        end;
-        // ToDo: Performance der Codeunit ProgressDialog schlecht, ggf.weniger generisch,
-        //       durch konkrete Programmierung aller Progressdialoge ersetzten
-        ProgressDialog.SaveCustomStartTime(Control::Progress);
-        ProgressDialog.SetTotalSteps(StepIndex::Process, BufferRef.Count);
-        ProgressDialog.AppendTextLine(ProgressBarTitle);
-        ProgressDialog.AppendText('\Filter:');
-        ProgressDialog.AddField(42, Control::"Filter");
-        ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\Record:');
-        ProgressDialog.AddField(42, Control::NoofRecord);
-        ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\' + DurationLbl + ':');
-        ProgressDialog.AddField(42, Control::"Duration");
-        ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\Progress:');
-        ProgressDialog.AddBar(42, Control::Progress);
-        ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
-        ProgressDialog.AddField(42, Control::TimeRemaining);
-        ProgressDialog.AppendTextLine('');
-        ProgressDialog.Open();
-        ProgressDialog.UpdateFieldControl(Control::"Filter", ConvertStr(BufferRef.GetFilters, '@', '_'));
+
+        PrepareProgressBar(DataFile, ProgressDialog, BufferRef);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then
             Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", DataFile)
@@ -186,36 +167,7 @@ codeunit 110017 DMTMigrate
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
-            Log.IncNoOfProcessedRecords();
-            ProgressDialog.NextStep(StepIndex::Process);
-            case ResultType of
-                ResultType::Error:
-                    begin
-                        ProgressDialog.NextStep(StepIndex::ResultError);
-                        Log.IncNoOfRecordsWithErrors();
-                    end;
-                ResultType::Ignored:
-                    begin
-                        if DMTImportSettings.UpdateFieldsFilter() = '' then
-                            ProgressDialog.NextStep(StepIndex::Ignored);
-                        //Field Update
-                        if DMTImportSettings.UpdateFieldsFilter() <> '' then begin
-                            //Log.IncNoOfSuccessfullyProcessedRecords();
-                        end;
-                    end;
-                ResultType::ChangesApplied:
-                    begin
-                        ProgressDialog.NextStep(StepIndex::ResultOK);
-                        Log.IncNoOfSuccessfullyProcessedRecords();
-                    end;
-                else begin
-                    Error('Unhandled Case %1', ResultType::" ");
-                end;
-            end;
-            ProgressDialog.UpdateFieldControl(Control::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
-            ProgressDialog.UpdateControlWithCustomDuration(Control::Duration, Control::Progress);
-            ProgressDialog.UpdateProgressBar(Control::Progress, StepIndex::Process);
-            ProgressDialog.UpdateFieldControl(Control::TimeRemaining, ProgressDialog.GetRemainingTime(Control::Progress, StepIndex::Process));
+            UpdateProgressAndLog(DMTImportSettings, Log, ProgressDialog, ResultType);
 
             if ProgressDialog.GetStep(1) mod 50 = 0 then
                 Commit();
@@ -225,7 +177,6 @@ codeunit 110017 DMTMigrate
         Log.CreateSummary();
         Log.ShowLogForCurrentProcess();
         ShowResultDialog(ProgressDialog);
-        // Message('Dauer %1', CurrentDateTime - Start);
     end;
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
@@ -294,6 +245,79 @@ codeunit 110017 DMTMigrate
                 ProgressDialog.GetCustomDuration(StepIndex::Process));
     end;
 
+    local procedure PrepareProgressBar(var DataFile: Record DMTDataFile; var ProgressDialog: Codeunit DMTProgressDialog; var BufferRef: RecordRef)
+    var
+        MaxWith: Integer;
+        DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
+        TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
+        ProgressBarTitle: Text;
+    begin
+        DataFile.CalcFields("Target Table Caption");
+        ProgressBarTitle := DataFile."Target Table Caption";
+        if StrLen(ProgressBarTitle) < MaxWith then begin
+            ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
+                                ProgressBarTitle +
+                                PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_');
+        end;
+        // ToDo: Performance der Codeunit ProgressDialog schlecht, ggf.weniger generisch,
+        //       durch konkrete Programmierung aller Progressdialoge ersetzten
+
+        ProgressDialog.SaveCustomStartTime(Enum::DMTProgressControlType::Progress);
+        ProgressDialog.SetTotalSteps(StepIndex::Process, BufferRef.Count);
+        ProgressDialog.AppendTextLine(ProgressBarTitle);
+        ProgressDialog.AppendText('\Filter:');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Filter");
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\Record:');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::NoofRecord);
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\' + DurationLbl + ':');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Duration");
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\Progress:');
+        ProgressDialog.AddBar(42, Enum::DMTProgressControlType::Progress);
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::TimeRemaining);
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.Open();
+        ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::"Filter", ConvertStr(BufferRef.GetFilters, '@', '_'));
+    end;
+
+    local procedure UpdateProgressAndLog(var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ProgressDialog: Codeunit DMTProgressDialog; ResultType: Enum DMTProcessingResultType)
+    begin
+        Log.IncNoOfProcessedRecords();
+        ProgressDialog.NextStep(StepIndex::Process);
+        case ResultType of
+            ResultType::Error:
+                begin
+                    ProgressDialog.NextStep(StepIndex::ResultError);
+                    Log.IncNoOfRecordsWithErrors();
+                end;
+            ResultType::Ignored:
+                begin
+                    if DMTImportSettings.UpdateFieldsFilter() = '' then
+                        ProgressDialog.NextStep(StepIndex::Ignored);
+                    //Field Update
+                    if DMTImportSettings.UpdateFieldsFilter() <> '' then begin
+                        //Log.IncNoOfSuccessfullyProcessedRecords();
+                    end;
+                end;
+            ResultType::ChangesApplied:
+                begin
+                    ProgressDialog.NextStep(StepIndex::ResultOK);
+                    Log.IncNoOfSuccessfullyProcessedRecords();
+                end;
+            else begin
+                Error('Unhandled Case %1', ResultType::" ");
+            end;
+        end;
+        ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::NoofRecord, StrSubstNo('%1 / %2', ProgressDialog.GetStep(StepIndex::Process), ProgressDialog.GetTotalStep(StepIndex::Process)));
+        ProgressDialog.UpdateControlWithCustomDuration(Enum::DMTProgressControlType::Duration, Enum::DMTProgressControlType::Progress);
+        ProgressDialog.UpdateProgressBar(Enum::DMTProgressControlType::Progress, StepIndex::Process);
+        ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::TimeRemaining, ProgressDialog.GetRemainingTime(Enum::DMTProgressControlType::Progress, StepIndex::Process));
+    end;
+
     procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
     var
         TargetRecID: RecordId;
@@ -343,6 +367,38 @@ codeunit 110017 DMTMigrate
                         Error('Für "%1" wurden keine importierten Daten gefunden', DataFile.FullDataFilePath());
                 end;
         end;
+    end;
+
+    procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings)
+    var
+        // DMTErrorLog: Record DMTErrorLog;
+        DataFile: Record DMTDataFile;
+        ID: RecordId;
+        BufferRef: RecordRef;
+        BufferRef2: RecordRef;
+        ProgressDialog: Codeunit DMTProgressDialog;
+        ResultType: Enum DMTProcessingResultType;
+    begin
+        if RecIdToProcessList.Count = 0 then
+            Error('Keine Daten zum Verarbeiten');
+
+        DataFile := ImportSettings.DataFile();
+        // Buffer loop
+        BufferRef.Open(DataFile."Buffer Table ID");
+        ID := RecIdToProcessList.Get(1);
+        BufferRef.Get(ID);
+        PrepareProgressBar(DataFile, ProgressDialog, BufferRef);
+
+        foreach ID in RecIdToProcessList do begin
+            BufferRef.Get(ID);
+            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            ProcessSingleBufferRecord(BufferRef2, ImportSettings, Log, ResultType);
+            UpdateProgressAndLog(ImportSettings, Log, ProgressDialog, ResultType);
+            if ProgressDialog.GetStep(1) mod 50 = 0 then
+                Commit();
+        end;
+        ProgressDialog.Close();
+        ShowResultDialog(ProgressDialog);
     end;
 
 
