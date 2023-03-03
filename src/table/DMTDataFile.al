@@ -321,7 +321,8 @@ table 110042 DMTDataFile
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::Cross;
                 end;
             /*(Rec.LastImportToTargetAt <> 0DT) and */
-            (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table"):
+            (Rec."No.of Records in Buffer Table" <= Rec."No. of Records In Trgt. Table") and
+            (Rec."No.of Records in Buffer Table" > 0):
                 begin
                     Rec.ImportToTargetIndicatorStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
                     Rec.ImportToTargetIndicator := Enum::DMTImportIndicator::CheckMark;

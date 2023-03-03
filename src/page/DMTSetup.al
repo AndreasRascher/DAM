@@ -73,7 +73,8 @@ page 110011 "DMT Setup"
                                         end;
                                 end;
                             if Choice <= NoOfChoices then begin
-                                Message('%1', StopSession(SessionList.Get(Choice)));
+                                if Choice <> 0 then // Cancel Menu
+                                    Message('%1', StopSession(SessionList.Get(Choice)));
                             end;
                         end;
                     }

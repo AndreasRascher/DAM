@@ -48,7 +48,7 @@ page 110001 DMTDocMigrations
                         end;
                     end;
                 }
-                field("Table ID"; Rec."Table ID") { }
+                field("Table ID"; Rec."Table ID") { Enabled = IsEnabled_TableNo; }
                 field(DeleteRecordIfExits; Rec.DeleteRecordIfExits) { Enabled = (Rec."Line Type" = Rec."Line Type"::Table); }
                 field(TableRelations; GetTableRelationsPreview(Rec))
                 {
@@ -173,7 +173,8 @@ page 110001 DMTDocMigrations
 
     procedure EnableControls()
     begin
-        DeleteRecordIfExitsEnabled := Rec."Line Type" = Rec."Line Type"::Table
+        DeleteRecordIfExitsEnabled := Rec."Line Type" = Rec."Line Type"::Table;
+        IsEnabled_TableNo := (Rec."Line Type" = Rec."Line Type"::Table);
     end;
 
     procedure GetTableRelationsPreview(DocMigration: Record DMTDocMigration) PreviewText: Text
@@ -193,4 +194,5 @@ page 110001 DMTDocMigrations
         TempDMTDocMigration_SELECTED: Record DMTDocMigration temporary;
         LineStyle: Text;
         DeleteRecordIfExitsEnabled: Boolean;
+        IsEnabled_TableNo: Boolean;
 }
