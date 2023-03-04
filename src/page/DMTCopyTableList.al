@@ -73,16 +73,16 @@ page 110013 DMTCopyTableList
         repeat
             CopyTable_SELECTED.CalcFields("Table Caption");
             ProgressDialog.AppendText(CopyTable_SELECTED."Table Caption");
-            ProgressDialog.AddField(10, CopyTable_SELECTED."Table No.");
+            ProgressDialog.AddField(10, format(CopyTable_SELECTED."Table No."));
             ProgressDialog.AppendTextLine('');
         until CopyTable_SELECTED.Next() = 0;
 
         CopyTable_SELECTED.FindSet();
         ProgressDialog.Open();
         repeat
-            ProgressDialog.SaveCustomStartTime(CopyTable_SELECTED."Table No.");
+            ProgressDialog.SaveCustomStartTime(format(CopyTable_SELECTED."Table No."));
             CopyDataFromSourceCompanyInner(CopyTable_SELECTED);
-            ProgressDialog.UpdateControlWithCustomDuration(CopyTable_SELECTED."Table No.", CopyTable_SELECTED."Table No.");
+            ProgressDialog.UpdateControlWithCustomDuration(format(CopyTable_SELECTED."Table No."), format(CopyTable_SELECTED."Table No."));
         until CopyTable_SELECTED.Next() = 0;
         ProgressDialog.Close();
     end;

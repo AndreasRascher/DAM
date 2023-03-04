@@ -24,35 +24,35 @@ codeunit 110008 DMTRunDocMigration
         dataFile.Get(rootNode."DataFile ID");
 
 
-        ProgressDialog.SaveCustomStartTime(Enum::DMTProgressControlType::Progress);
+        ProgressDialog.SaveCustomStartTime('Progress');
         ProgressDialog.SetTotalSteps('Process', bufferRef_Root.Count);
-        ProgressDialog.AppendTextLine(ProgressBarTitle);
+        // ProgressDialog.AppendTextLine(ProgressBarTitle);
         ProgressDialog.AppendText('\Filter:');
-        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Filter");
+        ProgressDialog.AddField(42, 'Filter');
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Record:');
-        ProgressDialog.AddField(42, Enum::DMTProgressControlType::NoofRecord);
+        ProgressDialog.AddField(42, 'NoofRecord');
         ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\' + DurationLbl + ':');
-        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Duration");
+        // ProgressDialog.AppendText('\' + DurationLbl + ':');
+        ProgressDialog.AddField(42, 'Duration');
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Progress:');
-        ProgressDialog.AddBar(42, Enum::DMTProgressControlType::Progress);
+        ProgressDialog.AddBar(42, 'Progress');
         ProgressDialog.AppendTextLine('');
-        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
-        ProgressDialog.AddField(42, Enum::DMTProgressControlType::TimeRemaining);
+        // ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
+        ProgressDialog.AddField(42, 'TimeRemaining');
         ProgressDialog.AppendTextLine('');
 
         if bufferRef_Root.FindSet(false, false) then begin
             log.InitNewProcess(enum::DMTLogUsage::"Process Buffer - Document Migration", dataFile);
             ProgressDialog.Open();
-            ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::"Filter", ConvertStr(bufferRef_Root.GetFilters, '@', '_'));
+            ProgressDialog.UpdateFieldControl('Filter', ConvertStr(bufferRef_Root.GetFilters, '@', '_'));
             repeat
                 Clear(RecIDsToProcessPerRootRecord);
                 CollectRecIdsInStructure(rootNode, bufferRef_Root, RecIDsToProcessPerRootRecord);
                 MigrateRecords(rootNode.DeleteRecordIfExits, log, RecIDsToProcessPerRootRecord);
-                progressDialog.NextStep(migrate.StepIndex_Process());
-                progressDialog.u
+                progressDialog.NextStep('Process');
+            // progressDialog.UpdateFieldControl();
             until bufferRef_Root.Next() = 0;
             progressDialog.Close();
             // Log am Ende schreiben
