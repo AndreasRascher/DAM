@@ -160,7 +160,7 @@ table 110001 DMTDocMigration
                 if Rec.Indentation > docMigration.Indentation then begin
                     Rec."Attached to Line No." := docMigration."Line No.";
                     if docMigration."Table ID" <> 0 then begin
-                        docMigration."Related Table ID" := docMigration."Table ID";
+                        Rec."Related Table ID" := docMigration."Table ID";
                     end;
                     break;
                 end;

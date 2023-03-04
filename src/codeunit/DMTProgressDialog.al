@@ -10,10 +10,11 @@ codeunit 110010 DMTProgressDialog
         ProgressMsg.Append(TextLineNew);
     end;
 
-    procedure AddBar(IndicatorLenght: Integer; ProgressIndicatorNo: Integer)
+    procedure AddBar(IndicatorLenght: Integer; ProgressIndicatorName: Text)
     var
         FieldText: Text;
     begin
+        if ProgressIndicatorName
         FieldText := PadStr('', IndicatorLenght, '@') + Format(ProgressIndicatorNo) + '@';
         ProgressMsg.Append(FieldText);
     end;
@@ -163,6 +164,7 @@ codeunit 110010 DMTProgressDialog
         Start: DateTime;
         Progress: Dialog;
         CustomStart: Dictionary of [Integer, DateTime];
+        ProgressIndicators: List of [Text];
         CurrStepValuesDict, TotalStepValuesDict : Dictionary of [Integer, Integer];
         FieldControlValuesDict: Dictionary of [Integer, Text];
         BarControlValuesDict: Dictionary of [Integer, Integer];

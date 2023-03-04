@@ -1988,11 +1988,6 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3774911051 - Method 4153940936 - NamedType 1257018962" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 records processed</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CreateNoOfBufferRecordsProcessedEntry - NamedType noOfRecordsProcessedLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
           <note from="Developer" annotates="general" priority="2">"%1" ist kein gültiger %2 Wert</note>

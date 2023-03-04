@@ -8,30 +8,64 @@ codeunit 110008 DMTRunDocMigration
     local procedure Start(DocMigration: Record DMTDocMigration)
     var
         rootNode: Record DMTDocMigration;
+        dataFile: Record DMTDataFile;
         log: Codeunit DMTLog;
+        progressDialog: Codeunit DMTProgressDialog;
+        migrate: Codeunit DMTMigrate;
+        docMigrationSubscriber: Codeunit DMTDocMigrSubscriber;
         bufferRef_Root: RecordRef;
         RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]];
     begin
         if not FindDocMigrationStructureRoot(rootNode, DocMigration) then
             Error('Keine Start Tabelle gefunden');
+
+        docMigrationSubscriber.Bind();
         InitBufferRefForDocMigrationTableLine(bufferRef_Root, rootNode);
-        if bufferRef_Root.FindSet(false, false) then
+        dataFile.Get(rootNode."DataFile ID");
+
+
+        ProgressDialog.SaveCustomStartTime(Enum::DMTProgressControlType::Progress);
+        ProgressDialog.SetTotalSteps('Process', bufferRef_Root.Count);
+        ProgressDialog.AppendTextLine(ProgressBarTitle);
+        ProgressDialog.AppendText('\Filter:');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Filter");
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\Record:');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::NoofRecord);
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\' + DurationLbl + ':');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::"Duration");
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\Progress:');
+        ProgressDialog.AddBar(42, Enum::DMTProgressControlType::Progress);
+        ProgressDialog.AppendTextLine('');
+        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
+        ProgressDialog.AddField(42, Enum::DMTProgressControlType::TimeRemaining);
+        ProgressDialog.AppendTextLine('');
+
+        if bufferRef_Root.FindSet(false, false) then begin
+            log.InitNewProcess(enum::DMTLogUsage::"Process Buffer - Document Migration", dataFile);
+            ProgressDialog.Open();
+            ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::"Filter", ConvertStr(bufferRef_Root.GetFilters, '@', '_'));
             repeat
                 Clear(RecIDsToProcessPerRootRecord);
                 CollectRecIdsInStructure(rootNode, bufferRef_Root, RecIDsToProcessPerRootRecord);
-                ToDo: 
-                DMTProgressDialog in der bufferRef_Root Schleife initialisieren
-                Log am Ende schreiben
-                MigrateRecords(rootNode.DeleteRecordIfExits, log, RecIDsToProcessPerRootRecord)
+                MigrateRecords(rootNode.DeleteRecordIfExits, log, RecIDsToProcessPerRootRecord);
+                progressDialog.NextStep(migrate.StepIndex_Process());
+                progressDialog.u
             until bufferRef_Root.Next() = 0;
-        log.
+            progressDialog.Close();
+            // Log am Ende schreiben
+            log.CreateSummary();
+            log.ShowLogForCurrentProcess();
+        end;
     end;
 
-        local procedure CollectRecIdsInStructure(Node: Record DMTDocMigration; parentRef: RecordRef; var RecIDsToProcess: Dictionary of [Integer, List of [RecordId]])
+    local procedure CollectRecIdsInStructure(Node: Record DMTDocMigration; parentRef: RecordRef; var RecIDsToProcess: Dictionary of [Integer, List of [RecordId]])
     var
         NextNode: Record DMTDocMigration;
         docMigration_Tables: Record DMTDocMigration;
-        emptyRecRef, childRef : RecordRef;
+        childRef: RecordRef;
     begin
         AddRecIDToCollection(RecIDsToProcess, Node, parentRef);
         case true of
@@ -108,13 +142,13 @@ codeunit 110008 DMTRunDocMigration
     var
         dataFile: Record DMTDataFile;
         docMigration: Record DMTDocMigration;
+        TmpFieldMapping: Record DMTFieldMapping temporary;
+        DMTMgt: Codeunit DMTMgt;
         migrate: Codeunit DMTMigrate;
         SourceRecID, TargetRecID : RecordId;
-        SourceRef, existingTargetRef : RecordRef;
+        existingTargetRef, SourceRef : RecordRef;
         docMigrationLineNo: Integer;
         recIdList: List of [RecordId];
-        DMTMgt: Codeunit DMTMgt;
-        TmpFieldMapping: Record DMTFieldMapping temporary;
     begin
         // DeleteExisting
         if DeleteRecordIfExits then

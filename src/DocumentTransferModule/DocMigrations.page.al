@@ -46,6 +46,8 @@ page 110001 DMTDocMigrations
                                     Rec.Description := DataFile."Target Table Caption";
                                 end;
                         end;
+                        EnableControls();
+                        SetLineStyle();
                     end;
                 }
                 field("Table ID"; Rec."Table ID") { Enabled = IsEnabled_TableNo; }
@@ -145,13 +147,7 @@ page 110001 DMTDocMigrations
 
     trigger OnAfterGetRecord()
     begin
-        LineStyle := Format(Enum::DMTFieldStyle::Standard);
-        case Rec."Line Type" of
-            Rec."Line Type"::Structure:
-                LineStyle := Format(Enum::DMTFieldStyle::Bold);
-            Rec."Line Type"::Table:
-                LineStyle := Format(Enum::DMTFieldStyle::Standard);
-        end;
+        SetLineStyle();
         EnableControls();
     end;
 
@@ -188,6 +184,17 @@ page 110001 DMTDocMigrations
                 PreviewText += StrSubstNo('%1=%2,', tempDocMigration."Field Caption", tempDocMigration."Related Field Caption");
             until tempDocMigration.Next() = 0;
         PreviewText := PreviewText.TrimEnd(',');
+    end;
+
+    local procedure SetLineStyle()
+    begin
+        LineStyle := Format(Enum::DMTFieldStyle::Standard);
+        case Rec."Line Type" of
+            Rec."Line Type"::Structure:
+                LineStyle := Format(Enum::DMTFieldStyle::Bold);
+            Rec."Line Type"::Table:
+                LineStyle := Format(Enum::DMTFieldStyle::Standard);
+        end;
     end;
 
     var
