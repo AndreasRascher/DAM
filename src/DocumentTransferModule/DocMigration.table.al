@@ -273,6 +273,9 @@ table 110001 DMTDocMigration
         FilterPage: Codeunit DMTFPBuilder;
         RecRef: RecordRef;
     begin
+        if Rec."Line Type" <> Rec."Line Type"::Table then
+            exit;
+
         if Rec.ReadFromBlob(rec.FieldNo("Table Filter")) <> '' then begin
             // Reuse old filter
             FilterPage.OpenRecRefWithFilters(RecRef, rec."DataFile ID", Rec.ReadFromBlob(rec.FieldNo("Table Filter")));

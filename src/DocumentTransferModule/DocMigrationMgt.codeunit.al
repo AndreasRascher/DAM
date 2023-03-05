@@ -11,10 +11,12 @@ codeunit 110008 DMTRunDocMigration
         dataFile: Record DMTDataFile;
         log: Codeunit DMTLog;
         progressDialog: Codeunit DMTProgressDialog;
-        migrate: Codeunit DMTMigrate;
         docMigrationSubscriber: Codeunit DMTDocMigrSubscriber;
         bufferRef_Root: RecordRef;
         RecIDsToProcessPerRootRecord: Dictionary of [Integer, List of [RecordId]];
+        DurationLbl: Label 'Duration';
+        TimeRemainingLbl: Label 'Time Remaining';
+        ProgressBarTitle: Text;
     begin
         if not FindDocMigrationStructureRoot(rootNode, DocMigration) then
             Error('Keine Start Tabelle gefunden');
@@ -23,23 +25,23 @@ codeunit 110008 DMTRunDocMigration
         InitBufferRefForDocMigrationTableLine(bufferRef_Root, rootNode);
         dataFile.Get(rootNode."DataFile ID");
 
-
+        ProgressBarTitle := rootNode.TableCaption;
         ProgressDialog.SaveCustomStartTime('Progress');
         ProgressDialog.SetTotalSteps('Process', bufferRef_Root.Count);
-        // ProgressDialog.AppendTextLine(ProgressBarTitle);
+        ProgressDialog.AppendTextLine(ProgressBarTitle);
         ProgressDialog.AppendText('\Filter:');
         ProgressDialog.AddField(42, 'Filter');
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Record:');
         ProgressDialog.AddField(42, 'NoofRecord');
         ProgressDialog.AppendTextLine('');
-        // ProgressDialog.AppendText('\' + DurationLbl + ':');
+        ProgressDialog.AppendText('\' + DurationLbl + ':');
         ProgressDialog.AddField(42, 'Duration');
         ProgressDialog.AppendTextLine('');
         ProgressDialog.AppendText('\Progress:');
         ProgressDialog.AddBar(42, 'Progress');
         ProgressDialog.AppendTextLine('');
-        // ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
+        ProgressDialog.AppendText('\' + TimeRemainingLbl + ':');
         ProgressDialog.AddField(42, 'TimeRemaining');
         ProgressDialog.AppendTextLine('');
 
@@ -52,7 +54,10 @@ codeunit 110008 DMTRunDocMigration
                 CollectRecIdsInStructure(rootNode, bufferRef_Root, RecIDsToProcessPerRootRecord);
                 MigrateRecords(rootNode.DeleteRecordIfExits, log, RecIDsToProcessPerRootRecord);
                 progressDialog.NextStep('Process');
-            // progressDialog.UpdateFieldControl();
+                ProgressDialog.UpdateFieldControl('NoofRecord', StrSubstNo('%1 / %2', ProgressDialog.GetStep('Process'), ProgressDialog.GetTotalStep('Process')));
+                ProgressDialog.UpdateControlWithCustomDuration('Duration', 'Progress');
+                ProgressDialog.UpdateProgressBar('Progress', 'Process');
+                ProgressDialog.UpdateFieldControl('TimeRemaining', ProgressDialog.GetRemainingTime('Progress', 'Process'));
             until bufferRef_Root.Next() = 0;
             progressDialog.Close();
             // Log am Ende schreiben
@@ -142,7 +147,7 @@ codeunit 110008 DMTRunDocMigration
     var
         dataFile: Record DMTDataFile;
         docMigration: Record DMTDocMigration;
-        TmpFieldMapping: Record DMTFieldMapping temporary;
+        TempFieldMapping: Record DMTFieldMapping temporary;
         DMTMgt: Codeunit DMTMgt;
         migrate: Codeunit DMTMigrate;
         SourceRecID, TargetRecID : RecordId;
@@ -155,13 +160,15 @@ codeunit 110008 DMTRunDocMigration
             foreach docMigrationLineNo in RecIDsToProcessPerRootRecord.Keys do begin
                 RecIDsToProcessPerRootRecord.Get(docMigrationLineNo, recIdList);
                 docMigration.Get(docMigration.Usage::DocMigrationSetup, docMigrationLineNo);
-                datafile.Get(docMigration."DataFile ID");
-                dataFile.LoadFieldMapping(TmpFieldMapping);
-                foreach SourceRecID in recIdList do begin
-                    SourceRef.Get(SourceRecID);
-                    TargetRecID := DMTMgt.GetTargetRefRecordID(dataFile, SourceRef, TmpFieldMapping);
-                    if existingTargetRef.Get(TargetRecID) then
-                        existingTargetRef.Delete();
+                if docMigration.DeleteRecordIfExits then begin
+                    datafile.Get(docMigration."DataFile ID");
+                    dataFile.LoadFieldMapping(TempFieldMapping);
+                    foreach SourceRecID in recIdList do begin
+                        SourceRef.Get(SourceRecID);
+                        TargetRecID := DMTMgt.GetTargetRefRecordID(dataFile, SourceRef, TempFieldMapping);
+                        if existingTargetRef.Get(TargetRecID) then
+                            existingTargetRef.Delete();
+                    end;
                 end;
             end;
         // MigrateDocumentRecords
@@ -169,9 +176,10 @@ codeunit 110008 DMTRunDocMigration
             RecIDsToProcessPerRootRecord.Get(docMigrationLineNo, recIdList);
             docMigration.Get(docMigration.Usage::DocMigrationSetup, docMigrationLineNo);
             datafile.Get(docMigration."DataFile ID");
-            migrate.ListOfBufferRecIDs(recIdList, log, dataFile);
+            if not migrate.ListOfBufferRecIDs(recIdList, log, dataFile, true) then
+                break;// If not fully processed then skip other dependent lines
         end;
-        // log.CreateNoOfBufferRecordsProcessedEntry(dataFile, recIdList.Count);
+        // log.IncNoOfSuccessfullyProcessedRecords();
     end;
 
     procedure setDocMigrationStructure(DocMigrationStructure: Record DMTDocMigration)

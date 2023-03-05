@@ -8,22 +8,23 @@ codeunit 110017 DMTMigrate
         Log: Codeunit DMTLog;
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", DataFile);
-        ListOfBufferRecIDs(RecIdToProcessList, Log, DataFile);
+        ListOfBufferRecIDs(RecIdToProcessList, Log, DataFile, false);
         Log.CreateSummary();
         Log.ShowLogForCurrentProcess();
     end;
     /// <summary>
     /// Process buffer records defined by RecordIds
     /// </summary>
-    procedure ListOfBufferRecIDs(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; DataFile: Record DMTDataFile)
+    procedure ListOfBufferRecIDs(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; DataFile: Record DMTDataFile; StopProcessingRecIDListAfterError: Boolean) IsFullyProcessed: Boolean
     var
-        DMTImportSettings: Codeunit DMTImportSettings;
+        ImportSettings: Codeunit DMTImportSettings;
     begin
-        DMTImportSettings.RecIdToProcessList(RecIdToProcessList);
-        DMTImportSettings.DataFile(DataFile);
-        DMTImportSettings.NoUserInteraction(true);
-        LoadFieldMapping(DMTImportSettings);
-        ListOfBufferRecIDsInner(RecIdToProcessList, Log, DMTImportSettings);
+        ImportSettings.RecIdToProcessList(RecIdToProcessList);
+        ImportSettings.DataFile(DataFile);
+        ImportSettings.NoUserInteraction(true);
+        ImportSettings.StopProcessingRecIDListAfterError(StopProcessingRecIDListAfterError);
+        LoadFieldMapping(ImportSettings);
+        IsFullyProcessed := ListOfBufferRecIDsInner(RecIdToProcessList, Log, ImportSettings);
     end;
     /// <summary>
     /// Process buffer records with field selection
@@ -170,8 +171,8 @@ codeunit 110017 DMTMigrate
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
-            UpdateProgressAndLog(DMTImportSettings, Log, ProgressDialog, ResultType);
-
+            UpdateLog(DMTImportSettings, Log, ResultType);
+            UpdateProgress(DMTImportSettings, ProgressDialog, ResultType);
             if ProgressDialog.GetStep('Process') mod 50 = 0 then
                 Commit();
         until BufferRef.Next() = 0;
@@ -245,7 +246,27 @@ codeunit 110017 DMTMigrate
                 ProgressDialog.GetStep('Process'),
                 ProgressDialog.GetStep('ResultOK'),
                 ProgressDialog.GetStep('ResultError'),
-                ProgressDialog.GetCustomDuration('Process'));
+                ProgressDialog.GetCustomDuration('Progress'));
+    end;
+
+    local procedure UpdateLog(var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
+    begin
+        Log.IncNoOfProcessedRecords();
+        case ResultType of
+            ResultType::Error:
+                Log.IncNoOfRecordsWithErrors();
+            ResultType::Ignored:
+                begin
+                    if DMTImportSettings.UpdateFieldsFilter() = '' then;
+                    //Field Update
+                    if DMTImportSettings.UpdateFieldsFilter() <> '' then;
+                end;
+            ResultType::ChangesApplied:
+                Log.IncNoOfSuccessfullyProcessedRecords();
+            else begin
+                Error('Unhandled Case %1', ResultType::" ");
+            end;
+        end;
     end;
 
     procedure PrepareProgressBar(var ProgressDialog: Codeunit DMTProgressDialog; var DataFile: Record DMTDataFile; var BufferRef: RecordRef)
@@ -285,16 +306,12 @@ codeunit 110017 DMTMigrate
         ProgressDialog.AppendTextLine('');
     end;
 
-    procedure UpdateProgressAndLog(var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ProgressDialog: Codeunit DMTProgressDialog; ResultType: Enum DMTProcessingResultType)
+    procedure UpdateProgress(var DMTImportSettings: Codeunit DMTImportSettings; var ProgressDialog: Codeunit DMTProgressDialog; ResultType: Enum DMTProcessingResultType)
     begin
-        Log.IncNoOfProcessedRecords();
         ProgressDialog.NextStep('Process');
         case ResultType of
             ResultType::Error:
-                begin
-                    ProgressDialog.NextStep('ResultError');
-                    Log.IncNoOfRecordsWithErrors();
-                end;
+                ProgressDialog.NextStep('ResultError');
             ResultType::Ignored:
                 begin
                     if DMTImportSettings.UpdateFieldsFilter() = '' then
@@ -305,10 +322,7 @@ codeunit 110017 DMTMigrate
                     end;
                 end;
             ResultType::ChangesApplied:
-                begin
-                    ProgressDialog.NextStep('ResultOK');
-                    Log.IncNoOfSuccessfullyProcessedRecords();
-                end;
+                ProgressDialog.NextStep('ResultOK');
             else begin
                 Error('Unhandled Case %1', ResultType::" ");
             end;
@@ -370,14 +384,13 @@ codeunit 110017 DMTMigrate
         end;
     end;
 
-    procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings)
+    procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean
     var
         // DMTErrorLog: Record DMTErrorLog;
         DataFile: Record DMTDataFile;
         ID: RecordId;
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
-        // ProgressDialog: Codeunit DMTProgressDialog;
         ResultType: Enum DMTProcessingResultType;
     begin
         if RecIdToProcessList.Count = 0 then
@@ -388,20 +401,22 @@ codeunit 110017 DMTMigrate
         BufferRef.Open(DataFile."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
         BufferRef.Get(ID);
-        // PrepareProgressBar(ProgressDialog, DataFile, BufferRef);
-        // ProgressDialog.Open();
-        // ProgressDialog.UpdateFieldControl(Enum::DMTProgressControlType::"Filter", ConvertStr(BufferRef.GetFilters, '@', '_'));
 
-
+        IsFullyProcessed := true;
         foreach ID in RecIdToProcessList do begin
             BufferRef.Get(ID);
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(BufferRef2, ImportSettings, Log, ResultType);
-            // UpdateProgressAndLog(ImportSettings, Log, ProgressDialog, ResultType);
-            // if ProgressDialog.GetStep(1) mod 50 = 0 then
-            // Commit();
+            Log.IncNoOfProcessedRecords();
+            if ResultType = ResultType::ChangesApplied then begin
+                Log.IncNoOfSuccessfullyProcessedRecords();
+            end;
+            if ResultType = ResultType::Error then begin
+                Log.IncNoOfRecordsWithErrors();
+                if ImportSettings.StopProcessingRecIDListAfterError() then begin
+                    exit(false); // break;
+                end;
+            end;
         end;
-        // ProgressDialog.Close();
-        // ShowResultDialog(ProgressDialog);
     end;
 }

@@ -2028,6 +2028,16 @@
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTObjMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1028073716 - Method 620325036 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Duration</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRunDocMigration - Method Start - NamedType DurationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1028073716 - Method 620325036 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time Remaining</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRunDocMigration - Method Start - NamedType TimeRemainingLbl</note>
+        </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
           <note from="Developer" annotates="general" priority="2"></note>

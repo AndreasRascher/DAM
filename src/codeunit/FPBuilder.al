@@ -92,7 +92,7 @@ codeunit 110019 DMTFPBuilder
                 for fieldIndex := 1 to recRef.FieldCount do begin
                     if recRef.FieldIndex(fieldIndex).GetFilter <> '' then begin
                         Clear(JObj);
-                        JObj.Add(format(recRef.Field(fieldIndex).Number), recRef.Field(fieldIndex).GetFilter);
+                        JObj.Add(format(recRef.FieldIndex(fieldIndex).Number), recRef.FieldIndex(fieldIndex).GetFilter);
                         JFilters.Add(JObj);
                     end;
                     // JFilterGroupsWithFilters.Add(JObj);

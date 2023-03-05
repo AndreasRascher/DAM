@@ -32,6 +32,16 @@ codeunit 110015 DMTImportSettings
         exit(NoUserInteractionGlobal);
     end;
 
+    procedure StopProcessingRecIDListAfterError(StopProcessingRecIDListAfterErrorNew: Boolean)
+    begin
+        StopProcessingRecIDListAfterErrorGlobal := StopProcessingRecIDListAfterErrorNew;
+    end;
+
+    procedure StopProcessingRecIDListAfterError() StopProcessingRecIDListAfterError: Boolean
+    begin
+        exit(StopProcessingRecIDListAfterErrorGlobal);
+    end;
+
     procedure DataFile(var DataFileNew: Record DMTDataFile)
     begin
         DataFileGlobal.Copy(DataFileNew);
@@ -88,6 +98,6 @@ codeunit 110015 DMTImportSettings
         DataFileGlobal: Record DMTDataFile;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
         SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
-        NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
+        StopProcessingRecIDListAfterErrorGlobal, NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
 }

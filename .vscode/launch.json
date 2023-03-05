@@ -20,6 +20,26 @@
             "numberOfSqlStatements": 10,
             "tenant": "default",
             "schemaUpdateMode": "ForceSync"
+        },
+        {
+            "name": "Docker BC21 - Debugger Break on Breakpoints only",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "OnPrem",
+            "server": "http://bc21",
+            "serverInstance": "BC",
+            "authentication": "UserPassword",
+            "startupObjectType": "Page",
+            "startupObjectId": 110001,
+            "breakOnError": "None",
+            "breakOnRecordWrite": false,
+            "launchBrowser": true,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10,
+            "tenant": "default",
+            "schemaUpdateMode": "ForceSync",
         }
         ,
         {

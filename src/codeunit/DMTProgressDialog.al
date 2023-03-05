@@ -14,10 +14,10 @@ codeunit 110010 DMTProgressDialog
     var
         FieldText: Text;
     begin
-        if ProgressBarNames.Contains(NewProgressBarName) then
+        if ControlNames.Contains(NewProgressBarName) then
             Error('Bar with indicator name %1 exists already', NewProgressBarName);
-        ProgressBarNames.Add(NewProgressBarName);
-        FieldText := PadStr('', IndicatorLenght, '@') + Format(ProgressBarNames.IndexOf(NewProgressBarName)) + '@';
+        ControlNames.Add(NewProgressBarName);
+        FieldText := PadStr('', IndicatorLenght, '@') + Format(ControlNames.IndexOf(NewProgressBarName)) + '@';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -25,11 +25,11 @@ codeunit 110010 DMTProgressDialog
     var
         FieldText: Text;
     begin
-        if ProgressFieldNames.Contains(NewProgressFieldName) then
+        if ControlNames.Contains(NewProgressFieldName) then
             Error('Field with indicator name %1 exists already', NewProgressFieldName);
-        ProgressFieldNames.Add(NewProgressFieldName);
+        ControlNames.Add(NewProgressFieldName);
 
-        FieldText := PadStr('', IndicatorLenght, '#') + Format(ProgressFieldNames.IndexOf(NewProgressFieldName)) + '#';
+        FieldText := PadStr('', IndicatorLenght, '#') + Format(ControlNames.IndexOf(NewProgressFieldName)) + '#';
         ProgressMsg.Append(FieldText);
     end;
 
@@ -47,7 +47,7 @@ codeunit 110010 DMTProgressDialog
     var
         ControlIndex: Integer;
     begin
-        ControlIndex := ProgressFieldNames.IndexOf(ControlName);
+        ControlIndex := ControlNames.IndexOf(ControlName);
         if not FieldControlValuesDict.ContainsKey(ControlIndex) then
             FieldControlValuesDict.Add(ControlIndex, Value)
         else
@@ -59,7 +59,7 @@ codeunit 110010 DMTProgressDialog
     var
         ControlIndex: Integer;
     begin
-        ControlIndex := ProgressBarNames.IndexOf(ControlName);
+        ControlIndex := ControlNames.IndexOf(ControlName);
         if not BarControlValuesDict.ContainsKey(ControlIndex) then
             BarControlValuesDict.Add(ControlIndex, Value)
         else
@@ -83,10 +83,9 @@ codeunit 110010 DMTProgressDialog
 
     procedure GetCustomDuration(CustomDurationName: Text) TimeElapsed: Duration
     begin
-        if CustomStart.ContainsKey(CustomDurationName) then
-            exit(CurrentDateTime - CustomStart.Get(CustomDurationName))
-        else
-            exit(0);
+        if not CustomStart.ContainsKey(CustomDurationName) then
+            Error('Custom Duration is not initialized!');
+        exit(CurrentDateTime - CustomStart.Get(CustomDurationName))
     end;
 
     procedure UpdateControlWithCustomDuration(ProgressFieldName: Text; CustomDurationName: Text)
@@ -176,7 +175,7 @@ codeunit 110010 DMTProgressDialog
         Start: DateTime;
         Progress: Dialog;
         CustomStart: Dictionary of [Text, DateTime];
-        ProgressBarNames, ProgressFieldNames : List of [Text];
+        ControlNames: List of [Text];
         CurrStepValuesDict, TotalStepValuesDict : Dictionary of [Text, Integer];
         FieldControlValuesDict: Dictionary of [Integer, Text];
         BarControlValuesDict: Dictionary of [Integer, Integer];
