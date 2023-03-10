@@ -109,9 +109,7 @@ codeunit 110008 DMTRunDocMigration
 
     local procedure InitBufferRefForDocMigrationTableLine(var bufferRef: RecordRef; docMigration: Record DMTDocMigration)
     var
-        datafile: Record DMTDataFile;
         FPBuilder: Codeunit DMTFPBuilder;
-        tableFilter: Text;
     begin
         Clear(bufferRef);
         docMigration.TestField("Line Type", docMigration."Line Type"::Table);
@@ -120,14 +118,14 @@ codeunit 110008 DMTRunDocMigration
 
     local procedure ApplyParentTableRelation(var bufferRef: RecordRef; var parentRef: RecordRef; DocMigration: Record DMTDocMigration)
     var
-        TableRelation: Record DMTDocMigration temporary;
+        tempTableRelation: Record DMTDocMigration temporary;
     begin
-        if DocMigration.LoadTableRelation(TableRelation) = 0 then
+        if DocMigration.LoadTableRelation(tempTableRelation) = 0 then
             Error('No Table Relations defined for %1 - %2', DocMigration."Line Type", DocMigration.Description);
-        if TableRelation.FindSet() then
+        if tempTableRelation.FindSet() then
             repeat
-                bufferRef.Field(TableRelation."Field ID").SetRange(parentRef.Field(TableRelation."Related Field ID"));
-            until TableRelation.Next() = 0;
+                bufferRef.Field(tempTableRelation."Field ID").SetRange(parentRef.Field(tempTableRelation."Related Field ID"));
+            until tempTableRelation.Next() = 0;
     end;
 
     local procedure FindDocMigrationStructureRoot(var DocMigration_RootTable: Record DMTDocMigration; DocMigration_Start: Record DMTDocMigration) OK: Boolean

@@ -143,7 +143,7 @@ page 110015 DMTProcessingPlan
             action(DeleteLine)
             {
                 Caption = 'Delete', Comment = 'de-DE=Löschen';
-                ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht
+                ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
                 Image = Delete;
                 trigger OnAction()
                 begin
