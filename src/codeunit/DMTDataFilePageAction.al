@@ -401,13 +401,9 @@ codeunit 110013 DMTDataFilePageAction
     procedure TryFindBufferTableID(var DataFile: Record DMTDataFile; DoModify: Boolean)
     var
         AllObjWithCaption: Record AllObjWithCaption;
-        DMTSetup: Record DMTSetup;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::Table);
-        if DMTSetup.Get() and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
-            AllObjWithCaption.SetFilter("Object ID", DMTSetup."Obj. ID Range Buffer Tables")
-        else
-            AllObjWithCaption.SetRange("Object ID", 50000, 99999);
+        AllObjWithCaption.SetRange("App Package ID", DataFile.GetCurrentAppPackageID());
         AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Buffer', DataFile."NAV Src.Table No."));
         if AllObjWithCaption.FindFirst() then begin
             DataFile."Buffer Table ID" := AllObjWithCaption."Object ID";
@@ -419,13 +415,9 @@ codeunit 110013 DMTDataFilePageAction
     procedure TryFindXMLPortID(var DataFile: Record DMTDataFile; DoModify: Boolean)
     var
         AllObjWithCaption: Record AllObjWithCaption;
-        DMTSetup: Record DMTSetup;
     begin
         AllObjWithCaption.SetRange("Object Type", AllObjWithCaption."Object Type"::XMLport);
-        if DMTSetup.Get() and (DMTSetup."Obj. ID Range Buffer Tables" <> '') then
-            AllObjWithCaption.SetFilter("Object ID", DMTSetup."Obj. ID Range XMLPorts")
-        else
-            AllObjWithCaption.SetRange("Object ID", 50000, 99999);
+        AllObjWithCaption.SetRange("App Package ID", DataFile.GetCurrentAppPackageID());
         AllObjWithCaption.SetRange("Object Name", StrSubstNo('T%1Import', DataFile."NAV Src.Table No."));
         if AllObjWithCaption.FindFirst() then begin
             DataFile."Import XMLPort ID" := AllObjWithCaption."Object ID";
@@ -696,16 +688,20 @@ codeunit 110013 DMTDataFilePageAction
         if DataFile."NAV Src.Table No." = 0 then
             DataFile."NAV Src.Table No." := DataFile."Target Table ID";
         ObjMgt.SetNAVTableCaptionAndTableName(DataFile."NAV Src.Table No.", DataFile."NAV Src.Table Caption", DataFile."NAV Src.Table Name");
-        DMTMigrationLib.ApplyKnownProcessingRules(DataFile);
+        DMTMigrationLib.ApplyKnownProcessingRulesToNewDataFileRec(DataFile);
         DataFile.Insert(true);
 
         if DataFile.FindFileRec(File) then
             // lager than 100KB -> CSV
+
             if ((File.Size / 1024) < 100) then
                 DataFile.Validate(BufferTableType, DataFile.BufferTableType::"Generic Buffer Table for all Files")
             else
                 DataFile.Validate(BufferTableType, DataFile.BufferTableType::"Seperate Buffer Table per CSV");
-        ProposeObjectIDs(DataFile, false);
+        TryFindBufferTableID(DataFile, false);
+        TryFindXMLPortID(DataFile, false);
+        if (DataFile."Import XMLPort ID" = 0) or (DataFile."Buffer Table ID" = 0) then
+            ProposeObjectIDs(DataFile, false);
         DataFile.Modify();
         // Fields
         InitFieldMapping(DataFile.ID);

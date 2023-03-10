@@ -212,6 +212,13 @@ table 110042 DMTDataFile
     /// Init App and Company FlowFilters for Company / App specific Counts and TableRelations
     /// </summary>
     internal procedure InitFlowFilters()
+    begin
+        Rec.SetRange("Current App Package ID Filter", GetCurrentAppPackageID());
+        Rec.SetFilter("Other App Packages ID Filter", '<>%1', GetCurrentAppPackageID());
+        Rec.SetRange("CompanyName Filter", CompanyName); // Required for Table Information Record Count
+    end;
+
+    procedure GetCurrentAppPackageID() PackageID: Text
     var
         NAVAppInstalledApp: Record "NAV App Installed App";
         mI: ModuleInfo;
@@ -219,9 +226,7 @@ table 110042 DMTDataFile
         NavApp.GetCurrentModuleInfo(mI);
         NAVAppInstalledApp.SetRange("App ID", mI.Id);
         NAVAppInstalledApp.FindFirst();
-        Rec.SetRange("Current App Package ID Filter", NAVAppInstalledApp."Package ID");
-        Rec.SetFilter("Other App Packages ID Filter", '<>%1', NAVAppInstalledApp."Package ID");
-        Rec.SetRange("CompanyName Filter", CompanyName); // Required for Table Information Record Count
+        PackageID := NAVAppInstalledApp."Package ID";
     end;
 
     procedure UpdateFileRecProperties(DoModify: Boolean)
@@ -382,6 +387,8 @@ table 110042 DMTDataFile
     procedure InitBufferRef(var BufferRef: RecordRef)
     var
         GenBuffTable: Record DMTGenBuffTable;
+        TableMetadata: Record "Table Metadata";
+        BufferTableMissingErr: Label 'Buffer Table %1 not found';
     begin
         if Rec.BufferTableType = Rec.BufferTableType::"Generic Buffer Table for all Files" then begin
             // GenBuffTable.InitFirstLineAsCaptions(DMTRec);
@@ -392,6 +399,8 @@ table 110042 DMTDataFile
             BufferRef.GetTable(GenBuffTable);
         end else
             if Rec.BufferTableType = Rec.BufferTableType::"Seperate Buffer Table per CSV" then begin
+                if not TableMetadata.Get(Rec."Buffer Table ID") then
+                    Error(BufferTableMissingErr, Rec."Buffer Table ID");
                 BufferRef.Open(Rec."Buffer Table ID");
             end;
     end;

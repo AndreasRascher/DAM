@@ -229,9 +229,11 @@ codeunit 110006 DMTLog
     end;
 
     local procedure CheckIfProcessNoIsSet()
+    var
+        ProcessNoNotInitializedErr: label 'Process number has not been initialized';
     begin
         if LogEntryTemplate."Process No." = 0 then
-            Error('Process No is not initialized');
+            Error(ProcessNoNotInitializedErr);
     end;
 
     procedure IncNoOfProcessedRecords()

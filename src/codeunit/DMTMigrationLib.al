@@ -179,7 +179,7 @@ codeunit 110011 DMTMigrationLib
             UpdateGlobalDimNoInDimensionValues();
     end;
 
-    internal procedure ApplyKnownProcessingRules(var DataFile: Record DMTDataFile)
+    internal procedure ApplyKnownProcessingRulesToNewDataFileRec(var DataFile: Record DMTDataFile)
     begin
         case DataFile."Target Table ID" of
             Database::"Item Vendor",

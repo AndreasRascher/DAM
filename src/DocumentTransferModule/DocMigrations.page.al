@@ -142,6 +142,7 @@ page 110001 DMTDocMigrations
                 actionref(IndentLeftRef; IndentLeft) { }
                 actionref(IndentRightRef; IndentRight) { }
             }
+            actionref(Start; StartProcessingStructure) { }
         }
     }
 
