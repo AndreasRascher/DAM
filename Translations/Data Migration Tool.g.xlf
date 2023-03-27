@@ -2508,11 +2508,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDocMigrations - Action StartProcessingStructure - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3650354758 - Action 2097681594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Indentation</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDocMigrations - Action IndentationGroup - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields</source>
           <note from="Developer" annotates="general" priority="2">Felder</note>
@@ -2682,11 +2677,6 @@
           <source>Import Backup</source>
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 2097681594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Indentation</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentationGroup - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>

@@ -278,6 +278,7 @@ codeunit 110017 DMTMigrate
     begin
         DataFile.CalcFields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
+        MaxWith := 120;
         if StrLen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
                                 ProgressBarTitle +

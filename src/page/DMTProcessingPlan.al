@@ -254,19 +254,19 @@ page 110015 DMTProcessingPlan
                 end;
             }
         }
-        area(Promoted)
-        {
-            actionref(NewLineRef; NewLine) { }
-            actionref(DelLine; DeleteLine) { }
-            actionref(StartCtrl; Start) { }
-            group(IndentationGroup)
-            {
-                Caption = 'Indentation';
-                Image = TransferOrder;
-                actionref(IndentLeftRef; IndentLeft) { }
-                actionref(IndentRightRef; IndentRight) { }
-            }
-        }
+        // area(Promoted)
+        // {
+        //     actionref(NewLineRef; NewLine) { }
+        //     actionref(DelLine; DeleteLine) { }
+        //     actionref(StartCtrl; Start) { }
+        //     group(IndentationGroup)
+        //     {
+        //         Caption = 'Indentation';
+        //         Image = TransferOrder;
+        //         actionref(IndentLeftRef; IndentLeft) { }
+        //         actionref(IndentRightRef; IndentRight) { }
+        //     }
+        // }
     }
 
     trigger OnAfterGetRecord()
