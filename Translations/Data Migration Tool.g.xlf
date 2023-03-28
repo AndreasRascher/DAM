@@ -1988,6 +1988,11 @@
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 1016274576 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No errors were found for retry</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 1263952573 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
