@@ -145,7 +145,8 @@ page 110030 DMTReplacementAssigmentsPart
     begin
         if not DataFile.Get(Rec."Data File ID") then exit;
         SelectMultipleFields.InitSelectSourceFields(DataFile, StrSubstNo('%1|%2', Rec."Compare Value 1 Field No.", Rec."Compare Value 2 Field No."));
-        // SelectMultipleFields.LookupMode(true);
+        // SelectMultipleFields.LookupMode(true);        
+        Commit;
         RunModalAction := SelectMultipleFields.RunModal();
         if RunModalAction = Action::OK then begin
             SelectedFields := SelectMultipleFields.GetSelectedSourceFieldIDList();
