@@ -133,17 +133,17 @@ page 110001 DMTDocMigrations
                 end;
             }
         }
-        area(Promoted)
-        {
-            group(IndentationGroup)
-            {
-                Caption = 'Indentation';
-                Image = TransferOrder;
-                actionref(IndentLeftRef; IndentLeft) { }
-                actionref(IndentRightRef; IndentRight) { }
-            }
-            actionref(Start; StartProcessingStructure) { }
-        }
+        // area(Promoted)
+        // {
+        //     group(IndentationGroup)
+        //     {
+        //         Caption = 'Indentation';
+        //         Image = TransferOrder;
+        //         actionref(IndentLeftRef; IndentLeft) { }
+        //         actionref(IndentRightRef; IndentRight) { }
+        //     }
+        //     actionref(Start; StartProcessingStructure) { }
+        // }
     }
 
     trigger OnAfterGetRecord()

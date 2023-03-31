@@ -2,7 +2,7 @@
   "id": "492ba9be-193c-48f2-a405-ab6ba7a6da55",
   "name": "Data Migration Tool",
   "publisher": "Andreas Rascher",
-  "version": "20.0.20230119.2",
+  "version": "20.0.20230327.1",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -26,7 +26,7 @@
     "allowDownloadingSource": true,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "10.0",
+  "runtime": "9.1",
   "target":"OnPrem",
   "features": ["TranslationFile"]
 }

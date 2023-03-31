@@ -51,6 +51,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field TableView - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1485543381 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table %1 not found</source>
+          <target>Puffertabelle %1 nicht gefunden</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataFile - Method InitBufferRef - NamedType BufferTableMissingErr</note>
+        </trans-unit>
         <trans-unit id="Table 1485543381 - Field 3434788173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffertable ID</source>
           <target>Puffertabelle ID</target>
@@ -2379,11 +2385,25 @@
           <note from="Developer" annotates="general" priority="2">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2980531674 - Method 1016274576 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No errors were found for retry</source>
+          <target>Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 1263952573 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <target>Import abgeschlossen</target>
           <note from="Developer" annotates="general" priority="2">Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3774911051 - Method 2653990749 - NamedType 1139369458" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process number has not been initialized</source>
+          <target>Protokoll-Verarbeitungsnr. wurde nicht initialisiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
@@ -2437,8 +2457,13 @@
           <source>Duration</source>
           <target>Dauer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRunDocMigration - Method Start - NamedType DurationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1028073716 - Method 620325036 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time Remaining</source>
+          <target>Verbleibende Zeit</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRunDocMigration - Method Start - NamedType TimeRemainingLbl</note>
         </trans-unit>
         <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Report Helper</source>
@@ -2992,12 +3017,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDocMigrations - Action StartProcessingStructure - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3650354758 - Action 2097681594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Indentation</source>
-          <target>Einrückung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDocMigrations - Action IndentationGroup - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields</source>
           <target>Felder</target>
@@ -3201,12 +3220,6 @@
           <target>Backup importieren</target>
           <note from="Developer" annotates="general" priority="2">Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 2097681594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Indentation</source>
-          <target>Einrückung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentationGroup - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>

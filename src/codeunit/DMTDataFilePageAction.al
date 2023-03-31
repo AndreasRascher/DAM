@@ -388,14 +388,19 @@ codeunit 110013 DMTDataFilePageAction
         Migrate: Codeunit DMTMigrate;
         LogQry: Query DMTLogQry;
         RecIdList: List of [RecordId];
+        NoErrorFoundLbl: label 'No errors were found for retry', Comment = 'de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden';
     begin
         LogQry.SetRange(LogQry.DataFileFolderPath, DataFile.Path);
         LogQry.SetRange(LogQry.DataFileName, DataFile.Name);
         LogQry.Open();
         while LogQry.Read() do begin
-            RecIdList.Add(LogQry.SourceID);
+            if Format(LogQry.SourceID) <> '' then
+                RecIdList.Add(LogQry.SourceID);
         end;
-        Migrate.RetryBufferRecordIDs(RecIdList, DataFile);
+        if RecIdList.Count > 0 then
+            Migrate.RetryBufferRecordIDs(RecIdList, DataFile)
+        else
+            Message(NoErrorFoundLbl);
     end;
 
     procedure TryFindBufferTableID(var DataFile: Record DMTDataFile; DoModify: Boolean)

@@ -278,10 +278,11 @@ codeunit 110017 DMTMigrate
     begin
         DataFile.CalcFields("Target Table Caption");
         ProgressBarTitle := DataFile."Target Table Caption";
+        MaxWith := 100-32;
         if StrLen(ProgressBarTitle) < MaxWith then begin
-            ProgressBarTitle := PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_') +
+            ProgressBarTitle := PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_') +
                                 ProgressBarTitle +
-                                PadStr('', (StrLen(ProgressBarTitle) - MaxWith) div 2, '_');
+                                PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_');
         end;
         // ToDo: Performance der Codeunit ProgressDialog schlecht, ggf.weniger generisch,
         //       durch konkrete Programmierung aller Progressdialoge ersetzten
