@@ -2328,6 +2328,11 @@
           <note from="Developer" annotates="general" priority="2">Datei Eigenschaften</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control FileInfo - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Created At - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1859521773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Size(KB)</source>
           <note from="Developer" annotates="general" priority="2"></note>

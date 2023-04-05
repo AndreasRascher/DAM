@@ -2389,7 +2389,6 @@
           <source>No errors were found for retry</source>
           <target>Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2980531674 - Method 1263952573 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
@@ -2402,7 +2401,6 @@
           <source>Process number has not been initialized</source>
           <target>Protokoll-Verarbeitungsnr. wurde nicht initialisiert</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3493842261 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
@@ -2794,6 +2792,13 @@
           <target>Datei Eigenschaften</target>
           <note from="Developer" annotates="general" priority="2">Datei Eigenschaften</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control FileInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1841337754 - Control 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created At</source>
+          <target>[NAB: SUGGESTION]Erstellt am</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Created At - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 1859521773 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Size(KB)</source>
