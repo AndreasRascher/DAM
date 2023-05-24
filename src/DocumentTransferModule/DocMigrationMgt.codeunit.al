@@ -68,7 +68,6 @@ codeunit 73018 DMTRunDocMigration
 
     local procedure CollectRecIdsInStructure(Node: Record DMTDocMigration; parentRef: RecordRef; var RecIDsToProcess: Dictionary of [Integer, List of [RecordId]])
     var
-        NextNode: Record DMTDocMigration;
         docMigration_Tables: Record DMTDocMigration;
         childRef: RecordRef;
     begin

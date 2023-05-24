@@ -108,11 +108,11 @@ page 73009 DMTDeleteDataInTargetTable
 
     local procedure CreateSourceToTargetRecIDMapping(DataFile: Record DMTDataFile; SourceView: Text; var NotTransferedRecords: List of [RecordId]) RecordMapping: Dictionary of [RecordId, RecordId]
     var
-        DMTMgt: Codeunit DMTMgt;
         TempFieldMapping: Record DMTFieldMapping temporary;
         DMTGenBuffTable: Record DMTGenBuffTable;
-        SourceRef, TargetRef : RecordRef;
+        DMTMgt: Codeunit DMTMgt;
         TargetRecID: RecordId;
+        SourceRef, TargetRef : RecordRef;
     begin
         Clear(NotTransferedRecords);
         Clear(RecordMapping);

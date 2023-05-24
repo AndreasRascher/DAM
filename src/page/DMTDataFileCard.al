@@ -150,7 +150,6 @@ page 73005 DMTDataFileCard
                 trigger OnAction()
                 var
                     FPBuilder: Codeunit DMTFPBuilder;
-                    Migrate: Codeunit DMTMigrate;
                     RecRef: RecordRef;
                     NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
