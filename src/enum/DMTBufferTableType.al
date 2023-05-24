@@ -1,4 +1,4 @@
-enum 110003 BufferTableType
+enum 73001 BufferTableType
 {
     value(0; "Generic Buffer Table for all Files")
     {

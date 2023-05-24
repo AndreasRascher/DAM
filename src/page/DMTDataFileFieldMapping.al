@@ -1,4 +1,4 @@
-page 110028 DMTFieldMapping
+page 73007 DMTFieldMapping
 {
     PageType = ListPart;
     SourceTable = DMTFieldMapping;

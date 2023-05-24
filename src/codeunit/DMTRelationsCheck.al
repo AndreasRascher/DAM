@@ -1,4 +1,4 @@
-codeunit 110005 DMTRelationsCheck
+codeunit 73014 DMTRelationsCheck
 {
     procedure FindRelatedTableIDs(DataFile: Record DMTDataFile) RelatedTableIDsList: List of [Integer]
     var

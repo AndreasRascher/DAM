@@ -1,4 +1,4 @@
-table 110042 DMTDataFile
+table 73004 DMTDataFile
 {
     Caption = 'DMTDataFile', locked = true;
     DrillDownPageId = DMTDataFileList;

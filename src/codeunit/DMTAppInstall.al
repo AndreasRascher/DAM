@@ -1,4 +1,4 @@
-codeunit 110007 "DMT App Install"
+codeunit 73000 "DMT App Install"
 {
     Subtype = Install;
 

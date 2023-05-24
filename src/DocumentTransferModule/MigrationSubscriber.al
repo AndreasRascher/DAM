@@ -1,4 +1,4 @@
-codeunit 110021 DMTDocMigrSubscriber
+codeunit 73019 DMTDocMigrSubscriber
 {
     EventSubscriberInstance = Manual;
 

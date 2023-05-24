@@ -1,4 +1,4 @@
-table 110048 DMTDataFileBuffer
+table 73007 DMTDataFileBuffer
 {
     TableType = Temporary;
     DataClassification = ToBeClassified;

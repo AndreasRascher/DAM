@@ -1,4 +1,4 @@
-page 110006 "DMTLogEntries"
+page 73002 "DMTLogEntries"
 {
     Caption = 'DMT Log Entries';
     DeleteAllowed = false;

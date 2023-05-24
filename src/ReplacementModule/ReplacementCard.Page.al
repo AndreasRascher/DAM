@@ -1,4 +1,4 @@
-page 110019 DMTReplacementCard
+page 73024 DMTReplacementCard
 {
     Caption = 'DMT Replacement Card';
     PageType = Card;

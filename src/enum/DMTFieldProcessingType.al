@@ -1,4 +1,4 @@
-enum 110008 DMTFieldProcessingType
+enum 73003 DMTFieldProcessingType
 {
     Extensible = false;
 

@@ -1,4 +1,4 @@
-codeunit 110013 DMTDataFilePageAction
+codeunit 73003 DMTDataFilePageAction
 {
     internal procedure InitFieldMapping(DataFileID: Integer): Boolean
     var

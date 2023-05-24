@@ -1,4 +1,4 @@
-enum 110011 DMTProcessingResultType
+enum 73000 DMTProcessingResultType
 {
     value(0; " ") { Caption = ' ', Locked = true; }
     value(1; ChangesApplied) { Caption = 'ChangesApplied', Locked = true; }

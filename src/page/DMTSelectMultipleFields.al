@@ -1,4 +1,4 @@
-page 110029 "DMTSelectMultipleFields"
+page 73019 "DMTSelectMultipleFields"
 {
     Caption = 'Select multiple fields';
     PageType = List;

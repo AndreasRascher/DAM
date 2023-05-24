@@ -1,4 +1,4 @@
-codeunit 110009 ChangeRecordWithPerm
+codeunit 73001 ChangeRecordWithPerm
 {
     Permissions = tabledata "Dimension Set Entry" = rimd,
                   tabledata "Dimension Set Tree Node" = rimd;

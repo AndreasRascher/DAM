@@ -1,4 +1,4 @@
-codeunit 110011 DMTMigrationLib
+codeunit 73008 DMTMigrationLib
 {
     procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
     begin

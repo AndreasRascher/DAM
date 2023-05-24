@@ -1,4 +1,4 @@
-codeunit 110020 DMTNotifications
+codeunit 73009 DMTNotifications
 {
     EventSubscriberInstance = StaticAutomatic;
 

@@ -1,4 +1,4 @@
-page 110017 DMTProcessInstructionFactBox
+page 73017 DMTProcessInstructionFactBox
 {
     Caption = 'Processing Instructions';
     PageType = ListPart;

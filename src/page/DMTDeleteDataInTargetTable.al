@@ -1,4 +1,4 @@
-page 110024 DMTDeleteDataInTargetTable
+page 73009 DMTDeleteDataInTargetTable
 {
     Caption = 'Delete Data in Target Table', Comment = 'Daten in Zieltabelle löschen';
     PageType = Card;

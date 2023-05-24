@@ -1,4 +1,4 @@
-page 110003 DMTGenBufferList100
+page 73012 DMTGenBufferList100
 {
     Caption = 'DMT GenBufferList';
     PageType = List;

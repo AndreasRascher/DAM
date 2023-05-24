@@ -1,4 +1,4 @@
-codeunit 110006 DMTLog
+codeunit 73020 DMTLog
 {
 
     procedure DeleteExistingLogFor(BufferRef: RecordRef);

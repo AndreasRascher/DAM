@@ -1,4 +1,4 @@
-page 110000 DMTFreeObjectsInLicense
+page 73011 DMTFreeObjectsInLicense
 {
     CaptionML = ENU = 'Free Objects in License', DEU = 'Freie Objekte in der Lizenz';
     ApplicationArea = All;

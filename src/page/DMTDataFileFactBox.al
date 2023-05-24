@@ -1,4 +1,4 @@
-page 110023 DMTDataFileFactBox
+page 73006 DMTDataFileFactBox
 {
     Caption = 'DataFile FactBox';
     PageType = ListPart;

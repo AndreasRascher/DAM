@@ -1,4 +1,4 @@
-page 110030 DMTReplacementAssigmentsPart
+page 73023 DMTReplacementAssigmentsPart
 {
     Caption = 'Replacements';
     PageType = ListPart;

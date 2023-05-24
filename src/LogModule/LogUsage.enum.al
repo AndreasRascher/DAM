@@ -1,5 +1,5 @@
 //Import to Buffer, Process Buffer, Field Update, Document Migration, Record Deletion, FieldUpdate
-enum 110000 DMTLogUsage
+enum 73011 DMTLogUsage
 {
     value(0; " ") { Caption = ' ', Locked = true; }
     value(10; "Information") { Caption = 'Information'; }

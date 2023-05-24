@@ -1,4 +1,4 @@
-codeunit 110014 "DMTReplacementsMgt"
+codeunit 73021 "DMTReplacementsMgt"
 {
     EventSubscriberInstance = StaticAutomatic;
 

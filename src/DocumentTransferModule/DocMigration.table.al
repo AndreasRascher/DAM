@@ -1,4 +1,4 @@
-table 110001 DMTDocMigration
+table 73000 DMTDocMigration
 {
     Caption = 'Document Migration';
     DataClassification = ToBeClassified;

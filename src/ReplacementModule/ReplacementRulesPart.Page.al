@@ -1,4 +1,4 @@
-page 110020 DMTReplacementRulesPart
+page 73025 DMTReplacementRulesPart
 {
     Caption = 'Mapping';
     PageType = ListPart;

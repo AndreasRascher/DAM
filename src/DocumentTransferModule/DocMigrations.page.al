@@ -1,4 +1,4 @@
-page 110001 DMTDocMigrations
+page 73000 DMTDocMigrations
 {
     Caption = 'DMT Document Migrations';
     PageType = List;

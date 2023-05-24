@@ -1,4 +1,4 @@
-page 110026 DMTDataFileCard
+page 73005 DMTDataFileCard
 {
     Caption = 'File Card', comment = 'Datei Karte';
     PageType = Card;

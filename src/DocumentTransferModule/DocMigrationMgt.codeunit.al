@@ -1,4 +1,4 @@
-codeunit 110008 DMTRunDocMigration
+codeunit 73018 DMTRunDocMigration
 {
     trigger OnRun()
     begin

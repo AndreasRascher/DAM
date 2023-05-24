@@ -1,4 +1,4 @@
-enum 110009 DMTProcessingPlanType
+enum 73008 DMTProcessingPlanType
 {
     Extensible = true;
 

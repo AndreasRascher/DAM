@@ -1,4 +1,4 @@
-page 110010 DMTSelectTableList
+page 73020 DMTSelectTableList
 {
     Caption = 'Tables', Comment = 'Tabellen';
     PageType = List;

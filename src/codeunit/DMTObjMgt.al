@@ -1,4 +1,4 @@
-codeunit 110000 DMTObjMgt
+codeunit 73010 DMTObjMgt
 {
     procedure LookUpOldVersionTable(var NAVSrcTableNo: Integer; var NAVSrcTableCaption: Text) OK: Boolean;
     var

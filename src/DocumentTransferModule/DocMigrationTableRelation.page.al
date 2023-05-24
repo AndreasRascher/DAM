@@ -1,4 +1,4 @@
-page 110007 DMTTableRelation
+page 73001 DMTTableRelation
 {
     PageType = List;
     UsageCategory = None;

@@ -1,4 +1,4 @@
-codeunit 110017 DMTMigrate
+codeunit 73007 DMTMigrate
 {
     /// <summary>
     /// Process buffer records defined by RecordIds

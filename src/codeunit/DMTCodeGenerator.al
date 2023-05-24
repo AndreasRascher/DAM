@@ -1,4 +1,4 @@
-codeunit 110004 DMTCodeGenerator
+codeunit 73002 DMTCodeGenerator
 {
 
     procedure CreateALXMLPort(DataFile: Record DMTDataFile) C: TextBuilder

@@ -1,4 +1,4 @@
-enum 110010 DMTLogEntryType
+enum 73010 DMTLogEntryType
 {
     value(0; " ") { Caption = ' ', Locked = true; }
     value(10; "Process Title") { Caption = 'Titel'; }
