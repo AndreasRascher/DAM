@@ -26,5 +26,6 @@
         "VariableNamesWithType"
     ],
     "editor.snippetSuggestions": "bottom",
-    "xliffSync.parseFromDeveloperNote": true
+    "xliffSync.parseFromDeveloperNote": true,
+    "xliffSync.parseFromDeveloperNoteOverwrite": true
  }

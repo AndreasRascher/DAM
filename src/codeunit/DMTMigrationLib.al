@@ -129,6 +129,9 @@ codeunit 73008 DMTMigrationLib
     local procedure FindKnownFieldsToIgnore(TargetField: Record Field) Found: Boolean
     begin
         case true of
+            // Picture BLOBs
+            IsMatch(TargetField, Database::Item, 'Picture'),
+            IsMatch(TargetField, Database::"Company Information", 'Picture'),
             // Sales Header
             IsMatch(TargetField, Database::"Sales Header", 'Invoice'),
             IsMatch(TargetField, Database::"Sales Header", 'Ship'),

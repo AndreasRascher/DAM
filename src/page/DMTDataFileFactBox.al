@@ -38,7 +38,7 @@ page 73006 DMTDataFileFactBox
                 {
                     Caption = 'Data File Properties', Comment = 'Datei Eigenschaften';
                     field(GetFileSizeInKB; CurrDataFile.GetFileSizeInKB()) { Caption = 'Size(KB)'; ApplicationArea = All; }
-                    field("Created At"; CurrDataFile."Created At") { Caption = 'Created At'; ApplicationArea = All; }
+                    field("Created At"; CurrDataFile."Created At") { Caption = 'Created At', Comment = 'de-DE=Erstellt am'; ApplicationArea = All; }
                 }
             }
             repeater(Log)

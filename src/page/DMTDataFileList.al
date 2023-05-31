@@ -28,7 +28,7 @@ page 73008 DMTDataFileList
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
                 // field("No.of Src.Fields Assigned"; Rec."No.of Src.Fields Assigned") { ApplicationArea = All; }
                 field(ImportToBufferIndicator; Rec.ImportToBufferIndicator) { ApplicationArea = All; Caption = 'Buffer Import'; StyleExpr = Rec.ImportToBufferIndicatorStyle; }
-                field(ImportToTargetIndicator; Rec.ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = Rec.ImportToTargetIndicatorStyle; }
+                field(ImportToTargetIndicator; Rec.ImportToTargetIndicator) { ApplicationArea = All; Caption = 'Target Import'; StyleExpr = Rec.ImportToTargetIndicatorStyle; Visible = false; }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { ApplicationArea = All; }
                 field("No. of Lines In Trgt. Table"; Rec."No. of Records In Trgt. Table") { ApplicationArea = All; }
                 field("No. of Table Relations"; Rec."Table Relations")
