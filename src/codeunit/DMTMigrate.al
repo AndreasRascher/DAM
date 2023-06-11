@@ -352,7 +352,8 @@ codeunit 73007 DMTMigrate
     procedure CheckMappedFieldsExist(DataFile: Record DMTDataFile)
     var
         FieldMapping: Record DMTFieldMapping;
-        FieldMappingEmptyErr: Label 'No field mapping found for "%1"', comment = 'Kein Feldmapping gefunden für "%1"';
+        FieldMappingEmptyErr: Label 'No field mapping found for "%1"',
+                          comment = 'de-DE=Kein Feldmapping gefunden für "%1"';
     begin
         // Key Fields Mapping Exists
         DataFile.FilterRelated(FieldMapping);

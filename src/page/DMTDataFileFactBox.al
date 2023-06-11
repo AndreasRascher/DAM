@@ -14,10 +14,10 @@ page 73006 DMTDataFileFactBox
                 Visible = (ViewMode = ViewMode::TableInfo);
                 group(TableInfo)
                 {
-                    Caption = 'No. of Records in';
+                    Caption = 'No. of Records in', Comment = 'de-DE=Anz. Datensätze in';
                     field("No. of Records In Trgt. Table"; CurrDataFile."No. of Records In Trgt. Table")
                     {
-                        Caption = 'Target';
+                        Caption = 'Target', Comment = 'de-DE=Ziel';
                         ApplicationArea = All;
                         trigger OnDrillDown()
                         begin
@@ -36,14 +36,14 @@ page 73006 DMTDataFileFactBox
                 }
                 group(FileInfo)
                 {
-                    Caption = 'Data File Properties', Comment = 'Datei Eigenschaften';
-                    field(GetFileSizeInKB; CurrDataFile.GetFileSizeInKB()) { Caption = 'Size(KB)'; ApplicationArea = All; }
+                    Caption = 'Data File Properties', Comment = 'de-DE=Datei Eigenschaften';
+                    field(GetFileSizeInKB; CurrDataFile.GetFileSizeInKB()) { Caption = 'Size(KB)', Comment = 'de-DE=Größe(KB)'; ApplicationArea = All; }
                     field("Created At"; CurrDataFile."Created At") { Caption = 'Created At', Comment = 'de-DE=Erstellt am'; ApplicationArea = All; }
                 }
             }
             repeater(Log)
             {
-                Caption = 'Log';
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
                 Visible = (ViewMode = ViewMode::Log);
                 field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; Visible = false; }
                 field(Usage; Rec.Usage) { ApplicationArea = All; }

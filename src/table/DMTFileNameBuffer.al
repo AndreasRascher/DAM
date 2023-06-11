@@ -10,25 +10,25 @@ table 73007 DMTDataFileBuffer
         field(2; Name; Text[99]) { Caption = 'Name'; Editable = false; }
         field(10; Size; Integer) { Caption = 'Size'; Editable = false; }
         field(11; "DateTime"; DateTime) { Caption = 'DateTime'; Editable = false; }
-        field(20; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.'; }
+        field(20; "NAV Src.Table No."; Integer) { Caption = 'NAV Src.Table No.', Comment = 'de-DE=NAV Tabellennr.'; }
         field(21; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; Editable = false; }
         field(22; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; Editable = false; }
         field(30; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
+            Caption = 'Target Table ID', comment = 'de-DE=Ziel Tabellen ID';
             DataClassification = SystemMetadata;
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(31; "Target Table Caption"; Text[250])
         {
-            Caption = 'Target Table Caption', comment = 'Zieltabelle Bezeichnung';
+            Caption = 'Target Table Caption', comment = 'de-DE=Zieltabelle Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
         }
         field(32; "File is already assigned"; Boolean)
         {
-            Caption = 'Already assigned', Comment = 'Bereits zugeordnet';
+            Caption = 'Already assigned', Comment = 'de-DE=Bereits zugeordnet';
             Editable = false;
         }
 

@@ -9,17 +9,17 @@ table 73006 DMTFieldMapping
         }
         field(10; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
+            Caption = 'Target Table ID', comment = 'de-DE=Ziel Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(11; "Target Field No."; Integer)
         {
-            Caption = 'Target Field No.', comment = 'Ziel Feldnr.';
+            Caption = 'Target Field No.', comment = 'de-DE=Ziel Feldnr.';
             TableRelation = Field."No." where(TableNo = field("Target Table ID"));
         }
         field(12; "Target Field Caption"; Text[80])
         {
-            Caption = 'Target Field Caption', comment = 'Zielfeld Bezeichnung';
+            Caption = 'Target Field Caption', comment = 'de-DE=Zielfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
@@ -27,12 +27,12 @@ table 73006 DMTFieldMapping
         field(13; "Search Target Field Caption"; Text[80])
         {
             Description = 'Searchable field';
-            Caption = 'Target Field Caption', comment = 'Zielfeld Bezeichnung';
+            Caption = 'Target Field Caption', comment = 'de-DE=Zielfeld Bezeichnung';
             Editable = false;
         }
         field(14; "Target Field Name"; Text[80])
         {
-            Caption = 'Target Field Name', comment = 'Zielfeld Name';
+            Caption = 'Target Field Name', comment = 'de-DE=Zielfeld Name';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field.FieldName where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
@@ -40,12 +40,12 @@ table 73006 DMTFieldMapping
         field(15; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'Schlüsselfeld'; Editable = false; }
         field(16; "Source Table ID"; Integer)
         {
-            Caption = 'Source Table ID', comment = 'Herkunft Tabellen ID';
+            Caption = 'Source Table ID', comment = 'de-DE=Herkunft Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(17; "Source Field No."; Integer)
         {
-            Caption = 'Source Field No.', comment = 'Herkunftsfeld Nr.';
+            Caption = 'Source Field No.', comment = 'de-DE=Herkunftsfeld Nr.';
             TableRelation = DMTFieldBuffer."No." where("Data File ID Filter" = field("Data File ID"));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -56,14 +56,13 @@ table 73006 DMTFieldMapping
                 UpdateProcessingAction(Rec.FieldNo("Source Field No."));
             end;
         }
-        field(18; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'Herkunftsfeld Bezeichnung'; Editable = false; }
-        // field(40; "Replacements Code"; Code[50]) { Caption = 'Replacements Code', comment = 'Ersetzungen Code'; TableRelation = DMTReplacementsHeaderOLD.Code; }
-        field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'Valid. Typ'; }
-        field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'Fehler ignorieren '; }
-        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'Aktion'; }
+        field(18; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
+        field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'de-DE=Valid. Typ'; }
+        field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'de-DE=Fehler ignorieren '; }
+        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'de-DE=Aktion'; }
         field(101; "Fixed Value"; Text[250])
         {
-            Caption = 'Fixed Value', comment = 'Fester Wert';
+            Caption = 'Fixed Value', comment = 'de-DE=Fester Wert';
             trigger OnValidate()
             var
                 ConfigValidateMgt: Codeunit "Config. Validate Management";
@@ -83,7 +82,6 @@ table 73006 DMTFieldMapping
                         "Fixed Value" := Format(FldRef.Value);
                     end;
                 end;
-                // UpdateProcessingAction(Rec.FieldNo("Fixed Value"));
             end;
         }
         field(102; "Validation Order"; Integer) { Caption = 'Validation Order', comment = 'Reihenfolge Validierung'; }

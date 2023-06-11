@@ -1,7 +1,7 @@
 table 73003 DMTCopyTable
 {
     DataClassification = SystemMetadata;
-    Caption = 'DMT Copy Table', comment = 'DMT Tabellen kopieren';
+    Caption = 'DMT Copy Table', comment = 'de-DE=DMT Tabellen kopieren';
     LookupPageId = DMTCopyTableList;
     DrillDownPageId = DMTCopyTableList;
 
@@ -9,30 +9,30 @@ table 73003 DMTCopyTable
     {
         field(1; "Table No."; Integer)
         {
-            Caption = 'Table No.', Comment = 'Tabellen ID';
+            Caption = 'Table No.', Comment = 'de-DE=Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
-        field(2; "Line No."; Integer) { Caption = 'Line No.'; }
+        field(2; "Line No."; Integer) { Caption = 'de-DE=Line No.'; }
         field(10; "Table Caption"; Text[249])
         {
-            Caption = 'Table Caption', Comment = 'Tabellen Bezeichnung';
+            Caption = 'Table Caption', Comment = 'de-DE=Tabellen Bezeichnung';
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Table No.")));
         }
         field(11; SourceCompanyName; Text[30])
         {
-            Caption = 'Copy from Company', Comment = 'Kopieren aus Mandant';
+            Caption = 'Copy from Company', Comment = 'de-DE=Kopieren aus Mandant';
             TableRelation = Company.Name where(Name = field(ExcludeSourceCompanyFilter));
         }
-        field(13; Description; Text[250]) { CaptionML = DEU = 'Beschreibung', ENU = 'Description'; }
+        field(13; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
         field(14; ExcludeSourceCompanyFilter; Text[250]) { FieldClass = FlowFilter; Caption = 'ExcludeSourceCompanyFilter', Locked = true; }
-        field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
+        field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(50; TableView; Blob) { }
-        field(51; FilterText; Text[250]) { Caption = 'Filter', Comment = 'Filter'; Editable = false; }
-        field(100; "Processing Time"; Duration) { CaptionML = DEU = 'Bearbeitungzeit', ENU = 'Processing Time'; Editable = false; }
-        field(101; "No. of Records(Target)"; Integer) { CaptionML = DEU = 'Anz. Datensätze', ENU = 'No. of Records'; Editable = false; }
-        field(102; "No. of Records inserted"; Integer) { CaptionML = DEU = 'Anz. importiert', ENU = 'No. of Records imported'; Editable = false; }
+        field(51; FilterText; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; Editable = false; }
+        field(100; "Processing Time"; Duration) { Caption = 'Processing Time', Comment = 'de-DE=Bearbeitungzeit'; Editable = false; }
+        field(101; "No. of Records(Target)"; Integer) { Caption = 'No. of Records', Comment = 'de-DE=Anz. Datensätze'; Editable = false; }
+        field(102; "No. of Records inserted"; Integer) { Caption = 'No. of Records imported', Comment = 'de-DE=Anz. importiert'; Editable = false; }
     }
 
     keys

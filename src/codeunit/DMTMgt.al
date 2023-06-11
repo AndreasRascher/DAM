@@ -87,7 +87,7 @@ codeunit 73006 DMTMgt
         _Integer: Integer;
         NoOfOptions: Integer;
         OptionIndex: Integer;
-        InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = '"%1" ist kein gültiger %2 Wert';
+        InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = 'de-DE="%1" ist kein gültiger %2 Wert';
         _OutStream: OutStream;
         OptionElement: Text;
         _Time: Time;

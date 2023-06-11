@@ -1,6 +1,6 @@
 page 73005 DMTDataFileCard
 {
-    Caption = 'File Card', comment = 'Datei Karte';
+    Caption = 'File Card', comment = 'de-DE=Datei Karte';
     PageType = Card;
     UsageCategory = None;
     SourceTable = DMTDataFile;
@@ -16,7 +16,7 @@ page 73005 DMTDataFileCard
                 Caption = 'General';
                 group(DataFilePathGroup)
                 {
-                    Caption = 'Data File Path', comment = 'Datentdatei Pfad';
+                    Caption = 'Data File Path', comment = 'de-DE=Datentdatei Pfad';
                     field(DataFilePath; FullDataFilePathText)
                     {
                         ApplicationArea = All;
@@ -45,7 +45,7 @@ page 73005 DMTDataFileCard
             part(Lines; DMTFieldMapping)
             {
                 ApplicationArea = All;
-                Caption = 'Field Mapping', Comment = 'Feldzuordnung';
+                Caption = 'Field Mapping', Comment = 'de-DE=Feldzuordnung';
                 SubPageLink = "Data File ID" = field(ID), "Target Table ID" = field("Target Table ID");
             }
             part(Replacements; DMTReplacementAssigmentsPart)
@@ -59,12 +59,12 @@ page 73005 DMTDataFileCard
             part(DMTDataFileFactBox_TableInfo; DMTDataFileFactBox)
             {
                 ApplicationArea = All;
-                Caption = 'Info', Comment = 'Info';
+                Caption = 'Info', Comment = 'de-DE=Info';
             }
             part(DMTDataFileFactBox_Log; DMTDataFileFactBox)
             {
                 ApplicationArea = All;
-                Caption = 'Log', Comment = 'Protokoll';
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
             }
         }
     }
@@ -75,7 +75,7 @@ page 73005 DMTDataFileCard
         {
             action(AutoMigration)
             {
-                Caption = 'Autom. Übernahme', Comment = 'Auto Migration';
+                Caption = 'Auto Migration', Comment = 'de-DE=Autom. Übernahme';
                 ApplicationArea = All;
                 Image = Process;
                 Promoted = true;
@@ -92,7 +92,7 @@ page 73005 DMTDataFileCard
             }
             action(ImportBufferDataFromFile)
             {
-                Caption = 'Import to Buffer Table', Comment = 'Import in Puffertabelle';
+                Caption = 'Import to Buffer Table', Comment = 'de-DE=Import in Puffertabelle';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -106,7 +106,7 @@ page 73005 DMTDataFileCard
             }
             action(DeleteRecordsInTargetTable)
             {
-                Caption = 'Delete Records In Target Table', Comment = 'Datensätze in Zieltabelle löschen';
+                Caption = 'Delete Records In Target Table', Comment = 'de-DE=Datensätze in Zieltabelle löschen';
                 ApplicationArea = All;
                 Image = "Invoicing-Delete";
                 Promoted = false;
@@ -167,7 +167,7 @@ page 73005 DMTDataFileCard
 
             action(TransferToTargetTable)
             {
-                Caption = 'Import to Target Table', Comment = 'In Zieltabelle übertragen';
+                Caption = 'Import to Target Table', Comment = 'de-DE=In Zieltabelle übertragen';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -184,7 +184,7 @@ page 73005 DMTDataFileCard
             }
             action(UpdateFields)
             {
-                Caption = 'Update Fields', Comment = 'Felder aktualisieren';
+                Caption = 'Update Fields', Comment = 'de-DE=Felder aktualisieren';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -199,7 +199,7 @@ page 73005 DMTDataFileCard
             }
             action(RetryBufferRecordsWithError)
             {
-                Caption = 'Retry Records With Error', Comment = 'Fehler erneut verarbeiten';
+                Caption = 'Retry Records With Error', Comment = 'de-DE=Fehler erneut verarbeiten';
                 ApplicationArea = All;
                 Image = TransferOrder;
                 Promoted = true;
@@ -214,7 +214,7 @@ page 73005 DMTDataFileCard
             }
             action(OpenLog)
             {
-                Caption = 'Log', Comment = 'Protokoll';
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
                 ApplicationArea = All;
                 Image = ErrorLog;
                 Promoted = true;
@@ -233,7 +233,7 @@ page 73005 DMTDataFileCard
             {
                 ApplicationArea = All;
                 Image = XMLSetup;
-                Caption = 'Create XMLPort', comment = 'XMLPort erstellen';
+                Caption = 'Create XMLPort', comment = 'de-DE=XMLPort erstellen';
 
                 trigger OnAction()
                 begin
@@ -244,7 +244,7 @@ page 73005 DMTDataFileCard
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Create Buffer Table', comment = 'Puffertabelle erstellen';
+                Caption = 'Create Buffer Table', comment = 'de-DE=Puffertabelle erstellen';
 
                 trigger OnAction()
                 begin
@@ -255,7 +255,7 @@ page 73005 DMTDataFileCard
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Check Transfered Records', comment = 'Übertragene Datensätze Prüfen';
+                Caption = 'Check Transfered Records', comment = 'de-DE=Übertragene Datensätze Prüfen';
 
                 trigger OnAction()
                 var
@@ -272,7 +272,7 @@ page 73005 DMTDataFileCard
             }
             action(CreateCode)
             {
-                Caption = 'Create Mapping Code';
+                Caption = 'Create AL Mapping Code', comment = 'de-DE=Mapping AL Code erstellen';
                 ApplicationArea = All;
                 Image = CodesList;
                 trigger OnAction()
@@ -285,7 +285,7 @@ page 73005 DMTDataFileCard
             }
             action(ExportTargetTableToCSV)
             {
-                Caption = 'Export target table to CSV';
+                Caption = 'Export target table to CSV', Comment = 'de-DE=Zieltabelle als CSV exportieren';
                 ApplicationArea = All;
                 Image = CodesList;
                 trigger OnAction()

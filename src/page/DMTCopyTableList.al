@@ -1,6 +1,6 @@
 page 73004 DMTCopyTableList
 {
-    Caption = 'DMT Copy Table List', Comment = 'DMT Tabellen kopieren';
+    Caption = 'DMT Copy Table List', Comment = 'de-DE=DMT Tabellen kopieren';
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
@@ -45,7 +45,7 @@ page 73004 DMTCopyTableList
         {
             action(CopyDataFromSourceCompanyAction)
             {
-                Caption = 'Copy Tables', Comment = 'Tabellen kopieren';
+                Caption = 'Copy Tables', Comment = 'de-DE=Tabellen kopieren';
                 Image = Copy;
                 Promoted = true;
                 PromotedOnly = true;

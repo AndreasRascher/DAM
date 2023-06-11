@@ -1,14 +1,14 @@
 table 73010 DMTSetup
 {
-    Caption = 'DMT Setup', comment = 'DMT Einrichtung';
+    Caption = 'DMT Setup', comment = 'de-DE=DMT Einrichtung';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'Primärschlüssel'; }
+        field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'de-DE=Primärschlüssel'; }
         field(10; "Obj. ID Range Buffer Tables"; Text[250])
         {
-            Caption = 'Obj. ID Range Buffer Tables', comment = 'Objekt ID Bereich für Puffertabellen';
+            Caption = 'Obj. ID Range Buffer Tables', comment = 'de-DE=Objekt ID Bereich für Puffertabellen';
             trigger OnValidate()
             var
                 SessionStorage: Codeunit DMTSessionStorage;
@@ -18,7 +18,7 @@ table 73010 DMTSetup
         }
         field(11; "Obj. ID Range XMLPorts"; Text[250])
         {
-            Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'Objekt ID Bereich für XMLPorts (Import)';
+            Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'de-DE=Objekt ID Bereich für XMLPorts (Import)';
             trigger OnValidate()
             var
                 SessionStorage: Codeunit DMTSessionStorage;
@@ -28,7 +28,7 @@ table 73010 DMTSetup
         }
         field(30; "Default Export Folder Path"; Text[250])
         {
-            Caption = 'Default Export Folder', Comment = 'Standard Export Ordnerpfad';
+            Caption = 'Default Export Folder', Comment = 'de-DE=Standard Export Ordnerpfad';
             DataClassification = ToBeClassified;
             trigger OnValidate()
             var
@@ -57,7 +57,7 @@ table 73010 DMTSetup
         }
         field(31; "Schema.csv File Path"; Text[250])
         {
-            Caption = 'Schema File Path', Comment = 'Pfad Schemadatei';
+            Caption = 'Schema File Path', Comment = 'de-DE=Pfad Schemadatei';
             trigger OnValidate()
             begin
                 Rec."Schema.csv File Path" := DelChr(Rec."Schema.csv File Path", '<>', '"');
@@ -73,7 +73,7 @@ table 73010 DMTSetup
         }
         field(32; "Backup.xml File Path"; Text[250])
         {
-            Caption = 'Backup.xml File Path', Comment = 'Pfad Backup.xml';
+            Caption = 'Backup.xml File Path', Comment = 'de-DE=Pfad Backup.xml';
             trigger OnValidate()
             begin
                 Rec."Backup.xml File Path" := DelChr(Rec."Backup.xml File Path", '<>', '"');
@@ -88,7 +88,7 @@ table 73010 DMTSetup
         }
         field(41; "Import with FlowFields"; Boolean)
         {
-            Caption = 'Import with Flowfields', Comment = 'Import mit Flowfields';
+            Caption = 'Import with Flowfields', Comment = 'de-DE=Import mit Flowfields';
         }
     }
     keys
@@ -170,7 +170,8 @@ table 73010 DMTSetup
     procedure CheckSchemaInfoHasBeenImporterd()
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
-        SchemaInfoMissingErr: TextConst ENU = 'The Schema.csv file has not been imported. Please goto the DMT Setup an import the Schema.csv', DEU = 'Die Schema.csv wurde nicht importiert. Öffnen Sie die DMT Einrichtung und importiern Sie die Schema.csv';
+        SchemaInfoMissingErr: Label 'The Schema.csv file has not been imported. Please goto the DMT Setup an import the Schema.csv',
+                          Comment = 'de-DE=Die Schema.csv wurde nicht importiert. Öffnen Sie die DMT Einrichtung und importiern Sie die Schema.csv';
     begin
         if DMTFieldBuffer.IsEmpty then Error(SchemaInfoMissingErr);
     end;

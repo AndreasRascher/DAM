@@ -31,8 +31,8 @@ table 73002 DMTReplacement
             OptionMembers = "1","2";
             OptionCaption = '1,2', Locked = true;
         }
-        field(110; "Comp.Value 1"; Text[80]) { Caption = 'Compare Value 1', Comment = 'Vgl.-Wert 1'; CaptionClass = Rec.GetCaption(Rec.FieldNo("Comp.Value 1")); }
-        field(111; "Comp.Val.1 Caption"; Text[80]) { Caption = 'Compare Field 1 Caption', Comment = 'Vgl.-Wert 1 Bezeichnung'; }
+        field(110; "Comp.Value 1"; Text[80]) { Caption = 'Compare Value 1', Comment = 'de-DE=Vgl.-Wert 1'; CaptionClass = Rec.GetCaption(Rec.FieldNo("Comp.Value 1")); }
+        field(111; "Comp.Val.1 Caption"; Text[80]) { Caption = 'Compare Field 1 Caption', Comment = 'de-DE=Vgl.-Wert 1 Bezeichnung'; }
         // field(112; "Rel.to Table ID (Comp.Val.1)"; Integer)
         // {
         //     Caption = 'Related to Table ID (Comp.Val.1)', Comment = 'Tabellenrelation ID (Vergleichswert 1)';
@@ -50,7 +50,7 @@ table 73002 DMTReplacement
         //     CalcFormula = lookup("Table Metadata".Caption where(ID = field("Rel.to Table ID (Comp.Val.1)")));
         //     Editable = false;
         // }
-        field(120; "Comp.Value 2"; Text[80]) { Caption = 'Compare Value 2', Comment = 'Vgl.-Wert 2'; CaptionClass = Rec.GetCaption(Rec.FieldNo("Comp.Value 2")); }
+        field(120; "Comp.Value 2"; Text[80]) { Caption = 'Compare Value 2', Comment = 'de-DE=Vgl.-Wert 2'; CaptionClass = Rec.GetCaption(Rec.FieldNo("Comp.Value 2")); }
         field(121; "Comp.Val.2 Caption"; Text[80]) { Caption = 'Compare Field 2 Caption'; }
         #endregion Compare Values
         #region NewValues
@@ -61,10 +61,10 @@ table 73002 DMTReplacement
             OptionCaption = '1,2', Locked = true;
         }
         field(210; "New Value 1"; Text[250]) { Caption = 'New Value 1', Comment = 'Neuer Wert 1'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 1")); }
-        field(211; "New Value 1 Caption"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'Neuer Wert 1 Bezeichnung'; }
+        field(211; "New Value 1 Caption"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'de-DE=Neuer Wert 1 Bezeichnung'; }
         field(212; "Rel.to Table ID (New Val.1)"; Integer)
         {
-            Caption = 'Related to Table ID (New.Fld.1)', Comment = 'Tabellenrelation ID (Neu 1)';
+            Caption = 'Related to Table ID (New.Fld.1)', Comment = 'de-DE=Tabellenrelation ID (Neu 1)';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
             DataClassification = SystemMetadata;
             trigger OnValidate()
@@ -74,16 +74,16 @@ table 73002 DMTReplacement
         }
         field(213; "Rel.to Table Cpt.(New Val.1)"; Text[100])
         {
-            Caption = 'Related Table Caption (New Val.1)', Comment = 'Relation zu Tabelle (Neu 1)';
+            Caption = 'Related Table Caption (New Val.1)', Comment = 'de-DE=Relation zu Tabelle (Neu 1)';
             FieldClass = FlowField;
             CalcFormula = lookup("Table Metadata".Caption where(ID = field("Rel.to Table ID (New Val.1)")));
             Editable = false;
         }
-        field(220; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'Neuer Wert 2 Bezeichnung'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 2")); }
-        field(221; "New Value 2 Caption"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'Neuer Wert 2 Bezeichnung'; }
+        field(220; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2 Bezeichnung'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 2")); }
+        field(221; "New Value 2 Caption"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2 Bezeichnung'; }
         field(222; "Rel.to Table ID (New Val.2)"; Integer)
         {
-            Caption = 'Related to Table ID (New Val.2)', Comment = 'Tabellenrelation ID (Neu 2)';
+            Caption = 'Related to Table ID (New Val.2)', Comment = 'de-DE=Tabellenrelation ID (Neu 2)';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
             DataClassification = SystemMetadata;
             trigger OnValidate()
@@ -93,7 +93,7 @@ table 73002 DMTReplacement
         }
         field(223; "Rel.to Table Cpt.(New Val.2)"; Text[100])
         {
-            Caption = 'Related Table Caption (New Val.2)', Comment = 'Relation zu Tabelle (Neu 2)';
+            Caption = 'Related Table Caption (New Val.2)', Comment = 'de-DE=Relation zu Tabelle (Neu 2)';
             FieldClass = FlowField;
             CalcFormula = lookup("Table Metadata".Caption where(ID = field("Rel.to Table ID (New Val.2)")));
             Editable = false;
@@ -121,27 +121,27 @@ table 73002 DMTReplacement
         }
         field(402; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'Ziel Tabellen ID';
+            Caption = 'Target Table ID', comment = 'de-DE=Ziel Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(403; "Compare Value 1 Field No."; Integer)
         {
-            Caption = 'Compare Value 1 Field No.', comment = 'Vgl.-Wert 1 Feld Nr.';
+            Caption = 'Compare Value 1 Field No.', comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
             TableRelation = DMTFieldMapping."Source Field No." where("Target Table ID" = field("Target Table ID"), "Source Field No." = field("Compare Value 1 Field No."));
         }
         field(404; "Compare Value 2 Field No."; Integer)
         {
-            Caption = 'Compare Value 2 Field No.', comment = 'Vgl.-Wert 2 Feld Nr.';
+            Caption = 'Compare Value 2 Field No.', comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
             TableRelation = DMTFieldMapping."Source Field No." where("Target Table ID" = field("Target Table ID"), "Source Field No." = field("Compare Value 2 Field No."));
         }
         field(405; "New Value 1 Field No."; Integer)
         {
-            Caption = 'Compare Value 1 Field No.', comment = 'Vgl.-Wert 1 Feld Nr.';
+            Caption = 'Compare Value 1 Field No.', comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
             TableRelation = DMTFieldMapping."Target Field No." where("Target Table ID" = field("Target Table ID"), "Target Field No." = field("New Value 1 Field No."));
         }
         field(406; "New Value 2 Field No."; Integer)
         {
-            Caption = 'Compare Value 2 Field No.', comment = 'Vgl.-Wert 2 Feld Nr.';
+            Caption = 'Compare Value 2 Field No.', comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
             TableRelation = DMTFieldMapping."Target Field No." where("Target Table ID" = field("Target Table ID"), "Target Field No." = field("New Value 2 Field No."));
         }
         #endregion DataFileTargetFieldAssignment
