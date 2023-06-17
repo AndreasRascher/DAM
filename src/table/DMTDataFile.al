@@ -85,6 +85,7 @@ table 73004 DMTDataFile
         field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(53; ImportFilter; TableFilter) { Caption = 'Import Filter', Comment = 'de-DE=Import Filter'; }
         field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'de-DE=Import Gruppe'; }
+        field(55; "File Config Code"; Code[50]) { Caption = 'File Config.', Comment = 'de-DE=Datei Konfig.'; TableRelation = DMTFileConfig; }
         #endregion Import and Processing Options
         field(60; LastView; Blob) { }
         field(62; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'de-DE=Auswahl letzes Feldupdate'; }

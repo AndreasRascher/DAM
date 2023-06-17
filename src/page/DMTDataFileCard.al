@@ -35,6 +35,7 @@ page 73005 DMTDataFileCard
                 field("NAV Src.Table No."; Rec."NAV Src.Table No.") { ApplicationArea = All; }
                 field("Import XMLPort ID"; Rec."Import XMLPort ID") { ApplicationArea = All; StyleExpr = Rec.ImportXMLPortIDStyle; }
                 field("Buffer Table ID"; Rec."Buffer Table ID") { ApplicationArea = All; StyleExpr = Rec.BufferTableIDStyle; }
+                field(ImportFileConfig; Rec."File Config Code") { ApplicationArea = All; }
             }
             group(ProcessingOptions)
             {
