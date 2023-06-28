@@ -55,6 +55,8 @@ codeunit 73008 DMTMigrationLib
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
         case true of
+            (TargetField.TableNo = database::"Dimension Set Tree Node"),
+            (TargetField.TableNo = database::"Dimension Set Entry"),
             IsMatch(TargetField, 'VAT Registration No.'),
             IsMatch(TargetField, Database::Location, 'ESCM In Behalf of Customer No.'),
             IsMatch(TargetField, Database::"Stockkeeping Unit", 'Phys Invt Counting Period Code'),
@@ -178,7 +180,7 @@ codeunit 73008 DMTMigrationLib
 
     internal procedure RunPostProcessingFor(var DataFile: Record DMTDataFile)
     begin
-        if DataFile."Target Table ID" = Database::"Dimension Value" then
+        if DataFile."Target Table ID" in [Database::Dimension, Database::"Dimension Value", Database::"Dimension Set Entry", Database::"Dimension Set Tree Node"] then
             UpdateGlobalDimNoInDimensionValues();
     end;
 

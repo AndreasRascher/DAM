@@ -393,6 +393,7 @@ codeunit 73007 DMTMigrate
         BufferRef: RecordRef;
         BufferRef2: RecordRef;
         ResultType: Enum DMTProcessingResultType;
+        SourceDoesNoExistErr: Label 'The source data set no longer exists. Please empty the log after each import into the generic buffer table.', Comment = 'de-DE=Der Quelldatensatz ist nicht mehr vorhanden. Bitte leeren Sie das Protokoll nach jedem Import in die generische Puffertabelle.';
     begin
         if RecIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
@@ -401,7 +402,9 @@ codeunit 73007 DMTMigrate
         // Buffer loop
         BufferRef.Open(DataFile."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
-        BufferRef.Get(ID);
+        if not BufferRef.Get(ID) then
+            Error();
+
 
         IsFullyProcessed := true;
         foreach ID in RecIdToProcessList do begin
