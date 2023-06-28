@@ -1,4 +1,4 @@
-query 73000 DMTLogQry
+query 73003 DMTLogQry
 {
     QueryType = Normal;
 

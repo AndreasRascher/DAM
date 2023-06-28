@@ -401,7 +401,8 @@ codeunit 73007 DMTMigrate
         // Buffer loop
         BufferRef.Open(DataFile."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
-        BufferRef.Get(ID);
+        if not BufferRef.Get(ID) then
+            Error('Quelldatensatz ist nicht mehr vorhanden. Bitte leeren Sie das Protokoll nach jedem import in die generische Puffertabelle.');
 
         IsFullyProcessed := true;
         foreach ID in RecIdToProcessList do begin
