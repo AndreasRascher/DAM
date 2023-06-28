@@ -4,17 +4,17 @@ table 73005 DMTFieldBuffer
     DataPerCompany = false;
     fields
     {
-        field(1; TableNo; Integer) { CaptionML = ENU = 'TableNo', DEU = 'TableNo'; }
-        field(2; "No."; Integer) { CaptionML = ENU = 'No.', DEU = 'No.'; }
-        field(3; TableName; Text[30]) { CaptionML = ENU = 'TableName', DEU = 'TableName'; }
-        field(4; FieldName; Text[30]) { CaptionML = ENU = 'FieldName', DEU = 'FieldName'; }
+        field(1; TableNo; Integer) { Caption = 'TableNo', Locked = true; }
+        field(2; "No."; Integer) { Caption = 'No.', Locked = true; }
+        field(3; TableName; Text[30]) { Caption = 'TableName', Locked = true; }
+        field(4; FieldName; Text[30]) { Caption = 'FieldName', Locked = true; }
         field(5; "Type"; Option)
         {
             CaptionML = ENU = 'Type', DEU = 'Type';
             OptionMembers = TableFilter,RecordID,Text,Date,Time,DateFormula,Decimal,Binary,BLOB,Boolean,Integer,Code,Option,BigInteger,Duration,GUID,DateTime;
             OptionCaptionML = ENU = 'TableFilter,RecordID,Text,Date,Time,DateFormula,Decimal,Binary,BLOB,Boolean,Integer,Code,Option,BigInteger,Duration,GUID,DateTime', DEU = 'TableFilter,RecordID,Text,Date,Time,DateFormula,Decimal,Binary,BLOB,Boolean,Integer,Code,Option,BigInteger,Duration,GUID,DateTime';
         }
-        field(6; Len; Integer) { CaptionML = ENU = 'Len', DEU = 'Len'; }
+        field(6; Len; Integer) { Caption = 'Len', Locked = true; }
         field(7; Class; Option)
         {
             CaptionML = ENU = 'Class', DEU = 'Class';

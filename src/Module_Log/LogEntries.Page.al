@@ -47,7 +47,7 @@ page 73002 "DMTLogEntries"
         {
             action(HideIgnored)
             {
-                Caption = 'Hide ignored Errors', comment = 'Ignorierte Fehler ausblenden';
+                Caption = 'Hide ignored Errors', comment = 'de-DE=Ignorierte Fehler ausblenden';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -64,7 +64,7 @@ page 73002 "DMTLogEntries"
             }
             action(ShowIgnored)
             {
-                Caption = 'Show ignored Errors', comment = 'Ignorierte Fehler anzeigen';
+                Caption = 'Show ignored Errors', comment = 'de-DE=Ignorierte Fehler anzeigen';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -81,7 +81,7 @@ page 73002 "DMTLogEntries"
             }
             action(DeleteFilteredLines)
             {
-                Caption = 'Delete filtered lines', Comment = 'Gefilterte Zeilen löschen';
+                Caption = 'Delete filtered lines', Comment = 'de-DE=Gefilterte Zeilen löschen';
                 ApplicationArea = All;
                 Image = Delete;
                 Promoted = true;

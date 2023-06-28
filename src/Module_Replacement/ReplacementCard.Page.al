@@ -126,7 +126,7 @@ page 73024 DMTReplacementCard
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
-                Caption = 'Propose Assignments', Comment = 'Zuordnung vorschlagen';
+                Caption = 'Propose Assignments', Comment = 'de-DE=Zuordnung vorschlagen';
                 trigger OnAction()
                 var
                     ReplacementsMgt: Codeunit DMTReplacementsMgt;

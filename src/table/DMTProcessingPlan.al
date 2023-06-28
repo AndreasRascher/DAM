@@ -8,11 +8,11 @@ table 73009 DMTProcessingPlan
     {
         field(1; "Line No."; Integer)
         {
-            Caption = 'Line No.';
+            Caption = 'Line No.', Comment = 'de-DE=Zeilennr.';
         }
         field(10; Type; Enum DMTProcessingPlanType)
         {
-            Caption = 'Type';
+            Caption = 'Type', Comment = 'de-DE=Art';
 
             trigger OnValidate()
             begin
@@ -25,7 +25,7 @@ table 73009 DMTProcessingPlan
         }
         field(11; ID; Integer)
         {
-            Caption = 'ID';
+            Caption = 'ID', Locked = true;
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else

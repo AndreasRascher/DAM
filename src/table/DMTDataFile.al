@@ -6,26 +6,26 @@ table 73004 DMTDataFile
     fields
     {
         field(1; ID; Integer) { Caption = 'ID', Locked = true; }
-        field(2; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'Sortierung'; }
+        field(2; "Sort Order"; Integer) { Caption = 'Sort Order', comment = 'de-DE=Sortierung'; }
         field(3; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', locked = true; FieldClass = FlowFilter; }
         field(4; "Other App Packages ID Filter"; Guid) { Caption = 'Other App Packages ID Filter', locked = true; FieldClass = FlowFilter; }
         field(5; "CompanyName Filter"; Text[30]) { Caption = 'Company Name Filter', locked = true; FieldClass = FlowFilter; }
         #region Target Table
         field(10; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'Zieltabellen ID';
+            Caption = 'Target Table ID', comment = 'de-DE=Zieltabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Other App Packages ID Filter"));
         }
         field(11; "Target Table Caption"; Text[250])
         {
-            Caption = 'Target Table Caption', comment = 'Zieltabelle Bezeichnung';
+            Caption = 'Target Table Caption', comment = 'de-DE=Zieltabelle Bezeichnung';
             FieldClass = FlowField;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
             Editable = false;
         }
         field(12; "No. of Records In Trgt. Table"; Integer)
         {
-            Caption = 'No. of Lines in Target Table', Comment = 'Anz. Zeilen in Zieltabelle';
+            Caption = 'No. of Lines in Target Table', Comment = 'de-DE=Anz. Zeilen in Zieltabelle';
             FieldClass = FlowField;
             CalcFormula = lookup("Table Information"."No. of Records" where("Table No." = field("Target Table ID"), "Company Name" = field("CompanyName Filter")));
             Editable = false;
@@ -40,7 +40,7 @@ table 73004 DMTDataFile
         #region Buffer Table Data
         field(30; "NAV Src.Table No."; Integer)
         {
-            Caption = 'NAV Src.Table No.', Comment = 'NAV Tabellennr.';
+            Caption = 'NAV Src.Table No.', Comment = 'de-DE=NAV Tabellennr.';
             trigger OnValidate()
             var
                 ObjMgt: Codeunit DMTObjMgt;
@@ -52,7 +52,7 @@ table 73004 DMTDataFile
         field(32; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; Editable = false; }
         field(40; BufferTableType; Enum BufferTableType)
         {
-            Caption = 'Buffer Table Type', Comment = 'Puffertabellenart';
+            Caption = 'Buffer Table Type', Comment = 'de-DE=Puffertabellenart';
             trigger OnValidate()
             var
                 DataFileMgt: Codeunit DMTDataFilePageAction;
@@ -66,30 +66,30 @@ table 73004 DMTDataFile
         }
         field(41; "Import XMLPort ID"; Integer)
         {
-            Caption = 'Import XMLPortID', Comment = 'XMLPort ID für Import';
+            Caption = 'Import XMLPortID', Comment = 'de-DE=XMLPort ID für Import';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLport), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(42; "Buffer Table ID"; Integer)
         {
-            Caption = 'Buffertable ID', Comment = 'Puffertabelle ID';
+            Caption = 'Buffertable ID', Comment = 'de-DE=Puffertabelle ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
         }
-        field(43; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', comment = 'Anz. Datensätze in Puffertabelle'; Editable = false; }
+        field(43; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
         #endregion Buffer Table Data
         #region Import and Processing Options
-        field(50; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'OnInsert Trigger verwenden'; InitValue = true; }
-        field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'Nur neue Datensätze importieren'; }
-        field(53; ImportFilter; TableFilter) { Caption = 'Import Filter', Comment = 'Import Filter'; }
-        field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'Import Gruppe'; }
+        field(50; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
+        field(52; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
+        field(53; ImportFilter; TableFilter) { Caption = 'Import Filter', Comment = 'de-DE=Import Filter'; }
+        field(54; ImportGroup; Code[250]) { Caption = 'Import Group', comment = 'de-DE=Import Gruppe'; }
         #endregion Import and Processing Options
         field(60; LastView; Blob) { }
-        field(62; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'Auswahl letzes Feldupdate'; }
-        field(80; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'Tabellenrelationen'; }
-        field(81; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'Offene Tab. Rel.'; }
+        field(62; LastFieldUpdateSelection; Blob) { Caption = 'Last Field Update Selection', Comment = 'de-DE=Auswahl letzes Feldupdate'; }
+        field(80; "Table Relations"; Integer) { Caption = 'Table Relations', Comment = 'de-DE=Tabellenrelationen'; }
+        field(81; "Unhandled Table Rel."; Integer) { Caption = 'Unhandled Table Rel.', Comment = 'de-DE=Offene Tab. Rel.'; }
         field(100; ImportToBufferIndicator; Enum DMTImportIndicator) { Caption = 'ImportToBufferIndicator', Locked = true; Editable = false; }
         field(101; ImportToBufferIndicatorStyle; Text[15]) { Caption = 'ImportToBufferIndicatorStyle', Locked = true; Editable = false; }
         field(102; ImportToTargetIndicator; Enum DMTImportIndicator) { Caption = 'ImportToTargetIndicator', Locked = true; Editable = false; }

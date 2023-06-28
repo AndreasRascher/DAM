@@ -4,7 +4,7 @@ table 73001 DMTLogEntry
     {
         field(1; "Entry No."; Integer)
         {
-            Caption = 'Entry No.', comment = 'Lfd.Nr.';
+            Caption = 'Entry No.', comment = 'de-DE=Lfd.Nr.';
             AutoIncrement = true;
         }
         field(10; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
@@ -16,13 +16,13 @@ table 73001 DMTLogEntry
         field(31; "Target ID (Text)"; Text[250]) { Caption = 'Target ID (Text)'; }
         field(32; "Target Table ID"; Integer) { }
         field(33; "Target Field No."; Integer) { }
-        field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }
-        field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
-        field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'Fehler Aufrufliste'; }
-        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
-        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'Fehler für Feldwert'; }
-        field(50; DataFilePath; Text[250]) { Caption = 'Data File Folder Path', comment = 'Ordnerpfad Exportdatei'; }
-        field(51; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
+        field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'de-DE=Kontext Beschreibung'; }
+        field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'de-DE=Fehler Code'; }
+        field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'de-DE=Fehler Aufrufliste'; }
+        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'de-DE=Fehler ignorieren'; }
+        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'de-DE=Fehler für Feldwert'; }
+        field(50; DataFilePath; Text[250]) { Caption = 'Data File Folder Path', comment = 'de-DE=Ordnerpfad Exportdatei'; }
+        field(51; DataFileName; Text[250]) { Caption = 'Data File Name', comment = 'de-DE=Dateiname Exportdatei'; }
     }
 
     keys

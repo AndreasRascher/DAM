@@ -101,7 +101,7 @@ codeunit 73003 DMTDataFilePageAction
     var
         FieldMapping: Record DMTFieldMapping;
         Field: Record Field;
-        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
         DataFile.FilterRelated(FieldMapping);
         FieldMapping.SetFilter("Source Field No.", '<>%1', 0);
@@ -320,8 +320,8 @@ codeunit 73003 DMTDataFilePageAction
         Start: DateTime;
         TableStart: DateTime;
         Progress: Dialog;
-        FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'Vorgang abgeschlossen\Dauer %1';
-        ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'Dateien werden eingelesen';
+        FinishedMsg: Label 'Processing finished\Duration %1', Comment = 'de-DE=Vorgang abgeschlossen\Dauer %1';
+        ImportFilesProgressMsg: Label 'Reading files into buffer tables', Comment = 'de-DE=Dateien werden eingelesen';
         ProgressMsg: Text;
     begin
         DataFile_SELECTED.SetCurrentKey("Sort Order");
@@ -437,7 +437,7 @@ codeunit 73003 DMTDataFilePageAction
         DMTSetup: Record DMTSetup;
         ObjectMgt: Codeunit DMTObjMgt;
         NoAvailableObjectIDsErr: Label 'No free object IDs of type %1 could be found. Defined ID range in setup: %2',
-                                comment = 'Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
+                                comment = 'de-DE=Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2';
         AvailableTables: List of [Integer];
         AvailableXMLPorts: List of [Integer];
     begin
@@ -755,7 +755,7 @@ codeunit 73003 DMTDataFilePageAction
         TempBlob: Codeunit "Temp Blob";
         ServerFile: File;
         InStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
+        ImportFinishedMsg: Label 'Import finished', comment = 'de-DE=Import abgeschlossen';
         OuStr: OutStream;
         FileName: Text;
         ServerFilePath: Text;

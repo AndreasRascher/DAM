@@ -35,7 +35,8 @@ codeunit 73010 DMTObjMgt
         FileFound: Boolean;
         ServerFile: File;
         InStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', comment = 'Import abgeschlossen';
+        ImportFinishedMsg: Label 'Import finished',
+                       comment = 'de-DE=Import abgeschlossen';
         FileName: Text;
     begin
         if DMTSetup.Get() and (DMTSetup."Schema.csv File Path" <> '') then
