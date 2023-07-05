@@ -1,9 +1,9 @@
-OBJECT Dataport 50005 DMTExport
+OBJECT Dataport 50100 DMTExport
 {
   OBJECT-PROPERTIES
   {
-    Date=19.09.22;
-    Time=21:40:59;
+    Date=05.07.23;
+    Time=16:55:02;
     Modified=Yes;
     Version List=DMT;
   }
@@ -118,6 +118,7 @@ OBJECT Dataport 50005 DMTExport
       _TotalLines@1000000013 : Integer;
       _Step@1000000014 : Integer;
       _LastUpdate@1000000015 : DateTime;
+      _FileCounter@1109900001 : Integer;
     BEGIN
       CLEAR(ExportDuration);
 
@@ -146,6 +147,7 @@ OBJECT Dataport 50005 DMTExport
         CreateHeaderLine(_ExportFieldBuffer,_LastFieldNo,FieldSeparator); // Header
       // Lines
       _LastUpdate := CURRENTDATETIME + 500;
+      _FileCounter := 1;
       REPEAT
         IF UseBigText THEN BEGIN
           // Required for extra columns
@@ -154,7 +156,15 @@ OBJECT Dataport 50005 DMTExport
           // Faster without BigText (BT)
           EXPORT_ExportSingleTableRec(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
         END;
-
+        IF SizeLimitReached() THEN BEGIN
+          AddCounterToFilePath(ExportToFilePath,_FileCounter);
+          ADOStream.SaveToFile(ExportToFilePath,2);
+          ADOStream.Close;
+          CLEAR(ADOStream);
+          InitExport;
+          _FileCounter += 1;
+          AddCounterToFilePath(ExportToFilePath,_FileCounter);
+        END;
         _Step += 1;
         IF ABS(CURRENTDATETIME-_LastUpdate) > 500 THEN BEGIN
           _Progress.UPDATE(1,(10000*(_Step/_TotalLines)) DIV 1);
@@ -329,7 +339,7 @@ OBJECT Dataport 50005 DMTExport
               _RecRef.SETTABLE(_Field);
               _ValueAsText := GetNoOfRecordsInTable(_Field);
             END;
-            ELSE _ValueAsText := GetFormattedFieldValue(_RecRef,_ExportFieldBuffer.TableNo);
+            ELSE _ValueAsText := GetFormattedFieldValue(_RecRef,_ExportFieldBuffer."No.");
           END; // END_CASE
 
           // Remove FieldSeparator from Value
@@ -676,7 +686,7 @@ OBJECT Dataport 50005 DMTExport
 
         _exportFieldBuffer."No." := 50001;
         _exportFieldBuffer.FieldName := 'Primary Key';
-        _exportFieldBuffer."Field Caption" := 'Prim�rschl�ssel';
+        _exportFieldBuffer."Field Caption" := 'Prim?rschl?ssel';
         _exportFieldBuffer.INSERT;
 
         _exportFieldBuffer."No." := 50002;
@@ -691,7 +701,7 @@ OBJECT Dataport 50005 DMTExport
 
         _exportFieldBuffer."No." := 50004;
         _exportFieldBuffer.FieldName := 'No. of Records';
-        _exportFieldBuffer."Field Caption" := 'Anz. Datens�tze';
+        _exportFieldBuffer."Field Caption" := 'Anz. Datens?tze';
         _exportFieldBuffer.INSERT;
 
       END;
@@ -731,6 +741,40 @@ OBJECT Dataport 50005 DMTExport
       TempTableInfo := _TableInfo;
       TempTableInfo.INSERT(FALSE);
       NoOfRecordsText := FORMAT(TempTableInfo."No. of Records");
+    END;
+
+    PROCEDURE AddCounterToFilePath@1109900002(VAR _CurrFilePath@1109900000 : Text[1024];_FileCounter@1109900001 : Integer);
+    VAR
+      _FileName@1109900002 : Text[1024];
+      _FileBaseName@1109900004 : Text[1024];
+      _FileExtension@1109900003 : Text[1024];
+      _NumberText@1109900005 : Text[30];
+    BEGIN
+      IF STRPOS(_CurrFilePath,'.csv') = 0 THEN ERROR('File extension csv expected');
+      _FileName := COPYSTR(_CurrFilePath,1,STRPOS(LOWERCASE(_CurrFilePath),'.csv')-1);
+
+      // remove existing number
+      _FileBaseName := _FileName;
+      _NumberText := COPYSTR(_FileName,STRLEN(_FileName)-1);
+      _NumberText := DELCHR(_NumberText,'=','0123456789');
+      IF _NumberText = '' THEN
+        _FileBaseName := COPYSTR(_FileName,1,STRLEN(_FileName)-3);
+
+      // add new number
+      CASE _FileCounter OF
+        0..9 : _CurrFilePath := _FileBaseName + '_0'+FORMAT(_FileCounter) + '.csv';
+        10..99 : _CurrFilePath := _FileBaseName + '_'+FORMAT(_FileCounter) + '.csv';
+      END;
+    END;
+
+    PROCEDURE SizeLimitReached@1109900004() IsLimitReached : Boolean;
+    VAR
+      FileSizeInBytes@1109900000 : Integer;
+    BEGIN
+      FileSizeInBytes := ADOStream.Size();
+      //Cloud Limit 350 MB = 367,001,600 Bytes
+      IsLimitReached := FileSizeInBytes >= 349 * 1024 * 1024; // 1 MB less for safety
+      //IsLimitReached := FileSizeInBytes >= 5*1024*1024;
     END;
 
     BEGIN
