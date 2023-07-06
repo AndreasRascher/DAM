@@ -1,16 +1,38 @@
 codeunit 73022 DMTImportFileMgt
 {
-    procedure ImportPreview(DMTDataFile: Record DMTDataFile; FromLineNo: Integer; ToLineNo: Integer)
+    procedure ImportPreviewWithUpload(dataFile: Record DMTDataFile; FromLineNo: Integer; ToLineNo: Integer)
+    var
+        fileConfig: Record DMTFileConfig;
+        importFileMgt: Codeunit DMTImportFileMgt;
+        readStream: InStream;
     begin
-        DMTDataFile.TestField("File Config Code");
+        dataFile.TestField("File Config Code");
+        fileConfig.Get(dataFile."File Config Code");
+        importFileMgt.GetReadStreamFromUpload(readStream, fileConfig.GetTextEncoding());
+        importFileMgt.ImportCSVFomStream(readStream);
     end;
 
-    procedure GetReadStreamForFileFromPath(var ReadStream: InStream; DataFile: Record DMTDataFile; encoding: TextEncoding)
+    procedure ImportPreviewFromFilePath(dataFile: Record DMTDataFile; FromLineNo: Integer; ToLineNo: Integer)
+    var
+        fileConfig: Record DMTFileConfig;
+        importFileMgt: Codeunit DMTImportFileMgt;
+        readStream: InStream;
+    begin
+        dataFile.TestField("File Config Code");
+        fileConfig.Get(dataFile."File Config Code");
+        importFileMgt.GetReadStreamFromFileFromPath(readStream, dataFile, fileConfig.GetTextEncoding());
+        importFileMgt.ImportCSVFomStream(readStream);
+    end;
+
+    procedure GetReadStreamFromFileFromPath(var readStream: InStream; dataFile: Record DMTDataFile; encoding: TextEncoding)
     var
         File: File;
+        isEOS: Boolean;
     begin
-        File.Open(DataFile.FullDataFilePath(), encoding);
-        File.CreateInStream(ReadStream);
+        Clear(readStream);
+        File.Open(dataFile.FullDataFilePath(), encoding);
+        File.CreateInStream(readStream);
+        isEOS := readStream.EOS;
     end;
 
     procedure GetReadStreamFromUpload(var readStream: InStream; encoding: TextEncoding)
@@ -20,9 +42,10 @@ codeunit 73022 DMTImportFileMgt
         fileName: Text;
     begin
         tempBlob.CreateInStream(readStream, encoding);
-        if not UploadIntoStream(selectCSVFileLbl, '', Format(Enum::DMTFileFilter::CSV), fileName, readStream) then begin
-            exit;
-        end;
+        UploadIntoStream(selectCSVFileLbl, '', Format(Enum::DMTFileFilter::CSV), fileName, readStream);
+        // if UploadIntoStream(selectCSVFileLbl, '', Format(Enum::DMTFileFilter::CSV), fileName, readStream) then begin
+        //     exit;
+        // end;
     end;
 
     internal procedure SetCSVProperties(Rec: Record DMTFileConfig)
@@ -33,18 +56,24 @@ codeunit 73022 DMTImportFileMgt
         RecordSeparatorGlobal := Rec."CSV Record Separator";
     end;
 
-    internal procedure ImportCSV()
-    var
-        CSVImport: XmlPort DMTCSVImport;
+    internal procedure ImportCSVFomStream(var readstream: InStream)
     begin
+        CSVImport.SetSource(readstream);
         CSVImport.TextEncoding := TextEncodingGlobal;
         CSVImport.FieldDelimiter := FieldDelimiterGlobal;
         CSVImport.FieldSeparator := FieldSeparatorGlobal;
         CSVImport.RecordSeparator := RecordSeparatorGlobal;
+        CSVImport.Import();
+    end;
+
+    procedure DefineLinesToImport(LineNo: Integer)
+    begin
+        CSVImport.SetOrAddSpecificImportLineNo(LineNo);
     end;
 
     var
-
+        CSVImport: XmlPort DMTCSVImport;
         TextEncodingGlobal: TextEncoding;
         FieldDelimiterGlobal, FieldSeparatorGlobal, RecordSeparatorGlobal : Text;
+
 }

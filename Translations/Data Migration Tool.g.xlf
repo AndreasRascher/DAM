@@ -418,15 +418,30 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field Code - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 936308139 - Field 3825013809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>de-DE=Feld Begrenzungszeichen</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field CSV Field Delimiter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 936308139 - Field 3608342827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>de-DE=Feld Trennzeichen</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field CSV Field Separator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 936308139 - Field 2965868546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>de-DE=Datensatz Trennzeichen</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field CSV Record Separator - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 936308139 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field Description - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 936308139 - Field 2677495628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 936308139 - Field 2364795791 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>de-DE=Datei-Textcodierung</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field FileTextEncoding - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFileConfig - Field File Encoding - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 936308139 - Field 3834989042 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>de-DE=Zeilennr. der Überschrift</source>
@@ -2053,6 +2068,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDataFilePageAction - Method UploadFileToDefaultFolder - NamedType ImportFinishedMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 875817044 - Method 851345775 - NamedType 3796878134" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select a csv file</source>
+          <note from="Developer" annotates="general" priority="2">de-De=Wählen sie eine CSV Datei aus</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportFileMgt - Method GetReadStreamFromUpload - NamedType selectCSVFileLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 2653990749 - NamedType 1139369458" size-unit="char" translate="yes" xml:space="preserve">
           <source>Process number has not been initialized</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2358,6 +2378,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Protokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action OpenLog - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2874035913 - Action 4075396280 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>PreviewCSV</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action PreviewCSV - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Retry Records With Error</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Fehler erneut verarbeiten</note>
@@ -2632,6 +2657,11 @@
           <source>DMT File Config List</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datei Konfig. Übersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFileConfigList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2287722197 - Control 1963025173 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>&lt;KeyFieldNo1&gt;,&lt;KeyFieldNo2&gt;,...,&lt;KeyFieldNoX&gt;</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=&lt;Schlüsselfeldnr1&gt;,&lt;Schlüsselfeldnr2&gt;,...,&lt;SchlüsselfeldnrX&gt;</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFileConfigList - Control No. of Columns - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
@@ -2968,15 +2998,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Separate Tabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum BufferTableType - EnumValue Seperate Buffer Table per CSV - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 2922184346 - EnumValue 2504024752 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>MSDOS(Default)</source>
-          <note from="Developer" annotates="general" priority="2">MSDOS(Standard)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTEncoding - EnumValue MSDOS(Default) - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 2922184346 - EnumValue 3376219028 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>MSDOS(Default)</source>
-          <note from="Developer" annotates="general" priority="2">MSDOS(Standard)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTEncoding - EnumValue UTF16 - Property Caption</note>
+        <trans-unit id="Enum 2922184346 - EnumValue 3520923613 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>MS-DOS(Default)</source>
+          <note from="Developer" annotates="general" priority="2">MS-DOS(Standard)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTEncoding - EnumValue MS-DOS - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 979487675 - EnumValue 223684030 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No buffer table records match the filter.\ Filter: "%1"</source>
@@ -3029,8 +3054,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue All - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 487643378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>CSV Files|*.csv</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=CSV Dateien|*.csv</note>
+          <source>CSV Files (*.csv)|*.csv</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=CSV Dateien (*.csv)|*.csv</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 1819335129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

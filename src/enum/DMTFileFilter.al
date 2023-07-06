@@ -8,5 +8,5 @@ enum 73005 DMTFileFilter
     value(3; RDL) { Caption = 'SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc', Comment = 'de-DE=SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc'; }
     value(4; Txt) { Caption = 'Text Files (*.txt)|*.txt', Comment = 'de-DE=Textdateien (*.txt)|*.txt'; }
     value(5; Xml) { Caption = 'XML Files (*.xml)|*.xml', Comment = 'de-DE=XML-Dateien (*.xml)|*.xml'; }
-    value(6; CSV) { Caption = 'CSV Files|*.csv', Comment = 'de-DE=CSV Dateien|*.csv'; }
+    value(6; CSV) { Caption = 'CSV Files (*.csv)|*.csv', Comment = 'de-DE=CSV Dateien (*.csv)|*.csv'; }
 }

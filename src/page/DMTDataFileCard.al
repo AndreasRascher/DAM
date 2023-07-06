@@ -294,6 +294,17 @@ page 73005 DMTDataFileCard
                     PageActions.ExportTargetTableToCSV(Rec);
                 end;
             }
+            action(PreviewCSV)
+            {
+                Caption = 'PreviewCSV';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    ImportFileMgt: Codeunit DMTImportFileMgt;
+                begin
+                    ImportFileMgt.ImportPreviewFromFilePath(Rec, 1, 3);
+                end;
+            }
 
         }
     }
