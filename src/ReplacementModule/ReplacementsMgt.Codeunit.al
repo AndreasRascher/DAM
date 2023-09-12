@@ -132,6 +132,11 @@ codeunit 110014 "DMTReplacementsMgt"
         DummyTargetRef: RecordRef;
         IsMatch: Boolean;
         ArrayPos: Integer;
+        left, right : Text;
+        ByteCompare: Dictionary of [Integer, Char];
+        i: Integer;
+        FromToArray: Array[2] of Char;
+        FromToArray2: Array[2] of Integer;
     begin
         Clear(NewValueFieldArray);
         Clear(NewValueFieldNumbers);
@@ -150,7 +155,23 @@ codeunit 110014 "DMTReplacementsMgt"
             case ReplacementHeader."No. of Compare Values" of
                 ReplacementHeader."No. of Compare Values"::"1":
                     begin
-                        IsMatch := format(CompareFieldValueArray[1].Value) = TempReplacementLine."Comp.Value 1";
+                        left := format(CompareFieldValueArray[1].Value);
+                        right := TempReplacementLine."Comp.Value 1";
+                        IsMatch := (left = right);
+                        clear(ByteCompare);
+                        for i := 1 to StrLen(left) do begin
+                            if i <= StrLen(right) then
+                                if left[i] = right[i] then
+                                    ByteCompare.Add(i, left[i])
+                                else begin
+                                    ByteCompare.Add(i, '?');
+                                    FromToArray[1] := left[i];
+                                    FromToArray[2] := right[i];
+                                    FromToArray2[1] := left[i] * 1;
+                                    FromToArray2[2] := right[i] * 1;
+                                end;
+
+                        end;
                     end;
                 ReplacementHeader."No. of Compare Values"::"2":
                     begin
