@@ -2795,7 +2795,7 @@
         </trans-unit>
         <trans-unit id="Page 1841337754 - Control 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Created At</source>
-          <target>[NAB: SUGGESTION]Erstellt am</target>
+          <target>Erstellt am</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileFactBox - Control Created At - Property Caption</note>
