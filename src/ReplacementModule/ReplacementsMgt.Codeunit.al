@@ -155,7 +155,7 @@ codeunit 110014 "DMTReplacementsMgt"
             case ReplacementHeader."No. of Compare Values" of
                 ReplacementHeader."No. of Compare Values"::"1":
                     begin
-                        left := format(CompareFieldValueArray[1].Value);
+                        left := format(CompareFieldValueArray[Get1stArgumentArrayPos(ReplacementAssignmentForDataFileGlobal, CompareFieldNumbers)].Value);
                         right := TempReplacementLine."Comp.Value 1";
                         IsMatch := (left = right);
                         clear(ByteCompare);
@@ -242,6 +242,13 @@ codeunit 110014 "DMTReplacementsMgt"
             until TableRelationsMetadata.Next() = 0;
         TempFieldMappingFound.Copy(TempFieldMapping, true);
         NoOfLinesFound := TempFieldMappingFound.Count;
+    end;
+
+    local procedure Get1stArgumentArrayPos(var replacementAssignment: Record DMTReplacement temporary; CompareFieldNumbers: List of [Integer]) arrayIndex: Integer
+    begin
+        //Für 1 : 1
+        if replacementAssignment."Compare Value 1 Field No." <> 0 then
+            arrayIndex := CompareFieldNumbers.IndexOf(replacementAssignment."Compare Value 1 Field No.");
     end;
 
     internal procedure proposeAssignments(ReplacementHeader: Record DMTReplacement)
