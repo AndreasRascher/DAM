@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=31.05.23;
-    Time=12:42:11;
+    Date=26.10.23;
+    Time=22:18:51;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2953,6 +2953,15 @@ OBJECT XMLport 50049 DMT Export
         ExportToFolderPath += '\';
     END;
 
+    PROCEDURE IsTableCompiled@1000000000(TableID@1000000001 : Integer) Result : Boolean;
+    VAR
+      Object@1000000000 : Record 2000000001;
+    BEGIN
+      Result:= TRUE;
+      IF Object.GET(Object.Type::Table,'',TableID) THEN
+        Result := Object.Compiled
+    END;
+
     LOCAL PROCEDURE "----- Actions -----"@1000000006();
     BEGIN
     END;
@@ -3193,4 +3202,3 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
-
