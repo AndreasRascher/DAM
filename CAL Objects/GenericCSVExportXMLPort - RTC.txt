@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=26.10.23;
-    Time=22:18:51;
+    Date=27.10.23;
+    Time=19:44:48;
     Modified=Yes;
     Version List=DMT;
   }
@@ -18,9 +18,6 @@ OBJECT XMLport 50049 DMT Export
                   BEGIN
                     Action1 := ExportSchemaLbl;
                     Action2 := ExportDataLbl;
-                    //CreateTextFile;
-                    //Field.SETRANGE(TableNo,27);
-                    //ERROR('%1',Field.COUNT);
                   END;
 
     OnPreXMLport=VAR
@@ -57,7 +54,7 @@ OBJECT XMLport 50049 DMT Export
                                                   SourceTableView=SORTING(Field1)
                                                                   WHERE(Field1=FILTER(1..));
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         //Lines.SETFilter(Number,1,ExportRecRef.COUNT);  // 20221129  Stop on last line
+                                                                         //Lines.SETRANGE(Number,1,8);  // debug
                                                                        END;
 
                                                   Export::OnAfterGetRecord=VAR
@@ -67,7 +64,7 @@ OBJECT XMLport 50049 DMT Export
                                                                                ExportRecRef.FINDSET(FALSE,FALSE);
                                                                                CLEAR(LineProgress);
                                                                                TotalLineCount := ExportRecRef.COUNT;
-                                                                               DialogText := CONVERTSTR('Table: "' + ExportRecRef.CAPTION + '"','\','/') + '\Processed ################1 \No. of Lines ####################2#';
+                                                                               DialogText := CONVERTSTR('Table: "' + ExportRecRef.CAPTION + '"','\','/') + '\Processed ###################1 \No. of Lines #######################2#';
                                                                                LineProgress.OPEN(DialogText);
                                                                                LastUpdateProgress := CURRENTDATETIME - 1000;
                                                                              END ELSE
@@ -2598,6 +2595,16 @@ OBJECT XMLport 50049 DMT Export
                   SourceExpr=ExportFlowFields;
                   ShowCaption=No }
 
+      { 1000000012;3;Group  ;
+                  CaptionML=DEU=Blob Felder Exportieren;
+                  GroupType=Group }
+
+      { 1000000011;4;Field  ;
+                  Name=ExportBlobContent;
+                  CaptionML=DEU=Export Blob Fields;
+                  SourceExpr=ExportBlobContent;
+                  ShowCaption=No }
+
       { 55000;2  ;Group     ;
                   CaptionML=DEU=Aktionen;
                   GroupType=Group }
@@ -2640,6 +2647,7 @@ OBJECT XMLport 50049 DMT Export
       ExportTableIDFilter@1000000003 : Text INDATASET;
       ExportWithTitleLine@1000000010 : Boolean;
       ExportFlowFields@55000 : Boolean;
+      ExportBlobContent@1000000017 : Boolean;
       FieldSeparator@1000000002 : Text[1];
       Action1@1000000001 : Text;
       Action2@1000000000 : Text;
@@ -2675,7 +2683,7 @@ OBJECT XMLport 50049 DMT Export
 
       start := CURRENTDATETIME;
       progress.OPEN(STRSUBSTNO('Export %1\Line #######1#',CONVERTSTR(exportToFilePath,'\','/')));
-      DMTExport.InitExport(exportTableID,TableView);
+      DMTExport.InitExport(exportTableID,ExportFlowFields,ExportBlobContent,TableView);
 
       serverFile.CREATETEMPFILE;
       serverFilePath := serverFile.NAME;
@@ -2770,6 +2778,8 @@ OBJECT XMLport 50049 DMT Export
       _Time@1000000001 : Time;
       _Boolean@1000000006 : Boolean;
       _Field@1000000010 : Record 2000000041;
+      _TempBlob@1000000011 : TEMPORARY Record 99008535;
+      _IStream@1000000012 : InStream;
     BEGIN
       //* returns values in xmlformat, handles problems with field.type optionstring bug
       fieldRef := recRef.FIELD(fieldNo);
@@ -2782,6 +2792,14 @@ OBJECT XMLport 50049 DMT Export
         'DATE':    BEGIN; _Date    := fieldRef.VALUE; IF _Date <> 0D THEN   _Result := FORMAT(_Date,0,9);    END;
         'TIME':    BEGIN; _Time := fieldRef.VALUE;    IF _Time <> 0T THEN   _Result := FORMAT(_Time,0,9);    END;
         'CHAR','TEXT','CODE':   _Result := fieldRef.VALUE;
+        'BLOB': BEGIN;
+          fieldRef.CALCFIELD;
+          _TempBlob.Blob := fieldRef.VALUE;
+          IF NOT _TempBlob.Blob.HASVALUE THEN
+            EXIT('');
+          _TempBlob.Blob.CREATEINSTREAM(_IStream);
+          _Result := ToBase64(_IStream,FALSE);
+        END;
         ELSE _Result := FORMAT(fieldRef.VALUE,0,9);
       END; // END_CASE
 
@@ -2842,11 +2860,13 @@ OBJECT XMLport 50049 DMT Export
       //* create a list ob columns to export
       IF _ExportTableID <> 0 THEN
         _fields.SETRANGE(TableNo,_ExportTableID);
+
+      _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
       _fields.SETFILTER(Type,'<>%1',_fields.Type::BLOB);
       IF ExportFlowFields THEN
-        _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField)
-      ELSE
-        _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
+        _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField);
+      IF ExportBlobContent THEN
+        _fields.SETRANGE(Type);
 
       _fields.SETRANGE(Enabled,TRUE);
       SetObsoleteFieldFilter(_fields);
@@ -2915,13 +2935,15 @@ OBJECT XMLport 50049 DMT Export
       TabeIsEmpty := RecRef.ISEMPTY;
     END;
 
-    PROCEDURE InitExport@1000000017(exportTableIDNew@1000000000 : Integer;tableView@1000000001 : Text);
+    PROCEDURE InitExport@1000000017(exportTableIDNew@1000000000 : Integer;exportFlowFieldsNew@1000000003 : Boolean;exportBlobContentNew@1000000002 : Boolean;tableView@1000000001 : Text);
     VAR
       field@55000 : Record 2000000041;
     BEGIN
       FieldSeparator[1] := 9; // TAB
       ExportWithTitleLine := TRUE;
-      ExportTableID :=  exportTableIDNew;
+      ExportTableID     :=  exportTableIDNew;
+      ExportFlowFields  :=  exportFlowFieldsNew;
+      ExportBlobContent :=  exportBlobContentNew;
 
       ExportRecRef.OPEN(ExportTableID);
       IF tableView <> '' THEN
@@ -2960,6 +2982,46 @@ OBJECT XMLport 50049 DMT Export
       Result:= TRUE;
       IF Object.GET(Object.Type::Table,'',TableID) THEN
         Result := Object.Compiled
+    END;
+
+    PROCEDURE FromBase64@1000000003(Base64String@1000000002 : Text;TextEncoding@1000000005 : 'UTF8,UTF16,MSDos,Windows') : Text;
+    VAR
+      Convert@1000000001 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      Encoding@1000000003 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.Encoding";
+      OutputString@1000000004 : Text;
+    BEGIN
+      IF Base64String = '' THEN
+          EXIT('');
+      CASE TextEncoding OF
+          TextEncoding::UTF16:
+              OutputString := Encoding.Unicode().GetString(Convert.FromBase64String(Base64String));
+          TextEncoding::MSDos,
+          TextEncoding::Windows:
+              OutputString := Encoding.GetEncoding(0{CodePage}).GetString(Convert.FromBase64String(Base64String));
+          ELSE
+              OutputString := Encoding.UTF8().GetString(Convert.FromBase64String(Base64String));
+      END;
+      EXIT(OutputString);
+    END;
+
+    PROCEDURE ToBase64@1000000011(VAR InStream@1000000000 : InStream;InsertLineBreaks@1000000001 : Boolean) : Text;
+    VAR
+      Convert@1000000003 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Convert";
+      Base64FormattingOptions@1000000005 : DotNet "'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Base64FormattingOptions";
+      MemoryStream@1000000002 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.IO.MemoryStream";
+      InputArray@1000000004 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Array";
+      Base64String@1000000006 : Text;
+    BEGIN
+      MemoryStream := MemoryStream.MemoryStream();
+      COPYSTREAM(MemoryStream, InStream);
+      InputArray := MemoryStream.ToArray();
+
+      IF InsertLineBreaks THEN BEGIN
+        Base64String := Convert.ToBase64String(InputArray,Base64FormattingOptions.InsertLineBreaks);
+      END ELSE
+        Base64String := Convert.ToBase64String(InputArray);
+      MemoryStream.Close();
+      EXIT(Base64String);
     END;
 
     LOCAL PROCEDURE "----- Actions -----"@1000000006();
@@ -3143,35 +3205,49 @@ OBJECT XMLport 50049 DMT Export
       recRef@55002 : RecordRef;
       fieldRef@55003 : FieldRef;
       TableNos@55005 : TEMPORARY Record 2000000026;
+      Object@1000000000 : Record 2000000001;
     BEGIN
       //* depending on the version of nav some tables must be excluded
-      IF NOT AllObj.GET(AllObj."Object Type"::Table,2000000136) THEN EXIT;
+      IF AllObj.GET(AllObj."Object Type"::Table,2000000136) THEN BEGIN
 
-      recRef.OPEN(2000000136);
+        recRef.OPEN(2000000136);
 
-      IF recRef.FIELDEXIST(11) THEN BEGIN //TableMetadata.TableType
-        recRef.RESET;
-        fieldRef := recRef.FIELD(11);
-        fieldRef.SETFILTER('>0');
-        IF recRef.FINDSET THEN
-          REPEAT
-            fieldRef := recRef.FIELD(1);
-            TableNos.Number := fieldRef.VALUE;
-            IF TableNos.INSERT THEN;
+        IF recRef.FIELDEXIST(11) THEN BEGIN //TableMetadata.TableType
+          recRef.RESET;
+          fieldRef := recRef.FIELD(11);
+          fieldRef.SETFILTER('>0');
+          IF recRef.FINDSET THEN
+            REPEAT
+              fieldRef := recRef.FIELD(1);
+              TableNos.Number := fieldRef.VALUE;
+              IF TableNos.INSERT THEN;
+            UNTIL recRef.NEXT = 0;
+        END;
+
+        IF recRef.FIELDEXIST(13) THEN BEGIN //TableMetadata.ObsoleteState
+          recRef.RESET;
+          fieldRef := recRef.FIELD(13);
+          fieldRef.SETFILTER('>0');
+          IF recRef.FINDSET THEN REPEAT
+              fieldRef := recRef.FIELD(1);
+              TableNos.Number := fieldRef.VALUE;
+              IF TableNos.INSERT THEN;
           UNTIL recRef.NEXT = 0;
+        END;
+
       END;
 
-      IF recRef.FIELDEXIST(13) THEN BEGIN //TableMetadata.ObsoleteState
-        recRef.RESET;
-        fieldRef := recRef.FIELD(13);
-        fieldRef.SETFILTER('>0');
-        IF recRef.FINDSET THEN REPEAT
-            fieldRef := recRef.FIELD(1);
-            TableNos.Number := fieldRef.VALUE;
-            IF TableNos.INSERT THEN;
-        UNTIL recRef.NEXT = 0;
-      END;
+      //* Exclude not compiled tables
+      Object.RESET;
+      Object.SETRANGE(Type,Object.Type::Table);
+      Object.SETRANGE("Company Name",'');
+      Object.SETRANGE(Compiled,FALSE);
+      IF Object.FINDSET THEN REPEAT
+        TableNos.Number := Object.ID;
+        IF TableNos.INSERT THEN;
+      UNTIL Object.NEXT = 0;
 
+      //* Build Filter
       IF TableNos.FINDSET THEN REPEAT
         FilterExpr += '&<>'+FORMAT(TableNos.Number);
       UNTIL TableNos.NEXT = 0;
@@ -3202,3 +3278,4 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
+
