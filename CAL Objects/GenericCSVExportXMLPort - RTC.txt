@@ -3,7 +3,7 @@ OBJECT XMLport 50049 DMT Export
   OBJECT-PROPERTIES
   {
     Date=27.10.23;
-    Time=19:44:48;
+    Time=20:36:49;
     Modified=Yes;
     Version List=DMT;
   }
@@ -54,7 +54,7 @@ OBJECT XMLport 50049 DMT Export
                                                   SourceTableView=SORTING(Field1)
                                                                   WHERE(Field1=FILTER(1..));
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         //Lines.SETRANGE(Number,1,8);  // debug
+                                                                         Lines.SETRANGE(Number,1,8);  // debug
                                                                        END;
 
                                                   Export::OnAfterGetRecord=VAR
@@ -2662,6 +2662,7 @@ OBJECT XMLport 50049 DMT Export
       LineProgress@1000000014 : Dialog;
       LastUpdateProgress@1000000015 : DateTime;
       TotalLineCount@1000000016 : Integer;
+      BlobColumnIdentifier@1000000018 : TextConst 'DEU=[Base64];ENU=[Base64]';
 
     LOCAL PROCEDURE ExportTable@1109900001(exportToFilePath@1000000001 : Text;exportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text);
     VAR
@@ -2703,16 +2704,17 @@ OBJECT XMLport 50049 DMT Export
 
     LOCAL PROCEDURE CreateHeaderLine@1000000013(VAR _ExportFieldBuffer@1000000001 : TEMPORARY Record 2000000041;_LastFieldNo@1000000000 : Integer) HeaderLineText : Text;
     VAR
-      _ValueAsText@1000000002 : Text;
+      _Caption@1000000002 : Text;
       CRLF@55000 : Text[2];
     BEGIN
       IF NOT ExportWithTitleLine THEN EXIT('');
 
       _ExportFieldBuffer.FINDSET;
       REPEAT
-        //_ValueAsText := ReplaceStr(_ExportFieldBuffer."Field Caption",FieldSeparator,'');  // Remove FieldSeparator from Value
-        _ValueAsText := ReplaceStr(_ExportFieldBuffer.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
-        HeaderLineText += _ValueAsText;
+        _Caption := ReplaceStr(_ExportFieldBuffer.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
+        IF UPPERCASE(FORMAT(_ExportFieldBuffer.Type))='BLOB' THEN // Add Blob Identifier to import as Base64
+          _Caption += BlobColumnIdentifier;
+        HeaderLineText += _Caption;
         IF LastFieldNo <> _ExportFieldBuffer."No." THEN
           HeaderLineText += FieldSeparator;
       UNTIL _ExportFieldBuffer.NEXT = 0;
