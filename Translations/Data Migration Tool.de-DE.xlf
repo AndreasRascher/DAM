@@ -2439,6 +2439,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Kein Feldmapping gefunden für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 3785309385 - NamedType 1659138217" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The source data set no longer exists. Please empty the log after each import into the generic buffer table.</source>
+          <target state="translated">Der Quelldatensatz ist nicht mehr vorhanden. Bitte leeren Sie das Protokoll nach jedem Import in die generische Puffertabelle.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Der Quelldatensatz ist nicht mehr vorhanden. Bitte leeren Sie das Protokoll nach jedem Import in die generische Puffertabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ListOfBufferRecIDsInner - NamedType SourceDoesNoExistErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
           <source>Duration</source>
           <target>Dauer</target>
@@ -2711,8 +2717,7 @@
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 1733595285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Auto Migration</source>
-          <target state="needs-adaptation">Autom. Übernahme</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Autom. Übernahme</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Autom. Übernahme</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action AutoMigration - Property Caption</note>
         </trans-unit>
@@ -2754,8 +2759,7 @@
         </trans-unit>
         <trans-unit id="Page 2874035913 - Action 3448018027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create AL Mapping Code</source>
-          <target state="needs-adaptation">Mapping AL Code erstellen</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Mapping AL Code erstellen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Mapping AL Code erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataFileCard - Action CreateCode - Property Caption</note>
         </trans-unit>

@@ -2033,6 +2033,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Kein Feldmapping gefunden für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType FieldMappingEmptyErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 3785309385 - NamedType 1659138217" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The source data set no longer exists. Please empty the log after each import into the generic buffer table.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Der Quelldatensatz ist nicht mehr vorhanden. Bitte leeren Sie das Protokoll nach jedem Import in die generische Puffertabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ListOfBufferRecIDsInner - NamedType SourceDoesNoExistErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
           <source>Duration</source>
           <note from="Developer" annotates="general" priority="2">de-DE Dauer</note>

@@ -404,7 +404,7 @@ codeunit 73007 DMTMigrate
         BufferRef.Open(DataFile."Buffer Table ID");
         ID := RecIdToProcessList.Get(1);
         if not BufferRef.Get(ID) then
-            Error();
+            Error(SourceDoesNoExistErr);
 
 
         IsFullyProcessed := true;

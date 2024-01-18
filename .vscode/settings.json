@@ -10,7 +10,7 @@
         "maxDegreeOfParallelism": 4
     },
     "[al]": {
-        "editor.wordBasedSuggestions": true,
+        "editor.wordBasedSuggestions": "matchingDocuments",
         "editor.suggestSelection": "first",
         "editor.formatOnSave": true,
         "editor.semanticHighlighting.enabled": true,
